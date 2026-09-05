@@ -4,18 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title inertia>{{ config('app.name', 'Visit Sukabumi') }}</title>
+    <title>{{ config('app.name', 'Visit Sukabumi') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,600,700,900" rel="stylesheet" />
 
-    <!-- Inertia and Vite -->
-    @viteReactRefresh
-    @vite(['resources/css/app.css', 'resources/js/app.jsx'])
-    @inertiaHead
+    <!-- Lottie Player (Web Component) -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+    <!-- Vite CSS -->
+    @vite(['resources/css/app.css'])
 </head>
-<body class="sticky-nav-init antialiased">
-    @inertia
+<body class="antialiased">
+    @yield('content')
 </body>
 </html>
