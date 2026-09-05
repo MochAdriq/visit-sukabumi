@@ -1,0 +1,210 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1a6bbf;
+  --color-secondary: #145299;
+}
+
+/* =========================================================
+ * NAVBAR — pixel-perfect Visit London structure
+ * ========================================================= */
+
+/* Row 1 brand bar */
+.vs-brand-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Nav row */
+.vs-nav-row {
+  position: relative;
+  background: #fff;
+}
+
+/* Blue accent bar on far right of nav row, like VL's red bar */
+.vs-nav-row::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: #1a6bbf;
+}
+
+/* Nav link base */
+.vs-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1f2937;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  position: relative;
+}
+
+.vs-nav-link:hover,
+.vs-nav-link.active {
+  color: #1a6bbf;
+  border-bottom-color: #1a6bbf;
+}
+
+/* Home icon link */
+.vs-nav-link-home {
+  padding: 14px 12px;
+  border-bottom: 3px solid #1a6bbf;
+  color: #1a6bbf;
+}
+
+/* =========================================================
+ * MEGAMENU
+ * ========================================================= */
+.vs-megamenu {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  background: #fff;
+  border-top: 3px solid #1a6bbf;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  z-index: 200;
+}
+
+.vs-megamenu-inner {
+  max-width: 80rem;
+  margin: 0 auto;
+  display: flex;
+  gap: 40px;
+  padding: 28px 24px;
+}
+
+.vs-nav-item:hover .vs-megamenu {
+  display: block;
+}
+
+.vs-megamenu-sidebar {
+  min-width: 220px;
+  max-width: 240px;
+  border-right: 1px solid #e5e7eb;
+  padding-right: 32px;
+  flex-shrink: 0;
+}
+
+.vs-megamenu-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: #1a6bbf;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.vs-megamenu-text {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.vs-megamenu-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-content: start;
+  padding-left: 0;
+  column-count: 2;
+  column-gap: 16px;
+}
+
+.vs-megamenu-links li {
+  break-inside: avoid;
+}
+
+.vs-megamenu-links li a {
+  display: block;
+  padding: 7px 12px;
+  font-size: 13px;
+  color: #374151;
+  white-space: nowrap;
+  transition: color 0.15s, background 0.15s;
+}
+
+.vs-megamenu-links li a:hover {
+  color: #1a6bbf;
+  background: #f0f7ff;
+}
+
+.vs-megamenu-links li a.vs-highlight {
+  color: #1a6bbf;
+  font-weight: 700;
+}
+
+.vs-megamenu-links li a.vs-highlight:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+ * LOTTIE CATEGORY PANELS — Visit London row6-icons-animated
+ * ========================================================= */
+.vs-icon-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.vs-icon-panel:hover {
+  background: #f0f7ff;
+}
+
+.vs-icon-panel .vs-icon-box {
+  width: 120px;
+  height: 90px;
+  position: relative;
+  overflow: hidden;
+}
+
+.vs-icon-panel .vs-icon-static {
+  display: block;
+}
+
+.vs-icon-panel .vs-icon-hover {
+  display: none;
+}
+
+.vs-icon-panel:hover .vs-icon-static {
+  display: none;
+}
+
+.vs-icon-panel:hover .vs-icon-hover {
+  display: block;
+}
+
+.vs-icon-panel h3 {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.vs-icon-panel:hover h3 {
+  color: #1a6bbf;
+}
+
