@@ -18,5 +18,6 @@
 </head>
 <body class="antialiased">
     @yield('content')
+    @stack('scripts')
 </body>
 </html>

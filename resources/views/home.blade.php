@@ -12,27 +12,29 @@
                 <div class="absolute inset-0 bg-black opacity-30"></div>
             </div>
 
-            <div class="relative max-w-7xl mx-auto px-6 h-full flex flex-col justify-center">
-                <h1 class="text-5xl md:text-6xl font-black text-white uppercase tracking-wider mb-8 drop-shadow-lg">
+            <div class="relative max-w-7xl mx-auto px-6 h-full flex flex-col items-center justify-center">
+                <h1 class="text-5xl md:text-7xl font-bold text-white drop-shadow-lg mb-8 text-center" style="text-shadow: 0 4px 12px rgba(0,0,0,0.4);">
                     Discover Sukabumi
                 </h1>
 
-                <div class="bg-white/95 backdrop-blur-sm p-4 rounded shadow-xl max-w-lg">
-                    <details class="group">
-                        <summary class="flex justify-between items-center cursor-pointer list-none text-xl font-bold text-gray-800">
-                            <span>I want to...</span>
-                            <span class="transition-transform group-open:rotate-180">
-                                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20">
+                <div class="relative w-full max-w-3xl">
+                    <details class="group relative">
+                        <summary class="bg-white h-[60px] rounded-full flex items-center justify-between pl-8 pr-2 shadow-2xl cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                            <span class="text-gray-700 text-[17px]">I want to</span>
+                            <div class="w-11 h-11 bg-[#1a6bbf] rounded-full flex items-center justify-center text-white transition-transform duration-300 group-open:rotate-180 flex-shrink-0">
+                                <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="24">
                                     <path d="M6 9l6 6 6-6"/>
                                 </svg>
-                            </span>
+                            </div>
                         </summary>
-                        <div class="mt-3 pt-3 border-t border-gray-200 space-y-2">
-                            <a href="#" class="block text-[15px] text-[#1a6bbf] hover:text-[#145299] font-semibold">Kunjungi destinasi alam terbaik</a>
-                            <a href="#" class="block text-[15px] text-[#1a6bbf] hover:text-[#145299] font-semibold">Jelajahi Geopark Ciletuh</a>
-                            <a href="#" class="block text-[15px] text-[#1a6bbf] hover:text-[#145299] font-semibold">Nikmati kuliner lokal</a>
-                            <a href="#" class="block text-[15px] text-[#1a6bbf] hover:text-[#145299] font-semibold">Ikuti tur arung jeram</a>
-                            <a href="#" class="block text-[15px] text-[#1a6bbf] hover:text-[#145299] font-semibold">Temukan penginapan terbaik</a>
+                        
+                        <!-- Dropdown Content -->
+                        <div class="absolute left-0 right-0 top-full mt-3 bg-white rounded-2xl shadow-2xl overflow-hidden z-50 py-2">
+                            <a href="#" class="block px-8 py-3 text-[16px] text-[#1a6bbf] hover:bg-[#f0f7ff] hover:text-[#145299] font-semibold transition-colors">Kunjungi destinasi alam terbaik</a>
+                            <a href="#" class="block px-8 py-3 text-[16px] text-[#1a6bbf] hover:bg-[#f0f7ff] hover:text-[#145299] font-semibold transition-colors">Jelajahi Geopark Ciletuh</a>
+                            <a href="#" class="block px-8 py-3 text-[16px] text-[#1a6bbf] hover:bg-[#f0f7ff] hover:text-[#145299] font-semibold transition-colors">Nikmati kuliner lokal</a>
+                            <a href="#" class="block px-8 py-3 text-[16px] text-[#1a6bbf] hover:bg-[#f0f7ff] hover:text-[#145299] font-semibold transition-colors">Ikuti tur arung jeram</a>
+                            <a href="#" class="block px-8 py-3 text-[16px] text-[#1a6bbf] hover:bg-[#f0f7ff] hover:text-[#145299] font-semibold transition-colors">Temukan penginapan terbaik</a>
                         </div>
                     </details>
                 </div>
@@ -74,52 +76,104 @@
             <h2 class="text-3xl font-black text-gray-900 uppercase tracking-tight mb-3">Must-sees in Sukabumi</h2>
             <p class="text-base text-gray-600 mb-8 max-w-2xl">A trip to Sukabumi wouldn't be complete without experiencing our most iconic nature attractions, stunning waterfalls and exciting outdoor tours.</p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                <a href="#" class="group relative block h-72 overflow-hidden bg-gray-900 rounded shadow-md transition-transform hover:-translate-y-1">
-                    <span class="absolute top-4 left-0 bg-[#1a6bbf] text-white text-[11px] font-bold px-3 py-1 uppercase z-20 tracking-wide">Top Rated</span>
-                    <img alt="Geopark Ciletuh" src="https://images.unsplash.com/photo-1542662565-7e4fd1e56993?q=80&w=640&h=480&fit=crop" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"/>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-                    <div class="absolute bottom-0 p-5 z-10 w-full">
-                        <h3 class="text-lg font-bold text-white mb-1">Geopark Ciletuh</h3>
-                        <p class="text-xs text-gray-300 line-clamp-2">Jelajahi UNESCO Global Geopark dengan air terjun memukau dan pemandangan amfiteater alam.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Card 1 -->
+                <a href="#" class="group relative block h-80 overflow-hidden bg-gray-900 rounded-xl shadow-md cursor-pointer">
+                    <span class="absolute top-4 left-0 bg-[#f9a826] text-gray-900 text-[12px] font-bold px-3 py-1 z-20 rounded-r-md shadow-sm">Special offer</span>
+                    <img alt="Geopark Ciletuh" src="https://images.unsplash.com/photo-1542662565-7e4fd1e56993?q=80&w=640&h=480&fit=crop" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"/>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute inset-x-0 bottom-0 p-5 z-10 flex flex-col justify-end">
+                        <h3 class="text-xl font-bold text-white group-hover:underline decoration-2 underline-offset-4 transition-all duration-300">Geopark Ciletuh</h3>
+                        <div class="max-h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:max-h-24 group-hover:opacity-100 group-hover:mt-2">
+                            <p class="text-[13px] text-gray-200 line-clamp-3">
+                                Jelajahi UNESCO Global Geopark dengan air terjun memukau dan pemandangan amfiteater alam yang luar biasa.
+                            </p>
+                        </div>
                     </div>
                 </a>
 
-                <a href="#" class="group relative block h-72 overflow-hidden bg-gray-900 rounded shadow-md transition-transform hover:-translate-y-1">
-                    <img alt="Situ Gunung" src="https://images.unsplash.com/photo-1610486001224-b0402b8552fc?q=80&w=640&h=480&fit=crop" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"/>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-                    <div class="absolute bottom-0 p-5 z-10 w-full">
-                        <h3 class="text-lg font-bold text-white mb-1">Situ Gunung</h3>
-                        <p class="text-xs text-gray-300 line-clamp-2">Rasakan jembatan gantung terpanjang di Asia Tenggara di tengah hutan pinus yang sejuk.</p>
+                <!-- Card 2 -->
+                <a href="#" class="group relative block h-80 overflow-hidden bg-gray-900 rounded-xl shadow-md cursor-pointer">
+                    <span class="absolute top-4 left-0 bg-[#f9a826] text-gray-900 text-[12px] font-bold px-3 py-1 z-20 rounded-r-md shadow-sm">Top Rated</span>
+                    <img alt="Situ Gunung" src="https://images.unsplash.com/photo-1610486001224-b0402b8552fc?q=80&w=640&h=480&fit=crop" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"/>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute inset-x-0 bottom-0 p-5 z-10 flex flex-col justify-end">
+                        <h3 class="text-xl font-bold text-white group-hover:underline decoration-2 underline-offset-4 transition-all duration-300">Situ Gunung</h3>
+                        <div class="max-h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:max-h-24 group-hover:opacity-100 group-hover:mt-2">
+                            <p class="text-[13px] text-gray-200 line-clamp-3">
+                                Rasakan sensasi menyeberangi jembatan gantung terpanjang di Asia Tenggara di tengah sejuknya hutan pinus.
+                            </p>
+                        </div>
                     </div>
                 </a>
 
-                <a href="#" class="group relative block h-72 overflow-hidden bg-gray-900 rounded shadow-md transition-transform hover:-translate-y-1 lg:col-span-2">
-                    <span class="absolute top-4 left-0 bg-[#1a6bbf] text-white text-[11px] font-bold px-3 py-1 uppercase z-20 tracking-wide">An itinerary essential</span>
-                    <img alt="Pelabuhan Ratu" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1280&h=480&fit=crop" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"/>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-                    <div class="absolute bottom-0 p-5 z-10 w-full">
-                        <h3 class="text-xl font-bold text-white mb-1">Pelabuhan Ratu</h3>
-                        <p class="text-xs text-gray-300 line-clamp-2 max-w-sm">Nikmati keindahan pantai selatan dengan ombak legendaris dan pemandangan matahari terbenam.</p>
+                <!-- Card 3 -->
+                <a href="#" class="group relative block h-80 overflow-hidden bg-gray-900 rounded-xl shadow-md cursor-pointer">
+                    <span class="absolute top-4 left-0 bg-[#f9a826] text-gray-900 text-[12px] font-bold px-3 py-1 z-20 rounded-r-md shadow-sm">An itinerary essential</span>
+                    <img alt="Pelabuhan Ratu" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=640&h=480&fit=crop" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"/>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute inset-x-0 bottom-0 p-5 z-10 flex flex-col justify-end">
+                        <h3 class="text-xl font-bold text-white group-hover:underline decoration-2 underline-offset-4 transition-all duration-300">Pelabuhan Ratu</h3>
+                        <div class="max-h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:max-h-24 group-hover:opacity-100 group-hover:mt-2">
+                            <p class="text-[13px] text-gray-200 line-clamp-3">
+                                Surga para peselancar dengan ombak legendaris pantai selatan dan panorama matahari terbenam yang magis.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 4 -->
+                <a href="#" class="group relative block h-80 overflow-hidden bg-gray-900 rounded-xl shadow-md cursor-pointer">
+                    <img alt="Curug Cikaso" src="https://images.unsplash.com/photo-1596404554311-66774e50ebec?q=80&w=640&h=480&fit=crop" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"/>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute inset-x-0 bottom-0 p-5 z-10 flex flex-col justify-end">
+                        <h3 class="text-xl font-bold text-white group-hover:underline decoration-2 underline-offset-4 transition-all duration-300">Curug Cikaso</h3>
+                        <div class="max-h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:max-h-24 group-hover:opacity-100 group-hover:mt-2">
+                            <p class="text-[13px] text-gray-200 line-clamp-3">
+                                Pesona tiga air terjun berdampingan dengan kolam alami berwarna biru kehijauan yang sangat menyegarkan.
+                            </p>
+                        </div>
                     </div>
                 </a>
             </div>
         </div>
 
         <!-- FIRST-TIME VISITOR CALLOUT -->
-        <div class="bg-white border-y border-gray-200 py-14">
-            <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row gap-12 items-center">
-                <div class="flex-1">
-                    <h2 class="text-3xl font-black text-gray-900 uppercase border-l-4 border-[#1a6bbf] pl-4 mb-4">Pertama kali ke Sukabumi?</h2>
-                    <hr class="border-[#1a6bbf] mb-4 w-16"/>
-                    <p class="text-lg text-gray-700 font-medium leading-relaxed">Temukan panduan lengkap wisata Sukabumi dari destinasi alam terbaik hingga kuliner, hotel, dan aktivitas seru!</p>
-                </div>
-                <div class="flex-1 space-y-5">
-                    <p class="text-gray-600 leading-relaxed">Jika ini pertama kali kamu mengunjungi Sukabumi, panduan ini akan membantu perjalananmu menjadi aman, mudah, dan menyenangkan!</p>
-                    <a href="#" class="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold text-white bg-[#1a6bbf] hover:bg-[#145299] rounded transition-colors shadow-sm">
-                        Pelajari lebih lanjut
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                    </a>
+        <div class="bg-gray-50 py-16">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="relative bg-white border border-[#1a6bbf] rounded-tl-[3.5rem] rounded-br-[3.5rem] p-8 md:p-12 shadow-sm overflow-hidden flex flex-col md:flex-row gap-10">
+                    
+                    <!-- Decorative SVG Bottom Right -->
+                    <div class="absolute bottom-0 right-8 text-[#1a6bbf] opacity-80 pointer-events-none hidden md:block">
+                        <svg width="140" height="80" viewBox="0 0 140 80" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <!-- Mountain / Tree outlines to mimic the London taxi/trees -->
+                            <path d="M100 80 L120 40 L140 80" stroke-linejoin="round" />
+                            <path d="M110 80 L120 55 L130 80" stroke-linejoin="round" />
+                            <path d="M70 80 L90 50 L110 80" stroke-linejoin="round" />
+                            <path d="M20 80 L20 65 C20 50 40 50 40 65 L40 80" />
+                            <path d="M15 65 L45 65" />
+                            <circle cx="23" cy="72" r="3" />
+                            <circle cx="37" cy="72" r="3" />
+                            <path d="M25 57 L35 57" />
+                        </svg>
+                    </div>
+
+                    <div class="flex-1 z-10">
+                        <h2 class="text-4xl md:text-5xl font-black text-[#1a6bbf] mb-6 leading-tight">Pertama kali ke<br>Sukabumi?</h2>
+                        <hr class="border-[#1a6bbf] border-t-2 w-16 mb-6"/>
+                        <p class="text-[17px] text-gray-900 font-bold leading-relaxed">
+                            Temukan panduan lengkap wisata Sukabumi... dari destinasi alam terbaik hingga kuliner, hotel, aktivitas seru, dan lainnya!
+                        </p>
+                    </div>
+                    
+                    <div class="flex-1 space-y-8 z-10">
+                        <p class="text-[15px] text-gray-700 leading-relaxed">
+                            Jika ini pertama kali kamu mengunjungi Sukabumi, panduan ini akan membantu perjalananmu menjadi aman, mudah, dan yang paling penting, menyenangkan! Jelajahi Sukabumi dengan mudah melalui informasi rute terbaru, panduan transportasi darat, dan tips wisata yang praktis.
+                        </p>
+                        <a href="#" class="inline-block px-10 py-3.5 text-[15px] font-bold text-white bg-[#1a6bbf] hover:bg-[#145299] rounded-full transition-colors shadow-md">
+                            Pelajari lebih lanjut
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -127,24 +181,22 @@
         <!-- ANIMATED CATEGORY ICONS -->
         @php
         $categories = [
-            ['name' => 'Wisata Alam', 'lottie' => asset('lottie/anim1.json')],
-            ['name' => 'Arung Jeram', 'lottie' => asset('lottie/anim3.json')],
-            ['name' => 'Wisata Pantai', 'lottie' => asset('lottie/anim3.json')],
-            ['name' => 'Kuliner Lokal', 'lottie' => asset('lottie/anim6.json')],
-            ['name' => 'Hiking', 'lottie' => asset('lottie/anim1.json')],
-            ['name' => 'Hotel & Resort', 'lottie' => asset('lottie/anim6.json')],
+            ['name' => 'Wisata Alam',    'lottie' => asset('lottie/wisata-alam.json')],
+            ['name' => 'Wisata Pantai',  'lottie' => asset('lottie/wisata-pantai.json')],
+            ['name' => 'Kuliner Lokal',  'lottie' => asset('lottie/kuliner-lokal.json')],
+            ['name' => 'Hotel & Resort', 'lottie' => asset('lottie/hotel-resort.json')],
         ];
         @endphp
 
-        <div class="max-w-7xl mx-auto px-6 py-14">
-            <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">Butuh inspirasi aktivitas?</h2>
-            <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
+        <div class="max-w-7xl mx-auto px-6 py-12">
+            <h2 class="text-[22px] font-bold text-gray-900 mb-6">Butuh inspirasi aktivitas?</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
                 @foreach($categories as $cat)
-                    <a href="#" class="vs-icon-panel">
-                        <div class="vs-icon-box">
-                            <lottie-player src="{{ $cat['lottie'] }}" background="transparent" speed="1" style="width: 100%; height: 100%;" autoplay loop></lottie-player>
+                    <a href="#" class="vs-cat-card group">
+                        <div class="vs-cat-lottie">
+                            <lottie-player src="{{ $cat['lottie'] }}" background="transparent" speed="1" style="width:100%;height:100%;" autoplay loop></lottie-player>
                         </div>
-                        <h3>{{ $cat['name'] }}</h3>
+                        <h3 class="vs-cat-label">{{ $cat['name'] }}</h3>
                     </a>
                 @endforeach
             </div>
@@ -167,3 +219,9 @@
     </footer>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    // Lottie category cards: always playing, no pause/stop behavior
+</script>
+@endpush

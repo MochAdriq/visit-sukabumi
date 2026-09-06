@@ -120,7 +120,7 @@ $navItems = [
 
             @foreach($navItems as $item)
                 @if($item['dropdown'])
-                    <div class="vs-nav-item relative">
+                    <div class="vs-nav-item">
                         <a href="{{ $item['href'] }}" class="vs-nav-link">
                             {{ $item['label'] }}
                             <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">

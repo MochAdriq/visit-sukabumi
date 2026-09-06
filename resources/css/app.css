@@ -42,6 +42,7 @@
 /* Nav link base */
 .vs-nav-link {
   display: flex;
+  align-content: center;
   align-items: center;
   gap: 4px;
   padding: 14px 16px;
@@ -49,34 +50,61 @@
   font-weight: 700;
   color: #1f2937;
   white-space: nowrap;
-  border-bottom: 3px solid transparent;
-  transition: color 0.15s, border-color 0.15s;
+  transition: color 0.15s;
   position: relative;
+}
+
+/* Top bar animation on hover */
+.vs-nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #1a6bbf;
+  transform: translateY(5px);
+  opacity: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .vs-nav-link:hover,
 .vs-nav-link.active {
   color: #1a6bbf;
-  border-bottom-color: #1a6bbf;
+}
+
+.vs-nav-link:hover::before,
+.vs-nav-link.active::before {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 /* Home icon link */
 .vs-nav-link-home {
   padding: 14px 12px;
-  border-bottom: 3px solid #1a6bbf;
   color: #1a6bbf;
+}
+.vs-nav-link-home::before {
+  background: #1a6bbf;
+  transform: translateY(0);
+  opacity: 1;
 }
 
 /* =========================================================
  * MEGAMENU
  * ========================================================= */
 .vs-megamenu {
-  display: none;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  
   position: absolute;
   left: 0;
   right: 0;
   top: 100%;
-  background: #fff;
+  background: #ffffff !important;
   border-top: 3px solid #1a6bbf;
   box-shadow: 0 8px 24px rgba(0,0,0,0.15);
   z-index: 200;
@@ -91,7 +119,10 @@
 }
 
 .vs-nav-item:hover .vs-megamenu {
-  display: block;
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .vs-megamenu-sidebar {
@@ -120,11 +151,8 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  display: flex;
-  flex-direction: column;
+  display: block;
   flex: 1;
-  align-content: start;
-  padding-left: 0;
   column-count: 2;
   column-gap: 16px;
 }
@@ -206,5 +234,60 @@
 
 .vs-icon-panel:hover h3 {
   color: #1a6bbf;
+}
+
+/* =========================================================
+ * CATEGORY CARDS — 4-column icon grid
+ * ========================================================= */
+.vs-cat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  height: 180px;
+  background: #fff;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.vs-cat-card:hover {
+  border-color: #fff;
+  background: #1a6bbf;
+  box-shadow: 0 8px 24px rgba(26,107,191,0.35);
+}
+
+.vs-cat-lottie {
+  width: 90px;
+  height: 90px;
+  margin-bottom: 14px;
+  /* Default: hitam pekat — ikon terlihat solid hitam */
+  filter: brightness(0);
+  transition: filter 0.3s ease;
+}
+
+/* Hover: jadikan icon putih bersih di atas background biru */
+.vs-cat-card:hover .vs-cat-lottie {
+  filter: brightness(0) invert(1);
+}
+
+.vs-cat-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+  text-align: center;
+  line-height: 1.3;
+  transition: color 0.25s ease;
+  text-decoration: none;
+}
+
+.vs-cat-card:hover .vs-cat-label {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
