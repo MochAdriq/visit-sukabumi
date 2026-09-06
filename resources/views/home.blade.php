@@ -127,12 +127,12 @@
         <!-- ANIMATED CATEGORY ICONS -->
         @php
         $categories = [
-            ['name' => 'Wisata Alam', 'lottie' => 'https://assets5.lottiefiles.com/packages/lf20_qm8eqzse.json'],
-            ['name' => 'Arung Jeram', 'lottie' => 'https://assets10.lottiefiles.com/packages/lf20_qnbs5sez.json'],
-            ['name' => 'Wisata Pantai', 'lottie' => 'https://assets9.lottiefiles.com/packages/lf20_ysas4vcp.json'],
-            ['name' => 'Kuliner Lokal', 'lottie' => 'https://assets4.lottiefiles.com/packages/lf20_5njp3udg.json'],
-            ['name' => 'Hiking', 'lottie' => 'https://assets7.lottiefiles.com/packages/lf20_vnik36ac.json'],
-            ['name' => 'Hotel & Resort', 'lottie' => 'https://assets4.lottiefiles.com/packages/lf20_v1yudlrx.json'],
+            ['name' => 'Wisata Alam', 'lottie' => asset('lottie/anim1.json')],
+            ['name' => 'Arung Jeram', 'lottie' => asset('lottie/anim3.json')],
+            ['name' => 'Wisata Pantai', 'lottie' => asset('lottie/anim3.json')],
+            ['name' => 'Kuliner Lokal', 'lottie' => asset('lottie/anim6.json')],
+            ['name' => 'Hiking', 'lottie' => asset('lottie/anim1.json')],
+            ['name' => 'Hotel & Resort', 'lottie' => asset('lottie/anim6.json')],
         ];
         @endphp
 
