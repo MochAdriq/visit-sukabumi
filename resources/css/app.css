@@ -6,7 +6,7 @@
 }
 
 /* =========================================================
- * NAVBAR — pixel-perfect Visit London structure
+ * NAVBAR â€” pixel-perfect Visit London structure
  * ========================================================= */
 
 /* Row 1 brand bar */
@@ -44,8 +44,10 @@
   display: flex;
   align-content: center;
   align-items: center;
+  justify-content: center;
   gap: 4px;
-  padding: 14px 16px;
+  height: 50px;
+  padding: 0 16px;
   font-size: 13px;
   font-weight: 700;
   color: #1f2937;
@@ -81,9 +83,10 @@
 
 /* Home icon link */
 .vs-nav-link-home {
-  padding: 14px 12px;
+  padding: 0 12px;
   color: #1a6bbf;
 }
+
 .vs-nav-link-home::before {
   background: #1a6bbf;
   transform: translateY(0);
@@ -99,14 +102,14 @@
   transform: translateY(10px);
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-  
+
   position: absolute;
   left: 0;
   right: 0;
   top: 100%;
   background: #ffffff !important;
   border-top: 3px solid #1a6bbf;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   z-index: 200;
 }
 
@@ -185,7 +188,7 @@
 }
 
 /* =========================================================
- * LOTTIE CATEGORY PANELS — Visit London row6-icons-animated
+ * LOTTIE CATEGORY PANELS â€” Visit London row6-icons-animated
  * ========================================================= */
 .vs-icon-panel {
   display: flex;
@@ -237,7 +240,7 @@
 }
 
 /* =========================================================
- * CATEGORY CARDS — 4-column icon grid
+ * CATEGORY CARDS â€” 4-column icon grid
  * ========================================================= */
 .vs-cat-card {
   display: flex;
@@ -249,7 +252,7 @@
   background: #fff;
   border: 2px solid #d1d5db;
   border-radius: 12px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
   transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
   cursor: pointer;
   text-decoration: none;
@@ -258,14 +261,14 @@
 .vs-cat-card:hover {
   border-color: #fff;
   background: #1a6bbf;
-  box-shadow: 0 8px 24px rgba(26,107,191,0.35);
+  box-shadow: 0 8px 24px rgba(26, 107, 191, 0.35);
 }
 
 .vs-cat-lottie {
   width: 90px;
   height: 90px;
   margin-bottom: 14px;
-  /* Default: hitam pekat — ikon terlihat solid hitam */
+  /* Default: hitam pekat â€” ikon terlihat solid hitam */
   filter: brightness(0);
   transition: filter 0.3s ease;
 }
@@ -291,3 +294,37 @@
   text-underline-offset: 3px;
 }
 
+
+/* =========================================================
+ * TAB PILLS — konsisten dengan sistem navbar
+ * hover  : border biru + teks biru (sama dengan vs-nav-link)
+ * active : background biru solid + teks putih
+ * ========================================================= */
+.vs-tab-pill {
+  padding: 8px 22px;
+  border-radius: 999px;
+  border: 2px solid #d1d5db;
+  background: transparent;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.vs-tab-pill:hover {
+  border-color: #1a6bbf;
+  color: #1a6bbf;
+  background: #f0f7ff;
+}
+
+.vs-tab-pill.active {
+  background: #1a6bbf;
+  border-color: #1a6bbf;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(26, 107, 191, 0.25);
+}
+
+/* =========================================================
+ * MEGAMENU LINKS — konsisten dengan hover biru muda
+ * ========================================================= */
