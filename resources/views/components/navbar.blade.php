@@ -1,64 +1,70 @@
 @php
 $navItems = [
     [
-        'label' => 'Book tickets',
-        'href' => '#',
+        'label'    => 'Book tickets',
+        'href'     => '#',
+        'activeOn' => 'tickets*',
         'dropdown' => false,
     ],
     [
-        'label' => 'Destinations',
-        'href' => '#',
+        'label'    => 'Destinations',
+        'href'     => '/place',
+        'activeOn' => 'place*',
         'dropdown' => true,
-        'intro' => ['title' => 'Destinations', 'text' => 'Temukan destinasi wisata terbaik di Sukabumi, dari alam hingga kuliner.'],
-        'links' => [
-            ['label' => 'Geopark Ciletuh', 'href' => '#', 'highlight' => false],
-            ['label' => 'Pelabuhan Ratu', 'href' => '#', 'highlight' => false],
-            ['label' => 'Situ Gunung', 'href' => '#', 'highlight' => false],
-            ['label' => 'Curug Cikaso', 'href' => '#', 'highlight' => false],
-            ['label' => 'Pantai Ujung Genteng', 'href' => '#', 'highlight' => false],
-            ['label' => 'Curug Luhur', 'href' => '#', 'highlight' => false],
-            ['label' => 'Taman Nasional Gunung Halimun', 'href' => '#', 'highlight' => false],
-            ['label' => 'Semua Destinasi', 'href' => '#', 'highlight' => true],
+        'intro'    => ['title' => 'Destinations', 'text' => 'Temukan destinasi wisata terbaik di Sukabumi, dari alam hingga kuliner.'],
+        'links'    => [
+            ['label' => 'Geopark Ciletuh',              'href' => '/place/geopark-ciletuh',              'highlight' => false],
+            ['label' => 'Pelabuhan Ratu',                'href' => '/place/pantai-palabuhanratu',          'highlight' => false],
+            ['label' => 'Situ Gunung',                   'href' => '/place/situ-gunung',                  'highlight' => false],
+            ['label' => 'Curug Cikaso',                  'href' => '/place/curug-cikaso',                 'highlight' => false],
+            ['label' => 'Pantai Ujung Genteng',          'href' => '/place/pantai-ujung-genteng',          'highlight' => false],
+            ['label' => 'Curug Luhur',                   'href' => '/place/curug-luhur',                  'highlight' => false],
+            ['label' => 'Taman Nasional Gunung Halimun', 'href' => '/place/taman-nasional-halimun-salak', 'highlight' => false],
+            ['label' => 'Semua Destinasi',               'href' => '/place',                              'highlight' => true],
         ],
     ],
     [
-        'label' => 'Things to do',
-        'href' => '#',
+        'label'    => 'Things to do',
+        'href'     => '#',
+        'activeOn' => 'aktivitas*',
         'dropdown' => true,
-        'intro' => ['title' => 'Things to do', 'text' => 'Temukan aktivitas seru dan pengalaman tak terlupakan di Sukabumi.'],
-        'links' => [
-            ['label' => 'Wisata keluarga', 'href' => '#', 'highlight' => false],
-            ['label' => 'Kuliner & minuman', 'href' => '#', 'highlight' => false],
-            ['label' => 'Arung jeram', 'href' => '#', 'highlight' => false],
-            ['label' => 'Diving & snorkeling', 'href' => '#', 'highlight' => false],
-            ['label' => 'Hiking & trekking', 'href' => '#', 'highlight' => false],
-            ['label' => 'Wisata sejarah', 'href' => '#', 'highlight' => false],
-            ['label' => 'Belanja oleh-oleh', 'href' => '#', 'highlight' => false],
-            ['label' => 'Semua aktivitas', 'href' => '#', 'highlight' => true],
+        'intro'    => ['title' => 'Things to do', 'text' => 'Temukan aktivitas seru dan pengalaman tak terlupakan di Sukabumi.'],
+        'links'    => [
+            ['label' => 'Wisata keluarga',    'href' => '#', 'highlight' => false],
+            ['label' => 'Kuliner & minuman',  'href' => '#', 'highlight' => false],
+            ['label' => 'Arung jeram',        'href' => '/place/arung-jeram-sungai-citarik', 'highlight' => false],
+            ['label' => 'Diving & snorkeling','href' => '/place/snorkeling-ujung-genteng',   'highlight' => false],
+            ['label' => 'Hiking & trekking',  'href' => '#', 'highlight' => false],
+            ['label' => 'Wisata sejarah',     'href' => '#', 'highlight' => false],
+            ['label' => 'Belanja oleh-oleh',  'href' => '/place/pusat-oleh-oleh-sukabumi-khas', 'highlight' => false],
+            ['label' => 'Semua aktivitas',    'href' => '#', 'highlight' => true],
         ],
     ],
     [
-        'label' => 'Traveller information',
-        'href' => '#',
+        'label'    => 'Traveller information',
+        'href'     => '#',
+        'activeOn' => 'info*',
         'dropdown' => true,
-        'intro' => ['title' => 'Traveller information', 'text' => 'Panduan perjalanan lengkap untuk wisatawan Sukabumi.'],
-        'links' => [
-            ['label' => 'Cara ke Sukabumi', 'href' => '#', 'highlight' => false],
-            ['label' => 'Transportasi lokal', 'href' => '#', 'highlight' => false],
-            ['label' => 'Aksesibilitas', 'href' => '#', 'highlight' => false],
-            ['label' => 'Cari hotel', 'href' => '#', 'highlight' => false],
-            ['label' => 'Informasi penting', 'href' => '#', 'highlight' => false],
-            ['label' => 'Semua info perjalanan', 'href' => '#', 'highlight' => true],
+        'intro'    => ['title' => 'Traveller information', 'text' => 'Panduan perjalanan lengkap untuk wisatawan Sukabumi.'],
+        'links'    => [
+            ['label' => 'Cara ke Sukabumi',       'href' => '#', 'highlight' => false],
+            ['label' => 'Transportasi lokal',     'href' => '#', 'highlight' => false],
+            ['label' => 'Aksesibilitas',           'href' => '#', 'highlight' => false],
+            ['label' => 'Cari hotel',              'href' => '#', 'highlight' => false],
+            ['label' => 'Informasi penting',      'href' => '#', 'highlight' => false],
+            ['label' => 'Semua info perjalanan',  'href' => '#', 'highlight' => true],
         ],
     ],
     [
-        'label' => 'Accommodation',
-        'href' => '#',
+        'label'    => 'Accommodation',
+        'href'     => '#',
+        'activeOn' => 'accommodation*',
         'dropdown' => false,
     ],
     [
-        'label' => 'Blog',
-        'href' => '#',
+        'label'    => 'Blog',
+        'href'     => '#',
+        'activeOn' => 'blog*',
         'dropdown' => false,
     ],
 ];
@@ -112,18 +118,23 @@ $navItems = [
     <div class="vs-nav-row">
         <nav class="max-w-7xl mx-auto px-6 w-full flex items-center justify-center">
             <!-- Home -->
-            <a href="/" class="vs-nav-link vs-nav-link-home flex items-center justify-center">
+            <a href="/" class="vs-nav-link vs-nav-link-home flex items-center justify-center {{ request()->is('/') ? 'active' : '' }}">
                 <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                 </svg>
             </a>
 
             @foreach($navItems as $item)
+                @php
+                    $isActive = isset($item['activeOn'])
+                        ? request()->is($item['activeOn'])
+                        : ($item['href'] !== '#' && request()->is(ltrim($item['href'], '/')));
+                @endphp
                 @if($item['dropdown'])
                     <div class="vs-nav-item">
-                        <a href="{{ $item['href'] }}" class="vs-nav-link">
+                        <a href="{{ $item['href'] }}" class="vs-nav-link {{ $isActive ? 'active' : '' }}">
                             {{ $item['label'] }}
-                            <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="transition-transform duration-200">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </a>
@@ -146,7 +157,7 @@ $navItems = [
                         </div>
                     </div>
                 @else
-                    <a href="{{ $item['href'] }}" class="vs-nav-link">
+                    <a href="{{ $item['href'] }}" class="vs-nav-link {{ $isActive ? 'active' : '' }}">
                         {{ $item['label'] }}
                     </a>
                 @endif
