@@ -11,8 +11,13 @@ class Place extends Model
 {
     protected $fillable = [
         'category_id', 'name', 'slug', 'description',
-        'address', 'latitude', 'longitude', 'status',
+        'address', 'district', 'latitude', 'longitude', 'status',
         'price', 'phone', 'website', 'open_hours', 'duration', 'ticket_info',
+        'facilities', 'nearby_places',
+    ];
+
+    protected $casts = [
+        'facilities' => 'array',
     ];
 
     /** Route model binding by slug instead of id */

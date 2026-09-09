@@ -3,57 +3,72 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TicketResource\Pages;
-use App\Filament\Resources\TicketResource\RelationManagers;
 use App\Models\Ticket;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TicketResource extends Resource
 {
     protected static ?string $model = Ticket::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-ticket';
+    protected static ?string $navigationGroup = 'Event & Trip';
+    protected static ?string $modelLabel = 'Tiket';
+    protected static ?string $pluralModelLabel = 'Tiket';
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('place_id')
-                    ->relationship('place', 'name')
-                    ->required(),
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('type')
-                    ->options([
-                        'reguler' => 'Tiket Reguler',
-                        'open_trip' => 'Open Trip',
-                        'guided_tour' => 'Guided Tour',
-                    ])
-                    ->required()
-                    ->default('reguler'),
-                Forms\Components\TextInput::make('price')
-                    ->required()
-                    ->numeric()
-                    ->default(0.00),
-                Forms\Components\DateTimePicker::make('date')
-                    ->label('Tanggal (Khusus Open Trip)')
-                    ->nullable(),
-                Forms\Components\TextInput::make('quota')
-                    ->numeric()
-                    ->label('Kuota')
-                    ->nullable(),
-                Forms\Components\Toggle::make('is_active')
-                    ->label('Aktif Dijual')
-                    ->default(true)
-                    ->required(),
-                Forms\Components\Textarea::make('description')
-                    ->columnSpanFull(),
+                Forms\Components\Section::make('Informasi Tiket')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\Select::make('place_id')
+                            ->relationship('place', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->label('Destinasi'),
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255)
+                            ->label('Nama Tiket')
+                            ->placeholder('Contoh: Tiket Masuk Reguler'),
+                        Forms\Components\Select::make('type')
+                            ->options([
+                                'reguler'      => 'Tiket Reguler',
+                                'open_trip'    => 'Open Trip',
+                                'guided_tour'  => 'Guided Tour',
+                            ])
+                            ->required()
+                            ->default('reguler')
+                            ->label('Tipe Tiket'),
+                        Forms\Components\TextInput::make('price')
+                            ->required()
+                            ->numeric()
+                            ->prefix('Rp')
+                            ->default(0)
+                            ->label('Harga'),
+                        Forms\Components\DateTimePicker::make('date')
+                            ->label('Tanggal (Khusus Open Trip / Guided Tour)')
+                            ->nullable(),
+                        Forms\Components\TextInput::make('quota')
+                            ->numeric()
+                            ->label('Kuota Peserta')
+                            ->nullable()
+                            ->placeholder('Kosongkan jika tidak terbatas'),
+                        Forms\Components\Toggle::make('is_active')
+                            ->label('Aktif Dijual')
+                            ->default(true),
+                        Forms\Components\Textarea::make('description')
+                            ->columnSpanFull()
+                            ->rows(3)
+                            ->label('Keterangan Tambahan'),
+                    ]),
             ]);
     }
 
@@ -63,36 +78,67 @@ class TicketResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('place.name')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Destinasi'),
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Nama Tiket'),
                 Tables\Columns\TextColumn::make('type')
-                    ->searchable(),
+                    ->badge()
+                    ->color(fn(string $state) => match($state) {
+                        'reguler'     => 'gray',
+                        'open_trip'   => 'primary',
+                        'guided_tour' => 'success',
+                        default       => 'gray',
+                    })
+                    ->formatStateUsing(fn(string $state) => match($state) {
+                        'reguler'     => 'Reguler',
+                        'open_trip'   => 'Open Trip',
+                        'guided_tour' => 'Guided Tour',
+                        default       => $state,
+                    })
+                    ->label('Tipe'),
                 Tables\Columns\TextColumn::make('price')
                     ->money('IDR')
-                    ->sortable(),
+                    ->sortable()
+                    ->label('Harga'),
                 Tables\Columns\TextColumn::make('date')
-                    ->dateTime()
-                    ->sortable(),
+                    ->date('d M Y')
+                    ->sortable()
+                    ->label('Tanggal'),
                 Tables\Columns\TextColumn::make('quota')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('Kuota')
+                    ->default('—'),
                 Tables\Columns\IconColumn::make('is_active')
-                    ->boolean(),
+                    ->boolean()
+                    ->label('Aktif'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                Tables\Filters\TernaryFilter::make('is_active')
+                    ->label('Status Aktif'),
+                Tables\Filters\SelectFilter::make('type')
+                    ->options([
+                        'reguler'     => 'Tiket Reguler',
+                        'open_trip'   => 'Open Trip',
+                        'guided_tour' => 'Guided Tour',
+                    ])
+                    ->label('Tipe Tiket'),
+                Tables\Filters\SelectFilter::make('place')
+                    ->relationship('place', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->label('Filter Destinasi'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -103,17 +149,15 @@ class TicketResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTickets::route('/'),
+            'index'  => Pages\ListTickets::route('/'),
             'create' => Pages\CreateTicket::route('/create'),
-            'edit' => Pages\EditTicket::route('/{record}/edit'),
+            'edit'   => Pages\EditTicket::route('/{record}/edit'),
         ];
     }
 }

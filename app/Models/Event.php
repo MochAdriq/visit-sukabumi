@@ -15,6 +15,10 @@ class Event extends Model
         'location_name',
         'image_path',
         'is_active',
+        'whats_included',
+        'what_to_expect',
+        'meeting_and_pickup',
+        'cancellation_policy',
     ];
 
     protected $casts = [
@@ -22,4 +26,9 @@ class Event extends Model
         'end_date' => 'datetime',
         'is_active' => 'boolean',
     ];
+
+    public function itineraries()
+    {
+        return $this->hasMany(EventItinerary::class)->orderBy('order_num');
+    }
 }

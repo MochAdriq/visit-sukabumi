@@ -29,6 +29,7 @@ class PlaceResource extends Resource
                     Forms\Components\Select::make('category_id')
                         ->relationship('category', 'name')
                         ->required()
+                        ->preload()
                         ->label('Kategori'),
                     Forms\Components\Select::make('status')
                         ->options([
@@ -49,6 +50,7 @@ class PlaceResource extends Resource
                     Forms\Components\TextInput::make('slug')
                         ->required()
                         ->maxLength(255)
+                        ->unique(ignoreRecord: true)
                         ->label('Slug (URL)')
                         ->helperText('Otomatis terisi dari nama, bisa diedit manual'),
                     Forms\Components\Textarea::make('description')
@@ -59,6 +61,11 @@ class PlaceResource extends Resource
                         ->columnSpanFull()
                         ->rows(2)
                         ->label('Alamat Lengkap'),
+                    Forms\Components\TextInput::make('district')
+                        ->columnSpanFull()
+                        ->maxLength(100)
+                        ->label('Kecamatan')
+                        ->placeholder('Contoh: Pelabuhan Ratu'),
                 ]),
 
             Forms\Components\Section::make('Koordinat Peta')
@@ -85,7 +92,7 @@ class PlaceResource extends Resource
                     Forms\Components\TextInput::make('phone')
                         ->tel()
                         ->maxLength(20)
-                        ->label('Nomor WhatsApp')
+                        ->label('Nomor WhatsApp / Kontak')
                         ->placeholder('08xxxxxxxxxx'),
                     Forms\Components\TextInput::make('open_hours')
                         ->maxLength(100)
@@ -104,6 +111,38 @@ class PlaceResource extends Resource
                         ->maxLength(255)
                         ->label('Info Tiket Tambahan')
                         ->placeholder('Termasuk parkir dan pemandu'),
+                    Forms\Components\TagsInput::make('facilities')
+                        ->columnSpanFull()
+                        ->label('Fasilitas Utama')
+                        ->placeholder('Ketik fasilitas lalu tekan Enter (contoh: WiFi, Kolam Renang)'),
+                    Forms\Components\Textarea::make('nearby_places')
+                        ->columnSpanFull()
+                        ->rows(2)
+                        ->maxLength(255)
+                        ->label('Dekat Dengan (Nearby Places)')
+                        ->placeholder('Contoh: 5 Menit ke Alun-Alun, Dekat Pantai Karang Hawu'),
+                ]),
+
+            Forms\Components\Section::make('Galeri Foto')
+                ->description('Upload beberapa foto destinasi. Centang "Foto Utama" untuk foto yang tampil di listing.')
+                ->collapsed()
+                ->schema([
+                    Forms\Components\Repeater::make('placeImages')
+                        ->relationship()
+                        ->schema([
+                            Forms\Components\FileUpload::make('image_path')
+                                ->image()
+                                ->required()
+                                ->imageEditor()
+                                ->directory('places')
+                                ->label('Foto'),
+                            Forms\Components\Toggle::make('is_primary')
+                                ->label('Foto Utama')
+                                ->default(false),
+                        ])
+                        ->columns(2)
+                        ->addActionLabel('+ Tambah Foto')
+                        ->columnSpanFull(),
                 ]),
         ]);
     }
@@ -112,13 +151,23 @@ class PlaceResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('primaryImage.image_path')
+                    ->label('')
+                    ->square()
+                    ->size(50)
+                    ->disk('public'),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable()
                     ->label('Nama'),
                 Tables\Columns\TextColumn::make('category.name')
                     ->sortable()
+                    ->badge()
+                    ->color('primary')
                     ->label('Kategori'),
+                Tables\Columns\TextColumn::make('district')
+                    ->searchable()
+                    ->label('Kecamatan'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->color(fn(string $state) => match($state) {
@@ -131,6 +180,11 @@ class PlaceResource extends Resource
                     ->money('IDR')
                     ->sortable()
                     ->label('Harga'),
+                Tables\Columns\TextColumn::make('reviews_count')
+                    ->counts('reviews')
+                    ->badge()
+                    ->color('gray')
+                    ->label('Ulasan'),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -143,15 +197,17 @@ class PlaceResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->options(['published' => 'Published', 'draft' => 'Draft']),
                 Tables\Filters\SelectFilter::make('category')
-                    ->relationship('category', 'name'),
+                    ->relationship('category', 'name')
+                    ->preload(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('view')
                     ->label('Lihat')
                     ->icon('heroicon-o-eye')
-                    ->url(fn(Place $record) => url('/place/'.$record->slug))
+                    ->url(fn(Place $record) => url('/place/' . $record->slug))
                     ->openUrlInNewTab(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
