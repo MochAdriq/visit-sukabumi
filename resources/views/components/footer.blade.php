@@ -1,8 +1,8 @@
-﻿<footer class="bg-white border-t border-gray-200">
+<footer class="bg-white border-t border-gray-200">
     <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6 border-b border-gray-200">
         <div>
-            <div class="text-[#1a6bbf] text-2xl font-black tracking-tight leading-none">VISIT SUKABUMI</div>
-            <div class="text-[11px] text-gray-500 font-semibold tracking-widest uppercase mt-0.5">Panduan Wisata Resmi</div>
+            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-16 md:h-20 object-contain drop-shadow-sm mb-1" />
+            <div class="text-[11px] text-gray-500 font-semibold tracking-widest uppercase mt-0.5 px-2">Panduan Wisata Resmi</div>
         </div>
         <div class="text-gray-300 hidden md:block">
             <svg width="220" height="55" viewBox="0 0 220 55" fill="none" stroke="currentColor" stroke-width="1.2">
@@ -59,9 +59,13 @@
     </div>
     <div class="bg-[#1a6bbf]">
         <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div>
-                <span class="text-white text-[15px] font-black tracking-tight">VISIT SUKABUMI</span>
-                <span class="block text-blue-200 text-[11px] mt-0.5">Didukung oleh Dinas Pariwisata Kabupaten Sukabumi</span>
+            <div class="flex items-center gap-4">
+                <div class="bg-white px-3 py-1.5 rounded-xl shadow-sm">
+                    <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-8 md:h-10 object-contain" />
+                </div>
+                <span class="block text-blue-100 text-[11px] md:text-[12px] font-medium leading-snug">
+                    Didukung oleh Dinas Pariwisata<br class="hidden md:block"/> Kabupaten Sukabumi
+                </span>
             </div>
             <div class="flex flex-wrap gap-x-6 gap-y-2">
                 @foreach(['Hubungi Kami','Tentang Kami','Kebijakan Privasi','Aksesibilitas','Syarat & Ketentuan'] as $link)

@@ -1,46 +1,60 @@
 @php
+// Tentukan kategori yang sedang aktif (baik dari URL parameter, atau dari halaman detail destinasi)
+$currentCatSlug = request('category');
+if (isset($place) && $place->category) {
+    $currentCatSlug = $place->category->slug;
+} elseif (isset($currentCategory) && $currentCategory) {
+    $currentCatSlug = $currentCategory->slug;
+}
+
 $navItems = [
     [
         'label'    => 'Pacu Adrenalin',
-        'href'     => '/place?category=aktivitas-seru',
-        'activeOn' => 'place*',
+        'href'     => '/kategori/aktivitas-seru',
+        'activeCategories' => ['aktivitas-seru'],
         'dropdown' => true,
         'intro'    => ['title' => 'Pacu Adrenalin', 'text' => 'Tantang diri Anda dengan aktivitas ekstrem dan petualangan seru di Sukabumi.'],
         'links'    => [
             ['label' => 'Arung Jeram Citarik', 'href' => '/place/arung-jeram-sungai-citarik', 'highlight' => false],
             ['label' => 'Surfing & Ombak',      'href' => '/place/snorkeling-ujung-genteng',   'highlight' => false],
-            ['label' => 'Semua Aktivitas Seru', 'href' => '/place?category=aktivitas-seru',    'highlight' => true],
+            ['label' => 'Semua Aktivitas Seru', 'href' => '/kategori/aktivitas-seru',    'highlight' => true],
         ],
     ],
     [
         'label'    => 'Santai & Healing',
-        'href'     => '/place?category=wisata-alam',
-        'activeOn' => 'place*',
+        'href'     => '/kategori/wisata-alam',
+        'activeCategories' => ['wisata-alam', 'wisata-pantai'],
         'dropdown' => true,
         'intro'    => ['title' => 'Santai & Healing', 'text' => 'Lepaskan penat dan nikmati ketenangan alam yang asri di Sukabumi.'],
         'links'    => [
             ['label' => 'Pesona Geopark Ciletuh', 'href' => '/place/geopark-ciletuh',            'highlight' => false],
             ['label' => 'Situ Gunung & Jembatan', 'href' => '/place/situ-gunung',                'highlight' => false],
-            ['label' => 'Wisata Pantai',          'href' => '/place?category=wisata-pantai',     'highlight' => false],
-            ['label' => 'Semua Wisata Alam',      'href' => '/place?category=wisata-alam',       'highlight' => true],
+            ['label' => 'Wisata Pantai',          'href' => '/kategori/wisata-pantai',     'highlight' => false],
+            ['label' => 'Semua Wisata Alam',      'href' => '/kategori/wisata-alam',       'highlight' => true],
         ],
     ],
     [
         'label'    => 'Budaya & Sejarah',
-        'href'     => '/place?category=wisata-budaya',
-        'activeOn' => 'place*',
+        'href'     => '/kategori/wisata-budaya',
+        'activeCategories' => ['wisata-budaya', 'kuliner'],
         'dropdown' => true,
         'intro'    => ['title' => 'Budaya & Sejarah', 'text' => 'Kenali lebih dekat warisan budaya, sejarah, dan kuliner otentik Sukabumi.'],
         'links'    => [
-            ['label' => 'Kampung Adat',         'href' => '/place?category=wisata-budaya', 'highlight' => false],
-            ['label' => 'Wisata Kuliner Lokal', 'href' => '/place?category=kuliner',       'highlight' => false],
-            ['label' => 'Jelajah Budaya',       'href' => '/place?category=wisata-budaya', 'highlight' => true],
+            ['label' => 'Kampung Adat',         'href' => '/kategori/wisata-budaya', 'highlight' => false],
+            ['label' => 'Wisata Kuliner Lokal', 'href' => '/kategori/kuliner',       'highlight' => false],
+            ['label' => 'Jelajah Budaya',       'href' => '/kategori/wisata-budaya', 'highlight' => true],
         ],
     ],
     [
         'label'    => 'Tempat Menginap',
-        'href'     => '/place?category=hotel-resort',
-        'activeOn' => 'place*',
+        'href'     => '/kategori/hotel-resort',
+        'activeCategories' => ['hotel-resort'],
+        'dropdown' => false,
+    ],
+    [
+        'label'    => 'Event & Festival',
+        'href'     => '/event',
+        'activeOn' => 'event*',
         'dropdown' => false,
     ],
     [
@@ -57,16 +71,28 @@ $navItems = [
     <div class="vs-brand-row">
         <!-- Left: Language + Currency -->
         <div class="flex items-center gap-3 z-10">
-            <button class="flex items-center gap-1 text-[13px] font-semibold text-gray-700 hover:text-[#1a6bbf] transition-colors">
-                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="9.5" stroke-width="1.5"/>
-                    <path d="M2.5 12h19M12 2.5c-2.5 3-4 6-4 9.5s1.5 6.5 4 9.5M12 2.5c2.5 3 4 6 4 9.5s-1.5 6.5-4 9.5" stroke-width="1.3"/>
-                </svg>
-                <span>EN</span>
-                <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/>
-                </svg>
-            </button>
+            <!-- Language Dropdown with Google Translate -->
+            <div class="relative group z-50">
+                <button class="flex items-center gap-1 text-[13px] font-semibold text-gray-700 hover:text-[#1a6bbf] transition-colors py-2">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9.5" stroke-width="1.5"/>
+                        <path d="M2.5 12h19M12 2.5c-2.5 3-4 6-4 9.5s1.5 6.5 4 9.5M12 2.5c2.5 3 4 6 4 9.5s-1.5 6.5-4 9.5" stroke-width="1.3"/>
+                    </svg>
+                    <span id="current-lang">ID</span>
+                    <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="absolute left-0 top-full mt-0 w-36 bg-white border border-gray-100 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                    <div class="py-1">
+                        <button onclick="changeGTranslate('id', 'ID')" class="w-full text-left px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Indonesian</button>
+                        <button onclick="changeGTranslate('en', 'EN')" class="w-full text-left px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">English</button>
+                        <button onclick="changeGTranslate('zh-CN', 'CN')" class="w-full text-left px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Chinese</button>
+                        <button onclick="changeGTranslate('ja', 'JA')" class="w-full text-left px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Japanese</button>
+                        <button onclick="changeGTranslate('ar', 'AR')" class="w-full text-left px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Arabic</button>
+                    </div>
+                </div>
+            </div>
             <button class="flex items-center gap-1 text-[13px] font-semibold text-gray-700 hover:text-[#1a6bbf] transition-colors">
                 <span>Rp&ensp;IDR</span>
                 <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,13 +102,8 @@ $navItems = [
         </div>
 
         <!-- Center: Brand — truly centered with absolute positioning -->
-        <a href="/" class="absolute left-0 right-0 mx-auto w-fit flex flex-col items-center text-center group">
-            <span class="font-black text-[30px] tracking-[0.06em] text-[#1a6bbf] uppercase leading-none group-hover:opacity-80 transition-opacity">
-                Visit Sukabumi
-            </span>
-            <span class="text-[9px] font-bold tracking-[0.22em] text-gray-500 uppercase mt-[3px]">
-                Official Visitor Guide
-            </span>
+        <a href="/" class="absolute left-0 right-0 mx-auto w-fit flex items-center justify-center group py-2">
+            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-14 md:h-16 object-contain group-hover:opacity-90 transition-opacity drop-shadow-sm" />
         </a>
 
         <!-- Right: Search & Auth -->
@@ -128,9 +149,14 @@ $navItems = [
 
             @foreach($navItems as $item)
                 @php
-                    $isActive = isset($item['activeOn'])
-                        ? request()->is($item['activeOn'])
-                        : ($item['href'] !== '#' && request()->is(ltrim($item['href'], '/')));
+                    $isActive = false;
+                    if (isset($item['activeCategories'])) {
+                        $isActive = request()->is('place*') && in_array($currentCatSlug, $item['activeCategories']);
+                    } elseif (isset($item['activeOn'])) {
+                        $isActive = request()->is($item['activeOn']);
+                    } else {
+                        $isActive = $item['href'] !== '#' && request()->is(ltrim($item['href'], '/'));
+                    }
                 @endphp
                 @if($item['dropdown'])
                     <div class="vs-nav-item">
@@ -167,3 +193,21 @@ $navItems = [
         </nav>
     </div>
 </header>
+
+<!-- Google Translate Widget (Hidden) & Custom Script -->
+<div id="google_translate_element" style="display:none;"></div>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'id', autoDisplay: false}, 'google_translate_element');
+}
+
+function changeGTranslate(langCode, langLabel) {
+    var teCombo = document.querySelector('.goog-te-combo');
+    if (teCombo) {
+        teCombo.value = langCode;
+        teCombo.dispatchEvent(new Event('change'));
+        document.getElementById('current-lang').innerText = langLabel;
+    }
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>

@@ -233,55 +233,7 @@
     </main>
 
     {{-- FOOTER --}}
-    <footer class="bg-white border-t border-gray-200">
-        <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 border-b border-gray-100">
-            <div>
-                <h4 class="text-[11px] font-black uppercase tracking-widest text-gray-900 mb-4">WISATA</h4>
-                <ul class="space-y-2.5">
-                    @foreach(['Tempat wisata Sukabumi','Wisata alam','Wisata pantai','Hiking & trekking','Arung jeram','Kuliner & makanan'] as $l)
-                    <li><a href="{{ route('place.index') }}" class="text-[13px] text-gray-500 hover:text-[#1a6bbf] hover:underline transition-colors">{{ $l }}</a></li>
-                    @endforeach
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-[11px] font-black uppercase tracking-widest text-gray-900 mb-4">DESTINASI POPULER</h4>
-                <ul class="space-y-2.5">
-                    @foreach(['Geopark Ciletuh','Situ Gunung','Pelabuhan Ratu','Curug Cikaso','Pantai Ujung Genteng','Gunung Gede Pangrango'] as $l)
-                    <li><a href="{{ route('place.index') }}" class="text-[13px] text-gray-500 hover:text-[#1a6bbf] hover:underline transition-colors">{{ $l }}</a></li>
-                    @endforeach
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-[11px] font-black uppercase tracking-widest text-gray-900 mb-4">AKTIVITAS TERBAIK</h4>
-                <ul class="space-y-2.5">
-                    @foreach(['Arung Jeram Citarik','Surfing Palabuhanratu','Jembatan Situ Gunung','Snorkeling Ujung Genteng','Glamping Halimun','Camping Curug'] as $l)
-                    <li><a href="{{ url('/place?category=aktivitas-seru') }}" class="text-[13px] text-gray-500 hover:text-[#1a6bbf] hover:underline transition-colors">{{ $l }}</a></li>
-                    @endforeach
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-[11px] font-black uppercase tracking-widest text-gray-900 mb-4">PANDUAN WISATA</h4>
-                <ul class="space-y-2.5">
-                    @foreach(['Cara ke Sukabumi','Transportasi lokal','Tips keselamatan','Hotel & penginapan','Kontak darurat'] as $l)
-                    <li><a href="{{ route('information.index') }}" class="text-[13px] text-gray-500 hover:text-[#1a6bbf] hover:underline transition-colors">{{ $l }}</a></li>
-                    @endforeach
-                </ul>
-            </div>
-        </div>
-        <div class="bg-[#1a6bbf]">
-            <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-                <div>
-                    <span class="text-white text-[14px] font-black tracking-tight">VISIT SUKABUMI</span>
-                    <span class="text-blue-200 text-[11px] ml-2">Didukung oleh Dinas Pariwisata Kabupaten Sukabumi</span>
-                </div>
-                <div class="flex flex-wrap gap-x-5 gap-y-1">
-                    @foreach(['Hubungi Kami','Tentang Kami','Kebijakan Privasi','Syarat & Ketentuan'] as $link)
-                    <a href="#" class="text-blue-100 hover:text-white text-[12px] font-medium transition-colors">{{ $link }}</a>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </footer>
+    @include('components.footer')
 
 </div>
 @endsection
