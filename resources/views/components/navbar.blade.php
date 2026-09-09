@@ -1,70 +1,52 @@
 @php
 $navItems = [
     [
-        'label'    => 'Book tickets',
-        'href'     => '#',
-        'activeOn' => 'tickets*',
-        'dropdown' => false,
-    ],
-    [
-        'label'    => 'Destinations',
-        'href'     => '/place',
+        'label'    => 'Pacu Adrenalin',
+        'href'     => '/place?category=aktivitas-seru',
         'activeOn' => 'place*',
         'dropdown' => true,
-        'intro'    => ['title' => 'Destinations', 'text' => 'Temukan destinasi wisata terbaik di Sukabumi, dari alam hingga kuliner.'],
+        'intro'    => ['title' => 'Pacu Adrenalin', 'text' => 'Tantang diri Anda dengan aktivitas ekstrem dan petualangan seru di Sukabumi.'],
         'links'    => [
-            ['label' => 'Geopark Ciletuh',              'href' => '/place/geopark-ciletuh',              'highlight' => false],
-            ['label' => 'Pelabuhan Ratu',                'href' => '/place/pantai-palabuhanratu',          'highlight' => false],
-            ['label' => 'Situ Gunung',                   'href' => '/place/situ-gunung',                  'highlight' => false],
-            ['label' => 'Curug Cikaso',                  'href' => '/place/curug-cikaso',                 'highlight' => false],
-            ['label' => 'Pantai Ujung Genteng',          'href' => '/place/pantai-ujung-genteng',          'highlight' => false],
-            ['label' => 'Curug Luhur',                   'href' => '/place/curug-luhur',                  'highlight' => false],
-            ['label' => 'Taman Nasional Gunung Halimun', 'href' => '/place/taman-nasional-halimun-salak', 'highlight' => false],
-            ['label' => 'Semua Destinasi',               'href' => '/place',                              'highlight' => true],
+            ['label' => 'Arung Jeram Citarik', 'href' => '/place/arung-jeram-sungai-citarik', 'highlight' => false],
+            ['label' => 'Surfing & Ombak',      'href' => '/place/snorkeling-ujung-genteng',   'highlight' => false],
+            ['label' => 'Semua Aktivitas Seru', 'href' => '/place?category=aktivitas-seru',    'highlight' => true],
         ],
     ],
     [
-        'label'    => 'Things to do',
-        'href'     => '#',
-        'activeOn' => 'aktivitas*',
+        'label'    => 'Santai & Healing',
+        'href'     => '/place?category=wisata-alam',
+        'activeOn' => 'place*',
         'dropdown' => true,
-        'intro'    => ['title' => 'Things to do', 'text' => 'Temukan aktivitas seru dan pengalaman tak terlupakan di Sukabumi.'],
+        'intro'    => ['title' => 'Santai & Healing', 'text' => 'Lepaskan penat dan nikmati ketenangan alam yang asri di Sukabumi.'],
         'links'    => [
-            ['label' => 'Wisata keluarga',    'href' => '#', 'highlight' => false],
-            ['label' => 'Kuliner & minuman',  'href' => '#', 'highlight' => false],
-            ['label' => 'Arung jeram',        'href' => '/place/arung-jeram-sungai-citarik', 'highlight' => false],
-            ['label' => 'Diving & snorkeling','href' => '/place/snorkeling-ujung-genteng',   'highlight' => false],
-            ['label' => 'Hiking & trekking',  'href' => '#', 'highlight' => false],
-            ['label' => 'Wisata sejarah',     'href' => '#', 'highlight' => false],
-            ['label' => 'Belanja oleh-oleh',  'href' => '/place/pusat-oleh-oleh-sukabumi-khas', 'highlight' => false],
-            ['label' => 'Semua aktivitas',    'href' => '#', 'highlight' => true],
+            ['label' => 'Pesona Geopark Ciletuh', 'href' => '/place/geopark-ciletuh',            'highlight' => false],
+            ['label' => 'Situ Gunung & Jembatan', 'href' => '/place/situ-gunung',                'highlight' => false],
+            ['label' => 'Wisata Pantai',          'href' => '/place?category=wisata-pantai',     'highlight' => false],
+            ['label' => 'Semua Wisata Alam',      'href' => '/place?category=wisata-alam',       'highlight' => true],
         ],
     ],
     [
-        'label'    => 'Traveller information',
-        'href'     => '#',
-        'activeOn' => 'info*',
+        'label'    => 'Budaya & Sejarah',
+        'href'     => '/place?category=wisata-budaya',
+        'activeOn' => 'place*',
         'dropdown' => true,
-        'intro'    => ['title' => 'Traveller information', 'text' => 'Panduan perjalanan lengkap untuk wisatawan Sukabumi.'],
+        'intro'    => ['title' => 'Budaya & Sejarah', 'text' => 'Kenali lebih dekat warisan budaya, sejarah, dan kuliner otentik Sukabumi.'],
         'links'    => [
-            ['label' => 'Cara ke Sukabumi',       'href' => '#', 'highlight' => false],
-            ['label' => 'Transportasi lokal',     'href' => '#', 'highlight' => false],
-            ['label' => 'Aksesibilitas',           'href' => '#', 'highlight' => false],
-            ['label' => 'Cari hotel',              'href' => '#', 'highlight' => false],
-            ['label' => 'Informasi penting',      'href' => '#', 'highlight' => false],
-            ['label' => 'Semua info perjalanan',  'href' => '#', 'highlight' => true],
+            ['label' => 'Kampung Adat',         'href' => '/place?category=wisata-budaya', 'highlight' => false],
+            ['label' => 'Wisata Kuliner Lokal', 'href' => '/place?category=kuliner',       'highlight' => false],
+            ['label' => 'Jelajah Budaya',       'href' => '/place?category=wisata-budaya', 'highlight' => true],
         ],
     ],
     [
-        'label'    => 'Accommodation',
-        'href'     => '#',
-        'activeOn' => 'accommodation*',
+        'label'    => 'Tempat Menginap',
+        'href'     => '/place?category=hotel-resort',
+        'activeOn' => 'place*',
         'dropdown' => false,
     ],
     [
-        'label'    => 'Blog',
-        'href'     => '#',
-        'activeOn' => 'blog*',
+        'label'    => 'Panduan Wisata',
+        'href'     => '/information',
+        'activeOn' => 'information*',
         'dropdown' => false,
     ],
 ];
@@ -103,15 +85,35 @@ $navItems = [
             </span>
         </a>
 
-        <!-- Right: Search -->
-        <form class="flex items-center border border-gray-300 rounded-sm px-2.5 py-[5px] gap-2 focus-within:border-[#1a6bbf] transition-colors z-10" action="/search">
-            <input type="search" name="keywords" placeholder="Search" class="text-[13px] text-gray-700 bg-transparent outline-none w-[130px] placeholder-gray-400" />
-            <button type="submit" class="text-gray-400 hover:text-[#1a6bbf] flex-shrink-0">
-                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-            </button>
-        </form>
+        <!-- Right: Search & Auth -->
+        <div class="flex items-center gap-4 z-10">
+            <form class="flex items-center border border-gray-300 rounded-sm px-2.5 py-[5px] gap-2 focus-within:border-[#1a6bbf] transition-colors" action="/search">
+                <input type="search" name="keywords" placeholder="Search" class="text-[13px] text-gray-700 bg-transparent outline-none w-[130px] placeholder-gray-400" />
+                <button type="submit" class="text-gray-400 hover:text-[#1a6bbf] flex-shrink-0">
+                    <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </button>
+            </form>
+
+            @auth
+                <div class="flex items-center gap-4 border-l border-gray-200 pl-4">
+                    <span class="text-[13px] font-semibold text-gray-700">Hai, {{ explode(' ', Auth::user()->name)[0] }}</span>
+                    <a href="{{ route('wishlist.index') }}" class="flex items-center gap-1 text-[13px] font-bold text-gray-600 hover:text-[#f9a826] transition">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                        <span class="hidden md:inline">Wishlist</span>
+                    </a>
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="text-[13px] font-bold text-red-500 hover:underline">Logout</button>
+                    </form>
+                </div>
+            @else
+                <div class="flex items-center gap-3 border-l border-gray-200 pl-4">
+                    <a href="{{ route('login') }}" class="text-[13px] font-bold text-[#1a6bbf] hover:underline">Log in</a>
+                </div>
+            @endauth
+        </div>
     </div>
 
     <!-- ── ROW 2: Nav bar with megamenu ── -->
