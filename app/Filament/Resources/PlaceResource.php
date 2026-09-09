@@ -23,6 +23,7 @@ class PlaceResource extends Resource
     {
         return $form->schema([
 
+            // ── INFORMASI DASAR ──────────────────────────────────────
             Forms\Components\Section::make('Informasi Dasar')
                 ->columns(2)
                 ->schema([
@@ -68,6 +69,7 @@ class PlaceResource extends Resource
                         ->placeholder('Contoh: Pelabuhan Ratu'),
                 ]),
 
+            // ── KOORDINAT PETA ───────────────────────────────────────
             Forms\Components\Section::make('Koordinat Peta')
                 ->columns(2)
                 ->schema([
@@ -81,13 +83,14 @@ class PlaceResource extends Resource
                         ->placeholder('106.9236'),
                 ]),
 
+            // ── DETAIL KUNJUNGAN ─────────────────────────────────────
             Forms\Components\Section::make('Detail Kunjungan')
                 ->columns(2)
                 ->schema([
                     Forms\Components\TextInput::make('price')
                         ->numeric()
                         ->prefix('Rp')
-                        ->label('Harga Tiket')
+                        ->label('Harga Tiket Umum')
                         ->placeholder('0 = Gratis'),
                     Forms\Components\TextInput::make('phone')
                         ->tel()
@@ -123,6 +126,7 @@ class PlaceResource extends Resource
                         ->placeholder('Contoh: 5 Menit ke Alun-Alun, Dekat Pantai Karang Hawu'),
                 ]),
 
+            // ── GALERI FOTO ──────────────────────────────────────────
             Forms\Components\Section::make('Galeri Foto')
                 ->description('Upload beberapa foto destinasi. Centang "Foto Utama" untuk foto yang tampil di listing.')
                 ->collapsed()
@@ -143,6 +147,167 @@ class PlaceResource extends Resource
                         ->columns(2)
                         ->addActionLabel('+ Tambah Foto')
                         ->columnSpanFull(),
+                ]),
+
+            // ════════════════════════════════════════════════════════
+            // ── FITUR AKTIF (TOGGLE MASTER) ──────────────────────────
+            // ════════════════════════════════════════════════════════
+            Forms\Components\Section::make('Aktifkan Fitur Khusus')
+                ->description('Aktifkan fitur yang relevan untuk destinasi ini. Field tambahan akan muncul secara otomatis.')
+                ->icon('heroicon-o-sparkles')
+                ->columns(3)
+                ->schema([
+                    Forms\Components\Toggle::make('has_ticket')
+                        ->label('Tiket Online')
+                        ->helperText('Aktifkan jika ada pemesanan tiket')
+                        ->live()
+                        ->default(false),
+                    Forms\Components\Toggle::make('has_accommodation')
+                        ->label('Penginapan / Hotel')
+                        ->helperText('Aktifkan jika ini tempat menginap')
+                        ->live()
+                        ->default(false),
+                    Forms\Components\Toggle::make('has_restaurant')
+                        ->label('Restoran / Kuliner')
+                        ->helperText('Aktifkan jika ini tempat makan')
+                        ->live()
+                        ->default(false),
+                    Forms\Components\Toggle::make('has_tour_package')
+                        ->label('Paket Tur & Guide')
+                        ->helperText('Aktifkan jika ada paket wisata')
+                        ->live()
+                        ->default(false),
+                    Forms\Components\Toggle::make('has_accessibility_warning')
+                        ->label('Peringatan Akses')
+                        ->helperText('Aktifkan jika ada info akses khusus')
+                        ->live()
+                        ->default(false),
+                ]),
+
+            // ── SEKSI TIKET ──────────────────────────────────────────
+            Forms\Components\Section::make('Informasi Tiket Online')
+                ->icon('heroicon-o-ticket')
+                ->columns(2)
+                ->visible(fn(Forms\Get $get): bool => (bool) $get('has_ticket'))
+                ->schema([
+                    Forms\Components\TextInput::make('ticket_price')
+                        ->numeric()
+                        ->prefix('Rp')
+                        ->required()
+                        ->label('Harga Tiket per Orang')
+                        ->placeholder('50000'),
+                    Forms\Components\TextInput::make('ticket_booking_url')
+                        ->url()
+                        ->label('URL / WhatsApp Pemesanan')
+                        ->placeholder('https://wa.me/628... atau https://tiket.com/...'),
+                    Forms\Components\Textarea::make('ticket_terms')
+                        ->columnSpanFull()
+                        ->rows(3)
+                        ->label('Syarat & Ketentuan Tiket')
+                        ->placeholder('Contoh: Tiket tidak dapat dikembalikan. Check-in 30 menit sebelum jadwal.'),
+                ]),
+
+            // ── SEKSI PENGINAPAN ─────────────────────────────────────
+            Forms\Components\Section::make('Informasi Penginapan / Hotel')
+                ->icon('heroicon-o-home-modern')
+                ->columns(2)
+                ->visible(fn(Forms\Get $get): bool => (bool) $get('has_accommodation'))
+                ->schema([
+                    Forms\Components\Select::make('hotel_star')
+                        ->options([
+                            1 => '⭐ Bintang 1',
+                            2 => '⭐⭐ Bintang 2',
+                            3 => '⭐⭐⭐ Bintang 3',
+                            4 => '⭐⭐⭐⭐ Bintang 4',
+                            5 => '⭐⭐⭐⭐⭐ Bintang 5',
+                        ])
+                        ->label('Klasifikasi Bintang'),
+                    Forms\Components\TextInput::make('hotel_booking_url')
+                        ->url()
+                        ->label('Link Booking (Agoda/Traveloka/dll)')
+                        ->placeholder('https://agoda.com/...'),
+                    Forms\Components\TagsInput::make('hotel_facilities')
+                        ->columnSpanFull()
+                        ->label('Fasilitas Penginapan')
+                        ->placeholder('Contoh: Kolam Renang, Sarapan Gratis, AC, WiFi, Parkir'),
+                ]),
+
+            // ── SEKSI RESTORAN ───────────────────────────────────────
+            Forms\Components\Section::make('Informasi Restoran / Kuliner')
+                ->icon('heroicon-o-cake')
+                ->columns(2)
+                ->visible(fn(Forms\Get $get): bool => (bool) $get('has_restaurant'))
+                ->schema([
+                    Forms\Components\Toggle::make('restaurant_is_halal')
+                        ->label('Bersertifikat Halal')
+                        ->columnSpanFull()
+                        ->default(false),
+                    Forms\Components\TextInput::make('restaurant_menu_url')
+                        ->url()
+                        ->label('Link Menu (Gambar/PDF)')
+                        ->placeholder('https://drive.google.com/... atau link foto menu'),
+                    Forms\Components\TextInput::make('restaurant_reservation_url')
+                        ->label('Link / WhatsApp Reservasi Meja')
+                        ->placeholder('https://wa.me/628... atau nomor telepon reservasi'),
+                ]),
+
+            // ── SEKSI PAKET TUR ──────────────────────────────────────
+            Forms\Components\Section::make('Paket Tur & Pemandu Wisata')
+                ->icon('heroicon-o-users')
+                ->columns(2)
+                ->visible(fn(Forms\Get $get): bool => (bool) $get('has_tour_package'))
+                ->schema([
+                    Forms\Components\TextInput::make('tour_meeting_point')
+                        ->columnSpanFull()
+                        ->label('Titik Kumpul (Meeting Point)')
+                        ->placeholder('Contoh: Parkiran Geopark Ciletuh, pukul 08.00 WIB'),
+                    Forms\Components\TextInput::make('tour_guide_contact')
+                        ->label('Kontak Pemandu Wisata')
+                        ->placeholder('08xxxxxxxxxx atau nama guide'),
+                    Forms\Components\Repeater::make('tour_packages')
+                        ->label('Daftar Paket')
+                        ->columnSpanFull()
+                        ->schema([
+                            Forms\Components\TextInput::make('name')
+                                ->required()
+                                ->label('Nama Paket')
+                                ->placeholder('Contoh: Paket Rafting 2H1M'),
+                            Forms\Components\TextInput::make('price')
+                                ->numeric()
+                                ->required()
+                                ->prefix('Rp')
+                                ->label('Harga'),
+                            Forms\Components\TextInput::make('quota')
+                                ->numeric()
+                                ->label('Kuota (kosongkan = tidak terbatas)')
+                                ->placeholder('10'),
+                            Forms\Components\Textarea::make('description')
+                                ->rows(2)
+                                ->label('Deskripsi Paket'),
+                        ])
+                        ->columns(2)
+                        ->addActionLabel('+ Tambah Paket'),
+                ]),
+
+            // ── SEKSI AKSESIBILITAS ──────────────────────────────────
+            Forms\Components\Section::make('Peringatan & Info Aksesibilitas')
+                ->icon('heroicon-o-exclamation-triangle')
+                ->columns(2)
+                ->visible(fn(Forms\Get $get): bool => (bool) $get('has_accessibility_warning'))
+                ->schema([
+                    Forms\Components\Select::make('accessibility_type')
+                        ->options([
+                            'vehicle_only'       => '🚗 Hanya Bisa Kendaraan Roda 4',
+                            'motorcycle_only'    => '🏍️ Hanya Bisa Motor / 4WD',
+                            'hiking'             => '🥾 Harus Jalan Kaki / Mendaki',
+                            'wheelchair_friendly'=> '♿ Ramah Kursi Roda',
+                            'boat_required'      => '⛵ Perlu Naik Perahu',
+                        ])
+                        ->label('Tipe Akses'),
+                    Forms\Components\Textarea::make('accessibility_note')
+                        ->rows(3)
+                        ->label('Detail Keterangan Akses')
+                        ->placeholder('Contoh: Jalan berbatu sepanjang 2 km dari parkiran. Disarankan menggunakan sepatu gunung.'),
                 ]),
         ]);
     }
@@ -168,6 +333,15 @@ class PlaceResource extends Resource
                 Tables\Columns\TextColumn::make('district')
                     ->searchable()
                     ->label('Kecamatan'),
+                Tables\Columns\IconColumn::make('has_ticket')
+                    ->boolean()
+                    ->label('Tiket'),
+                Tables\Columns\IconColumn::make('has_accommodation')
+                    ->boolean()
+                    ->label('Hotel'),
+                Tables\Columns\IconColumn::make('has_restaurant')
+                    ->boolean()
+                    ->label('Kuliner'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->color(fn(string $state) => match($state) {
@@ -180,11 +354,6 @@ class PlaceResource extends Resource
                     ->money('IDR')
                     ->sortable()
                     ->label('Harga'),
-                Tables\Columns\TextColumn::make('reviews_count')
-                    ->counts('reviews')
-                    ->badge()
-                    ->color('gray')
-                    ->label('Ulasan'),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -199,6 +368,9 @@ class PlaceResource extends Resource
                 Tables\Filters\SelectFilter::make('category')
                     ->relationship('category', 'name')
                     ->preload(),
+                Tables\Filters\TernaryFilter::make('has_ticket')->label('Punya Tiket'),
+                Tables\Filters\TernaryFilter::make('has_accommodation')->label('Penginapan'),
+                Tables\Filters\TernaryFilter::make('has_restaurant')->label('Restoran'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
