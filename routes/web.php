@@ -9,9 +9,12 @@ use App\Http\Controllers\EventController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::get('/kategori/{category:slug}', [App\Http\Controllers\CategoryController::class, 'show'])->name('category.show');
+
 Route::get('/place', [PlaceController::class, 'index'])->name('place.index');
 Route::get('/place/{place:slug}', [PlaceController::class, 'show'])->name('place.show');
 
+Route::get('/event', [EventController::class, 'index'])->name('event.index');
 Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show');
 
 // Static Pages

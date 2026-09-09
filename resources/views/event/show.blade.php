@@ -1,138 +1,596 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-white font-sans text-gray-900">
+<div class="min-h-screen bg-white font-sans text-gray-900 pb-20">
     @include('components.navbar')
 
-    <main class="pt-20">
+    <main class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-4">
 
-        {{-- ══ HERO IMAGE ══ --}}
-        <div class="w-full h-72 md:h-96 relative bg-gray-900 overflow-hidden">
-            @if($event->image_path)
-                <img src="{{ Storage::url($event->image_path) }}"
-                     alt="{{ $event->title }}"
-                     class="w-full h-full object-cover opacity-75"/>
-            @endif
-            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+        {{-- ══ BREADCRUMB ══ --}}
+        <nav class="flex text-xs md:text-sm text-gray-500 gap-2 items-center flex-wrap mb-3">
+            <a href="{{ url('/') }}" class="hover:underline hover:text-black">Visit Sukabumi</a>
+            <span>›</span>
+            <a href="{{ route('event.index') }}" class="hover:underline hover:text-black">Events & Trips</a>
+            <span>›</span>
+            <span class="text-gray-900">{{ $event->title }}</span>
+        </nav>
 
-            {{-- Date Badge --}}
-            <div class="absolute top-6 left-6 bg-white rounded-xl px-4 py-2 text-center shadow-lg">
-                <div class="text-[11px] font-black text-red-500 uppercase tracking-widest">{{ $event->start_date->translatedFormat('M Y') }}</div>
-                <div class="text-3xl font-black text-gray-900 leading-none">{{ $event->start_date->format('d') }}</div>
+        {{-- ══ TITLE & RATING ══ --}}
+        <h1 class="text-3xl md:text-[32px] font-black text-gray-900 leading-tight mb-2">
+            {{ $event->title }}
+        </h1>
+        <div class="flex items-center gap-2 mb-6 flex-wrap">
+            <div class="flex items-center gap-1 text-[#00aa6c]">
+                <span class="font-bold text-sm">4.9</span>
+                <div class="flex">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                </div>
             </div>
-
-            {{-- Title over hero --}}
-            <div class="absolute bottom-0 inset-x-0 px-4 pb-8 md:px-8 max-w-7xl mx-auto">
-                <h1 class="text-2xl md:text-4xl font-extrabold text-white drop-shadow-lg leading-tight">
-                    {{ $event->title }}
-                </h1>
+            <a href="#reviews" class="text-sm font-bold text-gray-900 hover:underline border-b border-dotted border-gray-900">(7,572 reviews)</a>
+            <span class="text-gray-300 mx-1">•</span>
+            <div class="flex items-center gap-1.5 text-sm font-medium text-gray-700">
+                <svg class="w-4 h-4 text-[#e00b81]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                Recommended by 98% of travelers
             </div>
         </div>
 
-        {{-- ══ BREADCRUMB ══ --}}
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-2">
-            <nav class="flex text-sm text-gray-500 gap-2 items-center flex-wrap">
-                <a href="{{ url('/') }}" class="hover:underline hover:text-gray-900">Home</a>
-                <span>›</span>
-                <span class="text-gray-900 font-medium">{{ $event->title }}</span>
+        {{-- ══ PHOTO GALLERY (TripAdvisor Style) ══ --}}
+        @php
+            $mainImg = $event->image_path ? Storage::url($event->image_path) : 'https://images.unsplash.com/photo-1542662565-7e4fd1e56993?q=80&w=1200&h=800&fit=crop';
+            // Placeholder images for the right side layout
+            $smallImg1 = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600&h=400&fit=crop';
+        @endphp
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 lg:h-[450px] mb-8 rounded-2xl overflow-hidden">
+            {{-- Left: Main Big Image --}}
+            <div class="lg:col-span-2 h-72 lg:h-full relative group cursor-pointer">
+                <img src="{{ $mainImg }}" alt="{{ $event->title }}" class="w-full h-full object-cover group-hover:opacity-95 transition">
+                <div class="absolute bottom-4 left-4 bg-[#f9a826] text-black font-black px-3 py-2 rounded flex flex-col items-center shadow-lg transform -rotate-3">
+                    <svg class="w-6 h-6 mb-1" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path fill="white" d="M8 10h8v4H8z"/></svg>
+                    <span class="text-[10px] leading-none">TRAVELERS'</span>
+                    <span class="text-xs leading-none">CHOICE</span>
+                </div>
+            </div>
+
+            {{-- Right: Stacked layout --}}
+            <div class="hidden lg:flex flex-col gap-2 h-full">
+                {{-- Top Right: Superb Review Card --}}
+                <div class="bg-[#faf1ed] h-1/2 p-6 flex flex-col justify-center rounded-tr-2xl relative">
+                    <div class="flex items-center gap-1 mb-2">
+                        <span class="font-bold text-lg">Superb</span>
+                        <div class="flex text-[#00aa6c]">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                        </div>
+                    </div>
+                    <p class="font-bold text-gray-900 leading-tight mb-2">"We had a really nice day trip. The guide was excellent. They did a great job."</p>
+                    <p class="text-xs text-gray-500 font-medium">Budi S • Featured review</p>
+                </div>
+                {{-- Bottom Right: Image --}}
+                <div class="h-1/2 relative group cursor-pointer">
+                    <img src="{{ $smallImg1 }}" alt="Gallery view" class="w-full h-full object-cover group-hover:opacity-95 transition rounded-br-2xl">
+                    <div class="absolute bottom-3 right-3 bg-black/70 text-white font-bold text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 backdrop-blur-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-width="2"/><circle cx="8.5" cy="8.5" r="1.5" stroke-width="2"/><path d="M21 15l-5-5L5 21" stroke-width="2"/></svg>
+                        12 Photos
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- ══ IN-PAGE TABS ══ --}}
+        <div class="border-b border-gray-200 mb-8 sticky top-[64px] bg-white z-30 shadow-sm transition-all duration-300">
+            <nav id="page-nav" class="flex gap-8 overflow-x-auto no-scrollbar font-bold text-sm text-gray-500">
+                <a href="#overview" class="nav-tab py-4 border-b-2 border-black text-black whitespace-nowrap transition-colors">Overview</a>
+                <a href="#details" class="nav-tab py-4 border-b-2 border-transparent hover:border-black hover:text-black whitespace-nowrap transition-colors">Details</a>
+                <a href="#itinerary" class="nav-tab py-4 border-b-2 border-transparent hover:border-black hover:text-black whitespace-nowrap transition-colors">Itinerary</a>
+                <a href="#operator" class="nav-tab py-4 border-b-2 border-transparent hover:border-black hover:text-black whitespace-nowrap transition-colors">Operator</a>
+                <a href="#reviews" class="nav-tab py-4 border-b-2 border-transparent hover:border-black hover:text-black whitespace-nowrap transition-colors">Reviews</a>
             </nav>
         </div>
 
         {{-- ══ CONTENT GRID ══ --}}
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
 
-                {{-- ── LEFT: Main Content ── --}}
-                <div class="lg:col-span-2 space-y-8">
+            {{-- ── LEFT: Main Content ── --}}
+            <div class="lg:col-span-2 space-y-10">
 
-                    {{-- About --}}
-                    <div class="border-b border-gray-100 pb-8">
-                        <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">Tentang Event Ini</h2>
-                        @if($event->description)
-                            <div class="prose prose-sm md:prose-base max-w-none text-gray-700 leading-relaxed">
-                                {!! $event->description !!}
-                            </div>
-                        @else
-                            <p class="text-gray-400 italic">Belum ada deskripsi untuk event ini.</p>
-                        @endif
+                {{-- Badges / Status --}}
+                <div class="flex items-center gap-3 bg-[#fff1e0] p-4 rounded-xl border border-[#ffd5a0]">
+                    <div class="bg-[#f9a826] rounded-full p-2 text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
                     </div>
-
-                    {{-- Event Info Chips --}}
-                    <div class="border-b border-gray-100 pb-8">
-                        <h2 class="text-xl font-bold text-gray-900 mb-4">Informasi Acara</h2>
-                        <div class="flex flex-wrap gap-3">
-                            {{-- Date Start --}}
-                            <div class="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-lg text-sm text-gray-700">
-                                <svg class="w-4 h-4 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                <span><strong>Mulai:</strong> {{ $event->start_date->translatedFormat('l, d F Y · H:i') }} WIB</span>
-                            </div>
-                            {{-- Date End --}}
-                            @if($event->end_date)
-                            <div class="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-lg text-sm text-gray-700">
-                                <svg class="w-4 h-4 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                <span><strong>Selesai:</strong> {{ $event->end_date->translatedFormat('l, d F Y · H:i') }} WIB</span>
-                            </div>
-                            @endif
-                            {{-- Location --}}
-                            @if($event->location_name)
-                            <div class="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-lg text-sm text-gray-700">
-                                <svg class="w-4 h-4 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                <span>{{ $event->location_name }}</span>
-                            </div>
-                            @endif
-                        </div>
+                    <div>
+                        <div class="font-bold text-gray-900 text-sm">Travelers' Choice Best of the Best 2026</div>
+                        <div class="text-xs text-gray-700">Top 1% of things to do worldwide</div>
                     </div>
-
                 </div>
 
-                {{-- ── RIGHT: CTA Sidebar ── --}}
-                <div class="lg:col-span-1">
-                    <div class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm space-y-5">
-
-                        {{-- Event Status --}}
-                        <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                            <span class="text-sm font-bold text-green-600">Event Akan Datang</span>
+                {{-- Why travelers love this --}}
+                <div id="overview" class="scroll-mt-32 section-block">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4 flex justify-between items-center">
+                        Why travelers love this
+                        <div class="flex gap-1 text-[#00aa6c]">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
                         </div>
+                    </h2>
+                    
+                    <div class="flex gap-4 overflow-x-auto pb-4 snap-x">
+                        <div class="min-w-[280px] sm:min-w-[320px] bg-white border border-gray-200 rounded-2xl p-5 shadow-sm snap-start">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="flex text-[#00aa6c]">
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                                </div>
+                                <span class="text-xs font-bold text-gray-900">Agus M · Sep 2026</span>
+                            </div>
+                            <p class="text-sm text-gray-700 leading-relaxed">"The tour guide was very nice and professional. The experience is incredibly organized well. We highly enjoy it."</p>
+                        </div>
+                        <div class="min-w-[280px] sm:min-w-[320px] bg-white border border-gray-200 rounded-2xl p-5 shadow-sm snap-start">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="flex text-[#00aa6c]">
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                                </div>
+                                <span class="text-xs font-bold text-gray-900">Siti R · Aug 2026</span>
+                            </div>
+                            <p class="text-sm text-gray-700 leading-relaxed">"Incredible from start to finish. I highly recommend taking this tour when you are visiting the city."</p>
+                        </div>
+                    </div>
+                </div>
 
-                        {{-- Date Summary --}}
+                {{-- Overview Text --}}
+                <div class="prose prose-sm md:prose-base max-w-none text-gray-800 leading-relaxed">
+                    @if($event->description)
+                        {!! $event->description !!}
+                    @else
+                        <p>Tinggalkan hiruk pikuk kota dan nikmati keindahan alam yang memukau pada petualangan luar biasa ini. Semua keperluan logistik akan diurus oleh pemandu berpengalaman, Anda cukup datang dan menikmati hari yang sempurna.</p>
+                    @endif
+                </div>
+
+                {{-- Quick Info Icons --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 mt-0.5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                         <div>
-                            <p class="text-2xl font-extrabold text-gray-900">{{ $event->start_date->translatedFormat('d F Y') }}</p>
-                            <p class="text-sm text-gray-500 mt-0.5">{{ $event->start_date->format('H:i') }} WIB
+                            <div class="text-sm font-medium text-gray-900">Ages 0-100</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 mt-0.5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <div>
+                            <div class="text-sm font-medium text-gray-900">Duration: 
                                 @if($event->end_date)
-                                    – {{ $event->end_date->format('H:i') }} WIB
+                                    {{ $event->start_date->diffInHours($event->end_date) }} hours
+                                @else
+                                    Half-day
                                 @endif
-                            </p>
+                            </div>
                         </div>
-
-                        @if($event->location_name)
-                        <div class="flex items-start gap-2 text-sm text-gray-600 pb-4 border-b border-gray-100">
-                            <svg class="w-4 h-4 mt-0.5 flex-shrink-0 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            <span>{{ $event->location_name }}</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 mt-0.5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        <div>
+                            <div class="text-sm font-medium text-gray-900">Start time: {{ $event->start_date->format('H:i') }} WIB</div>
                         </div>
-                        @endif
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 mt-0.5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                        <div>
+                            <div class="text-sm font-medium text-gray-900">Mobile ticket accepted</div>
+                        </div>
+                    </div>
+                    @if($event->location_name)
+                    <div class="flex items-start gap-3 sm:col-span-2">
+                        <svg class="w-5 h-5 mt-0.5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        <div>
+                            <div class="text-sm font-medium text-gray-900">Meeting point: {{ $event->location_name }}</div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
 
-                        {{-- WhatsApp CTA --}}
-                        @php
-                            $waText = "Halo Admin Visit Sukabumi! Saya tertarik dengan event *" . $event->title . "* pada tanggal *" . $event->start_date->translatedFormat('d F Y') . "*. Mohon info selengkapnya 🙏";
-                            $waPhone = env('ADMIN_WHATSAPP_NUMBER', '6281234567890');
-                        @endphp
-                        <a href="https://wa.me/{{ $waPhone }}?text={{ urlencode($waText) }}"
-                           target="_blank"
-                           class="w-full flex items-center justify-center gap-2 bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold py-3.5 px-6 rounded-full transition shadow text-sm">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                            Tanya / Daftar via WhatsApp
-                        </a>
+                <hr class="border-gray-200">
 
-                        <p class="text-xs text-gray-400 text-center">Klik tombol di atas untuk menghubungi admin dan mendapatkan informasi lebih lanjut.</p>
+                {{-- Details Accordions --}}
+                @if($event->whats_included || $event->what_to_expect || $event->meeting_and_pickup || $event->cancellation_policy)
+                <div id="details" class="space-y-0 scroll-mt-32 section-block">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Details</h2>
+                    
+                    @if($event->whats_included)
+                    <div class="border-t border-gray-200 py-5 group detail-accordion">
+                        <div class="cursor-pointer flex justify-between items-center accordion-header">
+                            <span class="font-bold text-gray-900 text-[15px]">What's included</span>
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-black transform transition-transform duration-300 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+                        <div class="accordion-content hidden mt-4 text-gray-700 prose prose-sm max-w-none">
+                            {!! $event->whats_included !!}
+                        </div>
+                    </div>
+                    @endif
+                    
+                    @if($event->what_to_expect)
+                    <div class="border-t border-gray-200 py-5 group detail-accordion">
+                        <div class="cursor-pointer flex justify-between items-center accordion-header">
+                            <span class="font-bold text-gray-900 text-[15px]">What to expect</span>
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-black transform transition-transform duration-300 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+                        <div class="accordion-content hidden mt-4 text-gray-700 prose prose-sm max-w-none">
+                            {!! $event->what_to_expect !!}
+                        </div>
+                    </div>
+                    @endif
+
+                    @if($event->meeting_and_pickup)
+                    <div class="border-t border-gray-200 py-5 group detail-accordion">
+                        <div class="cursor-pointer flex justify-between items-center accordion-header">
+                            <span class="font-bold text-gray-900 text-[15px]">Meeting and pickup</span>
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-black transform transition-transform duration-300 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+                        <div class="accordion-content hidden mt-4 text-gray-700 prose prose-sm max-w-none">
+                            {!! $event->meeting_and_pickup !!}
+                        </div>
+                    </div>
+                    @endif
+
+                    @if($event->cancellation_policy)
+                    <div class="border-t border-b border-gray-200 py-5 group detail-accordion">
+                        <div class="cursor-pointer flex justify-between items-center accordion-header">
+                            <span class="font-bold text-gray-900 text-[15px]">Cancellation policy</span>
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-black transform transition-transform duration-300 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+                        <div class="accordion-content hidden mt-4 text-gray-700 prose prose-sm max-w-none">
+                            {!! $event->cancellation_policy !!}
+                        </div>
+                    </div>
+                    @endif
+                </div>
+                @else
+                <div id="details" class="scroll-mt-32 section-block">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Details</h2>
+                    <div class="p-6 border border-gray-200 rounded-2xl text-center">
+                        <p class="text-gray-500">More details will be updated soon. Check back later!</p>
+                    </div>
+                </div>
+                @endif
+
+                {{-- Dynamic Itinerary & Interactive Map --}}
+                <div id="itinerary" class="scroll-mt-32 section-block">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Itinerary</h2>
+                    
+                    @if($event->itineraries && $event->itineraries->count() > 0)
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {{-- Left: Timeline --}}
+                            <div class="space-y-8 relative border-l-2 border-dashed border-gray-300 ml-4 pl-8 py-2">
+                                @foreach($event->itineraries as $index => $itin)
+                                    <div class="relative itinerary-item cursor-pointer group" data-lat="{{ $itin->latitude }}" data-lng="{{ $itin->longitude }}">
+                                        {{-- Marker Icon --}}
+                                        <div class="absolute -left-[49px] top-0 w-8 h-8 bg-white rounded-full flex items-center justify-center font-bold text-sm border-[3px] z-10 transition-colors {{ $index === 0 ? 'border-[#f9a826] text-black bg-[#f9a826]' : ($index === $event->itineraries->count() - 1 ? 'border-[#f9a826] text-black bg-[#f9a826]' : 'border-[#00aa6c] text-[#00aa6c]') }} group-hover:scale-110">
+                                            {{ $index === 0 ? 'Start' : ($index === $event->itineraries->count() - 1 ? 'End' : $index) }}
+                                        </div>
+                                        
+                                        <h3 class="font-bold text-gray-900 group-hover:underline">{{ $itin->title }}</h3>
+                                        @if($itin->duration_text)
+                                            <p class="text-sm text-gray-500 mt-1">{{ $itin->duration_text }}</p>
+                                        @endif
+                                        <p class="text-sm text-gray-900 font-medium mt-1 group-hover:hidden">See details & photo</p>
+                                        
+                                        {{-- Expandable Content --}}
+                                        <div class="itinerary-content mt-3 hidden group-hover:block transition-all">
+                                            @if($itin->image_path)
+                                                <img src="{{ Storage::url($itin->image_path) }}" alt="{{ $itin->title }}" class="w-full h-48 object-cover rounded-xl mb-3 shadow-sm">
+                                            @endif
+                                            @if($itin->description)
+                                                <p class="text-sm text-gray-700 leading-relaxed">{{ $itin->description }}</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            {{-- Right: Map --}}
+                            <div>
+                                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+                                <div id="itinerary-map" class="w-full h-[400px] sticky top-32 rounded-2xl border border-gray-200 z-10 shadow-inner"></div>
+                            </div>
+                        </div>
+                    @else
+                        {{-- Placeholder if no itineraries are found --}}
+                        <div class="p-6 border border-gray-200 rounded-2xl text-center">
+                            <p class="text-gray-500">Itinerary details will be updated soon. Check back later!</p>
+                        </div>
+                    @endif
+                </div>
+
+                {{-- Operator Dummy --}}
+                <div id="operator" class="scroll-mt-32 section-block">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Operator</h2>
+                    <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center border-2 border-gray-200 font-black text-xl text-gray-400">VS</div>
+                        <div>
+                            <div class="font-bold text-gray-900">Visit Sukabumi Official</div>
+                            <div class="text-sm text-gray-500">Local Expert Tour Provider</div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Reviews Dummy --}}
+                <div id="reviews" class="scroll-mt-32 section-block">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Reviews</h2>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="text-5xl font-black text-gray-900">4.9</div>
+                        <div>
+                            <div class="flex text-[#00aa6c] mb-1">
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+                            </div>
+                            <div class="text-sm text-gray-500 font-medium">7,572 reviews</div>
+                        </div>
+                    </div>
+                    <div class="p-6 border border-gray-200 rounded-2xl text-center">
+                        <p class="text-gray-500">More detailed reviews will be displayed here.</p>
                     </div>
                 </div>
 
             </div>
-        </div>
 
+            {{-- ── RIGHT: Sticky Booking Card ── --}}
+            <div class="lg:col-span-1">
+                <div class="sticky top-[140px] space-y-6">
+                    
+                    {{-- Primary Booking Card --}}
+                    <div class="bg-white border border-gray-200 rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-6">
+                        <div class="mb-5">
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-xl md:text-2xl font-black text-gray-900">Rp 150.000</span>
+                                <span class="text-sm text-gray-500">per adult</span>
+                            </div>
+                            <div class="text-xs font-bold text-green-600 mt-1 flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                Lowest Price Guarantee
+                            </div>
+                        </div>
+
+                        {{-- Date & Guests Selection --}}
+                        <div class="flex flex-col gap-2 mb-4">
+                            <button class="w-full text-left px-4 py-3 border-2 border-gray-900 rounded-xl font-bold flex justify-between items-center">
+                                <span>{{ $event->start_date->translatedFormat('D, d M') }}</span>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            </button>
+                            <button class="w-full text-left px-4 py-3 border-2 border-gray-300 rounded-xl flex justify-between items-center text-gray-600">
+                                <span>2 Adults</span>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                            </button>
+                        </div>
+
+                        {{-- WhatsApp CTA --}}
+                        @php
+                            $waText = "Halo Admin Visit Sukabumi! Saya ingin konfirmasi availability untuk *" . $event->title . "* pada tanggal *" . $event->start_date->translatedFormat('d F Y') . "*. Mohon infonya 🙏";
+                            $waPhone = env('ADMIN_WHATSAPP_NUMBER', '6281234567890');
+                        @endphp
+                        <a href="https://wa.me/{{ $waPhone }}?text={{ urlencode($waText) }}" target="_blank"
+                           class="w-full block text-center bg-[#00aa6c] hover:bg-[#008a57] text-white font-bold py-3.5 px-6 rounded-full transition text-[15px] mb-4">
+                            Check availability
+                        </a>
+
+                        {{-- Value Props --}}
+                        <div class="space-y-4 pt-2">
+                            <div class="flex gap-3">
+                                <div class="mt-0.5 text-gray-400">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                </div>
+                                <div class="text-xs">
+                                    <span class="font-bold text-gray-900">Free cancellation</span>
+                                    <span class="text-gray-500 block">Full refund if cancelled up to 24 hours before.</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <div class="mt-0.5 text-gray-400">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+                                </div>
+                                <div class="text-xs">
+                                    <span class="font-bold text-gray-900">Reserve now & pay later</span>
+                                    <span class="text-gray-500 block">Secure your spot while staying flexible.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Promo / Question Block --}}
+                    <div class="bg-[#f2f2f2] rounded-2xl p-5 border border-gray-200">
+                        <div class="font-bold text-sm text-gray-900 mb-2">Have booking questions?</div>
+                        <div class="flex gap-4">
+                            <a href="https://wa.me/{{ $waPhone }}" target="_blank" class="flex items-center gap-1.5 text-xs font-medium text-gray-700 hover:text-black">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                                {{ $waPhone }}
+                            </a>
+                            <a href="https://wa.me/{{ $waPhone }}" target="_blank" class="flex items-center gap-1.5 text-xs font-medium text-gray-700 hover:text-black border-b border-black pb-0.5">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                                Chat now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </main>
 
     <x-footer />
 </div>
+
+{{-- CSS for smooth scrolling --}}
+<style>
+    html { scroll-behavior: smooth; }
+</style>
+
+{{-- JS for IntersectionObserver (Active Tab Highlighting) --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('.section-block');
+    const navLinks = document.querySelectorAll('.nav-tab');
+
+    const observerOptions = {
+        root: null,
+        rootMargin: '-100px 0px -60% 0px',
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Remove active class from all
+                navLinks.forEach(link => {
+                    link.classList.remove('border-black', 'text-black');
+                    link.classList.add('border-transparent', 'text-gray-500');
+                });
+                // Add active class to corresponding nav tab
+                const id = entry.target.getAttribute('id');
+                const activeLink = document.querySelector(`.nav-tab[href="#${id}"]`);
+                if(activeLink) {
+                    activeLink.classList.remove('border-transparent', 'text-gray-500');
+                    activeLink.classList.add('border-black', 'text-black');
+                }
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(sec => {
+        observer.observe(sec);
+    });
+
+    // Accordion Logic
+    document.querySelectorAll('.detail-accordion .accordion-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.accordion-icon');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        });
+    });
+});
+</script>
+
+{{-- Leaflet Map Initialization --}}
+@if($event->itineraries && $event->itineraries->count() > 0)
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Collect all valid markers from the DOM
+    const items = document.querySelectorAll('.itinerary-item');
+    let markersData = [];
+    
+    items.forEach((item, index) => {
+        let lat = parseFloat(item.getAttribute('data-lat'));
+        let lng = parseFloat(item.getAttribute('data-lng'));
+        if(!isNaN(lat) && !isNaN(lng)) {
+            markersData.push({
+                lat: lat,
+                lng: lng,
+                title: item.querySelector('h3').innerText,
+                element: item,
+                index: index
+            });
+        }
+    });
+
+    if(markersData.length > 0) {
+        // Initialize Map
+        const map = L.map('itinerary-map', {
+            zoomControl: false // Hide default zoom to match mapbox clean look
+        }).setView([markersData[0].lat, markersData[0].lng], 13);
+        
+        // Add zoom control at bottom right
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        // TileLayer: CartoDB Positron gives a clean Mapbox-like aesthetic
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        let bounds = L.latLngBounds();
+        let mapMarkers = [];
+
+        // Create Custom Icon Style
+        const createIcon = (index, isStart, isEnd) => {
+            let bgColor = '#00aa6c'; // Default green
+            let txtColor = 'white';
+            let text = index;
+
+            if(isStart) {
+                bgColor = '#f9a826';
+                text = 'Start';
+                txtColor = 'black';
+            } else if(isEnd) {
+                bgColor = '#f9a826';
+                text = 'End';
+                txtColor = 'black';
+            }
+
+            return L.divIcon({
+                className: 'custom-leaflet-icon',
+                html: `<div style="background-color: ${bgColor}; color: ${txtColor}; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">${text}</div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+        };
+
+        // Add Markers to Map
+        markersData.forEach((data, i) => {
+            const isStart = i === 0;
+            const isEnd = i === markersData.length - 1;
+            
+            const marker = L.marker([data.lat, data.lng], {
+                icon: createIcon(i, isStart, isEnd)
+            }).addTo(map);
+            
+            marker.bindPopup(`<b>${data.title}</b>`);
+            bounds.extend([data.lat, data.lng]);
+            mapMarkers.push(marker);
+
+            // Add Click interaction to the DOM item
+            data.element.addEventListener('mouseenter', () => {
+                map.flyTo([data.lat, data.lng], 15, {
+                    animate: true,
+                    duration: 1.5
+                });
+                marker.openPopup();
+            });
+        });
+
+        // Fit Map to show all markers
+        map.fitBounds(bounds, { padding: [50, 50] });
+    } else {
+        document.getElementById('itinerary-map').innerHTML = '<div class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500 rounded-2xl">Map data unavailable</div>';
+    }
+});
+</script>
+@endif
+
 @endsection

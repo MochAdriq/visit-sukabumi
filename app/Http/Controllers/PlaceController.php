@@ -3,17 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\Place;
+use App\Models\Category;
+use Illuminate\Http\Request;
 
 class PlaceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $places = Place::with(['category', 'primaryImage'])
-            ->where('status', 'published')
-            ->latest()
-            ->paginate(12);
+        $categorySlug = $request->query('category');
+        $currentCategory = null;
 
-        return view('place.index', compact('places'));
+        $query = Place::with(['category', 'primaryImage'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
+            ->where('status', 'published');
+
+        if ($categorySlug) {
+            $currentCategory = Category::where('slug', $categorySlug)->first();
+            if ($currentCategory) {
+                $query->where('category_id', $currentCategory->id);
+            }
+        }
+
+        if ($request->filled('q')) {
+            $search = $request->query('q');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('location_name', 'like', "%{$search}%");
+            });
+        }
+
+        $places = $query->latest()->paginate(12)->withQueryString();
+        $allCategories = Category::all();
+
+        return view('place.index', compact('places', 'currentCategory', 'allCategories'));
     }
 
     public function show(Place $place)

@@ -4,7 +4,7 @@
 <div class="min-h-screen bg-white font-sans text-gray-900">
     @include('components.navbar')
 
-    <main class="pt-20">
+    <main class="pt-6">
 
         {{-- ══ BREADCRUMB ══ --}}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2">
@@ -46,7 +46,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                             </svg>
-                            <span class="leading-tight">{{ $place->address }}</span>
+                            <span class="leading-tight">{{ $place->address }}{{ $place->district ? ', Kec. ' . $place->district : '' }}</span>
                         </div>
                     @endif
                 </div>
@@ -111,6 +111,30 @@
                         </div>
                     @else
                         <p class="text-gray-400 italic">Belum ada deskripsi untuk destinasi ini.</p>
+                    @endif
+
+                    @if(is_array($place->facilities) && count($place->facilities) > 0)
+                        <div class="mt-6">
+                            <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3">Fasilitas Utama</h3>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($place->facilities as $facility)
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
+                                        <svg class="w-3.5 h-3.5 mr-1 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                        {{ $facility }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
+                    @if($place->nearby_places)
+                        <div class="mt-6">
+                            <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2">Dekat Dengan</h3>
+                            <div class="text-sm text-gray-700 bg-[#f9a826]/10 p-4 rounded-xl border border-[#f9a826]/20 leading-relaxed flex gap-3 items-start">
+                                <svg class="w-5 h-5 text-[#f9a826] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <div>{{ $place->nearby_places }}</div>
+                            </div>
+                        </div>
                     @endif
 
                     {{-- Meta chips --}}
@@ -245,37 +269,66 @@
                                 </div>
                             @endif
 
-                            <form action="{{ route('review.store', $place->id) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                            <style>
+                                .rating-bubbles { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 0.5rem; }
+                                .rating-bubbles input { display: none; }
+                                .rating-bubbles label { cursor: pointer; color: #e5e7eb; transition: transform 0.2s, color 0.2s; }
+                                .rating-bubbles label:hover,
+                                .rating-bubbles label:hover ~ label,
+                                .rating-bubbles input:checked ~ label { color: #00aa6c; }
+                                .rating-bubbles label:hover { transform: scale(1.1); }
+                            </style>
+                            <form action="{{ route('review.store', $place->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                                 @csrf
+                                
+                                {{-- Rating --}}
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Rating</label>
-                                    <div class="flex gap-4">
-                                        @for($i=1; $i<=5; $i++)
-                                            <label class="flex items-center gap-1 cursor-pointer">
-                                                <input type="radio" name="rating" value="{{ $i }}" class="text-[#f9a826] focus:ring-[#f9a826]" required>
-                                                <span class="text-sm">{{ $i }} Bintang</span>
+                                    <label class="block text-sm font-bold text-gray-900 mb-2">Penilaian Anda <span class="text-red-500">*</span></label>
+                                    <div class="rating-bubbles">
+                                        @for($i=5; $i>=1; $i--)
+                                            <input type="radio" id="rating-{{ $i }}" name="rating" value="{{ $i }}" required>
+                                            <label for="rating-{{ $i }}" title="{{ $i }} Bintang">
+                                                <svg class="w-10 h-10 fill-current drop-shadow-sm" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9"/></svg>
                                             </label>
                                         @endfor
                                     </div>
-                                    @error('rating') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                                    <p class="text-xs text-gray-500 mt-2 font-medium">Pilih salah satu lingkaran untuk memberikan rating.</p>
+                                    @error('rating') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
                                 </div>
                                 
+                                {{-- Komentar --}}
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Komentar (Opsional)</label>
-                                    <textarea name="content" rows="3" placeholder="Ceritakan pengalaman Anda di sini..."
-                                        class="w-full rounded-lg border-gray-300 focus:border-[#1a6bbf] focus:ring focus:ring-[#1a6bbf] focus:ring-opacity-50 text-sm p-3"></textarea>
-                                    @error('content') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                                    <label class="block text-sm font-bold text-gray-900 mb-2">Komentar (Opsional)</label>
+                                    <textarea name="content" rows="4" placeholder="Ceritakan pengalaman Anda secara detail. Apa yang Anda sukai? Apa yang bisa ditingkatkan?"
+                                        class="w-full rounded-2xl border-2 border-gray-200 focus:border-[#00aa6c] focus:ring-0 text-gray-900 text-sm p-4 transition-colors resize-none shadow-sm"></textarea>
+                                    @error('content') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
                                 </div>
 
+                                {{-- Upload Foto --}}
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Unggah Foto (Opsional)</label>
-                                    <input type="file" name="image" accept="image/jpeg, image/png, image/jpg" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#1a6bbf]/10 file:text-[#1a6bbf] hover:file:bg-[#1a6bbf]/20 transition"/>
-                                    @error('image') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                                    <label class="block text-sm font-bold text-gray-900 mb-2">Unggah Foto (Opsional)</label>
+                                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-2xl hover:bg-gray-50 hover:border-[#00aa6c] transition-colors cursor-pointer group relative">
+                                        <div class="space-y-2 text-center">
+                                            <svg class="mx-auto h-12 w-12 text-gray-400 group-hover:text-[#00aa6c] transition-colors" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                            <div class="flex text-sm text-gray-600 justify-center">
+                                                <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-bold text-[#00aa6c] hover:text-[#008a57] focus-within:outline-none">
+                                                    <span>Pilih file</span>
+                                                    <input id="file-upload" name="image" type="file" class="sr-only" accept="image/jpeg, image/png, image/jpg">
+                                                </label>
+                                                <p class="pl-1">atau tarik dan lepas di sini</p>
+                                            </div>
+                                            <p class="text-xs text-gray-500">PNG, JPG, JPEG maksimal 2MB</p>
+                                        </div>
+                                    </div>
+                                    @error('image') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
                                 </div>
                                 
-                                <div>
-                                    <button type="submit" class="bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold px-6 py-2 rounded-full transition shadow-sm text-sm">
-                                        Kirim Ulasan
+                                {{-- Tombol Submit --}}
+                                <div class="pt-2">
+                                    <button type="submit" class="w-full sm:w-auto bg-[#00aa6c] hover:bg-[#008a57] text-white font-bold px-8 py-3.5 rounded-full transition shadow-md text-base">
+                                        Kirim Ulasan Anda
                                     </button>
                                 </div>
                             </form>
