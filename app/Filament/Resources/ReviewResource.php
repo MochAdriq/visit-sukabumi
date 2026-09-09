@@ -17,7 +17,11 @@ class ReviewResource extends Resource
 {
     protected static ?string $model = Review::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-ellipsis';
+    protected static ?string $navigationGroup = 'Interaksi Pengguna';
+    protected static ?string $modelLabel = 'Ulasan';
+    protected static ?string $pluralModelLabel = 'Ulasan';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -36,7 +40,12 @@ class ReviewResource extends Resource
                     ->required()
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('visit_type')
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->label('Tipe Kunjungan'),
+                Forms\Components\FileUpload::make('image_path')
+                    ->image()
+                    ->directory('reviews')
+                    ->label('Foto Lampiran'),
             ]);
     }
 
@@ -54,7 +63,12 @@ class ReviewResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('visit_type')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Tipe Kunjungan'),
+                Tables\Columns\ImageColumn::make('image_path')
+                    ->label('Foto')
+                    ->circular()
+                    ->disk('public'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

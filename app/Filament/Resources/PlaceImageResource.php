@@ -17,7 +17,11 @@ class PlaceImageResource extends Resource
 {
     protected static ?string $model = PlaceImage::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-photo';
+    protected static ?string $navigationGroup = 'Data Master';
+    protected static ?string $modelLabel = 'Galeri Foto';
+    protected static ?string $pluralModelLabel = 'Galeri Foto';
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

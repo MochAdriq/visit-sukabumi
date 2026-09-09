@@ -46,4 +46,17 @@ class Place extends Model
     {
         return round($this->reviews->avg('rating') ?? 0, 1);
     }
+
+    /**
+     * Get the users who wishlisted this place.
+     */
+    public function wishlistedBy()
+    {
+        return $this->belongsToMany(User::class, 'wishlists')->withTimestamps();
+    }
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }
