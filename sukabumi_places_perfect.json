@@ -1,0 +1,173 @@
+{
+    "hotel": [
+        {
+            "name": "Horison Hotel Sukabumi",
+            "address": "Jl. Siliwangi No.68, Kebonjati, Cikole, Kota Sukabumi, Jawa Barat 43113",
+            "latitude": "-6.9186491",
+            "longitude": "106.9369214",
+            "phone": "(0266) 223311",
+            "website": "https://myhorison.com",
+            "open_hours": "Buka 24 Jam",
+            "rating": 4.5,
+            "price_level": "$$$"
+        },
+        {
+            "name": "Balcony Hotel Sukabumi",
+            "address": "Jl. Selabintana No.27, Selabatu, Cikole, Kota Sukabumi, Jawa Barat 43114",
+            "latitude": "-6.9082029",
+            "longitude": "106.9362347",
+            "phone": "(0266) 211511",
+            "website": "https://balconyhotel.com",
+            "open_hours": "Buka 24 Jam",
+            "rating": 4.3,
+            "price_level": "$$"
+        },
+        {
+            "name": "Sparks Odeon Sukabumi",
+            "address": "Jl. Pajagalan No.55, Nyomplong, Warudoyong, Kota Sukabumi, Jawa Barat 43131",
+            "latitude": "-6.9251497",
+            "longitude": "106.9238661",
+            "phone": "(0266) 222122",
+            "website": "https://sparks-odeon.com",
+            "open_hours": "Buka 24 Jam",
+            "rating": 4.2,
+            "price_level": "$$"
+        },
+        {
+            "name": "MaxOneHotels at Bounty Sukabumi",
+            "address": "Jl. Siliwangi No.90, Cikole, Kota Sukabumi, Jawa Barat 43113",
+            "latitude": "-6.917201",
+            "longitude": "106.932301",
+            "phone": "(0266) 221777",
+            "website": "https://maxonehotels.com",
+            "open_hours": "Buka 24 Jam",
+            "rating": 4.4,
+            "price_level": "$$"
+        },
+        {
+            "name": "Hotel Santika Sukabumi",
+            "address": "Jl. Bhayangkara No.28, Gunungpuyuh, Kota Sukabumi, Jawa Barat 43122",
+            "latitude": "-6.912345",
+            "longitude": "106.921345",
+            "phone": "(0266) 6250000",
+            "website": "https://mysantika.com",
+            "open_hours": "Buka 24 Jam",
+            "rating": 4.6,
+            "price_level": "$$$"
+        }
+    ],
+    "kuliner": [
+        {
+            "name": "Mochi Kaswari Lampion",
+            "address": "Jl. Bhayangkara Gang Kaswari No.1, Kota Sukabumi, Jawa Barat",
+            "latitude": "-6.915123",
+            "longitude": "106.922123",
+            "phone": "0811-2233-4455",
+            "website": "https://mochilampion.com",
+            "open_hours": "Senin - Minggu: 08:00 - 20:00",
+            "rating": 4.8,
+            "price_level": "$"
+        },
+        {
+            "name": "Bubur Ayam Bunut",
+            "address": "Jl. Siliwangi No.93, Cikole, Kota Sukabumi, Jawa Barat",
+            "latitude": "-6.916123",
+            "longitude": "106.933123",
+            "phone": "(0266) 212121",
+            "website": "",
+            "open_hours": "Senin - Minggu: 06:00 - 22:00",
+            "rating": 4.5,
+            "price_level": "$"
+        },
+        {
+            "name": "Mamih Ungu Resto & Cafe",
+            "address": "Jl. Brawijaya No.16, Gunungpuyuh, Kota Sukabumi, Jawa Barat",
+            "latitude": "-6.913123",
+            "longitude": "106.924123",
+            "phone": "(0266) 223456",
+            "website": "https://mamihungu.com",
+            "open_hours": "Senin - Minggu: 10:00 - 21:00",
+            "rating": 4.4,
+            "price_level": "$$"
+        },
+        {
+            "name": "Balkot Ramayana Cafe",
+            "address": "Jl. R.E. Martadinata No.1, Cikole, Kota Sukabumi",
+            "latitude": "-6.920123",
+            "longitude": "106.927123",
+            "phone": "0812-3456-7890",
+            "website": "",
+            "open_hours": "Senin - Minggu: 11:00 - 23:00",
+            "rating": 4.3,
+            "price_level": "$$"
+        },
+        {
+            "name": "Milan Pizzeria Cafe",
+            "address": "Jl. Surya Kencana No.23, Cikole, Kota Sukabumi",
+            "latitude": "-6.918123",
+            "longitude": "106.925123",
+            "phone": "(0266) 214567",
+            "website": "",
+            "open_hours": "Senin - Minggu: 10:00 - 22:00",
+            "rating": 4.6,
+            "price_level": "$$"
+        }
+    ],
+    "pariwisata": [
+        {
+            "name": "SantaSea Water Theme Park Sukabumi",
+            "address": "Jl. Lio Santa, Gedongpanjang, Citamiang, Kota Sukabumi, Jawa Barat 43143",
+            "latitude": "-6.9492593",
+            "longitude": "106.9260966",
+            "phone": "(0266) 233334",
+            "website": "https://santasea.com",
+            "open_hours": "Senin - Minggu: 09:00 - 17:00",
+            "rating": 4.3,
+            "price_level": "$$"
+        },
+        {
+            "name": "Situ Batu Karut",
+            "address": "Jl. Batu Karut, Pasirhalang, Sukaraja, Kabupaten Sukabumi",
+            "latitude": "-6.8855244",
+            "longitude": "106.9854024",
+            "phone": "",
+            "website": "",
+            "open_hours": "Buka 24 Jam",
+            "rating": 4.2,
+            "price_level": "$"
+        },
+        {
+            "name": "Wisata Alam OASIS Sukabumi",
+            "address": "Jl. Selabintana, Warnasari, Sukabumi",
+            "latitude": "-6.9050864",
+            "longitude": "106.9396282",
+            "phone": "0815-6677-8899",
+            "website": "",
+            "open_hours": "Senin - Minggu: 08:00 - 18:00",
+            "rating": 4.5,
+            "price_level": "$$"
+        },
+        {
+            "name": "Alun-Alun Kota Sukabumi",
+            "address": "Gunungparang, Cikole, Kota Sukabumi, Jawa Barat",
+            "latitude": "-6.9214554",
+            "longitude": "106.9257085",
+            "phone": "",
+            "website": "",
+            "open_hours": "Buka 24 Jam",
+            "rating": 4.6,
+            "price_level": "Gratis"
+        },
+        {
+            "name": "Pemandian Air Panas Cikundul",
+            "address": "Cikundul, Lembursitu, Kota Sukabumi",
+            "latitude": "-6.9761236",
+            "longitude": "106.9131387",
+            "phone": "(0266) 223444",
+            "website": "",
+            "open_hours": "Senin - Minggu: 07:00 - 17:00",
+            "rating": 4.1,
+            "price_level": "$"
+        }
+    ]
+}
