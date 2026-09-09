@@ -27,16 +27,38 @@
                         {{ $place->name }}
                     </h1>
                     <div class="flex flex-wrap items-center gap-2 md:gap-4 text-xs md:text-sm mb-3">
-                        {{-- Rating --}}
-                        @php $avg = $place->avgRating(); $full = floor($avg); @endphp
-                        <div class="flex items-center gap-1">
-                            @for($i = 1; $i <= 5; $i++)
-                                <svg class="w-4 h-4 {{ $i <= $full ? 'text-green-500' : 'text-gray-200' }} fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9"/></svg>
-                            @endfor
-                            <span class="ml-2 font-bold underline text-gray-900">{{ $place->reviews->count() }} ulasan</span>
-                        </div>
-                        <span class="text-gray-300">|</span>
+                        {{-- Feature badges --}}
+                        @if($place->has_ticket)
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-[#1a6bbf]/10 text-[#1a6bbf]">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+                                Tiket Online
+                            </span>
+                        @endif
+                        @if($place->has_accommodation)
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-purple-50 text-purple-600">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                                Penginapan
+                            </span>
+                        @endif
+                        @if($place->has_restaurant)
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-orange-50 text-orange-600">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                Kuliner
+                            </span>
+                        @endif
+                        @if($place->has_tour_package)
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-green-50 text-green-600">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                Paket Tur
+                            </span>
+                        @endif
+                        @if($place->has_restaurant && $place->restaurant_is_halal)
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-200">
+                                ✓ Halal
+                            </span>
+                        @endif
                         @if($place->category)
+                            <span class="text-gray-400">|</span>
                             <span class="text-gray-600">{{ $place->category->name }}</span>
                         @endif
                     </div>
@@ -151,245 +173,204 @@
                                 Durasi: {{ $place->duration }}
                             </div>
                         @endif
-                        @if($place->ticket_info)
-                            <div class="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-lg text-sm text-gray-700">
-                                <svg class="w-4 h-4 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
-                                {{ $place->ticket_info }}
-                            </div>
-                        @endif
                     </div>
                 </div>
 
-                {{-- Tickets / Packages --}}
-                @php $activeTickets = $place->tickets()->where('is_active', true)->get(); @endphp
-                @if($activeTickets->isNotEmpty())
-                <div class="border-b border-gray-100 pb-8 mt-8">
-                    <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-6">Paket & Tiket Tersedia</h2>
-                    <div class="space-y-4">
-                        @foreach($activeTickets as $ticket)
-                            <div class="bg-white border border-gray-200 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                                <div class="flex-1">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <h3 class="text-lg font-bold text-gray-900">{{ $ticket->name }}</h3>
-                                        <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full {{ $ticket->type == 'open_trip' ? 'bg-[#f9a826]/20 text-[#d97706]' : 'bg-[#1a6bbf]/10 text-[#1a6bbf]' }}">
-                                            {{ str_replace('_', ' ', $ticket->type) }}
-                                        </span>
-                                    </div>
-                                    @if($ticket->date)
-                                        <div class="text-sm text-gray-600 flex items-center gap-1 mt-1">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                            {{ $ticket->date->translatedFormat('l, d F Y H:i') }}
-                                        </div>
-                                    @endif
-                                    @if($ticket->description)
-                                        <p class="text-sm text-gray-500 mt-2 line-clamp-2">{{ $ticket->description }}</p>
-                                    @endif
-                                </div>
-                                <div class="flex flex-col items-start md:items-end w-full md:w-auto">
-                                    <div class="text-xl font-extrabold text-gray-900 mb-1">
-                                        Rp {{ number_format($ticket->price, 0, ',', '.') }}
-                                    </div>
-                                    @if($ticket->quota !== null)
-                                        <div class="text-xs text-red-500 font-medium mb-3">Sisa kuota: {{ $ticket->quota }}</div>
-                                    @endif
-                                    @php
-                                        $waText = "Halo Admin Visit Sukabumi, saya tertarik dengan paket *" . $ticket->name . "* di *" . $place->name . "*. Apakah masih tersedia?";
-                                        $waPhone = env('ADMIN_WHATSAPP_NUMBER', '6281234567890');
-                                    @endphp
-                                    <a href="https://wa.me/{{ $waPhone }}?text={{ urlencode($waText) }}" target="_blank" class="w-full md:w-auto text-center bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold px-6 py-2 rounded-full transition shadow-sm text-sm">
-                                        Pesan via WA
-                                    </a>
-                                </div>
+                {{-- ══ PERINGATAN AKSESIBILITAS ══ --}}
+                @if($place->has_accessibility_warning && $place->accessibility_note)
+                    @php
+                        $accessIcons = [
+                            'vehicle_only'        => ['icon' => '🚗', 'color' => 'bg-yellow-50 border-yellow-300 text-yellow-800'],
+                            'motorcycle_only'     => ['icon' => '🏍️', 'color' => 'bg-orange-50 border-orange-300 text-orange-800'],
+                            'hiking'              => ['icon' => '🥾', 'color' => 'bg-amber-50 border-amber-300 text-amber-800'],
+                            'wheelchair_friendly' => ['icon' => '♿', 'color' => 'bg-blue-50 border-blue-300 text-blue-800'],
+                            'boat_required'       => ['icon' => '⛵', 'color' => 'bg-cyan-50 border-cyan-300 text-cyan-800'],
+                        ];
+                        $accessStyle = $accessIcons[$place->accessibility_type] ?? ['icon' => '⚠️', 'color' => 'bg-gray-50 border-gray-300 text-gray-800'];
+                    @endphp
+                    <div class="border-b border-gray-100 pb-8">
+                        <div class="flex items-start gap-3 p-4 rounded-xl border-2 {{ $accessStyle['color'] }}">
+                            <span class="text-2xl flex-shrink-0">{{ $accessStyle['icon'] }}</span>
+                            <div>
+                                <p class="font-bold text-sm mb-1">Info Akses Menuju Lokasi</p>
+                                <p class="text-sm leading-relaxed">{{ $place->accessibility_note }}</p>
                             </div>
-                        @endforeach
+                        </div>
                     </div>
-                </div>
                 @endif
 
-                {{-- Reviews --}}
-                <div id="reviews" class="pb-8">
-                    <div class="mb-8">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Ulasan Pengunjung</h2>
-                        @php
-                            $totalReviews = $place->reviews->count();
-                            $ratingCounts = [
-                                5 => $place->reviews->where('rating', 5)->count(),
-                                4 => $place->reviews->where('rating', 4)->count(),
-                                3 => $place->reviews->where('rating', 3)->count(),
-                                2 => $place->reviews->where('rating', 2)->count(),
-                                1 => $place->reviews->where('rating', 1)->count(),
-                            ];
-                        @endphp
-                        
-                        @if($totalReviews > 0)
-                        <div class="flex flex-col md:flex-row items-center gap-8 bg-gray-50 p-6 rounded-2xl border border-gray-100">
-                            {{-- Average Score --}}
-                            <div class="flex flex-col items-center text-center">
-                                <div class="text-5xl font-black text-gray-900">{{ number_format($place->avgRating(), 1) }}</div>
-                                <div class="flex items-center gap-1 my-2">
-                                    @for($i=1; $i<=5; $i++)
-                                        <svg class="w-5 h-5 {{ $i <= floor($place->avgRating()) ? 'text-[#f9a826]' : 'text-gray-300' }} fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                    @endfor
+                {{-- ══ TIKET ONLINE ══ --}}
+                @if($place->has_ticket)
+                    <div class="border-b border-gray-100 pb-8">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+                            Tiket & Harga
+                        </h2>
+                        <div class="bg-gradient-to-r from-[#1a6bbf]/5 to-[#1a6bbf]/10 rounded-2xl p-6 border border-[#1a6bbf]/20">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                <div>
+                                    <p class="text-sm text-gray-500 mb-1">Harga Tiket Masuk</p>
+                                    <p class="text-3xl font-extrabold text-gray-900">
+                                        @if($place->ticket_price)
+                                            Rp {{ number_format($place->ticket_price, 0, ',', '.') }}
+                                        @else
+                                            Gratis
+                                        @endif
+                                    </p>
+                                    <p class="text-xs text-gray-400 mt-1">per orang</p>
                                 </div>
-                                <div class="text-sm text-gray-500">{{ $totalReviews }} ulasan</div>
+                                @if($place->ticket_booking_url)
+                                    <a href="{{ $place->ticket_booking_url }}" target="_blank"
+                                        class="inline-flex items-center gap-2 bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold px-8 py-3.5 rounded-full transition shadow-md text-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+                                        Pesan Tiket Sekarang
+                                    </a>
+                                @endif
                             </div>
-                            
-                            {{-- Progress Bars --}}
-                            <div class="flex-1 w-full space-y-2">
-                                @foreach([5,4,3,2,1] as $star)
-                                    @php $percentage = $totalReviews > 0 ? ($ratingCounts[$star] / $totalReviews) * 100 : 0; @endphp
-                                    <div class="flex items-center gap-3">
-                                        <div class="flex items-center gap-1 w-12 text-sm text-gray-600 font-medium">
-                                            {{ $star }} <svg class="w-3 h-3 text-gray-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            @if($place->ticket_terms)
+                                <div class="mt-4 pt-4 border-t border-[#1a6bbf]/20">
+                                    <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Syarat & Ketentuan</p>
+                                    <p class="text-sm text-gray-600 leading-relaxed">{{ $place->ticket_terms }}</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+
+                {{-- ══ PENGINAPAN / HOTEL ══ --}}
+                @if($place->has_accommodation)
+                    <div class="border-b border-gray-100 pb-8">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                            Info Penginapan
+                        </h2>
+                        <div class="bg-purple-50 rounded-2xl p-6 border border-purple-100">
+                            @if($place->hotel_star)
+                                <div class="flex items-center gap-1 mb-4">
+                                    @for($s = 1; $s <= 5; $s++)
+                                        <svg class="w-5 h-5 {{ $s <= $place->hotel_star ? 'text-[#f9a826]' : 'text-gray-200' }} fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                    @endfor
+                                    <span class="ml-2 text-sm font-bold text-gray-700">Hotel Bintang {{ $place->hotel_star }}</span>
+                                </div>
+                            @endif
+                            @if(is_array($place->hotel_facilities) && count($place->hotel_facilities) > 0)
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    @foreach($place->hotel_facilities as $fac)
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white text-purple-700 border border-purple-200">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                            {{ $fac }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                            @endif
+                            @if($place->hotel_booking_url)
+                                <a href="{{ $place->hotel_booking_url }}" target="_blank"
+                                    class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-full transition shadow-sm text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                    Cek Ketersediaan Kamar
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+
+                {{-- ══ RESTORAN / KULINER ══ --}}
+                @if($place->has_restaurant)
+                    <div class="border-b border-gray-100 pb-8">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                            Info Kuliner & Restoran
+                        </h2>
+                        <div class="bg-orange-50 rounded-2xl p-6 border border-orange-100 space-y-4">
+                            @if($place->restaurant_is_halal)
+                                <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-bold px-4 py-2 rounded-full">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Bersertifikat Halal
+                                </div>
+                            @endif
+                            <div class="flex flex-wrap gap-3">
+                                @if($place->restaurant_menu_url)
+                                    <a href="{{ $place->restaurant_menu_url }}" target="_blank"
+                                        class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-5 py-2.5 rounded-full transition text-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                                        Lihat Menu
+                                    </a>
+                                @endif
+                                @if($place->restaurant_reservation_url)
+                                    <a href="{{ Str::startsWith($place->restaurant_reservation_url, 'http') ? $place->restaurant_reservation_url : 'https://wa.me/' . preg_replace('/\D/', '', $place->restaurant_reservation_url) }}" target="_blank"
+                                        class="inline-flex items-center gap-2 bg-white border border-orange-300 text-orange-600 hover:bg-orange-50 font-bold px-5 py-2.5 rounded-full transition text-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                        Reservasi Meja
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                {{-- ══ PAKET TUR & GUIDE ══ --}}
+                @if($place->has_tour_package)
+                    <div class="border-b border-gray-100 pb-8">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            Paket Tur & Pemandu Wisata
+                        </h2>
+
+                        @if($place->tour_meeting_point)
+                            <div class="mb-4 flex items-start gap-3 text-sm text-gray-600 bg-green-50 p-4 rounded-xl border border-green-100">
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <div><span class="font-bold">Titik Kumpul:</span> {{ $place->tour_meeting_point }}</div>
+                            </div>
+                        @endif
+
+                        @if(is_array($place->tour_packages) && count($place->tour_packages) > 0)
+                            <div class="space-y-4">
+                                @foreach($place->tour_packages as $pkg)
+                                    <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                        <div class="flex-1">
+                                            <h3 class="text-base font-bold text-gray-900">{{ $pkg['name'] ?? '' }}</h3>
+                                            @if(!empty($pkg['description']))
+                                                <p class="text-sm text-gray-500 mt-1">{{ $pkg['description'] }}</p>
+                                            @endif
+                                            @if(!empty($pkg['quota']))
+                                                <p class="text-xs text-red-500 font-medium mt-1">Kuota tersisa: {{ $pkg['quota'] }} orang</p>
+                                            @endif
                                         </div>
-                                        <div class="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
-                                            <div class="h-full bg-[#f9a826] rounded-full" style="width: {{ $percentage }}%"></div>
+                                        <div class="flex flex-col items-start md:items-end gap-2">
+                                            <p class="text-xl font-extrabold text-gray-900">Rp {{ number_format($pkg['price'] ?? 0, 0, ',', '.') }}</p>
+                                            @if($place->tour_guide_contact)
+                                                @php
+                                                    $tourMsg = "Halo, saya tertarik dengan paket *{$pkg['name']}* di *{$place->name}*. Apakah masih tersedia?";
+                                                    $tourWa = 'https://wa.me/' . preg_replace('/\D/', '', $place->tour_guide_contact) . '?text=' . urlencode($tourMsg);
+                                                @endphp
+                                                <a href="{{ $tourWa }}" target="_blank"
+                                                    class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-5 py-2 rounded-full transition text-sm">
+                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                                                    Pesan via WA
+                                                </a>
+                                            @endif
                                         </div>
-                                        <div class="w-8 text-xs text-gray-400 text-right">{{ $ratingCounts[$star] }}</div>
                                     </div>
                                 @endforeach
                             </div>
-                        </div>
                         @endif
                     </div>
+                @endif
 
-                    {{-- Review Form --}}
-                    <div class="mb-8 bg-gray-50 border border-gray-200 rounded-xl p-5">
-                        @auth
-                            <h3 class="font-bold text-gray-900 mb-4">Bagaimana pengalaman Anda di {{ $place->name }}?</h3>
-                            
-                            @if(session('success'))
-                                <div class="bg-green-100 text-green-700 p-3 rounded-lg text-sm mb-4">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
-                            @if(session('error'))
-                                <div class="bg-red-100 text-red-700 p-3 rounded-lg text-sm mb-4">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
-
-                            <style>
-                                .rating-bubbles { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 0.5rem; }
-                                .rating-bubbles input { display: none; }
-                                .rating-bubbles label { cursor: pointer; color: #e5e7eb; transition: transform 0.2s, color 0.2s; }
-                                .rating-bubbles label:hover,
-                                .rating-bubbles label:hover ~ label,
-                                .rating-bubbles input:checked ~ label { color: #00aa6c; }
-                                .rating-bubbles label:hover { transform: scale(1.1); }
-                            </style>
-                            <form action="{{ route('review.store', $place->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-                                @csrf
-                                
-                                {{-- Rating --}}
-                                <div>
-                                    <label class="block text-sm font-bold text-gray-900 mb-2">Penilaian Anda <span class="text-red-500">*</span></label>
-                                    <div class="rating-bubbles">
-                                        @for($i=5; $i>=1; $i--)
-                                            <input type="radio" id="rating-{{ $i }}" name="rating" value="{{ $i }}" required>
-                                            <label for="rating-{{ $i }}" title="{{ $i }} Bintang">
-                                                <svg class="w-10 h-10 fill-current drop-shadow-sm" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9"/></svg>
-                                            </label>
-                                        @endfor
-                                    </div>
-                                    <p class="text-xs text-gray-500 mt-2 font-medium">Pilih salah satu lingkaran untuk memberikan rating.</p>
-                                    @error('rating') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
-                                </div>
-                                
-                                {{-- Komentar --}}
-                                <div>
-                                    <label class="block text-sm font-bold text-gray-900 mb-2">Komentar (Opsional)</label>
-                                    <textarea name="content" rows="4" placeholder="Ceritakan pengalaman Anda secara detail. Apa yang Anda sukai? Apa yang bisa ditingkatkan?"
-                                        class="w-full rounded-2xl border-2 border-gray-200 focus:border-[#00aa6c] focus:ring-0 text-gray-900 text-sm p-4 transition-colors resize-none shadow-sm"></textarea>
-                                    @error('content') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
-                                </div>
-
-                                {{-- Upload Foto --}}
-                                <div>
-                                    <label class="block text-sm font-bold text-gray-900 mb-2">Unggah Foto (Opsional)</label>
-                                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-2xl hover:bg-gray-50 hover:border-[#00aa6c] transition-colors cursor-pointer group relative">
-                                        <div class="space-y-2 text-center">
-                                            <svg class="mx-auto h-12 w-12 text-gray-400 group-hover:text-[#00aa6c] transition-colors" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                            <div class="flex text-sm text-gray-600 justify-center">
-                                                <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-bold text-[#00aa6c] hover:text-[#008a57] focus-within:outline-none">
-                                                    <span>Pilih file</span>
-                                                    <input id="file-upload" name="image" type="file" class="sr-only" accept="image/jpeg, image/png, image/jpg">
-                                                </label>
-                                                <p class="pl-1">atau tarik dan lepas di sini</p>
-                                            </div>
-                                            <p class="text-xs text-gray-500">PNG, JPG, JPEG maksimal 2MB</p>
-                                        </div>
-                                    </div>
-                                    @error('image') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
-                                </div>
-                                
-                                {{-- Tombol Submit --}}
-                                <div class="pt-2">
-                                    <button type="submit" class="w-full sm:w-auto bg-[#00aa6c] hover:bg-[#008a57] text-white font-bold px-8 py-3.5 rounded-full transition shadow-md text-base">
-                                        Kirim Ulasan Anda
-                                    </button>
-                                </div>
-                            </form>
-                        @else
-                            <div class="text-center py-4">
-                                <p class="text-sm text-gray-600 mb-3">Ingin membagikan pengalaman Anda? Silakan masuk terlebih dahulu.</p>
-                                <a href="{{ route('login') }}" class="inline-block px-6 py-2 border-2 border-[#1a6bbf] text-[#1a6bbf] rounded-full font-bold text-sm hover:bg-[#1a6bbf] hover:text-white transition">
-                                    Log in untuk menulis ulasan
-                                </a>
-                            </div>
-                        @endauth
-                    </div>
-
-                    @if($place->reviews->isEmpty())
-                        <div class="text-center py-12 text-gray-400">
-                            <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                            <p class="text-sm">Belum ada ulasan. Jadilah yang pertama!</p>
-                        </div>
-                    @else
-                        <div class="space-y-6">
-                            @foreach($place->reviews as $review)
-                                <div class="flex gap-4 border-b border-gray-100 pb-6 last:border-0">
-                                    <div class="flex-shrink-0">
-                                        <div class="w-10 h-10 bg-[#1a6bbf]/10 rounded-full flex items-center justify-center text-[#1a6bbf] font-bold text-xs">
-                                            {{ strtoupper(substr(optional($review->user)->name ?? 'U', 0, 2)) }}
-                                        </div>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="flex items-center gap-2 mb-1">
-                                            @for($i=1;$i<=5;$i++)
-                                                <svg class="w-3 h-3 {{ $i <= $review->rating ? 'text-green-500' : 'text-gray-200' }} fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9"/></svg>
-                                            @endfor
-                                            <span class="text-xs text-gray-400">{{ $review->created_at->diffForHumans() }}</span>
-                                        </div>
-                                        <p class="text-sm font-bold text-gray-900 mb-1">{{ optional($review->user)->name ?? 'Pengunjung' }}</p>
-                                        @if($review->content)
-                                            <p class="text-gray-700 text-sm leading-relaxed">{{ $review->content }}</p>
-                                        @endif
-                                        @if($review->image_path)
-                                            <div class="mt-3">
-                                                <img src="{{ Storage::url($review->image_path) }}" alt="Foto ulasan" class="w-32 h-32 md:w-48 md:h-48 object-cover rounded-xl shadow-sm border border-gray-100 hover:scale-105 transition duration-300">
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
             </div>
 
             {{-- RIGHT: Sticky Sidebar --}}
             <div class="hidden lg:block w-full lg:w-1/3">
                 <div class="sticky top-24 space-y-5">
 
-                    {{-- Pricing Card --}}
+                    {{-- Pricing / CTA Card --}}
                     <div class="bg-white border border-gray-200 rounded-2xl shadow-lg p-6">
                         <div class="flex justify-between items-center mb-5">
                             <div>
                                 <div class="text-2xl font-extrabold text-gray-900">
-                                    @if($place->price)
+                                    @if($place->has_ticket && $place->ticket_price)
+                                        Rp {{ number_format($place->ticket_price, 0, ',', '.') }}
+                                    @elseif($place->price)
                                         Rp {{ number_format($place->price, 0, ',', '.') }}
                                     @else
                                         Gratis
@@ -397,13 +378,35 @@
                                 </div>
                                 <div class="text-xs text-gray-400 mt-0.5">per orang</div>
                             </div>
-                            @if($place->price)
-                                <span class="text-xs bg-green-50 text-green-700 font-bold px-3 py-1 rounded-full">Tersedia</span>
-                            @endif
+                            <span class="text-xs bg-green-50 text-green-700 font-bold px-3 py-1 rounded-full">Tersedia</span>
                         </div>
-                        <button class="w-full bg-[#f9a826] hover:bg-[#e8971e] text-gray-900 font-bold py-3 rounded-full transition shadow-sm mb-2">
-                            Cek Ketersediaan
-                        </button>
+
+                        {{-- Dynamic CTA buttons based on active toggles --}}
+                        @if($place->has_ticket && $place->ticket_booking_url)
+                            <a href="{{ $place->ticket_booking_url }}" target="_blank"
+                                class="block w-full text-center bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold py-3 rounded-full transition shadow-sm mb-2">
+                                Pesan Tiket Sekarang
+                            </a>
+                        @elseif($place->has_accommodation && $place->hotel_booking_url)
+                            <a href="{{ $place->hotel_booking_url }}" target="_blank"
+                                class="block w-full text-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-full transition shadow-sm mb-2">
+                                Booking Kamar
+                            </a>
+                        @elseif($place->has_restaurant && $place->restaurant_reservation_url)
+                            <a href="{{ Str::startsWith($place->restaurant_reservation_url, 'http') ? $place->restaurant_reservation_url : 'https://wa.me/' . preg_replace('/\D/', '', $place->restaurant_reservation_url) }}" target="_blank"
+                                class="block w-full text-center bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-full transition shadow-sm mb-2">
+                                Reservasi Meja
+                            </a>
+                        @elseif($place->phone)
+                            <a href="https://wa.me/{{ preg_replace('/\D/', '', $place->phone) }}" target="_blank"
+                                class="block w-full text-center bg-[#f9a826] hover:bg-[#e8971e] text-gray-900 font-bold py-3 rounded-full transition shadow-sm mb-2">
+                                Hubungi via WhatsApp
+                            </a>
+                        @else
+                            <button class="w-full bg-[#f9a826] hover:bg-[#e8971e] text-gray-900 font-bold py-3 rounded-full transition shadow-sm mb-2">
+                                Cek Ketersediaan
+                            </button>
+                        @endif
                         <p class="text-center text-xs text-gray-400">Pembatalan gratis</p>
                     </div>
 
@@ -470,12 +473,30 @@
             <div>
                 <p class="text-xs text-gray-400">Harga per orang</p>
                 <p class="text-lg font-extrabold text-gray-900">
-                    @if($place->price) Rp {{ number_format($place->price,0,',','.') }} @else Gratis @endif
+                    @if($place->has_ticket && $place->ticket_price)
+                        Rp {{ number_format($place->ticket_price, 0, ',', '.') }}
+                    @elseif($place->price)
+                        Rp {{ number_format($place->price, 0, ',', '.') }}
+                    @else
+                        Gratis
+                    @endif
                 </p>
             </div>
-            <button class="bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold px-6 py-3 rounded-full transition shadow-md">
-                Cek Ketersediaan
-            </button>
+            @if($place->has_ticket && $place->ticket_booking_url)
+                <a href="{{ $place->ticket_booking_url }}" target="_blank"
+                    class="bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold px-6 py-3 rounded-full transition shadow-md">
+                    Pesan Tiket
+                </a>
+            @elseif($place->phone)
+                <a href="https://wa.me/{{ preg_replace('/\D/', '', $place->phone) }}" target="_blank"
+                    class="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 rounded-full transition shadow-md">
+                    Chat WA
+                </a>
+            @else
+                <button class="bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold px-6 py-3 rounded-full transition shadow-md">
+                    Cek Ketersediaan
+                </button>
+            @endif
         </div>
 
     </main>
