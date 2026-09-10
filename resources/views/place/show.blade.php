@@ -110,6 +110,12 @@
 
         {{-- ══ PHOTO GALLERY ══ --}}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+            @php 
+                $images = $place->placeImages; 
+                $mainImg = $images->firstWhere('is_primary', true) ?? $images->first(); 
+                $total = $images->count();
+                $otherImages = $images->where('id', '!=', optional($mainImg)->id);
+            @endphp
             
             {{-- 📱 MOBILE VIEW (< md) --}}
             <div class="block md:hidden">
