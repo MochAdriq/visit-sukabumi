@@ -297,20 +297,26 @@
                             {{-- Left: Timeline --}}
                             <div class="space-y-8 relative border-l-2 border-dashed border-gray-300 ml-4 pl-8 py-2">
                                 @foreach($event->itineraries as $index => $itin)
-                                    <div class="relative itinerary-item cursor-pointer group" data-lat="{{ $itin->latitude }}" data-lng="{{ $itin->longitude }}">
+                                    <div x-data="{ open: false }" @click="open = !open" class="relative itinerary-item cursor-pointer group" data-lat="{{ $itin->latitude }}" data-lng="{{ $itin->longitude }}">
                                         {{-- Marker Icon --}}
                                         <div class="absolute -left-[49px] top-0 w-8 h-8 bg-white rounded-full flex items-center justify-center font-bold text-sm border-[3px] z-10 transition-colors {{ $index === 0 ? 'border-[#f9a826] text-black bg-[#f9a826]' : ($index === $event->itineraries->count() - 1 ? 'border-[#f9a826] text-black bg-[#f9a826]' : 'border-[#00aa6c] text-[#00aa6c]') }} group-hover:scale-110">
                                             {{ $index === 0 ? 'Start' : ($index === $event->itineraries->count() - 1 ? 'End' : $index) }}
                                         </div>
                                         
-                                        <h3 class="font-bold text-gray-900 group-hover:underline">{{ $itin->title }}</h3>
-                                        @if($itin->duration_text)
-                                            <p class="text-sm text-gray-500 mt-1">{{ $itin->duration_text }}</p>
-                                        @endif
-                                        <p class="text-sm text-gray-900 font-medium mt-1 group-hover:hidden">See details & photo</p>
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <h3 class="font-bold text-gray-900 group-hover:underline">{{ $itin->title }}</h3>
+                                                @if($itin->duration_text)
+                                                    <p class="text-sm text-gray-500 mt-1">{{ $itin->duration_text }}</p>
+                                                @endif
+                                            </div>
+                                            <svg :class="{'rotate-180': open}" class="w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        </div>
+                                        
+                                        <p x-show="!open" class="text-sm text-[#1a6bbf] font-medium mt-1">Lihat detail & foto</p>
                                         
                                         {{-- Expandable Content --}}
-                                        <div class="itinerary-content mt-3 hidden group-hover:block transition-all">
+                                        <div x-show="open" style="display: none;" class="itinerary-content mt-3">
                                             @if($itin->image_path)
                                                 <img src="{{ Storage::url($itin->image_path) }}" alt="{{ $itin->title }}" class="w-full h-48 object-cover rounded-xl mb-3 shadow-sm">
                                             @endif
