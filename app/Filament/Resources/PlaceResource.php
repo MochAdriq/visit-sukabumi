@@ -75,10 +75,12 @@ class PlaceResource extends Resource
                 ->schema([
                     Forms\Components\TextInput::make('latitude')
                         ->numeric()
+                        ->nullable()
                         ->label('Latitude')
                         ->placeholder('-6.9175'),
                     Forms\Components\TextInput::make('longitude')
                         ->numeric()
+                        ->nullable()
                         ->label('Longitude')
                         ->placeholder('106.9236'),
                 ]),
