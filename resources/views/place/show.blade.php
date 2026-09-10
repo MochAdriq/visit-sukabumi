@@ -30,7 +30,18 @@
 
     <main class="pt-6">
 
-        {{-- BREADCRUMB REMOVED PER USER REQUEST --}}
+        {{-- ══ BREADCRUMB ══ --}}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2">
+            <nav class="flex text-xs md:text-sm text-gray-500 gap-2 items-center flex-wrap">
+                <a href="{{ url('/') }}" class="hover:underline hover:text-gray-900">Visit Sukabumi</a>
+                <span>›</span>
+                @if($place->category)
+                    <a href="{{ url('/place?category='.$place->category->slug) }}" class="hover:underline hover:text-gray-900">{{ $place->category->name }}</a>
+                    <span>›</span>
+                @endif
+                <span class="text-gray-900 font-medium truncate">{{ $place->name }}</span>
+            </nav>
+        </div>
 
         {{-- ══ TITLE + META ══ --}}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4">
