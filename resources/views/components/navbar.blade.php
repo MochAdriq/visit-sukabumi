@@ -106,7 +106,7 @@ $navItems = [
 
         {{-- Center: Brand --}}
         <a href="/" class="absolute left-0 right-0 mx-auto w-fit flex items-center justify-center group py-2">
-            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-14 md:h-16 object-contain group-hover:opacity-90 transition-opacity drop-shadow-sm" />
+            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-20 md:h-24 object-contain group-hover:opacity-90 transition-opacity drop-shadow-sm" />
         </a>
 
         {{-- Right: Search & Auth --}}
@@ -198,7 +198,7 @@ $navItems = [
     {{-- ════════════════════════════════════════════
          MOBILE NAVBAR — ☰ Logo Search style
          ════════════════════════════════════════════ --}}
-    <div class="md:hidden flex items-center justify-between px-4 h-[60px] border-b border-gray-200 bg-white relative">
+    <div class="md:hidden flex items-center justify-between px-4 h-[76px] border-b border-gray-200 bg-white relative">
 
         {{-- Left: Hamburger --}}
         <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="flex items-center justify-center w-10 h-10 text-gray-700 hover:text-[#1a6bbf] transition-colors" aria-label="Menu">
@@ -209,7 +209,7 @@ $navItems = [
 
         {{-- Center: Logo --}}
         <a href="/" class="absolute left-0 right-0 mx-auto w-fit flex items-center justify-center">
-            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-10 object-contain drop-shadow-sm" />
+            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-14 object-contain drop-shadow-sm" />
         </a>
 
         {{-- Right: Search icon (toggle inline search) + Login --}}
