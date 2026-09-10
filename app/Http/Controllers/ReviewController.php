@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Place;
+use App\Models\Event;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,6 +36,41 @@ class ReviewController extends Controller
         Review::create([
             'user_id' => Auth::id(),
             'place_id' => $place->id,
+            'rating' => $validated['rating'],
+            'content' => $validated['content'],
+            'visit_type' => $validated['visit_type'],
+            'image_path' => $imagePath,
+        ]);
+
+        return back()->with('success', 'Terima kasih! Ulasan Anda berhasil ditambahkan.');
+    }
+
+    public function storeEvent(Request $request, Event $event)
+    {
+        $validated = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'content' => 'nullable|string|max:1000',
+            'visit_type' => 'nullable|string|max:50',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // max 2MB
+        ]);
+
+        // Cek apakah user sudah mereview event ini
+        $existingReview = Review::where('user_id', Auth::id())
+                                ->where('event_id', $event->id)
+                                ->first();
+
+        if ($existingReview) {
+            return back()->with('error', 'Anda sudah memberikan ulasan untuk event ini.');
+        }
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('reviews', 'public');
+        }
+
+        Review::create([
+            'user_id' => Auth::id(),
+            'event_id' => $event->id,
             'rating' => $validated['rating'],
             'content' => $validated['content'],
             'visit_type' => $validated['visit_type'],

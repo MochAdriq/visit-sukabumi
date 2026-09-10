@@ -203,28 +203,70 @@
 
         {{-- SECTION 5: CERITA TRAVELER --}}
         @if(isset($recentReviews) && $recentReviews->count() > 0)
-        <div class="bg-[#f0f7ff] py-10 md:py-14">
-            <div class="max-w-7xl mx-auto px-4 md:px-6">
-                <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-1">Kata Mereka tentang Sukabumi</h2>
-                <p class="text-[13px] md:text-[14px] text-gray-500 mb-6 md:mb-8">Ulasan nyata dari ribuan wisatawan yang sudah berkunjung</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-                    @foreach($recentReviews as $review)
-                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col">
-                        <div class="flex items-center text-[#f9a826] mb-3">
-                            @for($i=1; $i<=5; $i++)
-                                <svg class="w-4 h-4 {{ $i <= $review->rating ? 'fill-current' : 'text-gray-200 fill-current' }}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        @php
+            // Divide reviews into 3 columns
+            $perColumn = ceil($recentReviews->count() / 3);
+            $firstColumn = $recentReviews->slice(0, $perColumn);
+            $secondColumn = $recentReviews->slice($perColumn, $perColumn);
+            $thirdColumn = $recentReviews->slice($perColumn * 2);
+        @endphp
+        <style>
+            @keyframes scroll-y {
+                0% { transform: translateY(0); }
+                100% { transform: translateY(-50%); }
+            }
+            .animate-scroll-y {
+                animation: scroll-y linear infinite;
+            }
+        </style>
+        <div class="bg-[#f0f7ff] py-10 md:py-16 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <div class="inline-block border border-blue-200 bg-blue-50 text-[#1a6bbf] px-4 py-1.5 rounded-full text-xs font-bold mb-4 tracking-wider uppercase">
+                        Testimonials
+                    </div>
+                    <h2 class="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight">Apa Kata Mereka</h2>
+                    <p class="text-[14px] md:text-base text-gray-500 mt-4 leading-relaxed">
+                        Ulasan nyata dari ribuan wisatawan yang sudah menikmati indahnya pesona Sukabumi bersama kami.
+                    </p>
+                </div>
+
+                <div class="flex justify-center gap-4 md:gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)] h-[600px] md:h-[740px] overflow-hidden">
+                    
+                    {{-- Column 1 --}}
+                    <div class="w-full md:w-1/3 max-w-[320px]">
+                        <div class="flex flex-col gap-4 animate-scroll-y hover:[animation-play-state:paused]" style="animation-duration: 15s;">
+                            {{-- Render 2 sets for infinite loop --}}
+                            @for($i=0; $i<2; $i++)
+                                @foreach($firstColumn as $review)
+                                    @include('components.home-review-card', ['review' => $review])
+                                @endforeach
                             @endfor
                         </div>
-                        <p class="text-[13px] text-gray-700 leading-relaxed italic line-clamp-4 mb-4 flex-1">"{{ $review->content }}"</p>
-                        <div class="flex items-center gap-3 pt-3 border-t border-gray-100 mt-auto">
-                            <div class="w-9 h-9 rounded-full bg-[#1a6bbf] text-white flex items-center justify-center font-bold text-sm flex-shrink-0">{{ strtoupper(substr($review->user->name ?? 'A', 0, 1)) }}</div>
-                            <div>
-                                <div class="text-[13px] font-bold text-gray-900">{{ $review->user->name ?? 'Anonim' }}</div>
-                                <a href="{{ route('place.show', $review->place->slug ?? '') }}" class="text-[11px] text-[#1a6bbf] hover:underline">{{ $review->place->name ?? 'Sukabumi' }}</a>
-                            </div>
+                    </div>
+
+                    {{-- Column 2 --}}
+                    <div class="w-full md:w-1/3 max-w-[320px] hidden md:block">
+                        <div class="flex flex-col gap-4 animate-scroll-y hover:[animation-play-state:paused]" style="animation-duration: 19s;">
+                            @for($i=0; $i<2; $i++)
+                                @foreach($secondColumn as $review)
+                                    @include('components.home-review-card', ['review' => $review])
+                                @endforeach
+                            @endfor
                         </div>
                     </div>
-                    @endforeach
+
+                    {{-- Column 3 --}}
+                    <div class="w-full md:w-1/3 max-w-[320px] hidden lg:block">
+                        <div class="flex flex-col gap-4 animate-scroll-y hover:[animation-play-state:paused]" style="animation-duration: 17s;">
+                            @for($i=0; $i<2; $i++)
+                                @foreach($thirdColumn as $review)
+                                    @include('components.home-review-card', ['review' => $review])
+                                @endforeach
+                            @endfor
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

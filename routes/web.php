@@ -29,6 +29,7 @@ Route::post('/logout', [VisitorAuthController::class, 'logout'])->name('logout')
 
 // Review Route (Requires Auth)
 Route::post('/place/{place}/review', [ReviewController::class, 'store'])->middleware('auth')->name('review.store');
+Route::post('/event/{event}/review', [ReviewController::class, 'storeEvent'])->middleware('auth')->name('review.store.event');
 
 // Wishlist Routes (Requires Auth)
 Route::middleware('auth')->group(function () {

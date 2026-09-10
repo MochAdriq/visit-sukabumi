@@ -31,4 +31,19 @@ class Event extends Model
     {
         return $this->hasMany(EventItinerary::class)->orderBy('order_num');
     }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function avgRating(): float
+    {
+        return round($this->reviews->avg('rating') ?? 0, 1);
+    }
 }

@@ -20,10 +20,10 @@ class HomeController extends Controller
             ->get();
             
         // 2. Recent Reviews (Cerita Traveler)
-        $recentReviews = Review::with(['user', 'place'])
+        $recentReviews = Review::with(['user', 'place', 'event'])
             ->whereNotNull('content')
             ->latest()
-            ->limit(4)
+            ->limit(12)
             ->get();
 
         // 3. Popular Places grouped by Category Slug

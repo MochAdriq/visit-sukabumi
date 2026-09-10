@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Review extends Model
 {
-    protected $fillable = ['user_id', 'place_id', 'rating', 'content', 'visit_type', 'image_path'];
+    protected $fillable = ['user_id', 'place_id', 'event_id', 'rating', 'content', 'visit_type', 'image_path'];
 
     public function user(): BelongsTo
     {
@@ -17,5 +17,10 @@ class Review extends Model
     public function place(): BelongsTo
     {
         return $this->belongsTo(Place::class);
+    }
+
+    public function event(): BelongsTo
+    {
+        return $this->belongsTo(Event::class);
     }
 }
