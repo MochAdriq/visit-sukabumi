@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@php
+    $waText = urlencode("Halo, saya mendapatkan informasi tempat ini (*{$place->name}*) dari website panduan wisata *Visit Sukabumi* (visitsukabumi.com).\n\nSaya ingin bertanya untuk informasi lebih lanjut.");
+    $restoWaText = urlencode("Halo, saya mendapatkan informasi restoran ini (*{$place->name}*) dari website panduan wisata *Visit Sukabumi* (visitsukabumi.com).\n\nSaya ingin bertanya terkait reservasi meja.");
+@endphp
+
 @section('content')
 <div class="min-h-screen bg-white font-sans text-gray-900">
     @include('components.navbar')
