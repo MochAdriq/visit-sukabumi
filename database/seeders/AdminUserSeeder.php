@@ -13,11 +13,11 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::firstOrCreate(
-            ['email' => 'admin@visitsukabumi.com'],
+        User::updateOrCreate(
+            ['email' => 'visitsukabumidotcom@gmail.com'],
             [
-                'name' => 'Administrator',
-                'password' => Hash::make('password'),
+                'name' => 'Visit Sukabumi Admin',
+                'password' => Hash::make('admin123'),
                 'role' => 'admin',
             ]
         );

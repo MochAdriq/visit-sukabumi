@@ -13,6 +13,9 @@ class VisitorAuthController extends Controller
     {
         // Jika sudah login, redirect kembali ke sebelumnya atau home
         if (Auth::check()) {
+            if (Auth::user()->role === 'admin') {
+                return redirect()->intended('/admin');
+            }
             return redirect()->intended('/');
         }
         return view('auth.login');
@@ -27,6 +30,10 @@ class VisitorAuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+
+            if (Auth::user()->role === 'admin') {
+                return redirect()->intended('/admin');
+            }
 
             return redirect()->intended('/')->with('success', 'Selamat datang kembali!');
         }

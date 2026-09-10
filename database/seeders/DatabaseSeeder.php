@@ -15,11 +15,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Buat akun admin utama (Super Admin)
+        \App\Models\User::updateOrCreate(
+            ['email' => 'visitsukabumidotcom@gmail.com'],
+            [
+                'name' => 'Visit Sukabumi Admin',
+                'password' => \Illuminate\Support\Facades\Hash::make('admin123'),
+                'role' => 'admin',
+            ]
+        );
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Hapus komentar di bawah jika ingin men-seed data destinasi dan event secara otomatis:
+        // $this->call([
+        //     VisitSukabumiSeeder::class,
+        //     EventAndTicketSeeder::class,
+        // ]);
     }
 }

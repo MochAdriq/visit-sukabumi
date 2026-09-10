@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direktori Sukabumi</title>
+
+    <link rel="preload" as="style" href="https://direktorisukabumi.com/build/assets/app-BaOYWwt8.css" />
+    <link rel="stylesheet" href="https://direktorisukabumi.com/build/assets/app-BaOYWwt8.css"
+        data-navigate-track="reload" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Livewire Styles -->
+    <style>
+        [wire\:loading][wire\:loading],
+        [wire\:loading\.delay][wire\:loading\.delay],
+        [wire\:loading\.inline-block][wire\:loading\.inline-block],
+        [wire\:loading\.inline][wire\:loading\.inline],
+        [wire\:loading\.block][wire\:loading\.block],
+        [wire\:loading\.flex][wire\:loading\.flex],
+        [wire\:loading\.table][wire\:loading\.table],
+        [wire\:loading\.grid][wire\:loading\.grid],
+        [wire\:loading\.inline-flex][wire\:loading\.inline-flex] {
+            display: none;
+        }
+
+        [wire\:loading\.delay\.none][wire\:loading\.delay\.none],
+        [wire\:loading\.delay\.shortest][wire\:loading\.delay\.shortest],
+        [wire\:loading\.delay\.shorter][wire\:loading\.delay\.shorter],
+        [wire\:loading\.delay\.short][wire\:loading\.delay\.short],
+        [wire\:loading\.delay\.default][wire\:loading\.delay\.default],
+        [wire\:loading\.delay\.long][wire\:loading\.delay\.long],
+        [wire\:loading\.delay\.longer][wire\:loading\.delay\.longer],
+        [wire\:loading\.delay\.longest][wire\:loading\.delay\.longest] {
+            display: none;
+        }
+
+        [wire\:offline][wire\:offline] {
+            display: none;
+        }
+
+        [wire\:dirty]:not(textarea):not(input):not(select) {
+            display: none;
+        }
+
+        :root {
+            --livewire-progress-bar-color: #2299dd;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        [wire\:cloak] {
+            display: none !important;
+        }
+
+        dialog#livewire-error::backdrop {
+            background-color: rgba(0, 0, 0, .6);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-brand-black font-sans antialiased">
+
+    <nav class="fixed top-0 w-full z-50 px-4 py-4">
+        <div
+            class="max-w-7xl mx-auto glass-panel rounded-full px-6 py-3 flex justify-between items-center shadow-lg bg-white/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/60 relative">
+
+            <a href="/" class="flex-shrink-0">
+                <img src="/assets/img/logo_1.png" alt="Logo Sukabumi" class="h-10 w-auto object-contain">
+            </a>
+
+            <div class="hidden md:flex gap-8 font-semibold text-sm text-gray-700">
+                <a href="/" class="hover:text-brand-teal transition">Home</a>
+                <a href="https://direktorisukabumi.com/place" class="hover:text-brand-teal transition">Destinasi</a>
+                <a href="https://direktorisukabumi.com/blog" class="hover:text-brand-teal transition">Blogs</a>
+                <a href="#" class="hover:text-brand-teal transition">Tentang</a>
+            </div>
+
+            <div class="hidden md:flex items-center gap-3">
+
+                <a href="https://direktorisukabumi.com/place">
+                    <button
+                        class="px-5 py-2 rounded-full bg-brand-black text-white text-sm font-bold hover:bg-brand-teal hover:shadow-[0_0_20px_rgba(32,199,186,0.4)] transition duration-300">
+                        Explore
+                    </button>
+                </a>
+
+                <a href="/admin/login">
+                    <button
+                        class="px-5 py-2 rounded-full border border-gray-200 text-sm font-bold hover:bg-gray-100 transition">
+                        Log in
+                    </button>
+                </a>
+
+            </div>
+
+            <button id="hamburger-btn" class="md:hidden p-2 text-gray-800 hover:text-brand-teal transition">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor" class="w-7 h-7">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu-overlay"
+            class="fixed inset-0 z-[60] pointer-events-none transition-opacity duration-300 opacity-0">
+
+            <div id="mobile-backdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+
+            <div id="mobile-sidebar"
+                class="absolute right-0 top-0 h-full w-[280px] bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col p-6">
+
+                <div class="flex justify-between items-center mb-8">
+                    <a href="/" class="flex-shrink-0">
+                        <img src="/assets/img/logo_1.png" alt="Logo" class="h-8 w-auto">
+                    </a>
+                    <button id="close-menu-btn" class="p-2 text-gray-500 hover:text-red-500 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="flex flex-col gap-6 font-semibold text-lg text-gray-700">
+                    <a href="/" class="hover:text-brand-teal transition border-b border-gray-100 pb-2">Home</a>
+                    <a href="https://direktorisukabumi.com/place"
+                        class="hover:text-brand-teal transition border-b border-gray-100 pb-2">Destinasi</a>
+                    <a href="https://direktorisukabumi.com/blog"
+                        class="hover:text-brand-teal transition border-b border-gray-100 pb-2">Blog</a>
+                    <a href="#" class="hover:text-brand-teal transition border-b border-gray-100 pb-2">Tentang</a>
+                </div>
+
+                <div class="mt-auto flex flex-col gap-3">
+                    <a href="/admin/login" class="w-full">
+                        <button
+                            class="w-full px-5 py-3 rounded-full border border-gray-200 font-bold hover:bg-gray-50 transition">
+                            Log in
+                        </button>
+                    </a>
+
+                    <a href="https://direktorisukabumi.com/place" class="w-full">
+                        <button
+                            class="w-full px-5 py-3 rounded-full bg-brand-black text-white font-bold hover:bg-brand-teal shadow-md transition">
+                            Explore Now
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div wire:snapshot="{&quot;data&quot;:{&quot;place&quot;:[null,{&quot;class&quot;:&quot;App\\Models\\Place&quot;,&quot;key&quot;:21,&quot;s&quot;:&quot;mdl&quot;}],&quot;related_same_category&quot;:[null,{&quot;keys&quot;:[10],&quot;class&quot;:&quot;Illuminate\\Database\\Eloquent\\Collection&quot;,&quot;modelClass&quot;:&quot;App\\Models\\Place&quot;,&quot;s&quot;:&quot;elcln&quot;}],&quot;related_main_category&quot;:[null,{&quot;keys&quot;:[20,5,22,27],&quot;class&quot;:&quot;Illuminate\\Database\\Eloquent\\Collection&quot;,&quot;modelClass&quot;:&quot;App\\Models\\Place&quot;,&quot;s&quot;:&quot;elcln&quot;}],&quot;related_sub_category&quot;:[null,{&quot;keys&quot;:[34,35,36,33],&quot;class&quot;:&quot;Illuminate\\Database\\Eloquent\\Collection&quot;,&quot;modelClass&quot;:&quot;App\\Models\\Place&quot;,&quot;s&quot;:&quot;elcln&quot;}],&quot;related_special&quot;:[null,{&quot;keys&quot;:[47,1,15,23],&quot;class&quot;:&quot;Illuminate\\Database\\Eloquent\\Collection&quot;,&quot;modelClass&quot;:&quot;App\\Models\\Place&quot;,&quot;s&quot;:&quot;elcln&quot;}],&quot;related_articles&quot;:[null,{&quot;keys&quot;:[],&quot;class&quot;:&quot;Illuminate\\Database\\Eloquent\\Collection&quot;,&quot;modelClass&quot;:null,&quot;s&quot;:&quot;elcln&quot;}]},&quot;memo&quot;:{&quot;id&quot;:&quot;9I2G4csXfp9okkZbHI2P&quot;,&quot;name&quot;:&quot;place.show-place&quot;,&quot;path&quot;:&quot;place\/dummy-place-21&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;release&quot;:&quot;a-a-a&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;3258c21c2fdc74bf9fc937c1909a91ffe25ebd79a33754ab308e0a43d5ab6c82&quot;}"
+            wire:effects="{&quot;partials&quot;:[]}" wire:id="9I2G4csXfp9okkZbHI2P"
+            class="bg-white font-sans text-gray-900 pb-24 lg:pb-10">
+
+            <div class="max-w-7xl mx-auto px-4 mt-20 sm:px-6 lg:px-8 pt-6">
+                <div
+                    class="relative w-full h-auto py-6 md:py-0 md:h-32 bg-gradient-to-r from-blue-900 to-teal-500 rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between px-6 md:px-10 gap-4">
+
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white opacity-10 rounded-full blur-xl">
+                    </div>
+                    <div
+                        class="absolute bottom-0 left-0 -mb-4 -ml-4 w-24 h-24 bg-yellow-400 opacity-20 rounded-full blur-lg">
+                    </div>
+
+                    <div class="relative z-10 text-white w-full md:w-auto">
+                        <span
+                            class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wide">Ad</span>
+                        <h3 class="text-lg md:text-2xl font-bold mt-1 leading-tight">Dapatkan Diskon 20% Hotel!</h3>
+                        <p class="text-sm text-blue-100 mt-1 md:mt-0">Kode promo: <span
+                                class="font-mono bg-white/20 px-1 rounded text-white">TRAVEL2025</span></p>
+                    </div>
+
+                    <div class="relative z-10 w-full md:w-auto">
+                        <a href="#"
+                            class="block text-center w-full md:w-auto bg-white text-blue-800 font-bold py-2 px-6 rounded-full shadow-md hover:bg-gray-100 transition">
+                            Cek Promo
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
+                <nav class="hidden md:flex text-sm text-gray-500 mb-4">
+                    <a href="/" class="hover:underline hover:text-black">Home</a> <span class="mx-2">></span>
+
+                    <!--[if BLOCK]><![endif]--> <a href="https://direktorisukabumi.com/category/koperasi"
+                        class="hover:underline hover:text-black">
+                        Koperasi
+                    </a>
+                    <!--[if ENDBLOCK]><![endif]-->
+                    <span class="mx-2">></span>
+                    <span class="text-gray-900 font-medium truncate">Dummy Place 21</span>
+                </nav>
+
+                <div class="flex flex-col md:flex-row justify-between items-start gap-4">
+                    <div class="w-full">
+                        <h1 class="text-2xl md:text-4xl font-extrabold text-gray-900 mb-2 leading-tight">Dummy Place 21
+                        </h1>
+
+                        <div class="flex flex-wrap items-center gap-2 md:gap-4 text-xs md:text-sm">
+                            <div class="flex items-center">
+                                <div class="flex text-green-500">
+                                    <!--[if BLOCK]><![endif]--> <svg class="w-3 h-3 md:w-4 md:h-4 fill-current"
+                                        viewBox="0 0 20 20">
+                                        <circle cx="10" cy="10" r="9" />
+                                    </svg>
+                                    <svg class="w-3 h-3 md:w-4 md:h-4 fill-current" viewBox="0 0 20 20">
+                                        <circle cx="10" cy="10" r="9" />
+                                    </svg>
+                                    <svg class="w-3 h-3 md:w-4 md:h-4 fill-current" viewBox="0 0 20 20">
+                                        <circle cx="10" cy="10" r="9" />
+                                    </svg>
+                                    <svg class="w-3 h-3 md:w-4 md:h-4 fill-current" viewBox="0 0 20 20">
+                                        <circle cx="10" cy="10" r="9" />
+                                    </svg>
+                                    <svg class="w-3 h-3 md:w-4 md:h-4 fill-current" viewBox="0 0 20 20">
+                                        <circle cx="10" cy="10" r="9" />
+                                    </svg>
+                                    <!--[if ENDBLOCK]><![endif]-->
+                                </div>
+                                <span class="ml-2 font-bold underline text-gray-900">1,240 reviews</span>
+                            </div>
+                            <span class="text-gray-400">|</span>
+                            <span class="text-gray-600 truncate">Koperasi</span>
+                        </div>
+
+                        <div class="mt-3 text-sm text-gray-600 flex items-start gap-2">
+                            <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span class="underline hover:text-blue-600 cursor-pointer leading-tight">24338 Jonatan
+                                Centers Suite 300
+                                Port Delilahton, DE 98114-5166</span>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 w-full md:w-auto mt-2 md:mt-0">
+                        <button
+                            class="flex flex-1 md:flex-none justify-center items-center px-6 py-2 border border-gray-300 rounded-full hover:bg-gray-50 font-bold text-sm transition">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                            </svg>
+                            Share
+                        </button>
+
+                        <button
+                            class="flex flex-1 md:flex-none justify-center items-center px-6 py-2 border border-gray-300 rounded-full hover:bg-gray-50 font-bold text-sm transition">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div x-data="{ showGallery: false }" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+
+                <div
+                    class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-2 h-64 md:h-[450px] rounded-xl overflow-hidden">
+
+                    <div @click="showGallery = true"
+                        class="col-span-1 md:col-span-2 md:row-span-2 relative cursor-pointer group h-full">
+                        <!--[if BLOCK]><![endif]-->
+                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">No Image</div>
+                        <!--[if ENDBLOCK]><![endif]-->
+                    </div>
+
+                    <div class="hidden md:contents">
+                        <!--[if BLOCK]><![endif]-->
+
+                        <!--[if ENDBLOCK]><![endif]-->
+                    </div>
+                </div>
+
+                <div x-show="showGallery" x-transition.opacity style="display: none"
+                    class="fixed inset-0 z-[100] bg-black bg-opacity-95 w-full h-full flex flex-col">
+
+                    <div
+                        class="flex justify-between items-center p-4 text-white absolute top-0 w-full z-50 bg-gradient-to-b from-black/50 to-transparent">
+                        <span class="text-sm font-bold">Dummy Place 21 (0
+                            Foto)</span>
+                        <button @click="showGallery = false"
+                            class="bg-white/10 p-2 rounded-full hover:bg-white/20 transition">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="flex-1 overflow-y-auto p-4 space-y-4 flex flex-col items-center pt-20 pb-10">
+                        <!--[if ENDBLOCK]><![endif]-->
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-10">
+
+                <div class="w-full lg:w-2/3 space-y-8">
+                    <div class="border-b pb-8">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">About Dummy Place 21</h2>
+                        <div class="prose prose-sm md:prose-base max-w-none text-gray-700 leading-relaxed mb-4">
+                            Blanditiis cupiditate similique adipisci odit nulla. Alias vel autem quos eaque quod.
+                            Provident quis dolor qui repellat dolores voluptatem praesentium iste. Facere in voluptatum
+                            nemo reiciendis vero sed repellat.
+                        </div>
+                        <div class="flex flex-wrap gap-2 md:gap-4 mt-4">
+                            <div
+                                class="bg-gray-100 px-3 py-2 rounded-lg text-xs md:text-sm font-medium text-gray-700 flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Duration: 1-2 hours
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                    <div id="reviews" class="pb-8">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 gap-4">
+                            <h2 class="text-xl font-bold text-gray-900">Reviews</h2>
+                            <button
+                                class="w-full md:w-auto px-4 py-2 border border-black text-black rounded-full font-bold text-sm hover:bg-gray-50">Write
+                                a review</button>
+                        </div>
+                        <div class="space-y-6">
+                            <!--[if BLOCK]><![endif]-->
+                            <div class="flex gap-4 border-b pb-6 last:border-0">
+                                <div class="flex-shrink-0">
+                                    <div
+                                        class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold text-xs">
+                                        US</div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center mb-1">
+                                        <div class="text-green-500 text-xs mr-2">●●●●●</div>
+                                        <span class="text-xs text-gray-500">Yesterday</span>
+                                    </div>
+                                    <h4 class="font-bold text-gray-900 mb-1 text-sm">Great place!</h4>
+                                    <p class="text-gray-700 text-sm leading-relaxed line-clamp-3">The view was amazing.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 border-b pb-6 last:border-0">
+                                <div class="flex-shrink-0">
+                                    <div
+                                        class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold text-xs">
+                                        US</div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center mb-1">
+                                        <div class="text-green-500 text-xs mr-2">●●●●●</div>
+                                        <span class="text-xs text-gray-500">Yesterday</span>
+                                    </div>
+                                    <h4 class="font-bold text-gray-900 mb-1 text-sm">Great place!</h4>
+                                    <p class="text-gray-700 text-sm leading-relaxed line-clamp-3">The view was amazing.
+                                    </p>
+                                </div>
+                            </div>
+                            <!--[if ENDBLOCK]><![endif]-->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hidden lg:block w-full lg:w-1/3 relative">
+                    <div class="sticky top-6 space-y-6">
+                        <div class="bg-white border border-gray-200 rounded-xl shadow-lg p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="text-xl font-bold">Rp 50.000</div>
+                                <div class="text-sm text-gray-500">per entry</div>
+                            </div>
+                            <button
+                                class="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 rounded-full transition shadow-sm mb-2">
+                                Check Availability
+                            </button>
+                            <div class="text-center text-xs text-gray-500">Free cancellation</div>
+                        </div>
+
+                        <div class="border rounded-xl overflow-hidden p-4">
+                            <div class="h-48 bg-gray-100 rounded-lg mb-4">
+                                <iframe width="100%" height="100%"
+                                    src="https://maps.google.com/maps?q=-7.0266690,106.9597210&hl=en;z=14&output=embed"
+                                    frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                            </div>
+                            <p class="text-sm text-gray-700">24338 Jonatan Centers Suite 300
+                                Port Delilahton, DE 98114-5166</p>
+                        </div>
+
+                        <div class="space-y-3">
+
+                            <!--[if BLOCK]><![endif]--> <a href="https://wa.me/083418486950" target="_blank"
+                                wire:click="openWhatsapp"
+                                class="flex items-center justify-center w-full py-3 px-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition shadow-sm cursor-pointer relative">
+                                <span wire:loading.remove wire:target="openWhatsapp" class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+                                    </svg>
+                                    Chat WhatsApp
+                                </span>
+
+                                <span wire:loading wire:target="openWhatsapp"
+                                    class="absolute inset-0 flex items-center justify-center">
+                                    <svg class="animate-spin h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                            stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                        </path>
+                                    </svg>
+                                </span>
+                            </a>
+                            <!--[if ENDBLOCK]><![endif]-->
+                            <!--[if BLOCK]><![endif]-->
+                            <div class="pt-2 text-center">
+                                <a href="crooks.com" target="_blank" wire:click="openWebsite"
+                                    class="text-sm text-teal-600 hover:underline font-medium relative inline-block">
+                                    <span wire:loading.remove wire:target="openWebsite">Visit Official Website</span>
+                                    <span wire:loading wire:target="openWebsite">Visiting...</span>
+                                </a>
+                            </div>
+                            <!--[if ENDBLOCK]><![endif]-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 space-y-12">
+                <hr class="border-gray-200">
+
+                <!--[if BLOCK]><![endif]-->
+                <div>
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">Serupa dengan Koperasi</h3>
+
+                    <div
+                        class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-4 md:gap-6 scrollbar-hide">
+                        <!--[if BLOCK]><![endif]--> <a href="https://direktorisukabumi.com/place/dummy-place-10"
+                            class="block min-w-[240px] md:min-w-0 bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition group cursor-pointer">
+
+                            <div class="h-36 md:h-48 bg-gray-200 relative overflow-hidden">
+                                <!--[if BLOCK]><![endif]--> <img
+                                    src="https://placeholder.pics/svg/400x400/DEDEDE/555555/No%20Image"
+                                    class="w-full h-full object-cover">
+                                <!--[if ENDBLOCK]><![endif]-->
+                                <div class="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow z-10">
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <h4
+                                    class="font-bold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-blue-600 transition">
+                                    Dummy Place 10</h4>
+                                <div class="flex items-center text-xs mb-2">
+                                    <div class="flex text-green-500 mr-1">●●●●○</div>
+                                    <span class="text-gray-500">(12)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <p class="font-bold text-gray-900 text-xs">Rp 25.000</p>
+                                    <span
+                                        class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-[80px]">Koperasi</span>
+                                </div>
+                            </div>
+                        </a>
+                        <!--[if ENDBLOCK]><![endif]-->
+                    </div>
+                </div>
+                <!--[if ENDBLOCK]><![endif]--> <!--[if BLOCK]><![endif]-->
+                <div>
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">Destinasi Pilihan Editor</h3>
+
+                    <div
+                        class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-4 md:gap-6 scrollbar-hide">
+                        <!--[if BLOCK]><![endif]--> <a href="https://direktorisukabumi.com/place/dummy-place-20"
+                            class="block min-w-[240px] md:min-w-0 bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition group cursor-pointer">
+
+                            <div class="h-36 md:h-48 bg-gray-200 relative overflow-hidden">
+                                <!--[if BLOCK]><![endif]--> <img
+                                    src="https://placeholder.pics/svg/400x400/DEDEDE/555555/No%20Image"
+                                    class="w-full h-full object-cover">
+                                <!--[if ENDBLOCK]><![endif]-->
+                                <div class="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow z-10">
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <h4
+                                    class="font-bold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-blue-600 transition">
+                                    Dummy Place 20</h4>
+                                <div class="flex items-center text-xs mb-2">
+                                    <div class="flex text-green-500 mr-1">●●●●○</div>
+                                    <span class="text-gray-500">(12)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <p class="font-bold text-gray-900 text-xs">Rp 25.000</p>
+                                    <span
+                                        class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-[80px]">Salon
+                                        &amp; Barbershop</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://direktorisukabumi.com/place/dummy-place-5"
+                            class="block min-w-[240px] md:min-w-0 bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition group cursor-pointer">
+
+                            <div class="h-36 md:h-48 bg-gray-200 relative overflow-hidden">
+                                <!--[if BLOCK]><![endif]--> <img
+                                    src="https://placeholder.pics/svg/400x400/DEDEDE/555555/No%20Image"
+                                    class="w-full h-full object-cover">
+                                <!--[if ENDBLOCK]><![endif]-->
+                                <div class="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow z-10">
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <h4
+                                    class="font-bold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-blue-600 transition">
+                                    Dummy Place 5</h4>
+                                <div class="flex items-center text-xs mb-2">
+                                    <div class="flex text-green-500 mr-1">●●●●○</div>
+                                    <span class="text-gray-500">(12)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <p class="font-bold text-gray-900 text-xs">Rp 25.000</p>
+                                    <span
+                                        class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-[80px]">Pet
+                                        Shop &amp; Dokter Hewan</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://direktorisukabumi.com/place/dummy-place-22"
+                            class="block min-w-[240px] md:min-w-0 bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition group cursor-pointer">
+
+                            <div class="h-36 md:h-48 bg-gray-200 relative overflow-hidden">
+                                <!--[if BLOCK]><![endif]--> <img
+                                    src="https://placeholder.pics/svg/400x400/DEDEDE/555555/No%20Image"
+                                    class="w-full h-full object-cover">
+                                <!--[if ENDBLOCK]><![endif]-->
+                                <div class="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow z-10">
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <h4
+                                    class="font-bold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-blue-600 transition">
+                                    Dummy Place 22</h4>
+                                <div class="flex items-center text-xs mb-2">
+                                    <div class="flex text-green-500 mr-1">●●●●○</div>
+                                    <span class="text-gray-500">(12)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <p class="font-bold text-gray-900 text-xs">Rp 25.000</p>
+                                    <span
+                                        class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-[80px]">Wedding
+                                        Organizer</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://direktorisukabumi.com/place/dummy-place-27"
+                            class="block min-w-[240px] md:min-w-0 bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition group cursor-pointer">
+
+                            <div class="h-36 md:h-48 bg-gray-200 relative overflow-hidden">
+                                <!--[if BLOCK]><![endif]--> <img
+                                    src="https://placeholder.pics/svg/400x400/DEDEDE/555555/No%20Image"
+                                    class="w-full h-full object-cover">
+                                <!--[if ENDBLOCK]><![endif]-->
+                                <div class="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow z-10">
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <h4
+                                    class="font-bold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-blue-600 transition">
+                                    Dummy Place 27</h4>
+                                <div class="flex items-center text-xs mb-2">
+                                    <div class="flex text-green-500 mr-1">●●●●○</div>
+                                    <span class="text-gray-500">(12)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <p class="font-bold text-gray-900 text-xs">Rp 25.000</p>
+                                    <span
+                                        class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-[80px]">UMKM
+                                        &amp; Bisnis Lokal</span>
+                                </div>
+                            </div>
+                        </a>
+                        <!--[if ENDBLOCK]><![endif]-->
+                    </div>
+                </div>
+                <!--[if ENDBLOCK]><![endif]--> <!--[if BLOCK]><![endif]-->
+                <div>
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">Baru Ditambahkan</h3>
+
+                    <div
+                        class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-4 md:gap-6 scrollbar-hide">
+                        <!--[if BLOCK]><![endif]--> <a href="https://direktorisukabumi.com/place/dummy-place-34"
+                            class="block min-w-[240px] md:min-w-0 bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition group cursor-pointer">
+
+                            <div class="h-36 md:h-48 bg-gray-200 relative overflow-hidden">
+                                <!--[if BLOCK]><![endif]--> <img
+                                    src="https://placeholder.pics/svg/400x400/DEDEDE/555555/No%20Image"
+                                    class="w-full h-full object-cover">
+                                <!--[if ENDBLOCK]><![endif]-->
+                                <div class="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow z-10">
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <h4
+                                    class="font-bold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-blue-600 transition">
+                                    Dummy Place 34</h4>
+                                <div class="flex items-center text-xs mb-2">
+                                    <div class="flex text-green-500 mr-1">●●●●○</div>
+                                    <span class="text-gray-500">(12)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <p class="font-bold text-gray-900 text-xs">Rp 25.000</p>
+                                    <span
+                                        class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-[80px]">Agen
+                                        Bus</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://direktorisukabumi.com/place/dummy-place-35"
+                            class="block min-w-[240px] md:min-w-0 bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition group cursor-pointer">
+
+                            <div class="h-36 md:h-48 bg-gray-200 relative overflow-hidden">
+                                <!--[if BLOCK]><![endif]--> <img
+                                    src="https://placeholder.pics/svg/400x400/DEDEDE/555555/No%20Image"
+                                    class="w-full h-full object-cover">
+                                <!--[if ENDBLOCK]><![endif]-->
+                                <div class="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow z-10">
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <h4
+                                    class="font-bold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-blue-600 transition">
+                                    Dummy Place 35</h4>
+                                <div class="flex items-center text-xs mb-2">
+                                    <div class="flex text-green-500 mr-1">●●●●○</div>
+                                    <span class="text-gray-500">(12)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <p class="font-bold text-gray-900 text-xs">Rp 25.000</p>
+                                    <span
+                                        class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-[80px]">Komunitas
+                                        Sosial</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://direktorisukabumi.com/place/dummy-place-36"
+                            class="block min-w-[240px] md:min-w-0 bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition group cursor-pointer">
+
+                            <div class="h-36 md:h-48 bg-gray-200 relative overflow-hidden">
+                                <!--[if BLOCK]><![endif]--> <img
+                                    src="https://placeholder.pics/svg/400x400/DEDEDE/555555/No%20Image"
+                                    class="w-full h-full object-cover">
+                                <!--[if ENDBLOCK]><![endif]-->
+                                <div class="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow z-10">
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <h4
+                                    class="font-bold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-blue-600 transition">
+                                    Dummy Place 36</h4>
+                                <div class="flex items-center text-xs mb-2">
+                                    <div class="flex text-green-500 mr-1">●●●●○</div>
+                                    <span class="text-gray-500">(12)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <p class="font-bold text-gray-900 text-xs">Rp 25.000</p>
+                                    <span
+                                        class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-[80px]">Apartemen</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://direktorisukabumi.com/place/dummy-place-33"
+                            class="block min-w-[240px] md:min-w-0 bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition group cursor-pointer">
+
+                            <div class="h-36 md:h-48 bg-gray-200 relative overflow-hidden">
+                                <!--[if BLOCK]><![endif]--> <img
+                                    src="https://placeholder.pics/svg/400x400/DEDEDE/555555/No%20Image"
+                                    class="w-full h-full object-cover">
+                                <!--[if ENDBLOCK]><![endif]-->
+                                <div class="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow z-10">
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <h4
+                                    class="font-bold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-blue-600 transition">
+                                    Dummy Place 33</h4>
+                                <div class="flex items-center text-xs mb-2">
+                                    <div class="flex text-green-500 mr-1">●●●●○</div>
+                                    <span class="text-gray-500">(12)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <p class="font-bold text-gray-900 text-xs">Rp 25.000</p>
+                                    <span
+                                        class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-[80px]">Event
+                                        Kampus / Sekolah</span>
+                                </div>
+                            </div>
+                        </a>
+                        <!--[if ENDBLOCK]><![endif]-->
+                    </div>
+                </div>
+                <!--[if ENDBLOCK]><![endif]--> <!--[if BLOCK]><![endif]-->
+                <div>
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">Mungkin Anda Suka</h3>
+
+                    <div
+                        class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-4 md:gap-6 scrollbar-hide">
+                        <!--[if BLOCK]><![endif]--> <a href="https://direktorisukabumi.com/place/dummy-place-47"
+                            class="block min-w-[240px] md:min-w-0 bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition group cursor-pointer">
+
+                            <div class="h-36 md:h-48 bg-gray-200 relative overflow-hidden">
+                                <!--[if BLOCK]><![endif]--> <img
+                                    src="https://placeholder.pics/svg/400x400/DEDEDE/555555/No%20Image"
+                                    class="w-full h-full object-cover">
+                                <!--[if ENDBLOCK]><![endif]-->
+                                <div class="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow z-10">
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <h4
+                                    class="font-bold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-blue-600 transition">
+                                    Dummy Place 47</h4>
+                                <div class="flex items-center text-xs mb-2">
+                                    <div class="flex text-green-500 mr-1">●●●●○</div>
+                                    <span class="text-gray-500">(12)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <p class="font-bold text-gray-900 text-xs">Rp 25.000</p>
+                                    <span
+                                        class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-[80px]">Pesantren</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://direktorisukabumi.com/place/dummy-place-1"
+                            class="block min-w-[240px] md:min-w-0 bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition group cursor-pointer">
+
+                            <div class="h-36 md:h-48 bg-gray-200 relative overflow-hidden">
+                                <!--[if BLOCK]><![endif]--> <img
+                                    src="https://placeholder.pics/svg/400x400/DEDEDE/555555/No%20Image"
+                                    class="w-full h-full object-cover">
+                                <!--[if ENDBLOCK]><![endif]-->
+                                <div class="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow z-10">
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <h4
+                                    class="font-bold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-blue-600 transition">
+                                    Dummy Place 1</h4>
+                                <div class="flex items-center text-xs mb-2">
+                                    <div class="flex text-green-500 mr-1">●●●●○</div>
+                                    <span class="text-gray-500">(12)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <p class="font-bold text-gray-900 text-xs">Rp 25.000</p>
+                                    <span
+                                        class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-[80px]">SMA/SMK</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://direktorisukabumi.com/place/dummy-place-15"
+                            class="block min-w-[240px] md:min-w-0 bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition group cursor-pointer">
+
+                            <div class="h-36 md:h-48 bg-gray-200 relative overflow-hidden">
+                                <!--[if BLOCK]><![endif]--> <img
+                                    src="https://placeholder.pics/svg/400x400/DEDEDE/555555/No%20Image"
+                                    class="w-full h-full object-cover">
+                                <!--[if ENDBLOCK]><![endif]-->
+                                <div class="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow z-10">
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <h4
+                                    class="font-bold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-blue-600 transition">
+                                    Dummy Place 15</h4>
+                                <div class="flex items-center text-xs mb-2">
+                                    <div class="flex text-green-500 mr-1">●●●●○</div>
+                                    <span class="text-gray-500">(12)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <p class="font-bold text-gray-900 text-xs">Rp 25.000</p>
+                                    <span
+                                        class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-[80px]">Fotografer
+                                        &amp; Videografer</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://direktorisukabumi.com/place/dummy-place-23"
+                            class="block min-w-[240px] md:min-w-0 bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition group cursor-pointer">
+
+                            <div class="h-36 md:h-48 bg-gray-200 relative overflow-hidden">
+                                <!--[if BLOCK]><![endif]--> <img
+                                    src="https://placeholder.pics/svg/400x400/DEDEDE/555555/No%20Image"
+                                    class="w-full h-full object-cover">
+                                <!--[if ENDBLOCK]><![endif]-->
+                                <div class="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow z-10">
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <h4
+                                    class="font-bold text-gray-900 text-sm mb-1 line-clamp-1 group-hover:text-blue-600 transition">
+                                    Dummy Place 23</h4>
+                                <div class="flex items-center text-xs mb-2">
+                                    <div class="flex text-green-500 mr-1">●●●●○</div>
+                                    <span class="text-gray-500">(12)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <p class="font-bold text-gray-900 text-xs">Rp 25.000</p>
+                                    <span
+                                        class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-[80px]">Travel
+                                        &amp; Shuttle</span>
+                                </div>
+                            </div>
+                        </a>
+                        <!--[if ENDBLOCK]><![endif]-->
+                    </div>
+                </div>
+                <!--[if ENDBLOCK]><![endif]--> <!--[if ENDBLOCK]><![endif]-->
+            </div>
+
+            <div
+                class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 z-50 lg:hidden flex justify-between items-center shadow-[0_-5px_10px_rgba(0,0,0,0.05)]">
+                <div>
+                    <p class="text-xs text-gray-500">Price per entry</p>
+                    <p class="text-lg font-bold text-gray-900">Rp 50.000</p>
+                </div>
+                <button
+                    class="bg-yellow-400 text-black font-bold py-2.5 px-6 rounded-full shadow-sm hover:bg-yellow-500 transition">
+                    Check Availability
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-black text-white pt-20 pb-10 rounded-t-[3rem] mt-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+                <div class="md:w-1/3">
+                    <h2 class="text-3xl font-black mb-6">SUKABUMI<span class="text-brand-teal">.GO</span></h2>
+                    <p class="text-gray-400 leading-relaxed mb-6">
+                        Platform panduan wisata modern untuk mengeksplorasi keindahan Sukabumi, dari pegunungan hingga
+                        lautan.
+                    </p>
+                    <div class="flex gap-4">
+                        <div
+                            class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-teal transition cursor-pointer">
+                            IG</div>
+                        <div
+                            class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-teal transition cursor-pointer">
+                            TT</div>
+                        <div
+                            class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-teal transition cursor-pointer">
+                            YT</div>
+                    </div>
+                </div>
+
+                <div class="md:w-2/3 grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div>
+                        <h4 class="font-bold text-lg mb-4 text-brand-yellow">Exploration</h4>
+                        <ul class="space-y-3 text-gray-400 text-sm">
+                            <li class="hover:text-white cursor-pointer">Geopark Ciletuh</li>
+                            <li class="hover:text-white cursor-pointer">Situ Gunung</li>
+                            <li class="hover:text-white cursor-pointer">Pantai Pelabuhan Ratu</li>
+                            <li class="hover:text-white cursor-pointer">Curug Cikaso</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-lg mb-4 text-brand-yellow">Support</h4>
+                        <ul class="space-y-3 text-gray-400 text-sm">
+                            <li class="hover:text-white cursor-pointer">Pusat Bantuan</li>
+                            <li class="hover:text-white cursor-pointer">Partner Login</li>
+                            <li class="hover:text-white cursor-pointer">Daftarkan Bisnis</li>
+                            <li class="hover:text-white cursor-pointer">Kebijakan Privasi</li>
+                        </ul>
+                    </div>
+
+                    <div class="col-span-2 md:col-span-1">
+                        <h4 class="font-bold text-lg mb-4 text-brand-yellow">Stay in Loop</h4>
+                        <form class="flex flex-col gap-3">
+                            <input type="email" placeholder="Email kamu..."
+                                class="bg-white/10 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-teal transition">
+                            <button
+                                class="bg-brand-teal text-white font-bold py-3 rounded-xl hover:bg-white hover:text-brand-teal transition">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
+                &copy; 2024 Sukabumi Unleashed. Made with ❤️ and Mochi.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const mobileBackdrop = document.getElementById('mobile-backdrop');
+
+        function openMenu() {
+            // Aktifkan overlay (pointer events & opacity)
+            mobileMenuOverlay.classList.remove('pointer-events-none', 'opacity-0');
+            mobileMenuOverlay.classList.add('pointer-events-auto', 'opacity-100');
+
+            // Geser sidebar masuk (remove translate-x-full)
+            mobileSidebar.classList.remove('translate-x-full');
+        }
+
+        function closeMenu() {
+            // Geser sidebar keluar
+            mobileSidebar.classList.add('translate-x-full');
+
+            // Sembunyikan overlay
+            mobileMenuOverlay.classList.remove('pointer-events-auto', 'opacity-100');
+            mobileMenuOverlay.classList.add('pointer-events-none', 'opacity-0');
+        }
+
+        // Event Listeners
+        hamburgerBtn.addEventListener('click', openMenu);
+        closeMenuBtn.addEventListener('click', closeMenu);
+        mobileBackdrop.addEventListener('click', closeMenu);
+    </script>
+
+    <!-- Livewire Scripts -->
+    <script src="/livewire/livewire.js?id=646f9d24" data-csrf="0bvGlykO1f53gpq8Trx0JaApUeL9bsWkCAAoBpLm"
+        data-update-uri="/livewire/update" data-navigate-once="true"></script>
+    <script type="module"
+        src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495"
+        integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg=="
+        data-cf-beacon='{"version":"2024.11.0","token":"7de2f07f95bf4608a299c24dab039ff3","r":1,"spa":2}'
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
