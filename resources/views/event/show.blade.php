@@ -390,8 +390,8 @@
 
                         {{-- WhatsApp CTA --}}
                         @php
-                            $waText = "Halo Admin Visit Sukabumi! Saya ingin konfirmasi availability untuk *" . $event->title . "* pada tanggal *" . $event->start_date->translatedFormat('d F Y') . "*. Mohon infonya 🙏";
-                            $waPhone = env('ADMIN_WHATSAPP_NUMBER', '6281234567890');
+                            $waText = "Halo, saya mendapatkan informasi paket tour ini (*{$event->title}*) dari website panduan wisata *Visit Sukabumi* (visitsukabumi.com).\n\nBoleh minta informasi lebih lanjut terkait pemesanan paket ini?";
+                            $waPhone = "6282298285558";
                         @endphp
                         <a href="https://wa.me/{{ $waPhone }}?text={{ urlencode($waText) }}" target="_blank"
                            class="w-full block text-center bg-[#00aa6c] hover:bg-[#008a57] text-white font-bold py-3.5 px-6 rounded-full transition text-[15px] mb-4">
@@ -425,11 +425,11 @@
                     <div class="bg-[#f2f2f2] rounded-2xl p-5 border border-gray-200">
                         <div class="font-bold text-sm text-gray-900 mb-2">Have booking questions?</div>
                         <div class="flex gap-4">
-                            <a href="https://wa.me/{{ $waPhone }}" target="_blank" class="flex items-center gap-1.5 text-xs font-medium text-gray-700 hover:text-black">
+                            <a href="https://wa.me/{{ $waPhone }}?text={{ urlencode($waText) }}" target="_blank" class="flex items-center gap-1.5 text-xs font-medium text-gray-700 hover:text-black">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                 {{ $waPhone }}
                             </a>
-                            <a href="https://wa.me/{{ $waPhone }}" target="_blank" class="flex items-center gap-1.5 text-xs font-medium text-gray-700 hover:text-black border-b border-black pb-0.5">
+                            <a href="https://wa.me/{{ $waPhone }}?text={{ urlencode($waText) }}" target="_blank" class="flex items-center gap-1.5 text-xs font-medium text-gray-700 hover:text-black border-b border-black pb-0.5">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                                 Chat now
                             </a>
