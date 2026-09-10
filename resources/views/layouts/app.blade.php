@@ -13,6 +13,9 @@
     <!-- Lottie Player (Web Component) -->
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <!-- Vite CSS -->
     @vite(['resources/css/app.css'])
 </head>
