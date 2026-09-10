@@ -165,6 +165,23 @@
             </div>
         </div>
 
+        {{-- ADVERTISEMENT BANNER --}}
+        @php
+            $ad = \App\Models\Advertisement::where('is_active', true)->inRandomOrder()->first();
+        @endphp
+        
+        @if($ad)
+        <div class="bg-white py-4">
+            <div class="max-w-7xl mx-auto px-4 md:px-6">
+                <div class="rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition">
+                    <a href="{{ $ad->url ?? '#' }}" target="{{ $ad->url ? '_blank' : '_self' }}" class="block w-full">
+                        <img src="{{ Storage::url($ad->image_path) }}" alt="{{ $ad->title }}" class="w-full h-auto max-h-[300px] md:max-h-[250px] object-cover object-center">
+                    </a>
+                </div>
+            </div>
+        </div>
+        @endif
+
         {{-- SECTION 3: JELAJAHI KATEGORI --}}
         <div class="bg-gray-50 py-10 md:py-14 border-b border-gray-100">
             <div class="max-w-7xl mx-auto px-4 md:px-6">
