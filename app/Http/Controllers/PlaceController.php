@@ -42,6 +42,15 @@ class PlaceController extends Controller
 
     public function show(Place $place)
     {
+        if ($place->status !== 'published') {
+            $isAdmin = (auth()->check() && (auth()->user()->role === 'admin' || empty(auth()->user()->role)))
+                || (class_exists(\Filament\Facades\Filament::class) && \Filament\Facades\Filament::auth()->check());
+
+            if (!$isAdmin) {
+                abort(404);
+            }
+        }
+
         $place->load([
             'category',
             'placeImages',

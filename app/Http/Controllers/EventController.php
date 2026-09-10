@@ -32,7 +32,16 @@ class EventController extends Controller
 
     public function show(string $slug)
     {
-        $event = Event::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $query = Event::where('slug', $slug);
+
+        $isAdmin = (auth()->check() && (auth()->user()->role === 'admin' || empty(auth()->user()->role)))
+            || (class_exists(\Filament\Facades\Filament::class) && \Filament\Facades\Filament::auth()->check());
+
+        if (!$isAdmin) {
+            $query->where('is_active', true);
+        }
+
+        $event = $query->firstOrFail();
 
         return view('event.show', compact('event'));
     }
