@@ -29,7 +29,8 @@ class PlaceController extends Controller
             $search = $request->query('q');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('location_name', 'like', "%{$search}%");
+                  ->orWhere('district', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%");
             });
         }
 
