@@ -117,62 +117,149 @@
                 $otherImages = $images->where('id', '!=', optional($mainImg)->id);
             @endphp
             
-            @if($total == 0)
-                <div class="w-full h-64 md:h-[440px] rounded-2xl flex items-center justify-center bg-gray-50 border border-gray-100">
-                    <svg class="w-20 h-20 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                </div>
-            @elseif($total == 1)
-                <div class="w-full h-64 md:h-[440px] rounded-2xl overflow-hidden relative bg-gray-100 group cursor-pointer shadow-sm">
-                    <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-                </div>
-            @elseif($total == 2)
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 h-64 md:h-[440px] rounded-2xl overflow-hidden shadow-sm">
-                    <div class="relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
-                    @foreach($otherImages->take(1) as $img)
-                        <div class="hidden md:block relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
-                    @endforeach
-                </div>
-            @elseif($total == 3)
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-2 h-64 md:h-[440px] rounded-2xl overflow-hidden shadow-sm">
-                    <div class="md:col-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
-                    <div class="hidden md:grid grid-rows-2 gap-2">
-                    @foreach($otherImages->take(2) as $img)
-                        <div class="relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
-                    @endforeach
+            {{-- 📱 MOBILE VIEW (< md) --}}
+            <div class="block md:hidden">
+                @if($total == 0)
+                    <div class="w-full h-64 rounded-2xl flex items-center justify-center bg-gray-50 border border-gray-100">
+                        <svg class="w-16 h-16 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     </div>
-                </div>
-            @elseif($total == 4)
-                <div class="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-2 h-64 md:h-[440px] rounded-2xl overflow-hidden shadow-sm">
-                    <div class="md:col-span-2 md:row-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
-                    @foreach($otherImages->take(3) as $index => $img)
-                        @if($index == 0)
-                            <div class="hidden md:block md:row-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
-                        @else
-                            {{-- We only have 3 slots visually (2x2 and 1x2 takes full 3 cols). So we skip the 4th image visually or adapt grid --}}
-                            {{-- Actually, if cols=3, rows=2. Main is col-span-2 row-span-2 (leaves 2 slots). So we can only fit 2 other images visually! --}}
-                            {{-- Wait, if it's cols=3, rows=2. Main is 2x2. That leaves Col 3 Row 1, and Col 3 Row 2. Total 3 images visually! --}}
-                            {{-- If total=4, we should use the 5-grid layout but with an empty space, OR just show 3 images. --}}
-                            {{-- Let's just use the 4-col layout for $total >= 4 --}}
-                        @endif
-                    @endforeach
-                </div>
-            @endif
+                @elseif($total == 1)
+                    <div class="w-full h-72 rounded-2xl overflow-hidden relative bg-gray-100 shadow-sm">
+                        <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover"/>
+                    </div>
+                @else
+                    {{-- Interactive Slider (Swipeable + Arrow Buttons + Dots + Counter) --}}
+                    <div x-data="{
+                        active: 0,
+                        total: {{ $total }},
+                        scroll() {
+                            const el = this.$refs.slider;
+                            if (el) {
+                                el.scrollTo({ left: this.active * el.offsetWidth, behavior: 'smooth' });
+                            }
+                        },
+                        next() {
+                            this.active = (this.active + 1) % this.total;
+                            this.scroll();
+                        },
+                        prev() {
+                            this.active = (this.active - 1 + this.total) % this.total;
+                            this.scroll();
+                        },
+                        onScroll() {
+                            const el = this.$refs.slider;
+                            if (el && el.offsetWidth > 0) {
+                                const index = Math.round(el.scrollLeft / el.offsetWidth);
+                                if (index >= 0 && index < this.total) {
+                                    this.active = index;
+                                }
+                            }
+                        }
+                    }" class="relative w-full overflow-hidden rounded-2xl bg-gray-900 shadow-sm select-none">
+                        {{-- Swipeable Track --}}
+                        <div x-ref="slider"
+                             @scroll.debounce.50ms="onScroll()"
+                             class="flex w-full overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
+                             style="scrollbar-width: none; -ms-overflow-style: none;">
+                            @foreach($images as $img)
+                                <div class="w-full shrink-0 snap-center relative h-72 sm:h-80 bg-gray-100 overflow-hidden">
+                                    <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover"/>
+                                </div>
+                            @endforeach
+                        </div>
 
-            @if($total >= 4)
-                <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-2 h-64 md:h-[440px] rounded-2xl overflow-hidden shadow-sm">
-                    <div class="col-span-1 md:col-span-2 md:row-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer">
+                        {{-- Left Arrow Button --}}
+                        <button @click="prev()"
+                                type="button"
+                                aria-label="Previous image"
+                                class="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/50 backdrop-blur-md text-white flex items-center justify-center hover:bg-black/70 active:scale-95 transition-all shadow-md z-10">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                        </button>
+
+                        {{-- Right Arrow Button --}}
+                        <button @click="next()"
+                                type="button"
+                                aria-label="Next image"
+                                class="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/50 backdrop-blur-md text-white flex items-center justify-center hover:bg-black/70 active:scale-95 transition-all shadow-md z-10">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+
+                        {{-- Photo Counter Badge (Bottom-Right) --}}
+                        <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-md pointer-events-none z-10">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <span x-text="(active + 1) + ' / ' + total"></span>
+                        </div>
+
+                        {{-- Bottom Dots Indicator --}}
+                        @if($total <= 8)
+                            <div class="absolute bottom-3.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10 pointer-events-none">
+                                @for($i = 0; $i < $total; $i++)
+                                    <span class="h-1.5 rounded-full transition-all duration-300"
+                                          :class="active === {{ $i }} ? 'w-4 bg-white shadow-sm' : 'w-1.5 bg-white/50'"></span>
+                                @endfor
+                            </div>
+                        @endif
+                    </div>
+                @endif
+            </div>
+
+            {{-- 💻 DESKTOP VIEW (>= md) --}}
+            <div class="hidden md:block">
+                @if($total == 0)
+                    <div class="w-full h-[440px] rounded-2xl flex items-center justify-center bg-gray-50 border border-gray-100">
+                        <svg class="w-20 h-20 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    </div>
+                @elseif($total == 1)
+                    <div class="w-full h-[440px] rounded-2xl overflow-hidden relative bg-gray-100 group cursor-pointer shadow-sm">
                         <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
                     </div>
-                    @foreach($otherImages->take(4) as $index => $img)
-                        <div class="hidden md:block relative overflow-hidden bg-gray-100 group cursor-pointer">
-                            <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-                            @if($index == 3 && $total > 5)
-                                <div class="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-bold text-xl">+{{ $total - 5 }}</div>
-                            @endif
+                @elseif($total == 2)
+                    <div class="grid grid-cols-2 gap-2 h-[440px] rounded-2xl overflow-hidden shadow-sm">
+                        <div class="relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
+                        @foreach($otherImages->take(1) as $img)
+                            <div class="relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
+                        @endforeach
+                    </div>
+                @elseif($total == 3)
+                    <div class="grid grid-cols-3 gap-2 h-[440px] rounded-2xl overflow-hidden shadow-sm">
+                        <div class="col-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
+                        <div class="grid grid-rows-2 gap-2">
+                        @foreach($otherImages->take(2) as $img)
+                            <div class="relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
+                        @endforeach
                         </div>
-                    @endforeach
-                </div>
-            @endif
+                    </div>
+                @elseif($total == 4)
+                    <div class="grid grid-cols-3 grid-rows-2 gap-2 h-[440px] rounded-2xl overflow-hidden shadow-sm">
+                        <div class="col-span-2 row-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
+                        @foreach($otherImages->take(2) as $img)
+                            <div class="relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
+                        @endforeach
+                    </div>
+                @else
+                    {{-- 5+ Images Grid --}}
+                    <div class="grid grid-cols-4 grid-rows-2 gap-2 h-[440px] rounded-2xl overflow-hidden shadow-sm">
+                        <div class="col-span-2 row-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer">
+                            <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                        </div>
+                        @foreach($otherImages->take(4) as $index => $img)
+                            <div class="relative overflow-hidden bg-gray-100 group cursor-pointer">
+                                <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                                @if($index == 3 && $total > 5)
+                                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-bold text-xl">+{{ $total - 5 }}</div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
         </div>
 
         {{-- ══ MAIN CONTENT + SIDEBAR ══ --}}
