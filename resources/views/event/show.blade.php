@@ -74,7 +74,9 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 lg:h-[450px] mb-8 rounded-2xl overflow-hidden">
             {{-- Left: Main Big Image --}}
             <div class="lg:col-span-2 h-72 lg:h-full relative group cursor-pointer">
-                <img src="{{ $mainImg }}" alt="{{ $event->title }}" class="w-full h-full object-cover group-hover:opacity-95 transition">
+                <a href="{{ $mainImg }}" class="glightbox" data-gallery="event-gallery">
+                    <img src="{{ $mainImg }}" alt="{{ $event->title }}" class="w-full h-full object-cover group-hover:opacity-95 transition">
+                </a>
                 <div class="absolute bottom-4 left-4 bg-[#f9a826] text-black font-black px-3 py-2 rounded flex flex-col items-center shadow-lg transform -rotate-3">
                     <svg class="w-6 h-6 mb-1" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path fill="white" d="M8 10h8v4H8z"/></svg>
                     <span class="text-[10px] leading-none">TRAVELERS'</span>
@@ -105,10 +107,12 @@
                 </div>
                 {{-- Bottom Right: Image --}}
                 <div class="h-1/2 relative group cursor-pointer">
-                    <img src="{{ $smallImg1 }}" alt="Gallery view" class="w-full h-full object-cover group-hover:opacity-95 transition rounded-br-2xl">
-                    <div class="absolute bottom-3 right-3 bg-black/70 text-white font-bold text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 backdrop-blur-sm">
+                    <a href="{{ $smallImg1 }}" class="glightbox" data-gallery="event-gallery">
+                        <img src="{{ $smallImg1 }}" alt="Gallery view" class="w-full h-full object-cover group-hover:opacity-95 transition rounded-br-2xl">
+                    </a>
+                    <div class="absolute bottom-3 right-3 bg-black/70 text-white font-bold text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 backdrop-blur-sm pointer-events-none">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-width="2"/><circle cx="8.5" cy="8.5" r="1.5" stroke-width="2"/><path d="M21 15l-5-5L5 21" stroke-width="2"/></svg>
-                        12 Photos
+                        Photos
                     </div>
                 </div>
             </div>
@@ -330,7 +334,9 @@
                                         {{-- Expandable Content --}}
                                         <div x-show="open" style="display: none;" class="itinerary-content mt-3">
                                             @if($itin->image_path)
-                                                <img src="{{ Storage::url($itin->image_path) }}" alt="{{ $itin->title }}" class="w-full h-48 object-cover rounded-xl mb-3 shadow-sm">
+                                                <a href="{{ Storage::url($itin->image_path) }}" class="glightbox" data-gallery="event-gallery">
+                                                    <img src="{{ Storage::url($itin->image_path) }}" alt="{{ $itin->title }}" class="w-full h-48 object-cover rounded-xl mb-3 shadow-sm">
+                                                </a>
                                             @endif
                                             @if($itin->description)
                                                 <p class="text-sm text-gray-700 leading-relaxed">{{ $itin->description }}</p>
