@@ -35,6 +35,20 @@
         </nav>
 
         {{-- ══ TITLE & RATING ══ --}}
+        @php
+            $mainImg = $event->image_path ? Storage::url($event->image_path) : 'https://images.unsplash.com/photo-1542662565-7e4fd1e56993?q=80&w=1200&h=800&fit=crop';
+            // Placeholder images for the right side layout
+            $smallImg1 = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600&h=400&fit=crop';
+            
+            // Dynamic Review Data
+            $score = number_format(4 + ($event->id % 10) / 10, 1);
+            $reviewCount = number_format(150 + ($event->id * 234));
+            $recommendPercent = 90 + ($event->id % 10);
+            
+            // Get random featured review
+            $featuredReview = \App\Models\Review::with('user')->where('rating', '>=', 4)->inRandomOrder()->first();
+        @endphp
+        
         <h1 class="text-3xl md:text-[32px] font-black text-gray-900 leading-tight mb-2">
             {{ $event->title }}
         </h1>
@@ -56,19 +70,6 @@
         </div>
 
         {{-- ══ PHOTO GALLERY (TripAdvisor Style) ══ --}}
-        @php
-            $mainImg = $event->image_path ? Storage::url($event->image_path) : 'https://images.unsplash.com/photo-1542662565-7e4fd1e56993?q=80&w=1200&h=800&fit=crop';
-            // Placeholder images for the right side layout
-            $smallImg1 = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600&h=400&fit=crop';
-            
-            // Dynamic Review Data
-            $score = number_format(4 + ($event->id % 10) / 10, 1);
-            $reviewCount = number_format(150 + ($event->id * 234));
-            $recommendPercent = 90 + ($event->id % 10);
-            
-            // Get random featured review
-            $featuredReview = \App\Models\Review::with('user')->where('rating', '>=', 4)->inRandomOrder()->first();
-        @endphp
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 lg:h-[450px] mb-8 rounded-2xl overflow-hidden">
             {{-- Left: Main Big Image --}}
             <div class="lg:col-span-2 h-72 lg:h-full relative group cursor-pointer">
