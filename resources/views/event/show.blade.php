@@ -132,7 +132,10 @@
         {{-- ══ CONTENT GRID ══ --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
 
-            {{-- ── LEFT: Main Content ── -                {{-- Badges / Status --}}
+            {{-- ── LEFT: Main Content ── --}}
+            <div class="lg:col-span-2 space-y-10">
+
+                {{-- Badges / Status --}}
                 <div class="flex items-center gap-3 bg-[#fff1e0] p-4 rounded-xl border border-[#ffd5a0]">
                     <div class="bg-[#f9a826] rounded-full p-2 text-white">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
