@@ -7,44 +7,44 @@
     <main>
 
         {{-- SECTION 1: HERO --}}
-        <div class="relative bg-gray-900" style="height: 70vh; min-height: 500px;">
+        <div class="relative bg-gray-900" style="height: 60vh; min-height: 420px;">
             <div class="absolute inset-0">
                 <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920&h=800&fit=crop" alt="Pemandangan Sukabumi" />
                 <div class="absolute inset-0 bg-black opacity-35"></div>
             </div>
-            <div class="relative max-w-7xl mx-auto px-6 h-full flex flex-col items-center justify-center gap-8">
-                <h1 class="text-5xl md:text-7xl font-bold text-white drop-shadow-lg text-center" style="text-shadow: 0 4px 12px rgba(0,0,0,0.4);">
+            <div class="relative max-w-7xl mx-auto px-4 md:px-6 h-full flex flex-col items-center justify-center gap-5 md:gap-8">
+                <h1 class="text-3xl md:text-7xl font-bold text-white drop-shadow-lg text-center" style="text-shadow: 0 4px 12px rgba(0,0,0,0.4);">
                     Discover Sukabumi
                 </h1>
-                <div class="relative w-full max-w-3xl">
-                    <form action="{{ route('place.index') }}" method="GET" class="bg-white h-[64px] rounded-full flex items-center justify-between pl-8 pr-2 shadow-2xl">
-                        <div class="flex items-center flex-1 gap-3">
-                            <svg class="w-6 h-6 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                            <input type="text" name="q" placeholder="Cari destinasi, hotel, atau kuliner..." class="w-full text-[17px] text-gray-700 bg-transparent border-none focus:ring-0 outline-none placeholder-gray-400 font-medium">
+                <div class="relative w-full max-w-3xl px-0">
+                    <form action="{{ route('place.index') }}" method="GET" class="bg-white h-[52px] md:h-[64px] rounded-full flex items-center justify-between pl-5 md:pl-8 pr-2 shadow-2xl">
+                        <div class="flex items-center flex-1 gap-2 min-w-0">
+                            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                            <input type="text" name="q" placeholder="Cari destinasi..." class="w-full text-[15px] md:text-[17px] text-gray-700 bg-transparent border-none focus:ring-0 outline-none placeholder-gray-400 font-medium min-w-0">
                         </div>
-                        <button type="submit" class="h-12 px-8 bg-[#1a6bbf] hover:bg-[#145299] rounded-full flex items-center justify-center text-white font-bold transition-colors shadow-md ml-2 flex-shrink-0">Cari</button>
+                        <button type="submit" class="h-10 md:h-12 px-5 md:px-8 bg-[#1a6bbf] hover:bg-[#145299] rounded-full flex items-center justify-center text-white font-bold transition-colors shadow-md ml-2 flex-shrink-0 text-sm md:text-base">Cari</button>
                     </form>
                 </div>
                 <div class="flex flex-wrap justify-center gap-2">
                     @foreach($exploreCategories as $cat)
-                    <a href="{{ url('/place?category=' . $cat->slug) }}" class="px-4 py-1.5 bg-white/20 backdrop-blur border border-white/40 text-white text-[13px] font-semibold rounded-full hover:bg-white hover:text-[#1a6bbf] transition-all">{{ $cat->name }}</a>
+                    <a href="{{ url('/place?category=' . $cat->slug) }}" class="px-3 py-1 md:px-4 md:py-1.5 bg-white/20 backdrop-blur border border-white/40 text-white text-[12px] md:text-[13px] font-semibold rounded-full hover:bg-white hover:text-[#1a6bbf] transition-all">{{ $cat->name }}</a>
                     @endforeach
                 </div>
             </div>
         </div>
 
         {{-- SECTION 2: DESTINASI TERPOPULER --}}
-        <div class="bg-white py-14 border-b border-gray-100">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-7">
+        <div class="bg-white py-10 md:py-14 border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 md:px-6">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-5 md:mb-7">
                     <div>
-                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">Destinasi Terpopuler</h2>
-                        <p class="text-[14px] text-gray-500">Pilihan terbaik berdasarkan review ribuan wisatawan</p>
+                        <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-1">Destinasi Terpopuler</h2>
+                        <p class="text-[13px] md:text-[14px] text-gray-500">Pilihan terbaik berdasarkan review ribuan wisatawan</p>
                     </div>
-                    <div class="flex gap-2" id="ticket-tabs">
-                        <button onclick="switchTab('alam')" id="tab-alam" class="vs-tab-pill active">Wisata Alam</button>
-                        <button onclick="switchTab('pantai')" id="tab-pantai" class="vs-tab-pill">Wisata Pantai</button>
-                        <button onclick="switchTab('kuliner')" id="tab-kuliner" class="vs-tab-pill">Kuliner</button>
+                    <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide" id="ticket-tabs">
+                        <button onclick="switchTab('alam')" id="tab-alam" class="vs-tab-pill active flex-shrink-0">Wisata Alam</button>
+                        <button onclick="switchTab('pantai')" id="tab-pantai" class="vs-tab-pill flex-shrink-0">Wisata Pantai</button>
+                        <button onclick="switchTab('kuliner')" id="tab-kuliner" class="vs-tab-pill flex-shrink-0">Kuliner</button>
                     </div>
                 </div>
 
@@ -124,11 +124,11 @@
         </div>
 
         {{-- SECTION 3: JELAJAHI KATEGORI --}}
-        <div class="bg-gray-50 py-14 border-b border-gray-100">
-            <div class="max-w-7xl mx-auto px-6">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">Jelajahi Sukabumi</h2>
-                <p class="text-[14px] text-gray-500 mb-8">Dari petualangan ekstrem hingga ketenangan alam — temukan pengalaman terbaik-mu</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="bg-gray-50 py-10 md:py-14 border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 md:px-6">
+                <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-1">Jelajahi Sukabumi</h2>
+                <p class="text-[13px] md:text-[14px] text-gray-500 mb-6 md:mb-8">Dari petualangan ekstrem hingga ketenangan alam — temukan pengalaman terbaik-mu</p>
+                <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5">
                     @foreach($exploreCategories as $cat)
                     <a href="{{ url('/place?category=' . $cat->slug) }}" class="group block">
                         <div class="overflow-hidden rounded-2xl mb-3 aspect-[4/3] bg-gray-200 flex items-center justify-center relative">
@@ -148,22 +148,22 @@
         </div>
 
         {{-- SECTION 4: EVENT MENDATANG --}}
-        <div class="bg-white py-14 border-b border-gray-100">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-7">
+        <div class="bg-white py-10 md:py-14 border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 md:px-6">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-5 md:mb-7">
                     <div>
-                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">Event & Festival Mendatang</h2>
-                        <p class="text-[14px] text-gray-500">Jangan sampai ketinggalan acara seru di Sukabumi</p>
+                        <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-1">Event & Festival Mendatang</h2>
+                        <p class="text-[13px] md:text-[14px] text-gray-500">Jangan sampai ketinggalan acara seru di Sukabumi</p>
                     </div>
-                    <div class="flex flex-wrap gap-2" id="event-filters">
-                        <button onclick="filterEvents('minggu-ini', this)" class="event-filter-btn px-4 py-1.5 border-2 border-[#1a6bbf] text-[#1a6bbf] bg-white text-[12px] font-bold rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors">Minggu ini</button>
-                        <button onclick="filterEvents('akhir-pekan', this)" class="event-filter-btn px-4 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-[12px] font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Akhir pekan</button>
-                        <button onclick="filterEvents('bulan-ini', this)" class="event-filter-btn px-4 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-[12px] font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Bulan ini</button>
-                        <button onclick="filterEvents('semua', this)" class="event-filter-btn px-4 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-[12px] font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Semua</button>
+                    <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide" id="event-filters">
+                        <button onclick="filterEvents('minggu-ini', this)" class="event-filter-btn flex-shrink-0 px-3 py-1.5 border-2 border-[#1a6bbf] text-[#1a6bbf] bg-white text-[12px] font-bold rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors">Minggu ini</button>
+                        <button onclick="filterEvents('akhir-pekan', this)" class="event-filter-btn flex-shrink-0 px-3 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-[12px] font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Akhir pekan</button>
+                        <button onclick="filterEvents('bulan-ini', this)" class="event-filter-btn flex-shrink-0 px-3 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-[12px] font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Bulan ini</button>
+                        <button onclick="filterEvents('semua', this)" class="event-filter-btn flex-shrink-0 px-3 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-[12px] font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Semua</button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" id="event-container">
+                <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5" id="event-container">
                     @forelse($upcomingEvents as $event)
                     <a href="{{ route('event.show', $event->slug) }}" class="event-card group relative block overflow-hidden rounded-2xl h-60 shadow-sm border border-gray-100 bg-gray-200" data-date="{{ $event->start_date->format('Y-m-d') }}">
                         @if($event->image_path)
@@ -203,11 +203,11 @@
 
         {{-- SECTION 5: CERITA TRAVELER --}}
         @if(isset($recentReviews) && $recentReviews->count() > 0)
-        <div class="bg-[#f0f7ff] py-14">
-            <div class="max-w-7xl mx-auto px-6">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">Kata Mereka tentang Sukabumi</h2>
-                <p class="text-[14px] text-gray-500 mb-8">Ulasan nyata dari ribuan wisatawan yang sudah berkunjung</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="bg-[#f0f7ff] py-10 md:py-14">
+            <div class="max-w-7xl mx-auto px-4 md:px-6">
+                <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-1">Kata Mereka tentang Sukabumi</h2>
+                <p class="text-[13px] md:text-[14px] text-gray-500 mb-6 md:mb-8">Ulasan nyata dari ribuan wisatawan yang sudah berkunjung</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
                     @foreach($recentReviews as $review)
                     <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col">
                         <div class="flex items-center text-[#f9a826] mb-3">

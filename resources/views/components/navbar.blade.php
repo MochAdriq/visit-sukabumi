@@ -1,5 +1,5 @@
 @php
-// Tentukan kategori yang sedang aktif (baik dari URL parameter, atau dari halaman detail destinasi)
+// Tentukan kategori yang sedang aktif
 $currentCatSlug = request('category');
 if (isset($place) && $place->category) {
     $currentCatSlug = $place->category->slug;
@@ -29,8 +29,8 @@ $navItems = [
         'links'    => [
             ['label' => 'Pesona Geopark Ciletuh', 'href' => '/place/geopark-ciletuh',            'highlight' => false],
             ['label' => 'Situ Gunung & Jembatan', 'href' => '/place/situ-gunung',                'highlight' => false],
-            ['label' => 'Wisata Pantai',          'href' => '/kategori/wisata-pantai',     'highlight' => false],
-            ['label' => 'Semua Wisata Alam',      'href' => '/kategori/wisata-alam',       'highlight' => true],
+            ['label' => 'Wisata Pantai',           'href' => '/kategori/wisata-pantai',     'highlight' => false],
+            ['label' => 'Semua Wisata Alam',       'href' => '/kategori/wisata-alam',       'highlight' => true],
         ],
     ],
     [
@@ -66,12 +66,15 @@ $navItems = [
 ];
 @endphp
 
+{{-- ════════════════════════════════════════════
+     DESKTOP HEADER
+     ════════════════════════════════════════════ --}}
 <header class="bg-white sticky top-0 z-50">
-    <!-- ── ROW 1: Brand bar ── -->
-    <div class="vs-brand-row">
-        <!-- Left: Language + Currency -->
+
+    {{-- ── DESKTOP: Row 1 Brand bar ── --}}
+    <div class="vs-brand-row hidden md:flex">
+        {{-- Left: Language + Currency --}}
         <div class="flex items-center gap-3 z-10">
-            <!-- Language Dropdown with Google Translate -->
             <div class="relative group z-50">
                 <button class="flex items-center gap-1 text-[13px] font-semibold text-gray-700 hover:text-[#1a6bbf] transition-colors py-2">
                     <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -101,12 +104,12 @@ $navItems = [
             </button>
         </div>
 
-        <!-- Center: Brand — truly centered with absolute positioning -->
+        {{-- Center: Brand --}}
         <a href="/" class="absolute left-0 right-0 mx-auto w-fit flex items-center justify-center group py-2">
             <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-14 md:h-16 object-contain group-hover:opacity-90 transition-opacity drop-shadow-sm" />
         </a>
 
-        <!-- Right: Search & Auth -->
+        {{-- Right: Search & Auth --}}
         <div class="flex items-center gap-4 z-10">
             <form class="flex items-center border border-gray-300 rounded-sm px-2.5 py-[5px] gap-2 focus-within:border-[#1a6bbf] transition-colors" action="/search">
                 <input type="search" name="keywords" placeholder="Search" class="text-[13px] text-gray-700 bg-transparent outline-none w-[130px] placeholder-gray-400" />
@@ -137,10 +140,9 @@ $navItems = [
         </div>
     </div>
 
-    <!-- ── ROW 2: Nav bar with megamenu ── -->
-    <div class="vs-nav-row">
+    {{-- ── DESKTOP: Row 2 Nav bar with megamenu ── --}}
+    <div class="vs-nav-row hidden md:block">
         <nav class="max-w-7xl mx-auto px-6 w-full flex items-center justify-center">
-            <!-- Home -->
             <a href="/" class="vs-nav-link vs-nav-link-home flex items-center justify-center {{ request()->is('/') ? 'active' : '' }}">
                 <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
@@ -192,9 +194,155 @@ $navItems = [
             @endforeach
         </nav>
     </div>
+
+    {{-- ════════════════════════════════════════════
+         MOBILE NAVBAR — ☰ Logo Search style
+         ════════════════════════════════════════════ --}}
+    <div class="md:hidden flex items-center justify-between px-4 h-[60px] border-b border-gray-200 bg-white relative">
+
+        {{-- Left: Hamburger --}}
+        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="flex items-center justify-center w-10 h-10 text-gray-700 hover:text-[#1a6bbf] transition-colors" aria-label="Menu">
+            <svg id="hamburger-icon" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
+
+        {{-- Center: Logo --}}
+        <a href="/" class="absolute left-0 right-0 mx-auto w-fit flex items-center justify-center">
+            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-10 object-contain drop-shadow-sm" />
+        </a>
+
+        {{-- Right: Search icon (toggle inline search) + Login --}}
+        <div class="flex items-center gap-2">
+            <button onclick="toggleMobileSearch()" class="flex items-center justify-center w-10 h-10 text-gray-700 hover:text-[#1a6bbf] transition-colors" aria-label="Search">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </button>
+            @auth
+                <a href="{{ route('wishlist.index') }}" class="flex items-center justify-center w-10 h-10 text-gray-600 hover:text-[#f9a826] transition-colors">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                </a>
+            @else
+                <a href="{{ route('login') }}" class="text-[13px] font-bold text-[#1a6bbf] px-3 py-1.5 border border-[#1a6bbf] rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors">
+                    Log in
+                </a>
+            @endauth
+        </div>
+    </div>
+
+    {{-- Mobile Search Bar (hidden by default) --}}
+    <div id="mobile-search-bar" class="md:hidden hidden bg-white border-b border-gray-200 px-4 py-3">
+        <form action="{{ route('place.index') }}" method="GET" class="flex items-center bg-gray-100 rounded-full px-4 py-2 gap-2">
+            <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text" name="q" placeholder="Cari destinasi, kuliner, hotel..." autofocus
+                class="flex-1 bg-transparent text-sm text-gray-700 outline-none placeholder-gray-400"/>
+            <button type="submit" class="text-[#1a6bbf] font-bold text-sm flex-shrink-0">Cari</button>
+        </form>
+    </div>
 </header>
 
-<!-- Google Translate Widget (Hidden) & Custom Script -->
+{{-- ════════════════════════════════════════════
+     MOBILE DRAWER MENU (full-screen slide-in)
+     ════════════════════════════════════════════ --}}
+{{-- Overlay --}}
+<div id="mobile-overlay" onclick="closeMobileMenu()" class="md:hidden fixed inset-0 bg-black/50 z-[999] hidden opacity-0 transition-opacity duration-300"></div>
+
+{{-- Drawer --}}
+<div id="mobile-drawer" class="md:hidden fixed top-0 left-0 h-full w-[85vw] max-w-sm bg-white z-[1000] shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+
+    {{-- Drawer Header --}}
+    <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+        <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-9 object-contain" />
+        <button onclick="closeMobileMenu()" class="text-gray-500 hover:text-gray-900 p-1">
+            <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+
+    {{-- Auth Banner --}}
+    @auth
+        <div class="px-5 py-4 bg-[#f0f7ff] border-b border-blue-100">
+            <p class="text-sm text-gray-500">Halo,</p>
+            <p class="font-bold text-gray-900">{{ Auth::user()->name }}</p>
+        </div>
+    @else
+        <div class="px-5 py-4 bg-[#f0f7ff] border-b border-blue-100 flex items-center justify-between">
+            <p class="text-sm text-gray-600">Masuk untuk akses penuh</p>
+            <a href="{{ route('login') }}" class="text-sm font-bold text-[#1a6bbf] border border-[#1a6bbf] px-4 py-1.5 rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors">Log in</a>
+        </div>
+    @endauth
+
+    {{-- Nav Links --}}
+    <nav class="flex-1 overflow-y-auto py-2">
+        <a href="/" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-gray-900 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors border-b border-gray-50 {{ request()->is('/') ? 'text-[#1a6bbf]' : '' }}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            Beranda
+        </a>
+
+        @foreach($navItems as $idx => $item)
+            @if($item['dropdown'])
+                {{-- Accordion item --}}
+                <div class="border-b border-gray-50">
+                    <button onclick="toggleAccordion({{ $idx }})"
+                        class="w-full flex items-center justify-between px-5 py-3.5 text-sm font-bold text-gray-900 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors text-left">
+                        <span>{{ $item['label'] }}</span>
+                        <svg id="acc-icon-{{ $idx }}" class="w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div id="acc-panel-{{ $idx }}" class="hidden bg-gray-50 pb-1">
+                        @foreach($item['links'] as $link)
+                            <a href="{{ $link['href'] }}"
+                                class="block px-8 py-2.5 text-sm {{ $link['highlight'] ? 'font-bold text-[#1a6bbf]' : 'text-gray-600' }} hover:text-[#1a6bbf] transition-colors">
+                                @if($link['highlight'])
+                                    → {{ $link['label'] }}
+                                @else
+                                    {{ $link['label'] }}
+                                @endif
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @else
+                <a href="{{ $item['href'] }}" class="flex items-center px-5 py-3.5 text-sm font-bold text-gray-900 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors border-b border-gray-50">
+                    {{ $item['label'] }}
+                </a>
+            @endif
+        @endforeach
+
+        {{-- Extra links --}}
+        @auth
+            <div class="mt-2 border-t border-gray-100 pt-2">
+                <a href="{{ route('wishlist.index') }}" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-[#f9a826] transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                    Wishlist Saya
+                </a>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-red-500 hover:bg-red-50 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                        Logout
+                    </button>
+                </form>
+            </div>
+        @endauth
+    </nav>
+
+    {{-- Footer --}}
+    <div class="px-5 py-4 border-t border-gray-100">
+        <p class="text-xs text-gray-400 text-center">© {{ date('Y') }} Visit Sukabumi</p>
+    </div>
+</div>
+
+{{-- Google Translate Widget (Hidden) --}}
 <div id="google_translate_element" style="display:none;"></div>
 <script type="text/javascript">
 function googleTranslateElementInit() {
@@ -207,6 +355,61 @@ function changeGTranslate(langCode, langLabel) {
         teCombo.value = langCode;
         teCombo.dispatchEvent(new Event('change'));
         document.getElementById('current-lang').innerText = langLabel;
+    }
+}
+
+// ── MOBILE MENU ──────────────────────────────────────
+function toggleMobileMenu() {
+    const drawer = document.getElementById('mobile-drawer');
+    const overlay = document.getElementById('mobile-overlay');
+    if (drawer.classList.contains('-translate-x-full')) {
+        openMobileMenu();
+    } else {
+        closeMobileMenu();
+    }
+}
+
+function openMobileMenu() {
+    const drawer = document.getElementById('mobile-drawer');
+    const overlay = document.getElementById('mobile-overlay');
+    overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => {
+        overlay.classList.remove('opacity-0');
+        overlay.classList.add('opacity-100');
+        drawer.classList.remove('-translate-x-full');
+        drawer.classList.add('translate-x-0');
+    });
+}
+
+function closeMobileMenu() {
+    const drawer = document.getElementById('mobile-drawer');
+    const overlay = document.getElementById('mobile-overlay');
+    drawer.classList.add('-translate-x-full');
+    drawer.classList.remove('translate-x-0');
+    overlay.classList.remove('opacity-100');
+    overlay.classList.add('opacity-0');
+    document.body.style.overflow = '';
+    setTimeout(() => overlay.classList.add('hidden'), 300);
+}
+
+function toggleAccordion(idx) {
+    const panel = document.getElementById('acc-panel-' + idx);
+    const icon = document.getElementById('acc-icon-' + idx);
+    if (panel.classList.contains('hidden')) {
+        panel.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+    } else {
+        panel.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+    }
+}
+
+function toggleMobileSearch() {
+    const bar = document.getElementById('mobile-search-bar');
+    bar.classList.toggle('hidden');
+    if (!bar.classList.contains('hidden')) {
+        bar.querySelector('input').focus();
     }
 }
 </script>
