@@ -20,8 +20,8 @@ class PlaceImageResource extends Resource
     protected static ?string $pluralModelLabel = 'Galeri Foto';
     protected static ?int $navigationSort = 3;
 
-    // Sembunyikan dari sidebar — sudah terintegrasi di dalam PlaceResource
-    protected static bool $shouldRegisterNavigation = false;
+    // Tampilkan di sidebar navigasi Data Master
+    protected static bool $shouldRegisterNavigation = true;
 
     public static function form(Form $form): Form
     {
