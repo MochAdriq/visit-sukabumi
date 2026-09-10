@@ -30,18 +30,7 @@
 
     <main class="pt-6">
 
-        {{-- ══ BREADCRUMB ══ --}}
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2">
-            <nav class="hidden md:flex text-sm text-gray-500 gap-2 items-center">
-                <a href="{{ url('/') }}" class="hover:underline hover:text-gray-900">Beranda</a>
-                <span>›</span>
-                @if($place->category)
-                    <a href="{{ url('/place?category='.$place->category->slug) }}" class="hover:underline hover:text-gray-900">{{ $place->category->name }}</a>
-                    <span>›</span>
-                @endif
-                <span class="text-gray-900 font-medium truncate">{{ $place->name }}</span>
-            </nav>
-        </div>
+        {{-- BREADCRUMB REMOVED PER USER REQUEST --}}
 
         {{-- ══ TITLE + META ══ --}}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4">
@@ -81,10 +70,7 @@
                                 ✓ Halal
                             </span>
                         @endif
-                        @if($place->category)
-                            <span class="text-gray-400">|</span>
-                            <span class="text-gray-600">{{ $place->category->name }}</span>
-                        @endif
+
                     </div>
                     @if($place->address)
                         <div class="text-sm text-gray-600 flex items-start gap-2">
