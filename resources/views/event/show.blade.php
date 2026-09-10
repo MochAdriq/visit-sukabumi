@@ -37,16 +37,17 @@
         {{-- ══ TITLE & RATING ══ --}}
         @php
             $mainImg = $event->image_path ? Storage::url($event->image_path) : 'https://images.unsplash.com/photo-1542662565-7e4fd1e56993?q=80&w=1200&h=800&fit=crop';
-            // Placeholder images for the right side layout
-            $smallImg1 = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600&h=400&fit=crop';
+            $smallImg1 = $mainImg;
             
-            // Dynamic Review Data
-            $score = number_format(4 + ($event->id % 10) / 10, 1);
-            $reviewCount = number_format(150 + ($event->id * 234));
-            $recommendPercent = 90 + ($event->id % 10);
+            // Real Review Data from Database
+            $score = $event->avgRating();
+            $reviewCount = $event->reviews()->count();
             
-            // Get random featured review
-            $featuredReview = \App\Models\Review::with('user')->where('rating', '>=', 4)->inRandomOrder()->first();
+            $highReviews = $event->reviews()->where('rating', '>=', 4)->count();
+            $recommendPercent = $reviewCount > 0 ? round(($highReviews / $reviewCount) * 100) : 0;
+            
+            // Get random featured review from THIS event
+            $featuredReview = $event->reviews()->with('user')->where('rating', '>=', 4)->inRandomOrder()->first();
         @endphp
         
         <h1 class="text-3xl md:text-[32px] font-black text-gray-900 leading-tight mb-2">
@@ -85,16 +86,22 @@
             <div class="hidden lg:flex flex-col gap-2 h-full">
                 {{-- Top Right: Superb Review Card --}}
                 <div class="bg-[#faf1ed] h-1/2 p-6 flex flex-col justify-center rounded-tr-2xl relative">
-                    <div class="flex items-center gap-1 mb-2">
-                        <span class="font-bold text-lg">{{ $featuredReview && $featuredReview->rating >= 5 ? 'Superb' : 'Great' }}</span>
-                        <div class="flex">
-                            @for($i=1; $i<=5; $i++)
-                                <svg class="w-3.5 h-3.5 fill-current {{ $i <= ($featuredReview ? $featuredReview->rating : 5) ? 'text-[#00aa6c]' : 'text-gray-300' }}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                            @endfor
+                    @if($featuredReview)
+                        <div class="flex items-center gap-1 mb-2">
+                            <span class="font-bold text-lg">{{ $featuredReview->rating >= 5 ? 'Superb' : 'Great' }}</span>
+                            <div class="flex">
+                                @for($i=1; $i<=5; $i++)
+                                    <svg class="w-3.5 h-3.5 fill-current {{ $i <= $featuredReview->rating ? 'text-[#00aa6c]' : 'text-gray-300' }}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                @endfor
+                            </div>
                         </div>
-                    </div>
-                    <p class="font-bold text-gray-900 leading-tight mb-2 line-clamp-3">"{{ $featuredReview ? $featuredReview->comment : 'We had a really nice day trip. The guide was excellent. They did a great job.' }}"</p>
-                    <p class="text-xs text-gray-500 font-medium">{{ $featuredReview && $featuredReview->user ? $featuredReview->user->name : 'Budi S' }} • Featured review</p>
+                        <p class="font-bold text-gray-900 leading-tight mb-2 line-clamp-3">"{{ $featuredReview->comment }}"</p>
+                        <p class="text-xs text-gray-500 font-medium">{{ $featuredReview->user ? $featuredReview->user->name : 'Anonim' }} • Featured review</p>
+                    @else
+                        <div class="flex items-center justify-center h-full">
+                            <p class="text-gray-500 text-sm font-medium">Belum ada ulasan unggulan.</p>
+                        </div>
+                    @endif
                 </div>
                 {{-- Bottom Right: Image --}}
                 <div class="h-1/2 relative group cursor-pointer">
