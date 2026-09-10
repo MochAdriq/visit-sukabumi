@@ -14,7 +14,7 @@
             </div>
             <div class="relative max-w-7xl mx-auto px-4 md:px-6 h-full flex flex-col items-center justify-center gap-5 md:gap-8">
                 <h1 class="text-3xl md:text-7xl font-bold text-white drop-shadow-lg text-center" style="text-shadow: 0 4px 12px rgba(0,0,0,0.4);">
-                    Discover Sukabumi
+                    Jelajahi Sukabumi
                 </h1>
                 <div class="relative w-full max-w-3xl px-0">
                     <form action="{{ route('place.index') }}" method="GET" class="bg-white h-[52px] md:h-[64px] rounded-full flex items-center justify-between pl-5 md:pl-8 pr-2 shadow-2xl">
@@ -33,35 +33,35 @@
             </div>
         </div>
 
-        {{-- SECTION 1.5: INFO BANNER --}}
-        <div class="bg-[#1a6bbf] text-white">
-            <div class="max-w-7xl mx-auto px-4 md:px-6 py-5 md:py-6">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
+        {{-- BANNER INFO (seperti baris merah Visit London) --}}
+        <div class="bg-[#1a6bbf] text-white py-5 md:py-6 border-b-4 border-[#145299]">
+            <div class="max-w-7xl mx-auto px-4 md:px-6">
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8">
                     
                     {{-- Title --}}
-                    <div class="text-center md:text-left w-full md:w-auto flex-shrink-0">
-                        <h2 class="text-xl md:text-[22px] font-bold leading-tight">Panduan Resmi<br>Wisata Sukabumi</h2>
+                    <div class="text-center lg:text-left flex-shrink-0">
+                        <h2 class="text-xl md:text-2xl font-extrabold leading-tight">Panduan Resmi<br class="hidden lg:block"> Wisata Sukabumi</h2>
                     </div>
-
-                    {{-- Features --}}
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 md:gap-8 flex-1">
+                    
+                    {{-- Features List --}}
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-center gap-6 lg:gap-10 w-full lg:w-auto">
                         
                         {{-- Feature 1 --}}
                         <div class="flex items-center gap-3">
-                            <svg class="w-7 h-7 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                            <p class="text-[13px] md:text-sm leading-snug">Menginspirasi <span class="font-bold">ribuan wisatawan</span> setiap tahun</p>
+                            <svg class="w-8 h-8 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                            <p class="text-sm leading-tight">Menginspirasi <span class="font-bold">ribuan wisatawan</span> setiap tahun</p>
                         </div>
 
                         {{-- Feature 2 --}}
                         <div class="flex items-center gap-3">
-                            <svg class="w-7 h-7 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-                            <p class="text-[13px] md:text-sm leading-snug"><span class="font-bold">Akses mudah</span> ke berbagai destinasi terbaik</p>
+                            <svg class="w-8 h-8 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                            <p class="text-sm leading-tight"><span class="font-bold">Akses mudah</span> ke berbagai destinasi terbaik</p>
                         </div>
 
                         {{-- Feature 3 --}}
                         <div class="flex items-center gap-3">
-                            <svg class="w-7 h-7 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            <p class="text-[13px] md:text-sm leading-snug">Kunjungan Anda <span class="font-bold">mendukung ekonomi lokal</span></p>
+                            <svg class="w-8 h-8 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <p class="text-sm leading-tight">Kunjungan Anda <span class="font-bold">mendukung ekonomi lokal</span></p>
                         </div>
 
                     </div>
@@ -94,7 +94,7 @@
                     @forelse($popularAlam as $place)
                     <a href="{{ route('place.show', $place->slug) }}" class="group block">
                         <div class="overflow-hidden rounded-xl mb-2 aspect-[3/4] relative bg-gray-100">
-                            @if($loop->first)<span class="absolute top-2 left-0 bg-[#f9a826] text-gray-900 text-[10px] font-bold px-2 py-0.5 z-10 rounded-r shadow-sm">Top Pick</span>@endif
+                            @if($loop->first)<span class="absolute top-2 left-0 bg-[#f9a826] text-gray-900 text-[10px] font-bold px-2 py-0.5 z-10 rounded-r shadow-sm">Pilihan Utama</span>@endif
                             <img src="{{ $place->primaryImage ? Storage::url($place->primaryImage->image_path) : 'https://placehold.co/320x427/e5e7eb/9ca3af?text=' . urlencode($place->name) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
                         </div>
                         <h4 class="text-[13px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-tight mb-1">{{ $place->name }}</h4>
@@ -103,7 +103,9 @@
                             <span class="text-[11px] font-bold text-gray-700">{{ number_format($place->reviews_avg_rating ?? 0, 1) }}</span>
                             <span class="text-[10px] text-gray-400">({{ $place->reviews_count ?? 0 }})</span>
                         </div>
+                        @if($place->has_general_price)
                         <span class="text-[11px] font-bold text-[#1a6bbf]">Mulai Rp {{ number_format($place->price ?? 0, 0, ',', '.') }}</span>
+                        @endif
                     </a>
                     @empty
                     <p class="text-gray-400 text-sm col-span-full">Belum ada data.</p>
@@ -114,7 +116,7 @@
                     @forelse($popularPantai as $place)
                     <a href="{{ route('place.show', $place->slug) }}" class="group block">
                         <div class="overflow-hidden rounded-xl mb-2 aspect-[3/4] relative bg-gray-100">
-                            @if($loop->first)<span class="absolute top-2 left-0 bg-[#f9a826] text-gray-900 text-[10px] font-bold px-2 py-0.5 z-10 rounded-r shadow-sm">Top Pick</span>@endif
+                            @if($loop->first)<span class="absolute top-2 left-0 bg-[#f9a826] text-gray-900 text-[10px] font-bold px-2 py-0.5 z-10 rounded-r shadow-sm">Pilihan Utama</span>@endif
                             <img src="{{ $place->primaryImage ? Storage::url($place->primaryImage->image_path) : 'https://placehold.co/320x427/e5e7eb/9ca3af?text=' . urlencode($place->name) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
                         </div>
                         <h4 class="text-[13px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-tight mb-1">{{ $place->name }}</h4>
@@ -123,7 +125,9 @@
                             <span class="text-[11px] font-bold text-gray-700">{{ number_format($place->reviews_avg_rating ?? 0, 1) }}</span>
                             <span class="text-[10px] text-gray-400">({{ $place->reviews_count ?? 0 }})</span>
                         </div>
+                        @if($place->has_general_price)
                         <span class="text-[11px] font-bold text-[#1a6bbf]">Mulai Rp {{ number_format($place->price ?? 0, 0, ',', '.') }}</span>
+                        @endif
                     </a>
                     @empty
                     <p class="text-gray-400 text-sm col-span-full">Belum ada data.</p>
@@ -134,7 +138,7 @@
                     @forelse($popularKuliner as $place)
                     <a href="{{ route('place.show', $place->slug) }}" class="group block">
                         <div class="overflow-hidden rounded-xl mb-2 aspect-[3/4] relative bg-gray-100">
-                            @if($loop->first)<span class="absolute top-2 left-0 bg-[#f9a826] text-gray-900 text-[10px] font-bold px-2 py-0.5 z-10 rounded-r shadow-sm">Top Pick</span>@endif
+                            @if($loop->first)<span class="absolute top-2 left-0 bg-[#f9a826] text-gray-900 text-[10px] font-bold px-2 py-0.5 z-10 rounded-r shadow-sm">Pilihan Utama</span>@endif
                             <img src="{{ $place->primaryImage ? Storage::url($place->primaryImage->image_path) : 'https://placehold.co/320x427/e5e7eb/9ca3af?text=' . urlencode($place->name) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
                         </div>
                         <h4 class="text-[13px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-tight mb-1">{{ $place->name }}</h4>
@@ -143,7 +147,9 @@
                             <span class="text-[11px] font-bold text-gray-700">{{ number_format($place->reviews_avg_rating ?? 0, 1) }}</span>
                             <span class="text-[10px] text-gray-400">({{ $place->reviews_count ?? 0 }})</span>
                         </div>
+                        @if($place->has_general_price)
                         <span class="text-[11px] font-bold text-[#1a6bbf]">Mulai Rp {{ number_format($place->price ?? 0, 0, ',', '.') }}</span>
+                        @endif
                     </a>
                     @empty
                     <p class="text-gray-400 text-sm col-span-full">Belum ada data.</p>

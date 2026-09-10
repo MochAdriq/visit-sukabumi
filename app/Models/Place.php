@@ -18,7 +18,7 @@ class Place extends Model
 
         // Master Toggles
         'has_ticket', 'has_accommodation', 'has_restaurant',
-        'has_tour_package', 'has_accessibility_warning',
+        'has_tour_package', 'has_accessibility_warning', 'has_general_price',
 
         // Tiket
         'ticket_price', 'ticket_booking_url', 'ticket_terms',
@@ -45,6 +45,7 @@ class Place extends Model
         'has_restaurant'            => 'boolean',
         'has_tour_package'          => 'boolean',
         'has_accessibility_warning' => 'boolean',
+        'has_general_price'         => 'boolean',
         'restaurant_is_halal'       => 'boolean',
     ];
 

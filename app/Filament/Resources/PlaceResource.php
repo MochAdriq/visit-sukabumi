@@ -93,7 +93,8 @@ class PlaceResource extends Resource
                         ->numeric()
                         ->prefix('Rp')
                         ->label('Harga Tiket Umum')
-                        ->placeholder('0 = Gratis'),
+                        ->placeholder('0 = Gratis')
+                        ->visible(fn(Forms\Get $get): bool => (bool) $get('has_general_price')),
                     Forms\Components\TextInput::make('phone')
                         ->tel()
                         ->maxLength(20)
@@ -166,6 +167,11 @@ class PlaceResource extends Resource
                 ->icon('heroicon-o-sparkles')
                 ->columns(3)
                 ->schema([
+                    Forms\Components\Toggle::make('has_general_price')
+                        ->label('Harga Tiket Umum')
+                        ->helperText('Aktifkan jika ada harga tiket')
+                        ->live()
+                        ->default(false),
                     Forms\Components\Toggle::make('has_ticket')
                         ->label('Tiket Online')
                         ->helperText('Aktifkan jika ada pemesanan tiket')

@@ -28,7 +28,7 @@
         {{-- ══ BREADCRUMB ══ --}}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2">
             <nav class="hidden md:flex text-sm text-gray-500 gap-2 items-center">
-                <a href="{{ url('/') }}" class="hover:underline hover:text-gray-900">Home</a>
+                <a href="{{ url('/') }}" class="hover:underline hover:text-gray-900">Beranda</a>
                 <span>›</span>
                 @if($place->category)
                     <a href="{{ url('/place?category='.$place->category->slug) }}" class="hover:underline hover:text-gray-900">{{ $place->category->name }}</a>
@@ -95,7 +95,7 @@
                 <div class="flex gap-2 mt-2 md:mt-0">
                     <button class="flex items-center px-5 py-2 border border-gray-300 rounded-full hover:bg-gray-50 font-bold text-sm transition gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
-                        Share
+                        Bagikan
                     </button>
                     <form action="{{ route('wishlist.toggle', $place->slug) }}" method="POST" class="inline">
                         @csrf
@@ -545,9 +545,9 @@
                         <div class="flex justify-between items-center mb-5">
                             <div>
                                 <div class="text-2xl font-extrabold text-gray-900">
-                                    @if($place->has_ticket && $place->ticket_price)
+                                    @if($place->has_ticket && $place->ticket_price !== null)
                                         Rp {{ number_format($place->ticket_price, 0, ',', '.') }}
-                                    @elseif($place->price)
+                                    @elseif($place->has_general_price && $place->price !== null)
                                         Rp {{ number_format($place->price, 0, ',', '.') }}
                                     @else
                                         Gratis

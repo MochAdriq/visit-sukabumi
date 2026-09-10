@@ -24,20 +24,20 @@
     
     {{-- Header & Write Review Button --}}
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-        <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Reviews</h2>
+        <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Ulasan</h2>
         <div class="flex flex-wrap items-center gap-4">
-            <div class="text-sm font-semibold text-gray-700 underline cursor-pointer hover:text-black">All reviews ({{ number_format($totalReviews) }})</div>
+            <div class="text-sm font-semibold text-gray-700 underline cursor-pointer hover:text-black">Semua ulasan ({{ number_format($totalReviews) }})</div>
             @auth
                 @if(!$userHasReviewed)
                     <button @click="showReviewModal = true" class="bg-[#002f20] hover:bg-[#001e14] text-white font-bold py-2.5 px-5 rounded-full flex items-center gap-2 transition-colors">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                        Write a review
+                        Tulis ulasan
                     </button>
                 @endif
             @else
                 <a href="{{ route('login') }}" class="bg-[#002f20] hover:bg-[#001e14] text-white font-bold py-2.5 px-5 rounded-full flex items-center gap-2 transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                    Write a review
+                    Tulis ulasan
                 </a>
             @endauth
         </div>
@@ -64,23 +64,23 @@
             <div class="flex flex-col items-center justify-center flex-shrink-0">
                 <div class="text-[52px] font-black text-gray-900 leading-none mb-1">{{ number_format($avgRating, 1) }}</div>
                 <div class="font-bold text-gray-900 mb-1">
-                    @if($avgRating >= 4.5) Excellent
-                    @elseif($avgRating >= 4) Very Good
-                    @elseif($avgRating >= 3) Average
-                    @elseif($avgRating >= 2) Poor
-                    @else Terrible @endif
+                    @if($avgRating >= 4.5) Luar Biasa
+                    @elseif($avgRating >= 4) Sangat Bagus
+                    @elseif($avgRating >= 3) Biasa
+                    @elseif($avgRating >= 2) Buruk
+                    @else Sangat Buruk @endif
                 </div>
                 <div class="flex text-[#00aa6c] mb-1 gap-0.5">
                     @for($i=1; $i<=5; $i++)
                         <svg class="w-4 h-4 {{ $i <= round($avgRating) ? 'fill-current' : 'text-gray-200 fill-current' }}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                     @endfor
                 </div>
-                <div class="text-xs text-gray-500 font-medium">{{ number_format($totalReviews) }} reviews</div>
+                <div class="text-xs text-gray-500 font-medium">{{ number_format($totalReviews) }} ulasan</div>
             </div>
             
             {{-- Distribution Bars --}}
             <div class="flex-1 max-w-sm">
-                @foreach(['Excellent' => 5, 'Good' => 4, 'Average' => 3, 'Poor' => 2, 'Terrible' => 1] as $label => $stars)
+                @foreach(['Luar Biasa' => 5, 'Bagus' => 4, 'Biasa' => 3, 'Buruk' => 2, 'Sangat Buruk' => 1] as $label => $stars)
                     @php 
                         $count = $ratingCounts[$stars];
                         $percentage = $totalReviews > 0 ? ($count / $totalReviews) * 100 : 0;
