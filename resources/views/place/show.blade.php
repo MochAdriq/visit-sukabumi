@@ -552,8 +552,7 @@
                         $hasPriceOrTicket = $place->has_ticket || $place->has_general_price;
                         $hasContactCTA = ($place->has_ticket && $place->ticket_booking_url) ||
                                          ($place->has_accommodation && $place->hotel_booking_url) ||
-                                         ($place->has_restaurant && $place->restaurant_reservation_url) ||
-                                         $place->phone;
+                                         ($place->has_restaurant && $place->restaurant_reservation_url);
                         $shouldShowCard = $hasPriceOrTicket || $hasContactCTA;
                     @endphp
 
@@ -593,12 +592,8 @@
                                 class="block w-full text-center bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-full transition shadow-sm mb-2">
                                 Reservasi Meja
                             </a>
-                        @elseif($place->phone)
-                            <a href="https://wa.me/{{ preg_replace('/\D/', '', $place->phone) }}?text={{ $waText }}" target="_blank"
-                                class="block w-full text-center bg-[#f9a826] hover:bg-[#e8971e] text-gray-900 font-bold py-3 rounded-full transition shadow-sm mb-2">
-                                Hubungi via WhatsApp
-                            </a>
                         @endif
+
                         
                         @if($hasPriceOrTicket && !$hasContactCTA)
                             <button class="w-full bg-[#f9a826] hover:bg-[#e8971e] text-gray-900 font-bold py-3 rounded-full transition shadow-sm mb-2 cursor-not-allowed opacity-80" disabled>
@@ -647,6 +642,11 @@
                                 </a>
                             </div>
                         @endif
+                    </div>
+
+                    {{-- Banner Iklan --}}
+                    <div class="mt-6 rounded-2xl overflow-hidden border border-gray-200 shadow-sm cursor-pointer hover:shadow-md transition">
+                        <img src="{{ asset('images/ads/banner-1.jpg') }}" alt="Advertisement" class="w-full h-auto object-cover">
                     </div>
 
                 </div>
