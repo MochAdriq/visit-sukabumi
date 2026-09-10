@@ -125,8 +125,8 @@ $navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
         </div>
 
         {{-- Center: Brand --}}
-        <a href="/" class="absolute left-0 right-0 mx-auto w-fit flex items-center justify-center group py-2">
-            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-20 md:h-24 object-contain group-hover:opacity-90 transition-opacity drop-shadow-sm" />
+        <a href="/" class="absolute inset-y-0 left-0 right-0 mx-auto w-fit flex items-center justify-center group">
+            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-[110px] object-contain group-hover:opacity-90 transition-opacity drop-shadow-sm" />
         </a>
 
         {{-- Right: Search & Auth --}}
@@ -218,7 +218,7 @@ $navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
     {{-- ════════════════════════════════════════════
          MOBILE NAVBAR — ☰ Logo Search style
          ════════════════════════════════════════════ --}}
-    <div class="md:hidden flex items-center justify-between px-4 h-[88px] border-b border-gray-200 bg-white relative">
+    <div class="md:hidden flex items-center justify-between px-4 h-[120px] border-b border-gray-200 bg-white relative overflow-hidden">
 
         {{-- Left: Hamburger --}}
         <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="flex items-center justify-center w-10 h-10 text-gray-700 hover:text-[#1a6bbf] transition-colors z-10" aria-label="Menu">
@@ -228,8 +228,8 @@ $navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
         </button>
 
         {{-- Center: Logo --}}
-        <a href="/" class="absolute left-0 right-0 mx-auto w-fit flex items-center justify-center">
-            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-16 max-w-[210px] object-contain drop-shadow-sm" />
+        <a href="/" class="absolute inset-y-0 left-0 right-0 mx-auto w-fit flex items-center justify-center">
+            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-[100px] max-w-[260px] object-contain drop-shadow-sm" />
         </a>
 
         {{-- Right: Search icon only --}}
@@ -263,10 +263,10 @@ $navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
 
 {{-- Drawer --}}
 <div id="mobile-drawer" class="md:hidden fixed top-0 left-0 h-full w-[85vw] max-w-sm bg-white z-[1000] shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
-
-    {{-- Drawer Header --}}
-    <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-        <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-9 object-contain" />
+        
+{{-- Drawer Header --}}
+        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-14 object-contain" />
         <button onclick="closeMobileMenu()" class="text-gray-500 hover:text-gray-900 p-1">
             <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>

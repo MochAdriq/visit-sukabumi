@@ -145,6 +145,13 @@ class PlaceResource extends Resource
                             Forms\Components\Toggle::make('is_primary')
                                 ->label('Foto Utama')
                                 ->default(false),
+                            Forms\Components\TextInput::make('copyright_name')
+                                ->label('Nama Copyright (Opsional)')
+                                ->maxLength(255),
+                            Forms\Components\TextInput::make('copyright_link')
+                                ->label('Link Sumber (Opsional)')
+                                ->url()
+                                ->maxLength(255),
                         ])
                         ->columns(2)
                         ->addActionLabel('+ Tambah Foto')

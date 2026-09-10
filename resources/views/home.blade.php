@@ -33,6 +33,42 @@
             </div>
         </div>
 
+        {{-- SECTION 1.5: INFO BANNER --}}
+        <div class="bg-[#1a6bbf] text-white">
+            <div class="max-w-7xl mx-auto px-4 md:px-6 py-5 md:py-6">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
+                    
+                    {{-- Title --}}
+                    <div class="text-center md:text-left w-full md:w-auto flex-shrink-0">
+                        <h2 class="text-xl md:text-[22px] font-bold leading-tight">Panduan Resmi<br>Wisata Sukabumi</h2>
+                    </div>
+
+                    {{-- Features --}}
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 md:gap-8 flex-1">
+                        
+                        {{-- Feature 1 --}}
+                        <div class="flex items-center gap-3">
+                            <svg class="w-7 h-7 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                            <p class="text-[13px] md:text-sm leading-snug">Menginspirasi <span class="font-bold">ribuan wisatawan</span> setiap tahun</p>
+                        </div>
+
+                        {{-- Feature 2 --}}
+                        <div class="flex items-center gap-3">
+                            <svg class="w-7 h-7 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                            <p class="text-[13px] md:text-sm leading-snug"><span class="font-bold">Akses mudah</span> ke berbagai destinasi terbaik</p>
+                        </div>
+
+                        {{-- Feature 3 --}}
+                        <div class="flex items-center gap-3">
+                            <svg class="w-7 h-7 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <p class="text-[13px] md:text-sm leading-snug">Kunjungan Anda <span class="font-bold">mendukung ekonomi lokal</span></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{-- SECTION 2: DESTINASI TERPOPULER --}}
         <div class="bg-white py-10 md:py-14 border-b border-gray-100">
             <div class="max-w-7xl mx-auto px-4 md:px-6">

@@ -1,0 +1,8 @@
+@props(['img', 'className' => 'bottom-2 left-2 text-[10px] px-2 py-1'])
+
+@if($img && $img->copyright_name)
+    <a href="{{ $img->copyright_link ?? '#' }}" target="_blank" class="absolute {{ $className }} bg-black/60 backdrop-blur-md text-white rounded shadow-sm hover:bg-black/80 transition-colors z-20 flex items-center gap-1.5" title="{{ $img->copyright_name }}" @click.stop>
+        <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <span class="truncate max-w-[120px] md:max-w-[180px]">{{ $img->copyright_name }}</span>
+    </a>
+@endif

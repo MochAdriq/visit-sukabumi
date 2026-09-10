@@ -126,6 +126,7 @@
                 @elseif($total == 1)
                     <div class="w-full h-72 rounded-2xl overflow-hidden relative bg-gray-100 shadow-sm">
                         <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover"/>
+                        <x-image-copyright :img="$mainImg" />
                     </div>
                 @else
                     {{-- Interactive Slider (Swipeable + Arrow Buttons + Dots + Counter) --}}
@@ -164,6 +165,7 @@
                             @foreach($images as $img)
                                 <div class="w-full shrink-0 snap-center relative h-72 sm:h-80 bg-gray-100 overflow-hidden">
                                     <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover"/>
+                                    <x-image-copyright :img="$img" />
                                 </div>
                             @endforeach
                         </div>
@@ -219,28 +221,47 @@
                 @elseif($total == 1)
                     <div class="w-full h-[440px] rounded-2xl overflow-hidden relative bg-gray-100 group cursor-pointer shadow-sm">
                         <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                        <x-image-copyright :img="$mainImg" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
                     </div>
                 @elseif($total == 2)
                     <div class="grid grid-cols-2 gap-2 h-[440px] rounded-2xl overflow-hidden shadow-sm">
-                        <div class="relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
+                        <div class="relative overflow-hidden bg-gray-100 group cursor-pointer">
+                            <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                            <x-image-copyright :img="$mainImg" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
+                        </div>
                         @foreach($otherImages->take(1) as $img)
-                            <div class="relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
+                            <div class="relative overflow-hidden bg-gray-100 group cursor-pointer">
+                                <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                                <x-image-copyright :img="$img" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
+                            </div>
                         @endforeach
                     </div>
                 @elseif($total == 3)
                     <div class="grid grid-cols-3 gap-2 h-[440px] rounded-2xl overflow-hidden shadow-sm">
-                        <div class="col-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
+                        <div class="col-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer">
+                            <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                            <x-image-copyright :img="$mainImg" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
+                        </div>
                         <div class="grid grid-rows-2 gap-2">
                         @foreach($otherImages->take(2) as $img)
-                            <div class="relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
+                            <div class="relative overflow-hidden bg-gray-100 group cursor-pointer">
+                                <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                                <x-image-copyright :img="$img" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
+                            </div>
                         @endforeach
                         </div>
                     </div>
                 @elseif($total == 4)
                     <div class="grid grid-cols-3 grid-rows-2 gap-2 h-[440px] rounded-2xl overflow-hidden shadow-sm">
-                        <div class="col-span-2 row-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
+                        <div class="col-span-2 row-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer">
+                            <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                            <x-image-copyright :img="$mainImg" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
+                        </div>
                         @foreach($otherImages->take(2) as $img)
-                            <div class="relative overflow-hidden bg-gray-100 group cursor-pointer"><img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/></div>
+                            <div class="relative overflow-hidden bg-gray-100 group cursor-pointer">
+                                <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                                <x-image-copyright :img="$img" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
+                            </div>
                         @endforeach
                     </div>
                 @else
@@ -248,14 +269,23 @@
                     <div class="grid grid-cols-4 grid-rows-2 gap-2 h-[440px] rounded-2xl overflow-hidden shadow-sm">
                         <div class="col-span-2 row-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer">
                             <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                            <x-image-copyright :img="$mainImg" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
                         </div>
-                        @foreach($otherImages->take(4) as $index => $img)
-                            <div class="relative overflow-hidden bg-gray-100 group cursor-pointer">
-                                <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-                                @if($index == 3 && $total > 5)
-                                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-bold text-xl">+{{ $total - 5 }}</div>
-                                @endif
-                            </div>
+                        @foreach($otherImages->take(3) as $img)
+                            @if($loop->last && $total > 5)
+                                <div class="relative overflow-hidden bg-gray-100 group cursor-pointer">
+                                    <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 brightness-50"/>
+                                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                        <span class="text-white text-xl md:text-2xl font-bold">+{{ $total - 4 }} Foto</span>
+                                    </div>
+                                    <x-image-copyright :img="$img" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
+                                </div>
+                            @else
+                                <div class="relative overflow-hidden bg-gray-100 group cursor-pointer">
+                                    <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                                    <x-image-copyright :img="$img" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
+                                </div>
+                            @endif
                         @endforeach
                     </div>
                 @endif
