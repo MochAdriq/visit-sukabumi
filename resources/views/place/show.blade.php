@@ -541,7 +541,18 @@
                 <div class="sticky top-24 space-y-5">
 
                     {{-- Pricing / CTA Card --}}
+                    @php
+                        $hasPriceOrTicket = $place->has_ticket || $place->has_general_price;
+                        $hasContactCTA = ($place->has_ticket && $place->ticket_booking_url) ||
+                                         ($place->has_accommodation && $place->hotel_booking_url) ||
+                                         ($place->has_restaurant && $place->restaurant_reservation_url) ||
+                                         $place->phone;
+                        $shouldShowCard = $hasPriceOrTicket || $hasContactCTA;
+                    @endphp
+
+                    @if($shouldShowCard)
                     <div class="bg-white border border-gray-200 rounded-2xl shadow-lg p-6">
+                        @if($hasPriceOrTicket)
                         <div class="flex justify-between items-center mb-5">
                             <div>
                                 <div class="text-2xl font-extrabold text-gray-900">
@@ -557,6 +568,7 @@
                             </div>
                             <span class="text-xs bg-green-50 text-green-700 font-bold px-3 py-1 rounded-full">Tersedia</span>
                         </div>
+                        @endif
 
                         {{-- Dynamic CTA buttons based on active toggles --}}
                         @if($place->has_ticket && $place->ticket_booking_url)
@@ -579,13 +591,19 @@
                                 class="block w-full text-center bg-[#f9a826] hover:bg-[#e8971e] text-gray-900 font-bold py-3 rounded-full transition shadow-sm mb-2">
                                 Hubungi via WhatsApp
                             </a>
-                        @else
-                            <button class="w-full bg-[#f9a826] hover:bg-[#e8971e] text-gray-900 font-bold py-3 rounded-full transition shadow-sm mb-2">
-                                Cek Ketersediaan
+                        @endif
+                        
+                        @if($hasPriceOrTicket && !$hasContactCTA)
+                            <button class="w-full bg-[#f9a826] hover:bg-[#e8971e] text-gray-900 font-bold py-3 rounded-full transition shadow-sm mb-2 cursor-not-allowed opacity-80" disabled>
+                                Tiket Tersedia di Lokasi
                             </button>
                         @endif
-                        <p class="text-center text-xs text-gray-400">Pembatalan gratis</p>
+                        
+                        @if($hasPriceOrTicket)
+                        <p class="text-center text-xs text-gray-400">Silakan cek info lebih lanjut saat berkunjung</p>
+                        @endif
                     </div>
+                    @endif
 
                     {{-- Map --}}
                     @if($place->latitude && $place->longitude)
