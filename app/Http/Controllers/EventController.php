@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Review;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -43,6 +44,11 @@ class EventController extends Controller
 
         $event = $query->firstOrFail();
 
-        return view('event.show', compact('event'));
+        $topReviews = $event->reviews()->where('rating', 5)->with('user')->latest()->take(6)->get();
+        if ($topReviews->isEmpty()) {
+            $topReviews = Review::where('rating', 5)->with('user')->latest()->take(6)->get();
+        }
+
+        return view('event.show', compact('event', 'topReviews'));
     }
 }
