@@ -165,23 +165,22 @@
                     <p class="text-gray-400 text-sm col-span-full">Belum ada data.</p>
                     @endforelse
                 </div>
+                </div>
 
-                </div>
-                </div>
-                
-            </div>
+                    </div> <!-- End of Left Content (flex-1) -->
 
-            {{-- Right: Ad Banner --}}
-            @if($ad)
-            <div class="w-full lg:w-1/4 xl:w-[300px] flex-shrink-0">
-                <div class="sticky top-24 rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition">
-                    <a href="{{ $ad->url ?? '#' }}" target="{{ $ad->url ? '_blank' : '_self' }}" class="block w-full">
-                        <img src="{{ Storage::url($ad->image_path) }}" alt="{{ $ad->title }}" class="w-full h-auto object-cover">
-                    </a>
-                </div>
-            </div>
-            @endif
-        </div>
+                    {{-- Right: Ad Banner --}}
+                    @if($ad)
+                    <div class="w-full lg:w-1/4 xl:w-[300px] flex-shrink-0">
+                        <div class="sticky top-24 rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition">
+                            <a href="{{ $ad->url ?? '#' }}" target="{{ $ad->url ? '_blank' : '_self' }}" class="block w-full">
+                                <img src="{{ Storage::url($ad->image_path) }}" alt="{{ $ad->title }}" class="w-full h-auto object-cover">
+                            </a>
+                        </div>
+                    </div>
+                    @endif
+
+                </div> <!-- End of Flex Row -->
             </div>
         </div>
 
