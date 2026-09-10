@@ -62,11 +62,11 @@
                     @endfor
                 </div>
             </div>
-            <a href="#reviews" class="text-sm font-bold text-gray-900 hover:underline border-b border-dotted border-gray-900">({{ $reviewCount }} reviews)</a>
+            <a href="#reviews" class="text-sm font-bold text-gray-900 hover:underline border-b border-dotted border-gray-900">({{ $reviewCount }} ulasan)</a>
             <span class="text-gray-300 mx-1">•</span>
             <div class="flex items-center gap-1.5 text-sm font-medium text-gray-700">
                 <svg class="w-4 h-4 text-[#e00b81]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                Recommended by {{ $recommendPercent }}% of travelers
+                Direkomendasikan oleh {{ $recommendPercent }}% wisatawan
             </div>
         </div>
 
@@ -79,8 +79,8 @@
                 </a>
                 <div class="absolute bottom-4 left-4 bg-[#f9a826] text-black font-black px-3 py-2 rounded flex flex-col items-center shadow-lg transform -rotate-3">
                     <svg class="w-6 h-6 mb-1" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path fill="white" d="M8 10h8v4H8z"/></svg>
-                    <span class="text-[10px] leading-none">TRAVELERS'</span>
-                    <span class="text-xs leading-none">CHOICE</span>
+                    <span class="text-[10px] leading-none">PILIHAN</span>
+                    <span class="text-xs leading-none">WISATAWAN</span>
                 </div>
             </div>
 
@@ -90,7 +90,7 @@
                 <div class="bg-[#faf1ed] h-1/2 p-6 flex flex-col justify-center rounded-tr-2xl relative">
                     @if($featuredReview)
                         <div class="flex items-center gap-1 mb-2">
-                            <span class="font-bold text-lg">{{ $featuredReview->rating >= 5 ? 'Superb' : 'Great' }}</span>
+                            <span class="font-bold text-lg">{{ $featuredReview->rating >= 5 ? 'Luar Biasa' : 'Sangat Bagus' }}</span>
                             <div class="flex">
                                 @for($i=1; $i<=5; $i++)
                                     <svg class="w-3.5 h-3.5 fill-current {{ $i <= $featuredReview->rating ? 'text-[#00aa6c]' : 'text-gray-300' }}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
@@ -98,7 +98,7 @@
                             </div>
                         </div>
                         <p class="font-bold text-gray-900 leading-tight mb-2 line-clamp-3">"{{ $featuredReview->comment }}"</p>
-                        <p class="text-xs text-gray-500 font-medium">{{ $featuredReview->user ? $featuredReview->user->name : 'Anonim' }} • Featured review</p>
+                        <p class="text-xs text-gray-500 font-medium">{{ $featuredReview->user ? $featuredReview->user->name : 'Anonim' }} • Ulasan pilihan</p>
                     @else
                         <div class="flex items-center justify-center h-full">
                             <p class="text-gray-500 text-sm font-medium">Belum ada ulasan unggulan.</p>
@@ -112,7 +112,7 @@
                     </a>
                     <div class="absolute bottom-3 right-3 bg-black/70 text-white font-bold text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 backdrop-blur-sm pointer-events-none">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-width="2"/><circle cx="8.5" cy="8.5" r="1.5" stroke-width="2"/><path d="M21 15l-5-5L5 21" stroke-width="2"/></svg>
-                        Photos
+                        Foto
                     </div>
                 </div>
             </div>
@@ -121,28 +121,25 @@
         {{-- ══ IN-PAGE TABS ══ --}}
         <div class="border-b border-gray-200 mb-8 sticky top-[64px] bg-white z-30 shadow-sm transition-all duration-300">
             <nav id="page-nav" class="flex gap-8 overflow-x-auto no-scrollbar font-bold text-sm text-gray-500">
-                <a href="#overview" class="nav-tab py-4 border-b-2 border-black text-black whitespace-nowrap transition-colors">Overview</a>
-                <a href="#details" class="nav-tab py-4 border-b-2 border-transparent hover:border-black hover:text-black whitespace-nowrap transition-colors">Details</a>
-                <a href="#itinerary" class="nav-tab py-4 border-b-2 border-transparent hover:border-black hover:text-black whitespace-nowrap transition-colors">Itinerary</a>
-                <a href="#operator" class="nav-tab py-4 border-b-2 border-transparent hover:border-black hover:text-black whitespace-nowrap transition-colors">Operator</a>
-                <a href="#reviews" class="nav-tab py-4 border-b-2 border-transparent hover:border-black hover:text-black whitespace-nowrap transition-colors">Reviews</a>
+                <a href="#overview" class="nav-tab py-4 border-b-2 border-black text-black whitespace-nowrap transition-colors">Ringkasan</a>
+                <a href="#details" class="nav-tab py-4 border-b-2 border-transparent hover:border-black hover:text-black whitespace-nowrap transition-colors">Detail</a>
+                <a href="#itinerary" class="nav-tab py-4 border-b-2 border-transparent hover:border-black hover:text-black whitespace-nowrap transition-colors">Rencana Perjalanan</a>
+                <a href="#operator" class="nav-tab py-4 border-b-2 border-transparent hover:border-black hover:text-black whitespace-nowrap transition-colors">Penyelenggara</a>
+                <a href="#reviews" class="nav-tab py-4 border-b-2 border-transparent hover:border-black hover:text-black whitespace-nowrap transition-colors">Ulasan</a>
             </nav>
         </div>
 
         {{-- ══ CONTENT GRID ══ --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
 
-            {{-- ── LEFT: Main Content ── --}}
-            <div class="lg:col-span-2 space-y-10">
-
-                {{-- Badges / Status --}}
+            {{-- ── LEFT: Main Content ── -                {{-- Badges / Status --}}
                 <div class="flex items-center gap-3 bg-[#fff1e0] p-4 rounded-xl border border-[#ffd5a0]">
                     <div class="bg-[#f9a826] rounded-full p-2 text-white">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
                     </div>
                     <div>
-                        <div class="font-bold text-gray-900 text-sm">Travelers' Choice Best of the Best 2026</div>
-                        <div class="text-xs text-gray-700">Top 1% of things to do worldwide</div>
+                        <div class="font-bold text-gray-900 text-sm">Pilihan Wisatawan Terbaik 2026</div>
+                        <div class="text-xs text-gray-700">Peringkat 1% teratas destinasi terbaik dunia</div>
                     </div>
                 </div>
 
@@ -159,7 +156,7 @@
                 @if($reviewsToDisplay->count() > 0)
                 <div id="overview" class="scroll-mt-32 section-block">
                     <h2 class="text-xl font-bold text-gray-900 mb-4 flex justify-between items-center">
-                        Why travelers love this
+                        Alasan wisatawan menyukainya
                         <div class="flex gap-1 text-[#00aa6c]">
                             @for($i = 0; $i < 5; $i++)
                             <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
@@ -201,17 +198,17 @@
                     <div class="flex items-start gap-3">
                         <svg class="w-5 h-5 mt-0.5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                         <div>
-                            <div class="text-sm font-medium text-gray-900">Ages 0-100</div>
+                            <div class="text-sm font-medium text-gray-900">Usia: Semua Umur (0-100 tahun)</div>
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
                         <svg class="w-5 h-5 mt-0.5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         <div>
-                            <div class="text-sm font-medium text-gray-900">Duration: 
+                            <div class="text-sm font-medium text-gray-900">Durasi: 
                                 @if($event->end_date)
-                                    {{ $event->start_date->diffInHours($event->end_date) }} hours
+                                    {{ $event->start_date->diffInHours($event->end_date) }} jam
                                 @else
-                                    Half-day
+                                    Setengah hari
                                 @endif
                             </div>
                         </div>
@@ -219,20 +216,20 @@
                     <div class="flex items-start gap-3">
                         <svg class="w-5 h-5 mt-0.5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                         <div>
-                            <div class="text-sm font-medium text-gray-900">Start time: {{ $event->start_date->format('H:i') }} WIB</div>
+                            <div class="text-sm font-medium text-gray-900">Waktu mulai: {{ $event->start_date->format('H:i') }} WIB</div>
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
                         <svg class="w-5 h-5 mt-0.5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                         <div>
-                            <div class="text-sm font-medium text-gray-900">Mobile ticket accepted</div>
+                            <div class="text-sm font-medium text-gray-900">Tiket elektronik di HP berlaku</div>
                         </div>
                     </div>
                     @if($event->location_name)
                     <div class="flex items-start gap-3 sm:col-span-2">
                         <svg class="w-5 h-5 mt-0.5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         <div>
-                            <div class="text-sm font-medium text-gray-900">Meeting point: {{ $event->location_name }}</div>
+                            <div class="text-sm font-medium text-gray-900">Titik kumpul: {{ $event->location_name }}</div>
                         </div>
                     </div>
                     @endif
@@ -243,12 +240,12 @@
                 {{-- Details Accordions --}}
                 @if($event->whats_included || $event->what_to_expect || $event->meeting_and_pickup || $event->cancellation_policy)
                 <div id="details" class="space-y-0 scroll-mt-32 section-block">
-                    <h2 class="text-xl font-bold text-gray-900 mb-6">Details</h2>
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Detail Acara</h2>
                     
                     @if($event->whats_included)
                     <div class="border-t border-gray-200 py-5 group detail-accordion">
                         <div class="cursor-pointer flex justify-between items-center accordion-header">
-                            <span class="font-bold text-gray-900 text-[15px]">What's included</span>
+                            <span class="font-bold text-gray-900 text-[15px]">Fasilitas yang termasuk</span>
                             <svg class="w-5 h-5 text-gray-400 group-hover:text-black transform transition-transform duration-300 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                         </div>
                         <div class="accordion-content hidden mt-4 text-gray-700 prose prose-sm max-w-none">
@@ -260,7 +257,7 @@
                     @if($event->what_to_expect)
                     <div class="border-t border-gray-200 py-5 group detail-accordion">
                         <div class="cursor-pointer flex justify-between items-center accordion-header">
-                            <span class="font-bold text-gray-900 text-[15px]">What to expect</span>
+                            <span class="font-bold text-gray-900 text-[15px]">Yang akan didapatkan</span>
                             <svg class="w-5 h-5 text-gray-400 group-hover:text-black transform transition-transform duration-300 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                         </div>
                         <div class="accordion-content hidden mt-4 text-gray-700 prose prose-sm max-w-none">
@@ -272,7 +269,7 @@
                     @if($event->meeting_and_pickup)
                     <div class="border-t border-gray-200 py-5 group detail-accordion">
                         <div class="cursor-pointer flex justify-between items-center accordion-header">
-                            <span class="font-bold text-gray-900 text-[15px]">Meeting and pickup</span>
+                            <span class="font-bold text-gray-900 text-[15px]">Titik kumpul & penjemputan</span>
                             <svg class="w-5 h-5 text-gray-400 group-hover:text-black transform transition-transform duration-300 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                         </div>
                         <div class="accordion-content hidden mt-4 text-gray-700 prose prose-sm max-w-none">
@@ -284,7 +281,7 @@
                     @if($event->cancellation_policy)
                     <div class="border-t border-b border-gray-200 py-5 group detail-accordion">
                         <div class="cursor-pointer flex justify-between items-center accordion-header">
-                            <span class="font-bold text-gray-900 text-[15px]">Cancellation policy</span>
+                            <span class="font-bold text-gray-900 text-[15px]">Kebijakan pembatalan</span>
                             <svg class="w-5 h-5 text-gray-400 group-hover:text-black transform transition-transform duration-300 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                         </div>
                         <div class="accordion-content hidden mt-4 text-gray-700 prose prose-sm max-w-none">
@@ -295,16 +292,16 @@
                 </div>
                 @else
                 <div id="details" class="scroll-mt-32 section-block">
-                    <h2 class="text-xl font-bold text-gray-900 mb-6">Details</h2>
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Detail Acara</h2>
                     <div class="p-6 border border-gray-200 rounded-2xl text-center">
-                        <p class="text-gray-500">More details will be updated soon. Check back later!</p>
+                        <p class="text-gray-500">Detail lengkap akan segera diperbarui. Silakan cek kembali nanti!</p>
                     </div>
                 </div>
                 @endif
 
                 {{-- Dynamic Itinerary & Interactive Map --}}
                 <div id="itinerary" class="scroll-mt-32 section-block">
-                    <h2 class="text-xl font-bold text-gray-900 mb-6">Itinerary</h2>
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Rencana Perjalanan</h2>
                     
                     @if($event->itineraries && $event->itineraries->count() > 0)
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -314,7 +311,7 @@
                                     <div x-data="{ open: false }" @click="open = !open" class="relative itinerary-item cursor-pointer group" data-lat="{{ $itin->latitude }}" data-lng="{{ $itin->longitude }}">
                                         {{-- Marker Icon --}}
                                         <div class="absolute -left-[49px] top-0 w-8 h-8 bg-white rounded-full flex items-center justify-center font-bold text-sm border-[3px] z-10 transition-colors {{ $index === 0 ? 'border-[#f9a826] text-black bg-[#f9a826]' : ($index === $event->itineraries->count() - 1 ? 'border-[#f9a826] text-black bg-[#f9a826]' : 'border-[#00aa6c] text-[#00aa6c]') }} group-hover:scale-110">
-                                            {{ $index === 0 ? 'Start' : ($index === $event->itineraries->count() - 1 ? 'End' : $index) }}
+                                            {{ $index === 0 ? 'Mulai' : ($index === $event->itineraries->count() - 1 ? 'Selesai' : $index) }}
                                         </div>
                                         
                                         <div class="flex justify-between items-center">
@@ -353,19 +350,19 @@
                     @else
                         {{-- Placeholder if no itineraries are found --}}
                         <div class="p-6 border border-gray-200 rounded-2xl text-center">
-                            <p class="text-gray-500">Itinerary details will be updated soon. Check back later!</p>
+                            <p class="text-gray-500">Detail rencana perjalanan akan segera diperbarui. Silakan cek kembali nanti!</p>
                         </div>
                     @endif
                 </div>
 
                 {{-- Operator Dummy --}}
                 <div id="operator" class="scroll-mt-32 section-block">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Operator</h2>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Penyelenggara</h2>
                     <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
                         <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center border-2 border-gray-200 font-black text-xl text-gray-400">VS</div>
                         <div>
                             <div class="font-bold text-gray-900">Visit Sukabumi Official</div>
-                            <div class="text-sm text-gray-500">Local Expert Tour Provider</div>
+                            <div class="text-sm text-gray-500">Pemandu Wisata Ahli Lokal</div>
                         </div>
                     </div>
                 </div>
@@ -384,11 +381,11 @@
                         <div class="mb-5">
                             <div class="flex items-baseline gap-1">
                                 <span class="text-xl md:text-2xl font-black text-gray-900">Rp 150.000</span>
-                                <span class="text-sm text-gray-500">per adult</span>
+                                <span class="text-sm text-gray-500">per orang</span>
                             </div>
                             <div class="text-xs font-bold text-green-600 mt-1 flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                                Lowest Price Guarantee
+                                Jaminan Harga Terbaik
                             </div>
                         </div>
 
@@ -399,7 +396,7 @@
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                             </button>
                             <button class="w-full text-left px-4 py-3 border-2 border-gray-300 rounded-xl flex justify-between items-center text-gray-600">
-                                <span>2 Adults</span>
+                                <span>2 Orang Dewasa</span>
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                             </button>
                         </div>
@@ -411,7 +408,7 @@
                         @endphp
                         <a href="https://wa.me/{{ $waPhone }}?text={{ urlencode($waText) }}" target="_blank"
                            class="w-full block text-center bg-[#00aa6c] hover:bg-[#008a57] text-white font-bold py-3.5 px-6 rounded-full transition text-[15px] mb-4">
-                            Check availability
+                            Cek Ketersediaan
                         </a>
 
                         {{-- Value Props --}}
@@ -421,8 +418,8 @@
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 </div>
                                 <div class="text-xs">
-                                    <span class="font-bold text-gray-900">Free cancellation</span>
-                                    <span class="text-gray-500 block">Full refund if cancelled up to 24 hours before.</span>
+                                    <span class="font-bold text-gray-900">Pembatalan Gratis</span>
+                                    <span class="text-gray-500 block">Pengembalian dana penuh jika dibatalkan hingga 24 jam sebelumnya.</span>
                                 </div>
                             </div>
                             <div class="flex gap-3">
@@ -430,8 +427,8 @@
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                                 </div>
                                 <div class="text-xs">
-                                    <span class="font-bold text-gray-900">Reserve now & pay later</span>
-                                    <span class="text-gray-500 block">Secure your spot while staying flexible.</span>
+                                    <span class="font-bold text-gray-900">Pesan Sekarang, Bayar Nanti</span>
+                                    <span class="text-gray-500 block">Amankan tempat Anda dengan tetap fleksibel.</span>
                                 </div>
                             </div>
                         </div>
@@ -439,7 +436,7 @@
 
                     {{-- Promo / Question Block --}}
                     <div class="bg-[#f2f2f2] rounded-2xl p-5 border border-gray-200">
-                        <div class="font-bold text-sm text-gray-900 mb-2">Have booking questions?</div>
+                        <div class="font-bold text-sm text-gray-900 mb-2">Ada pertanyaan seputar pemesanan?</div>
                         <div class="flex gap-4">
                             <a href="https://wa.me/{{ $waPhone }}?text={{ urlencode($waText) }}" target="_blank" class="flex items-center gap-1.5 text-xs font-medium text-gray-700 hover:text-black">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
@@ -447,7 +444,7 @@
                             </a>
                             <a href="https://wa.me/{{ $waPhone }}?text={{ urlencode($waText) }}" target="_blank" class="flex items-center gap-1.5 text-xs font-medium text-gray-700 hover:text-black border-b border-black pb-0.5">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                                Chat now
+                                Chat Sekarang
                             </a>
                         </div>
                     </div>
