@@ -218,36 +218,27 @@ $navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
     {{-- ════════════════════════════════════════════
          MOBILE NAVBAR — ☰ Logo Search style
          ════════════════════════════════════════════ --}}
-    <div class="md:hidden flex items-center justify-between px-4 h-[76px] border-b border-gray-200 bg-white relative">
+    <div class="md:hidden flex items-center justify-between px-4 min-h-[116px] h-28 border-b border-gray-200 bg-white relative">
 
         {{-- Left: Hamburger --}}
-        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="flex items-center justify-center w-10 h-10 text-gray-700 hover:text-[#1a6bbf] transition-colors" aria-label="Menu">
-            <svg id="hamburger-icon" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="flex items-center justify-center w-11 h-11 text-gray-700 hover:text-[#1a6bbf] transition-colors z-10" aria-label="Menu">
+            <svg id="hamburger-icon" width="26" height="26" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/>
             </svg>
         </button>
 
         {{-- Center: Logo --}}
-        <a href="/" class="absolute left-0 right-0 mx-auto w-fit flex items-center justify-center">
-            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-14 object-contain drop-shadow-sm" />
+        <a href="/" class="absolute left-0 right-0 mx-auto w-fit flex items-center justify-center py-1">
+            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-28 object-contain drop-shadow-sm" />
         </a>
 
-        {{-- Right: Search icon (toggle inline search) + Login --}}
-        <div class="flex items-center gap-2">
-            <button onclick="toggleMobileSearch()" class="flex items-center justify-center w-10 h-10 text-gray-700 hover:text-[#1a6bbf] transition-colors" aria-label="Search">
-                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {{-- Right: Search icon only --}}
+        <div class="flex items-center z-10">
+            <button onclick="toggleMobileSearch()" class="flex items-center justify-center w-11 h-11 text-gray-700 hover:text-[#1a6bbf] transition-colors" aria-label="Search">
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
             </button>
-            @auth
-                <a href="{{ route('wishlist.index') }}" class="flex items-center justify-center w-10 h-10 text-gray-600 hover:text-[#f9a826] transition-colors">
-                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                </a>
-            @else
-                <a href="{{ route('login') }}" class="text-[13px] font-bold text-[#1a6bbf] px-3 py-1.5 border border-[#1a6bbf] rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors">
-                    Log in
-                </a>
-            @endauth
         </div>
     </div>
 
@@ -336,24 +327,24 @@ $navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
             @endif
         @endforeach
 
-        {{-- Extra links --}}
-        @auth
-            <div class="mt-2 border-t border-gray-100 pt-2">
-                <a href="{{ route('wishlist.index') }}" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-[#f9a826] transition-colors">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                    Wishlist Saya
-                </a>
+        {{-- Wishlist & User actions --}}
+        <div class="mt-2 border-t border-gray-100 pt-1">
+            <a href="{{ route('wishlist.index') }}" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 hover:text-[#f9a826] transition-colors">
+                <svg class="w-5 h-5 text-[#f9a826]" fill="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                Wishlist Saya
+            </a>
+            @auth
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="w-full flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-red-500 hover:bg-red-50 transition-colors">
+                    <button type="submit" class="w-full flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-red-500 hover:bg-red-50 transition-colors text-left">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                         </svg>
                         Logout
                     </button>
                 </form>
-            </div>
-        @endauth
+            @endauth
+        </div>
     </nav>
 
     {{-- Footer --}}
