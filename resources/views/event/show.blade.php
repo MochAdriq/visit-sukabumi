@@ -582,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
             mapMarkers.push(marker);
 
             // Add Click interaction to the DOM item
-            data.element.addEventListener('mouseenter', () => {
+            data.element.addEventListener('click', () => {
                 map.flyTo([data.lat, data.lng], 15, {
                     animate: true,
                     duration: 1.5
