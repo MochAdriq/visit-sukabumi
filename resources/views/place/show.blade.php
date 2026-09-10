@@ -354,8 +354,123 @@
                                 @endforeach
                             </div>
                         @endif
-                    </div>
+            </div>
                 @endif
+
+                {{-- ══ ULASAN PENGUNJUNG ══ --}}
+                <div class="border-b border-gray-100 pb-8 pt-4" id="reviews-section">
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        Ulasan Pengunjung
+                    </h2>
+
+                    @if(session('success'))
+                        <div class="mb-6 bg-green-50 text-green-700 p-4 rounded-xl border border-green-200 font-medium text-sm">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="mb-6 bg-red-50 text-red-700 p-4 rounded-xl border border-red-200 font-medium text-sm">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    @auth
+                        @php
+                            $userHasReviewed = $place->reviews->where('user_id', Auth::id())->count() > 0;
+                        @endphp
+                        @if(!$userHasReviewed)
+                            <div class="bg-gray-50 rounded-2xl p-5 md:p-6 border border-gray-200 mb-8">
+                                <h3 class="font-bold text-gray-900 mb-4">Bagikan Pengalaman Anda</h3>
+                                <form action="{{ route('review.store', $place->id) }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="mb-4">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                                        <div class="flex items-center gap-2" id="star-rating-container">
+                                            @for($i=1; $i<=5; $i++)
+                                                <button type="button" onclick="setRating({{ $i }})" class="star-btn focus:outline-none" data-rating="{{ $i }}">
+                                                    <svg class="w-8 h-8 text-gray-300 hover:text-yellow-400 transition-colors duration-150 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                </button>
+                                            @endfor
+                                        </div>
+                                        <input type="hidden" name="rating" id="rating-input" required value="5">
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Ulasan</label>
+                                        <textarea name="content" rows="3" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-[#1a6bbf] focus:ring focus:ring-[#1a6bbf]/20 text-sm" placeholder="Ceritakan pengalaman Anda di sini..." required></textarea>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Tipe Kunjungan (Opsional)</label>
+                                        <select name="visit_type" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-[#1a6bbf] focus:ring focus:ring-[#1a6bbf]/20 text-sm">
+                                            <option value="">Pilih tipe kunjungan...</option>
+                                            <option value="Keluarga">Keluarga</option>
+                                            <option value="Pasangan">Pasangan</option>
+                                            <option value="Teman">Teman / Rombongan</option>
+                                            <option value="Solo">Solo / Sendiri</option>
+                                            <option value="Bisnis">Bisnis</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-5">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Foto (Opsional)</label>
+                                        <input type="file" name="image" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#1a6bbf]/10 file:text-[#1a6bbf] hover:file:bg-[#1a6bbf]/20 cursor-pointer"/>
+                                        <p class="text-xs text-gray-400 mt-1">Maks. 2MB (JPG/PNG)</p>
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <button type="submit" class="bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold px-6 py-2 rounded-full transition shadow-sm text-sm">
+                                            Kirim Ulasan
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        @else
+                            <div class="bg-blue-50 text-blue-700 p-4 rounded-xl border border-blue-200 mb-8 text-sm">
+                                Anda sudah memberikan ulasan untuk tempat ini. Terima kasih!
+                            </div>
+                        @endif
+                    @else
+                        <div class="bg-gray-50 rounded-2xl p-6 border border-gray-200 mb-8 text-center">
+                            <p class="text-gray-600 mb-3 text-sm">Login untuk membagikan pengalaman Anda.</p>
+                            <a href="{{ route('login') }}" class="inline-block bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold px-6 py-2 rounded-full transition shadow-sm text-sm">
+                                Login Sekarang
+                            </a>
+                        </div>
+                    @endauth
+
+                    {{-- Daftar Ulasan --}}
+                    @if($place->reviews->count() > 0)
+                        <div class="space-y-6">
+                            @foreach($place->reviews as $review)
+                                <div class="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="w-10 h-10 rounded-full bg-[#1a6bbf]/10 text-[#1a6bbf] flex items-center justify-center font-bold">
+                                            {{ strtoupper(substr($review->user->name ?? 'A', 0, 1)) }}
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-gray-900 text-sm">{{ $review->user->name ?? 'Anonim' }}</p>
+                                            <div class="flex items-center text-xs text-gray-500 gap-2">
+                                                <span>{{ $review->created_at->diffForHumans() }}</span>
+                                                @if($review->visit_type)
+                                                    <span>• {{ $review->visit_type }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex text-yellow-400 mb-2">
+                                        @for($i=1; $i<=5; $i++)
+                                            <svg class="w-4 h-4 {{ $i <= $review->rating ? 'fill-current' : 'text-gray-200 fill-current' }}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                        @endfor
+                                    </div>
+                                    <p class="text-sm text-gray-700 leading-relaxed">{{ $review->content }}</p>
+                                    @if($review->image_path)
+                                        <img src="{{ Storage::url($review->image_path) }}" alt="Foto ulasan" class="mt-3 rounded-lg max-h-40 object-cover">
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="text-gray-500 text-sm text-center py-6">Belum ada ulasan untuk destinasi ini. Jadilah yang pertama!</p>
+                    @endif
+                </div>
 
             </div>
 
@@ -503,4 +618,27 @@
 
     @include('components.footer')
 </div>
+
+@push('scripts')
+<script>
+    function setRating(rating) {
+        document.getElementById('rating-input').value = rating;
+        const stars = document.querySelectorAll('.star-btn svg');
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.classList.remove('text-gray-300');
+                star.classList.add('text-yellow-400');
+            } else {
+                star.classList.remove('text-yellow-400');
+                star.classList.add('text-gray-300');
+            }
+        });
+    }
+    // Initialize rating
+    if (document.getElementById('rating-input')) {
+        setRating(5);
+    }
+</script>
+@endpush
+
 @endsection
