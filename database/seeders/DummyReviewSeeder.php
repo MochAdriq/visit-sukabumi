@@ -9,7 +9,6 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class DummyReviewSeeder extends Seeder
 {
@@ -18,12 +17,33 @@ class DummyReviewSeeder extends Seeder
      */
     public function run(): void
     {
+        // Protected emails that must NEVER be deleted
+        $protectedEmails = [
+            'admin@admin.com',
+            'visitsukabumidotcom@gmail.com',
+            'adriq@gmail.com',
+            'adrik@gmail.com',
+            'test@example.com',
+        ];
+
+        $this->command->info("Membersihkan data ulasan dummy sebelumnya agar data baru terdistribusi alami...");
+        $oldDummyUserIds = User::whereNotIn('email', $protectedEmails)
+            ->where(function ($query) {
+                $query->where('role', 'user')->orWhereNull('role');
+            })
+            ->pluck('id');
+
+        Review::whereIn('user_id', $oldDummyUserIds)->delete();
+        User::whereIn('id', $oldDummyUserIds)->delete();
+
+        // Extended pool of realistic Indonesian names
         $firstNamesMale = [
             'Ahmad', 'Rizky', 'Dimas', 'Budi', 'Fajar', 'Ilham', 'Hendra', 'Gilang', 'Bayu', 'Aditya',
             'Wahyu', 'Eko', 'Rian', 'Arif', 'Bagus', 'Deni', 'Tri', 'Doni', 'Farhan', 'Irfan',
             'Dwi', 'Galih', 'Indra', 'Aldi', 'Angga', 'Reza', 'Rendy', 'Satria', 'Wildan', 'Tegar',
             'Yoga', 'Yusuf', 'Lukman', 'Dani', 'Agung', 'Ryan', 'Aris', 'Rio', 'Fauzan', 'Haidar',
-            'Danu', 'Bobby', 'Taufik', 'Dicky', 'Faisal', 'Akbar', 'Rahmat', 'Surya', 'Pandu', 'Yudha'
+            'Danu', 'Bobby', 'Taufik', 'Dicky', 'Faisal', 'Akbar', 'Rahmat', 'Surya', 'Pandu', 'Yudha',
+            'Asep', 'Dadang', 'Cecep', 'Deden', 'Ginanjar', 'Heru', 'Joko', 'Kukuh', 'Maman', 'Rangga'
         ];
 
         $firstNamesFemale = [
@@ -31,7 +51,8 @@ class DummyReviewSeeder extends Seeder
             'Dina', 'Fitri', 'Laras', 'Tiara', 'Ratna', 'Melati', 'Tari', 'Citra', 'Dinda', 'Nadia',
             'Wulan', 'Rini', 'Gita', 'Annisa', 'Mega', 'Nurul', 'Salsabila', 'Riska', 'Febby', 'Safira',
             'Cindy', 'Vina', 'Zahra', 'Aulia', 'Tasya', 'Bella', 'Alifah', 'Hanifah', 'Farah', 'Desi',
-            'Lestari', 'Salma', 'Shafa', 'Amanda', 'Sherly', 'Karina', 'Mira', 'Hilda', 'Novita', 'Widya'
+            'Lestari', 'Salma', 'Shafa', 'Amanda', 'Sherly', 'Karina', 'Mira', 'Hilda', 'Novita', 'Widya',
+            'Eneng', 'Ai', 'Imas', 'Neng', 'Resti', 'Yuni', 'Poppy', 'Winda', 'Silvia', 'Kania'
         ];
 
         $lastNames = [
@@ -39,38 +60,37 @@ class DummyReviewSeeder extends Seeder
             'Anggraini', 'Permata', 'Rahmawati', 'Utami', 'Susanto', 'Gunawan', 'Firmansyah', 'Ramadhan', 'Maulana', 'Kurniawan',
             'Syahputra', 'Siregar', 'Nasution', 'Lubis', 'Simanjuntak', 'Pasaribu', 'Subagyo', 'Prasetya', 'Suherman', 'Hartono',
             'Budiman', 'Sulaeman', 'Iskandar', 'Arifin', 'Basri', 'Syahrul', 'Darmawan', 'Wardhana', 'Purnomo', 'Tanjung',
-            'Suhendra', 'Kusnadi', 'Fachrudin', 'Mulyadi', 'Hasan', 'Pangestu', 'Wahyudi', 'Firmanto', 'Hermawan', 'Subekti'
+            'Suhendra', 'Kusnadi', 'Fachrudin', 'Mulyadi', 'Hasan', 'Pangestu', 'Wahyudi', 'Firmanto', 'Hermawan', 'Subekti',
+            'Kosasih', 'Ginanjar', 'Suryana', 'Kurnia', 'Somantri', 'Supratman', 'Kusumah', 'Rohendi', 'Subarna', 'Purwanto'
         ];
 
         $domains = [
-            'gmail.com', 'gmail.com', 'gmail.com', 'gmail.com', 'gmail.com', // 70% Gmail
-            'yahoo.com', 'yahoo.com',                                         // 20% Yahoo
-            'outlook.com'                                                     // 10% Outlook
+            'gmail.com', 'gmail.com', 'gmail.com', 'gmail.com', 'gmail.com',
+            'yahoo.com', 'yahoo.com',
+            'outlook.com'
         ];
 
-        // 1. Generate pool of 120 realistic Indonesian users
+        // 1. Create pool of 150 realistic Indonesian users
         $users = [];
         $existingEmails = User::pluck('email')->toArray();
-        $targetUserCount = 120;
+        $targetUserCount = 150;
 
-        $this->command->info("Membuat/menyiapkan pool {$targetUserCount} akun pengguna Indonesia yang realistis...");
+        $this->command->info("Membuat pool {$targetUserCount} akun pengguna Indonesia yang realistis...");
 
         $allFirstNames = array_merge($firstNamesMale, $firstNamesFemale);
         shuffle($allFirstNames);
 
-        $createdCount = 0;
         for ($i = 0; $i < $targetUserCount; $i++) {
             $firstName = $allFirstNames[$i % count($allFirstNames)];
             $lastName = $lastNames[array_rand($lastNames)];
             $fullName = "{$firstName} {$lastName}";
 
-            // Generate realistic Indonesian email address
             $domain = $domains[array_rand($domains)];
-            $emailStyle = rand(1, 5);
             $cleanFirst = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $firstName));
             $cleanLast = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $lastName));
+            $style = rand(1, 5);
 
-            switch ($emailStyle) {
+            switch ($style) {
                 case 1:
                     $emailUser = $cleanFirst . '.' . $cleanLast . rand(10, 99);
                     break;
@@ -90,114 +110,168 @@ class DummyReviewSeeder extends Seeder
             }
 
             $email = "{$emailUser}@{$domain}";
-
-            // Ensure unique email
             while (in_array($email, $existingEmails)) {
                 $email = "{$emailUser}" . rand(100, 9999) . "@{$domain}";
             }
             $existingEmails[] = $email;
 
-            // Create or update user
-            $user = User::firstOrCreate(
-                ['email' => $email],
-                [
-                    'name' => $fullName,
-                    'password' => Hash::make('password123'),
-                    'role' => 'user', // Safe role: cannot access Filament admin
-                    'email_verified_at' => Carbon::now()->subDays(rand(10, 200)),
-                ]
-            );
+            $user = User::create([
+                'name' => $fullName,
+                'email' => $email,
+                'password' => Hash::make('password123'),
+                'role' => 'user',
+                'email_verified_at' => Carbon::now()->subDays(rand(10, 200)),
+            ]);
 
             $users[] = $user;
-            $createdCount++;
         }
 
-        $this->command->info("Tersedia " . count($users) . " akun pengguna aktif.");
+        $this->command->info("Berhasil membuat " . count($users) . " akun pengguna aktif.");
 
-        // 2. Realistic review texts tailored for Sukabumi tourism
-        $reviewsPoolGeneral = [
-            "Tempatnya adem banget dan cocok buat healing bareng keluarga. Pemandangannya luar biasa indah, anak-anak juga betah seharian main di sini.",
-            "Akses jalannya sekarang sudah semakin bagus, udaranya sejuk pisan khas Sukabumi. Wajib bawa jaket kalau ke sini pagi-pagi.",
-            "Spot foto pemandangannya beneran juara! Warung-warung di sekitar juga ramah dan harganya terjangkau, kopinya nikmat.",
-            "Hidden gem di Sukabumi yang wajib dikunjungi. Capek selama perjalanan langsung terbayar lunas begitu sampai di lokasi. Rekomended banget!",
-            "Fasilitas musholla dan toilet bersih dan terawat. Tiket masuknya terjangkau dan pemandangan alamnya bikin tenang pikiran.",
-            "Salah satu tempat wisata paling berkesan di Sukabumi. Cocok buat melepas penat dari rutinitas kerja ibu kota.",
-            "Suasana asri dan sangat alami. Warga lokalnya ramah-ramah dan membantu saat kami tanya arah jalan.",
-            "Pemandangan saat cuaca cerah luar biasa bagus. Saran saya datang pagi-pagi biar dapat momen kabut tipis dan udara paling segar.",
-            "Tempat yang sangat instagramable dan estetik. Banyak spot foto kece dengan latar belakang alam yang megah.",
-            "Sangat puas berkunjung ke sini bersama rombongan teman kantor. Areanya luas dan udaranya segar tiada duanya.",
-            "Luar biasa indah! Pengalaman liburan yang sangat berkesan. Anak-anak dan orang tua semua senang berkunjung ke sini.",
-            "Wisata alam yang wajib masuk daftar kunjungan kalau ke Sukabumi. Tiket masuk ramah di kantong dengan panorama kelas dunia.",
-            "Suasana tenang dan damai, sangat cocok untuk quality time bareng pasangan. Sunset dan udaranya bikin nyaman.",
-            "Pengelolaannya cukup rapi dan kebersihannya terjaga. Jangan lupa bawa kamera karena setiap sudutnya sangat fotogenik.",
-            "Keren banget! Pemandangannya bener-bener memanjakan mata. Pasti bakal balik lagi ke sini kalau liburan ke Sukabumi.",
-            "Pengalaman pertama kali ke sini dan langsung terkesima. Alamnya masih sangat terjaga dan sejuk.",
-            "Lokasinya nyaman untuk bersantai santai sambil menikmati bekal. Sangat direkomendasikan untuk wisatawan keluarga.",
-            "Pemandangan spektakuler! Sangat beruntung bisa menikmati keindahan alam Sukabumi yang seindah ini.",
-            "Tempat yang sangat worth it untuk dikunjungi. Udara bersih, pemandangan hijau membentang, dan suasananya damai.",
-            "Gak pernah bosen datang ke sini. Selalu ada rasa tenang dan takjub setiap kali menikmati keindahan alamnya."
+        // 2. Review Content Banks by Rating and Type
+        // --- 5 STARS ---
+        $reviews5General = [
+            "Pemandangannya bener-bener luar biasa indah! Udara sejuk dan asri khas Sukabumi, bikin pikiran jadi segar kembali. Pelayanan dan keramahan warga lokal patut diacungi jempol.",
+            "Tempat wisata favorit keluarga kalau lagi ke Sukabumi. Areanya bersih, tertata rapi, dan banyak spot foto estetik. Anak-anak sangat senang bermain di sini.",
+            "Luar biasa memukau! Salah satu destinasi alam terbaik di Jawa Barat yang wajib dikunjungi. Pengalaman liburan yang sangat berkesan dan tak terlupakan.",
+            "Sangat memuaskan berkunjung ke sini. Tempatnya tenang, hijau, dan sangat asri. Cocok banget buat healing melepas penat setelah seminggu beraktivitas.",
+            "Suasana magis saat matahari terbit maupun tenggelam. Fasilitas musholla dan toilet sangat terawat dan bersih. Pasti akan kembali lagi ke sini bersama keluarga!",
+            "Hidden gem yang sangat memanjakan mata. Spot fotonya melimpah ruah dengan latar belakang alam yang megah. Worth it banget perjalanan jauh ke sini!",
+            "Harga tiket masuk sangat ramah di kantong dibandingkan keindahan alam yang disajikan. Udara pegunungan yang sangat bersih dan menyegarkan."
         ];
 
-        $reviewsPoolCurug = [
-            "Curugnya bener-bener luar biasa indah! Airnya sangat dingin, jernih, dan segar. Jalur trekking ke bawah agak licin, jadi disarankan pakai sepatu yang nyaman.",
-            "Suasananya sangat asri dan menenangkan. Suara gemuruh air terjun bikin pikiran jadi plong dan rileks. Kopi hangat di warung sekitar bikin suasana makin mantap.",
-            "Pemandangan alam air terjun yang memukau. Spot foto di dekat bebatuan curug sangat estetik. Jangan lupa bawa baju ganti kalau ke sini!",
-            "Salah satu air terjun terbaik di kawasan Sukabumi. Wajib dikunjungi kalau butuh healing sejati. Trekking sedikit tapi sangat sebanding dengan pemandangannya.",
-            "Treknya cukup menantang dan seru, begitu sampai di depan curug rasanya semua lelah langsung hilang. Airnya segar banget!",
-            "Curug yang masih sangat asri dan alami. Percikan airnya bikin sejuk sampai ke hati. Sangat direkomendasikan untuk pecinta wisata alam petualangan."
+        $reviews5Curug = [
+            "Curugnya spektakuler sekali! Debit airnya deras dan airnya sangat dingin menyegarkan. Begitu sampai di bawah tebing rasanya semua penat langsung hilang.",
+            "Pemandangan air terjun yang megah di antara tebing bebatuan hijau. Spot terbaik untuk foto-foto dan merasakan kesegaran alam Sukabumi yang asli.",
+            "Air terjun terindah yang pernah saya kunjungi di Sukabumi. Airnya jernih sekali dan suasananya benar-benar damai. Sangat recommended!"
         ];
 
-        $reviewsPoolPantai = [
-            "Pantainya luas dengan pasir yang bersih. Deburan ombak khas pantai selatan sangat megah dan menenangkan. Pemandangan sunset di sore hari luar biasa memukau!",
-            "Tempat yang pas banget buat santai sambil menikmati es kelapa muda di pinggir pantai. Angin sepoi-sepoi dan suasananya bikin betah berlama-lama.",
-            "Pemandangan laut lepas yang sangat indah. Suasana senja di sini magis banget, cocok banget buat hunting foto siluet.",
-            "Garis pantainya panjang dan area parkirnya cukup leluasa. Tempat yang asyik buat liburan bareng keluarga besar.",
-            "Ombaknya bagus dan pemandangan tebing karang di sekitarnya sangat eksotis. Salah satu pantai favorit di Sukabumi!"
+        $reviews5Pantai = [
+            "Garis pantai yang luas dengan pemandangan ombak laut selatan yang megah. Sunset di sore hari sangat luar biasa indah dan memukau!",
+            "Pemandangan laut lepas yang eksotis. Warung kelapa muda di pinggir pantai harganya sangat terjangkau dan suasananya bikin betah berlama-lama.",
+            "Pantai yang bersih dan angin sepoi-sepoi yang menenangkan. Momen senja di sini benar-benar magis untuk dinikmati bareng pasangan."
+        ];
+
+        // --- 4 STARS ---
+        $reviews4General = [
+            "Tempatnya bagus banget dan sangat asri. Sedikit catatan buat yang mau ke sini lebih baik datang sebelum jam 10 pagi biar udaranya masih sejuk dan belum terlalu ramai.",
+            "Pemandangan alamnya juara dan suasananya tenang. Akses jalan masuk lumayan menanjak dan sedikit sempit di beberapa titik, tapi begitu sampai terbayar lunas.",
+            "Sangat menikmati kunjungan ke sini bareng teman-teman. Fasilitas umum sudah lumayan lengkap, hanya saja pilihan warung makanan agak terbatas jadi lebih baik bawa camilan sendiri.",
+            "Destinasi wisata yang sangat berkesan. Spot foto instagramable di mana-mana. Disarankan pakai alas kaki yang nyaman karena areanya cukup luas untuk dijelajahi.",
+            "Udara sejuk dan pemandangan hijau membentang. Tempat parkirnya cukup luas dan aman. Pengalaman liburan yang sangat menyenangkan secara keseluruhan.",
+            "Keindahan alamnya memanjakan mata. Pelayanan petugas cukup ramah dan informatif. Sedikit perbaikan petunjuk arah di jalan utama akan membuatnya semakin sempurna."
+        ];
+
+        $reviews4Curug = [
+            "Air terjunnya luar biasa sejuk dan pemandangannya eksotis. Jalur trekking ke curug agak licin berbatu, jadi pastikan pakai sepatu atau sandal gunung yang tidak licin ya.",
+            "Curug yang sangat asri dan segar. Perjalanan turun dan naiknya cukup menguras tenaga, tapi begitu melihat air terjunnya semua lelah langsung terbayar. Wajib bawa air minum!"
+        ];
+
+        $reviews4Pantai = [
+            "Pantainya bersih dan suasananya syahdu saat sore. Ombaknya cukup besar jadi tidak disarankan berenang ke tengah, tapi sangat asyik untuk duduk santai di pinggir pantai.",
+            "Pemandangan sunset-nya juara dunia! Hanya saja fasilitas bilas air tawar saat kami datang agak antre sedikit. Selebihnya sangat bagus dan berkesan."
+        ];
+
+        // --- 3 STARS ---
+        $reviews3General = [
+            "Pemandangan alamnya sebetulnya sangat indah dan segar. Hanya saja pas kami datang di hari libur pengunjungnya sangat padat, jadi harus sabar antre saat mau ambil foto.",
+            "Potensi wisatanya luar biasa bagus dan alami. Namun fasilitas tempat sampah perlu ditambah lagi di beberapa sudut agar kebersihan area wisata tetap terjaga maksimal.",
+            "Suasana lumayan sejuk dan asri. Sayangnya pas ke sana cuaca lagi agak mendung jadi pemandangannya tertutup kabut tebal. Mungkin lain kali harus pilih waktu saat cuaca cerah."
+        ];
+
+        $reviews3Curug = [
+            "Curugnya indah tapi akses jalan menuju lokasi masih butuh perhatian terutama saat musim hujan karena cukup licin. Bagi yang bawa lansia atau anak kecil harus ekstra hati-hati."
+        ];
+
+        $reviews3Pantai = [
+            "Pemandangan pantainya lumayan bagus untuk santai sore. Namun parkirannya pas akhir pekan agak padat dan perlu penataan yang lebih rapi lagi oleh pengelola."
+        ];
+
+        // Event Reviews
+        $eventReviews5 = [
+            "Acaranya seru banget dan terselenggara dengan sangat meriah! Penampilan seni dan budayanya luar biasa memukau penonton dari berbagai daerah.",
+            "Festival budaya yang wajib dibanggakan warga Sukabumi! Sangat menginspirasi dan menghibur. Panggungnya megah dan kuliner lokalnya melimpah ruah.",
+            "Pengalaman pertama kali hadir di event ini dan langsung takjub. Antusiasme masyarakat dan suguhan atraksinya keren abis! Sukses terus untuk panitia."
+        ];
+
+        $eventReviews4 = [
+            "Event yang sangat positif dan edukatif untuk melestarikan tradisi lokal. Rangkaian acaranya padat dan menarik, hanya saja tempat parkir saat jam puncak agak padat.",
+            "Pertunjukan budayanya sangat memukau! Stand bazar UMKM juga kreatif. Sedikit saran agar jadwal rundown acara bisa dibagikan lebih awal di media sosial."
+        ];
+
+        $eventReviews3 = [
+            "Acaranya ramai dan semarak. Hanya saja antrean di pintu masuk utama cukup panjang saat menjelang sore. Semoga tahun depan pengaturan alur masuknya bisa lebih tertib."
         ];
 
         $visitTypes = ['Keluarga', 'Pasangan', 'Teman', 'Solo'];
 
-        // 3. Populate Reviews for each Place
+        // Helper function to pick realistic rating & matching review
+        $pickReview = function ($type, $isCurug, $isPantai) use (
+            $reviews5General, $reviews5Curug, $reviews5Pantai,
+            $reviews4General, $reviews4Curug, $reviews4Pantai,
+            $reviews3General, $reviews3Curug, $reviews3Pantai,
+            $eventReviews5, $eventReviews4, $eventReviews3
+        ) {
+            // Realistic Weighted Distribution:
+            // 58% -> 5 Stars
+            // 34% -> 4 Stars
+            // 8%  -> 3 Stars
+            $rand = rand(1, 100);
+            if ($rand <= 58) {
+                $rating = 5;
+            } elseif ($rand <= 92) {
+                $rating = 4;
+            } else {
+                $rating = 3;
+            }
+
+            if ($type === 'event') {
+                if ($rating === 5) {
+                    $content = $eventReviews5[array_rand($eventReviews5)];
+                } elseif ($rating === 4) {
+                    $content = $eventReviews4[array_rand($eventReviews4)];
+                } else {
+                    $content = $eventReviews3[array_rand($eventReviews3)];
+                }
+            } else {
+                if ($rating === 5) {
+                    $pool = $reviews5General;
+                    if ($isCurug) $pool = array_merge($reviews5Curug, $reviews5General);
+                    if ($isPantai) $pool = array_merge($reviews5Pantai, $reviews5General);
+                } elseif ($rating === 4) {
+                    $pool = $reviews4General;
+                    if ($isCurug) $pool = array_merge($reviews4Curug, $reviews4General);
+                    if ($isPantai) $pool = array_merge($reviews4Pantai, $reviews4General);
+                } else {
+                    $pool = $reviews3General;
+                    if ($isCurug) $pool = array_merge($reviews3Curug, $reviews3General);
+                    if ($isPantai) $pool = array_merge($reviews3Pantai, $reviews3General);
+                }
+                $content = $pool[array_rand($pool)];
+            }
+
+            return [$rating, $content];
+        };
+
+        // 3. Populate Reviews for Places
         $places = Place::all();
-        $this->command->info("Menambahkan ulasan dummy untuk {$places->count()} destinasi wisata...");
+        $this->command->info("Menambahkan ulasan terdistribusi alami untuk {$places->count()} destinasi...");
 
-        $totalReviewsAdded = 0;
-
+        $totalAdded = 0;
         foreach ($places as $place) {
-            // Check how many reviews to add (15 to 20 reviews per destination)
-            $reviewsTarget = rand(15, 20);
-            
-            // Shuffle users to pick unique reviewers for this place
+            $nameLower = strtolower($place->name . ' ' . $place->description);
+            $isCurug = str_contains($nameLower, 'curug') || str_contains($nameLower, 'air terjun');
+            $isPantai = str_contains($nameLower, 'pantai') || str_contains($nameLower, 'laut') || str_contains($nameLower, 'ujung genteng') || str_contains($nameLower, 'pelabuhan');
+
+            // 18 to 24 reviews per destination
+            $reviewsTarget = rand(18, 24);
             $shuffledUsers = $users;
             shuffle($shuffledUsers);
             $selectedUsers = array_slice($shuffledUsers, 0, $reviewsTarget);
 
-            // Determine appropriate review bank based on category or place name
-            $nameLower = strtolower($place->name . ' ' . $place->description);
-            if (str_contains($nameLower, 'curug') || str_contains($nameLower, 'air terjun')) {
-                $pool = array_merge($reviewsPoolCurug, $reviewsPoolGeneral);
-            } elseif (str_contains($nameLower, 'pantai') || str_contains($nameLower, 'laut') || str_contains($nameLower, 'ujung genteng') || str_contains($nameLower, 'pelabuhan')) {
-                $pool = array_merge($reviewsPoolPantai, $reviewsPoolGeneral);
-            } else {
-                $pool = $reviewsPoolGeneral;
-            }
-
             foreach ($selectedUsers as $user) {
-                // Check if user already reviewed this place
-                $alreadyExists = Review::where('user_id', $user->id)
-                    ->where('place_id', $place->id)
-                    ->exists();
-
-                if ($alreadyExists) {
-                    continue;
-                }
-
-                // 90% chance of 5 stars, 10% chance of 4 stars
-                $rating = (rand(1, 10) <= 9) ? 5 : 4;
-                $content = $pool[array_rand($pool)];
+                [$rating, $content] = $pickReview('place', $isCurug, $isPantai);
                 $visitType = $visitTypes[array_rand($visitTypes)];
-
-                // Spread created_at over the last 150 days
                 $createdAt = Carbon::now()->subDays(rand(1, 150))->subHours(rand(1, 23))->subMinutes(rand(1, 59));
 
                 Review::create([
@@ -211,39 +285,22 @@ class DummyReviewSeeder extends Seeder
                     'updated_at' => $createdAt,
                 ]);
 
-                $totalReviewsAdded++;
+                $totalAdded++;
             }
         }
 
-        // 4. Populate Reviews for each Event as well (8 to 12 reviews per event)
+        // 4. Populate Reviews for Events
         $events = Event::all();
-        $this->command->info("Menambahkan ulasan dummy untuk {$events->count()} event & festival...");
-
-        $eventReviewsPool = [
-            "Acaranya seru banget dan tertata rapi! Penampilan budayanya sangat memukau dan menghibur warga maupun wisatawan luar kota.",
-            "Festival yang sangat luar biasa untuk melestarikan kebudayaan lokal Sukabumi. Semoga tahun depan diadakan lagi dengan skala yang lebih meriah!",
-            "Sangat berkesan bisa hadir di event ini bareng keluarga. Panggungnya megah, stand kulinernya lengkap, dan suasanya sangat hidup.",
-            "Event yang keren abis! Pengalaman pertama ikut dan langsung takjub dengan antusiasme masyarakat serta atraksi yang disajikan.",
-            "Banyak spot foto menarik dan penampilan seni tradisionalnya bikin bangga. Acara wajib yang patut terus didukung.",
-            "Tertib, seru, dan edukatif banget buat anak-anak mengenal tradisi dan budaya lokal. Mantap Visit Sukabumi!"
-        ];
+        $this->command->info("Menambahkan ulasan terdistribusi alami untuk {$events->count()} event festival...");
 
         foreach ($events as $event) {
+            $reviewsTarget = rand(10, 16);
             $shuffledUsers = $users;
             shuffle($shuffledUsers);
-            $selectedUsers = array_slice($shuffledUsers, 0, rand(8, 12));
+            $selectedUsers = array_slice($shuffledUsers, 0, $reviewsTarget);
 
             foreach ($selectedUsers as $user) {
-                $alreadyExists = Review::where('user_id', $user->id)
-                    ->where('event_id', $event->id)
-                    ->exists();
-
-                if ($alreadyExists) {
-                    continue;
-                }
-
-                $rating = (rand(1, 10) <= 9) ? 5 : 4;
-                $content = $eventReviewsPool[array_rand($eventReviewsPool)];
+                [$rating, $content] = $pickReview('event', false, false);
                 $visitType = $visitTypes[array_rand($visitTypes)];
                 $createdAt = Carbon::now()->subDays(rand(1, 120))->subHours(rand(1, 23))->subMinutes(rand(1, 59));
 
@@ -258,10 +315,10 @@ class DummyReviewSeeder extends Seeder
                     'updated_at' => $createdAt,
                 ]);
 
-                $totalReviewsAdded++;
+                $totalAdded++;
             }
         }
 
-        $this->command->info("Selesai! Berhasil menambahkan {$totalReviewsAdded} ulasan dengan akun dummy Indonesia yang sangat realistis.");
+        $this->command->info("Selesai! Berhasil membuat {$totalAdded} ulasan dengan distribusi rating realistis (Bintang 5: ~58%, Bintang 4: ~34%, Bintang 3: ~8%).");
     }
 }
