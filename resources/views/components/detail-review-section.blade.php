@@ -231,29 +231,36 @@
                     {{-- Star Rating Filter --}}
                     <div class="mb-4">
                         <label class="block text-xs font-bold text-gray-700 mb-2">Nilai Rating</label>
-                        <div class="grid grid-cols-2 gap-2">
+                        <div class="grid grid-cols-3 gap-1.5">
                             <button @click="selectedRating = ''; currentPage = 1" 
-                                    class="px-3 py-1.5 rounded-lg border text-xs font-medium transition"
+                                    class="px-2 py-1.5 rounded-lg border text-xs font-medium transition text-center"
                                     :class="selectedRating === '' ? 'bg-[#002f20] text-white border-[#002f20]' : 'border-gray-200 text-gray-700 hover:bg-gray-50'">
                                 Semua
                             </button>
                             <button @click="selectedRating = 5; currentPage = 1" 
-                                    class="px-3 py-1.5 rounded-lg border text-xs font-medium transition flex items-center justify-center gap-1"
+                                    class="px-2 py-1.5 rounded-lg border text-xs font-medium transition flex items-center justify-center gap-1"
                                     :class="selectedRating === 5 ? 'bg-[#002f20] text-white border-[#002f20]' : 'border-gray-200 text-gray-700 hover:bg-gray-50'">
-                                <span>5 Bintang</span>
-                                <svg class="w-3 h-3 fill-current text-amber-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>5★</span>
                             </button>
                             <button @click="selectedRating = 4; currentPage = 1" 
-                                    class="px-3 py-1.5 rounded-lg border text-xs font-medium transition flex items-center justify-center gap-1"
+                                    class="px-2 py-1.5 rounded-lg border text-xs font-medium transition flex items-center justify-center gap-1"
                                     :class="selectedRating === 4 ? 'bg-[#002f20] text-white border-[#002f20]' : 'border-gray-200 text-gray-700 hover:bg-gray-50'">
-                                <span>4 Bintang</span>
-                                <svg class="w-3 h-3 fill-current text-amber-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>4★</span>
                             </button>
                             <button @click="selectedRating = 3; currentPage = 1" 
-                                    class="px-3 py-1.5 rounded-lg border text-xs font-medium transition flex items-center justify-center gap-1"
+                                    class="px-2 py-1.5 rounded-lg border text-xs font-medium transition flex items-center justify-center gap-1"
                                     :class="selectedRating === 3 ? 'bg-[#002f20] text-white border-[#002f20]' : 'border-gray-200 text-gray-700 hover:bg-gray-50'">
-                                <span>3 Bintang</span>
-                                <svg class="w-3 h-3 fill-current text-amber-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>3★</span>
+                            </button>
+                            <button @click="selectedRating = 2; currentPage = 1" 
+                                    class="px-2 py-1.5 rounded-lg border text-xs font-medium transition flex items-center justify-center gap-1"
+                                    :class="selectedRating === 2 ? 'bg-[#002f20] text-white border-[#002f20]' : 'border-gray-200 text-gray-700 hover:bg-gray-50'">
+                                <span>2★</span>
+                            </button>
+                            <button @click="selectedRating = 1; currentPage = 1" 
+                                    class="px-2 py-1.5 rounded-lg border text-xs font-medium transition flex items-center justify-center gap-1"
+                                    :class="selectedRating === 1 ? 'bg-[#002f20] text-white border-[#002f20]' : 'border-gray-200 text-gray-700 hover:bg-gray-50'">
+                                <span>1★</span>
                             </button>
                         </div>
                     </div>
