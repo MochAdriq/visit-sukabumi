@@ -72,18 +72,15 @@
         {{-- SECTION 2: DESTINASI TERPOPULER --}}
         <div class="bg-white py-10 md:py-14 border-b border-gray-100">
             <div class="max-w-7xl mx-auto px-4 md:px-6">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5 md:mb-7">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-5 md:mb-7">
                     <div>
                         <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-1">Destinasi Terpopuler</h2>
                         <p class="text-[13px] md:text-[14px] text-gray-500">Pilihan terbaik berdasarkan review ribuan wisatawan</p>
                     </div>
-                    <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide items-center">
+                    <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide" id="ticket-tabs">
                         <button onclick="switchTab('alam')" id="tab-alam" class="vs-tab-pill active flex-shrink-0">Wisata Alam</button>
                         <button onclick="switchTab('pantai')" id="tab-pantai" class="vs-tab-pill flex-shrink-0">Wisata Pantai</button>
                         <button onclick="switchTab('kuliner')" id="tab-kuliner" class="vs-tab-pill flex-shrink-0">Kuliner</button>
-                        <a href="{{ route('place.index') }}" class="ml-2 inline-flex items-center gap-1.5 px-4 py-1.5 border-2 border-[#1a6bbf] text-[#1a6bbf] font-bold rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors text-[12px] flex-shrink-0">
-                            Lihat semua destinasi &rarr;
-                        </a>
                     </div>
                 </div>
 
@@ -157,6 +154,13 @@
                     @empty
                     <p class="text-gray-400 text-sm col-span-full">Belum ada data.</p>
                     @endforelse
+                </div>
+
+                <div class="mt-8 text-center">
+                    <a href="{{ route('place.index') }}" class="inline-flex items-center gap-2 px-8 py-3 border-2 border-[#1a6bbf] text-[#1a6bbf] font-bold rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors text-[14px]">
+                        Lihat semua destinasi
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
                 </div>
             </div>
         </div>
