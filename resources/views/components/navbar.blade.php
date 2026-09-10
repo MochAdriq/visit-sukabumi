@@ -7,63 +7,83 @@ if (isset($place) && $place->category) {
     $currentCatSlug = $currentCategory->slug;
 }
 
-$navItems = [
-    [
-        'label'    => 'Pacu Adrenalin',
-        'href'     => '/kategori/aktivitas-seru',
-        'activeCategories' => ['aktivitas-seru'],
-        'dropdown' => true,
-        'intro'    => ['title' => 'Pacu Adrenalin', 'text' => 'Tantang diri Anda dengan aktivitas ekstrem dan petualangan seru di Sukabumi.'],
-        'links'    => [
-            ['label' => 'Arung Jeram Citarik', 'href' => '/place/arung-jeram-sungai-citarik', 'highlight' => false],
-            ['label' => 'Surfing & Ombak',      'href' => '/place/snorkeling-ujung-genteng',   'highlight' => false],
-            ['label' => 'Semua Aktivitas Seru', 'href' => '/kategori/aktivitas-seru',    'highlight' => true],
+$navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
+    $getTopPlaces = function(array $categorySlugs, $limit = 2) {
+        return \App\Models\Place::whereHas('category', function($q) use ($categorySlugs) {
+            $q->whereIn('slug', $categorySlugs);
+        })->where('status', 'published')
+          ->withCount('reviews')
+          ->orderByDesc('reviews_count')
+          ->take($limit)
+          ->get();
+    };
+
+    $adrenalinPlaces = $getTopPlaces(['aktivitas-seru'], 2);
+    $healingPlaces = $getTopPlaces(['wisata-alam', 'wisata-pantai'], 2);
+    $budayaPlaces = $getTopPlaces(['wisata-budaya', 'kuliner'], 2);
+
+    $mapPlacesToLinks = function($places, $allLabel, $allHref) {
+        $links = [];
+        foreach ($places as $place) {
+            $links[] = [
+                'label' => $place->name,
+                'href' => '/place/' . $place->slug,
+                'highlight' => false
+            ];
+        }
+        $links[] = [
+            'label' => $allLabel,
+            'href' => $allHref,
+            'highlight' => true
+        ];
+        return $links;
+    };
+
+    return [
+        [
+            'label'    => 'Pacu Adrenalin',
+            'href'     => '/kategori/aktivitas-seru',
+            'activeCategories' => ['aktivitas-seru'],
+            'dropdown' => true,
+            'intro'    => ['title' => 'Pacu Adrenalin', 'text' => 'Tantang diri Anda dengan aktivitas ekstrem dan petualangan seru di Sukabumi.'],
+            'links'    => $mapPlacesToLinks($adrenalinPlaces, 'Semua Aktivitas Seru', '/kategori/aktivitas-seru'),
         ],
-    ],
-    [
-        'label'    => 'Santai & Healing',
-        'href'     => '/kategori/wisata-alam',
-        'activeCategories' => ['wisata-alam', 'wisata-pantai'],
-        'dropdown' => true,
-        'intro'    => ['title' => 'Santai & Healing', 'text' => 'Lepaskan penat dan nikmati ketenangan alam yang asri di Sukabumi.'],
-        'links'    => [
-            ['label' => 'Pesona Geopark Ciletuh', 'href' => '/place/geopark-ciletuh',            'highlight' => false],
-            ['label' => 'Situ Gunung & Jembatan', 'href' => '/place/situ-gunung',                'highlight' => false],
-            ['label' => 'Wisata Pantai',           'href' => '/kategori/wisata-pantai',     'highlight' => false],
-            ['label' => 'Semua Wisata Alam',       'href' => '/kategori/wisata-alam',       'highlight' => true],
+        [
+            'label'    => 'Santai & Healing',
+            'href'     => '/kategori/wisata-alam',
+            'activeCategories' => ['wisata-alam', 'wisata-pantai'],
+            'dropdown' => true,
+            'intro'    => ['title' => 'Santai & Healing', 'text' => 'Lepaskan penat dan nikmati ketenangan alam yang asri di Sukabumi.'],
+            'links'    => $mapPlacesToLinks($healingPlaces, 'Semua Wisata Alam', '/kategori/wisata-alam'),
         ],
-    ],
-    [
-        'label'    => 'Budaya & Sejarah',
-        'href'     => '/kategori/wisata-budaya',
-        'activeCategories' => ['wisata-budaya', 'kuliner'],
-        'dropdown' => true,
-        'intro'    => ['title' => 'Budaya & Sejarah', 'text' => 'Kenali lebih dekat warisan budaya, sejarah, dan kuliner otentik Sukabumi.'],
-        'links'    => [
-            ['label' => 'Kampung Adat',         'href' => '/kategori/wisata-budaya', 'highlight' => false],
-            ['label' => 'Wisata Kuliner Lokal', 'href' => '/kategori/kuliner',       'highlight' => false],
-            ['label' => 'Jelajah Budaya',       'href' => '/kategori/wisata-budaya', 'highlight' => true],
+        [
+            'label'    => 'Budaya & Sejarah',
+            'href'     => '/kategori/wisata-budaya',
+            'activeCategories' => ['wisata-budaya', 'kuliner'],
+            'dropdown' => true,
+            'intro'    => ['title' => 'Budaya & Sejarah', 'text' => 'Kenali lebih dekat warisan budaya, sejarah, dan kuliner otentik Sukabumi.'],
+            'links'    => $mapPlacesToLinks($budayaPlaces, 'Jelajah Budaya', '/kategori/wisata-budaya'),
         ],
-    ],
-    [
-        'label'    => 'Tempat Menginap',
-        'href'     => '/kategori/hotel-resort',
-        'activeCategories' => ['hotel-resort'],
-        'dropdown' => false,
-    ],
-    [
-        'label'    => 'Event & Festival',
-        'href'     => '/event',
-        'activeOn' => 'event*',
-        'dropdown' => false,
-    ],
-    [
-        'label'    => 'Panduan Wisata',
-        'href'     => '/information',
-        'activeOn' => 'information*',
-        'dropdown' => false,
-    ],
-];
+        [
+            'label'    => 'Tempat Menginap',
+            'href'     => '/kategori/hotel-resort',
+            'activeCategories' => ['hotel-resort'],
+            'dropdown' => false,
+        ],
+        [
+            'label'    => 'Event & Festival',
+            'href'     => '/event',
+            'activeOn' => 'event*',
+            'dropdown' => false,
+        ],
+        [
+            'label'    => 'Panduan Wisata',
+            'href'     => '/information',
+            'activeOn' => 'information*',
+            'dropdown' => false,
+        ],
+    ];
+});
 @endphp
 
 {{-- ════════════════════════════════════════════
