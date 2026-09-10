@@ -645,9 +645,17 @@
                     </div>
 
                     {{-- Banner Iklan --}}
-                    <div class="mt-6 rounded-2xl overflow-hidden border border-gray-200 shadow-sm cursor-pointer hover:shadow-md transition">
-                        <img src="{{ asset('images/ads/banner-1.jpg') }}" alt="Advertisement" class="w-full h-auto object-cover">
+                    @php
+                        $ad = \App\Models\Advertisement::where('is_active', true)->inRandomOrder()->first();
+                    @endphp
+                    
+                    @if($ad)
+                    <div class="mt-6 rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition">
+                        <a href="{{ $ad->url ?? '#' }}" target="{{ $ad->url ? '_blank' : '_self' }}" class="block w-full h-full">
+                            <img src="{{ Storage::url($ad->image_path) }}" alt="{{ $ad->title }}" class="w-full h-auto object-cover">
+                        </a>
                     </div>
+                    @endif
 
                 </div>
             </div>
