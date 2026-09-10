@@ -70,15 +70,8 @@
         </div>
 
         {{-- SECTION 2: DESTINASI TERPOPULER --}}
-        @php
-            $ad = \App\Models\Advertisement::where('is_active', true)->inRandomOrder()->first();
-        @endphp
         <div class="bg-white py-10 md:py-14 border-b border-gray-100">
             <div class="max-w-7xl mx-auto px-4 md:px-6">
-                <div class="flex flex-col lg:flex-row gap-8">
-                    
-                    {{-- Left: Destinasi Terpopuler --}}
-                    <div class="flex-1 min-w-0">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5 md:mb-7">
                     <div>
                         <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-1">Destinasi Terpopuler</h2>
@@ -100,7 +93,7 @@
                 };
                 @endphp
 
-                <div id="content-alam" class="vs-tab-content grid grid-cols-2 md:grid-cols-3 {{ $ad ? 'lg:grid-cols-5' : 'lg:grid-cols-6' }} gap-4">
+                <div id="content-alam" class="vs-tab-content grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @forelse($popularAlam as $place)
                     <a href="{{ route('place.show', $place->slug) }}" class="group block">
                         <div class="overflow-hidden rounded-xl mb-2 aspect-[3/4] relative bg-gray-100">
@@ -122,7 +115,7 @@
                     @endforelse
                 </div>
 
-                <div id="content-pantai" class="vs-tab-content hidden grid grid-cols-2 md:grid-cols-3 {{ $ad ? 'lg:grid-cols-5' : 'lg:grid-cols-6' }} gap-4">
+                <div id="content-pantai" class="vs-tab-content hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @forelse($popularPantai as $place)
                     <a href="{{ route('place.show', $place->slug) }}" class="group block">
                         <div class="overflow-hidden rounded-xl mb-2 aspect-[3/4] relative bg-gray-100">
@@ -144,7 +137,7 @@
                     @endforelse
                 </div>
 
-                <div id="content-kuliner" class="vs-tab-content hidden grid grid-cols-2 md:grid-cols-3 {{ $ad ? 'lg:grid-cols-5' : 'lg:grid-cols-6' }} gap-4">
+                <div id="content-kuliner" class="vs-tab-content hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     @forelse($popularKuliner as $place)
                     <a href="{{ route('place.show', $place->slug) }}" class="group block">
                         <div class="overflow-hidden rounded-xl mb-2 aspect-[3/4] relative bg-gray-100">
@@ -165,22 +158,6 @@
                     <p class="text-gray-400 text-sm col-span-full">Belum ada data.</p>
                     @endforelse
                 </div>
-                </div>
-
-                    </div> <!-- End of Left Content (flex-1) -->
-
-                    {{-- Right: Ad Banner --}}
-                    @if($ad)
-                    <div class="w-full lg:w-1/4 xl:w-[300px] flex-shrink-0">
-                        <div class="sticky top-24 rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition">
-                            <a href="{{ $ad->url ?? '#' }}" target="{{ $ad->url ? '_blank' : '_self' }}" class="block w-full">
-                                <img src="{{ Storage::url($ad->image_path) }}" alt="{{ $ad->title }}" class="w-full h-auto object-cover">
-                            </a>
-                        </div>
-                    </div>
-                    @endif
-
-                </div> <!-- End of Flex Row -->
             </div>
         </div>
 
