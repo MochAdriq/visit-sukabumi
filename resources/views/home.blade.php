@@ -90,7 +90,7 @@
                 };
                 @endphp
 
-                <div id="content-alam" class="vs-tab-content grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div id="content-alam" class="vs-tab-content grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                     @forelse($popularAlam as $place)
                     <a href="{{ route('place.show', $place->slug) }}" class="group block">
                         <div class="overflow-hidden rounded-xl mb-2 aspect-[3/4] relative bg-gray-100">
@@ -112,7 +112,7 @@
                     @endforelse
                 </div>
 
-                <div id="content-pantai" class="vs-tab-content hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div id="content-pantai" class="vs-tab-content hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                     @forelse($popularPantai as $place)
                     <a href="{{ route('place.show', $place->slug) }}" class="group block">
                         <div class="overflow-hidden rounded-xl mb-2 aspect-[3/4] relative bg-gray-100">
@@ -134,7 +134,7 @@
                     @endforelse
                 </div>
 
-                <div id="content-kuliner" class="vs-tab-content hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div id="content-kuliner" class="vs-tab-content hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                     @forelse($popularKuliner as $place)
                     <a href="{{ route('place.show', $place->slug) }}" class="group block">
                         <div class="overflow-hidden rounded-xl mb-2 aspect-[3/4] relative bg-gray-100">
