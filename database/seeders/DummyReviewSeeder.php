@@ -275,14 +275,15 @@ class DummyReviewSeeder extends Seeder
                 $createdAt = Carbon::now()->subDays(rand(1, 150))->subHours(rand(1, 23))->subMinutes(rand(1, 59));
 
                 Review::create([
-                    'user_id'    => $user->id,
-                    'place_id'   => $place->id,
-                    'event_id'   => null,
-                    'rating'     => $rating,
-                    'content'    => $content,
-                    'visit_type' => $visitType,
-                    'created_at' => $createdAt,
-                    'updated_at' => $createdAt,
+                    'user_id'     => $user->id,
+                    'place_id'    => $place->id,
+                    'event_id'    => null,
+                    'rating'      => $rating,
+                    'content'     => $content,
+                    'visit_type'  => $visitType,
+                    'likes_count' => rand(2, 16),
+                    'created_at'  => $createdAt,
+                    'updated_at'  => $createdAt,
                 ]);
 
                 $totalAdded++;
@@ -305,14 +306,15 @@ class DummyReviewSeeder extends Seeder
                 $createdAt = Carbon::now()->subDays(rand(1, 120))->subHours(rand(1, 23))->subMinutes(rand(1, 59));
 
                 Review::create([
-                    'user_id'    => $user->id,
-                    'place_id'   => null,
-                    'event_id'   => $event->id,
-                    'rating'     => $rating,
-                    'content'    => $content,
-                    'visit_type' => $visitType,
-                    'created_at' => $createdAt,
-                    'updated_at' => $createdAt,
+                    'user_id'     => $user->id,
+                    'place_id'    => null,
+                    'event_id'    => $event->id,
+                    'rating'      => $rating,
+                    'content'     => $content,
+                    'visit_type'  => $visitType,
+                    'likes_count' => rand(2, 14),
+                    'created_at'  => $createdAt,
+                    'updated_at'  => $createdAt,
                 ]);
 
                 $totalAdded++;

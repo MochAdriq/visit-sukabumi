@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Review extends Model
 {
-    protected $fillable = ['user_id', 'place_id', 'event_id', 'rating', 'content', 'visit_type', 'image_path'];
+    protected $fillable = ['user_id', 'place_id', 'event_id', 'rating', 'content', 'visit_type', 'image_path', 'likes_count'];
 
     public function user(): BelongsTo
     {
@@ -22,5 +22,20 @@ class Review extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(ReviewLike::class);
+    }
+
+    public function isLikedBy($user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+
+        $userId = is_numeric($user) ? $user : $user->id;
+        return $this->likes()->where('user_id', $userId)->exists();
     }
 }

@@ -79,4 +79,33 @@ class ReviewController extends Controller
 
         return back()->with('success', 'Terima kasih! Ulasan Anda berhasil ditambahkan.');
     }
+
+    public function toggleLike(Review $review)
+    {
+        $userId = Auth::id();
+        $existing = \App\Models\ReviewLike::where('user_id', $userId)
+            ->where('review_id', $review->id)
+            ->first();
+
+        if ($existing) {
+            $existing->delete();
+            $review->decrement('likes_count');
+            $liked = false;
+        } else {
+            \App\Models\ReviewLike::create([
+                'user_id' => $userId,
+                'review_id' => $review->id,
+            ]);
+            $review->increment('likes_count');
+            $liked = true;
+        }
+
+        $freshCount = max(0, (int) $review->fresh()->likes_count);
+
+        return response()->json([
+            'success' => true,
+            'liked' => $liked,
+            'likes_count' => $freshCount,
+        ]);
+    }
 }
