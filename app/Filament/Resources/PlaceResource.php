@@ -445,8 +445,9 @@ class PlaceResource extends Resource
                             Forms\Components\Select::make('tags')
                                 ->label('Pilih Tag')
                                 ->multiple()
-                                ->relationship('tags', 'name')
-                                ->preload()
+                                ->options(fn () => Tag::all()->mapWithKeys(fn ($tag) => [
+                                    $tag->id => '[' . ($tag->type === 'activity' ? 'Aktivitas' : 'Wisata') . '] ' . $tag->name,
+                                ]))
                                 ->searchable()
                                 ->required()
                                 ->helperText('Pilih satu atau lebih tag yang akan diterapkan.'),
@@ -460,11 +461,16 @@ class PlaceResource extends Resource
                                 ->required(),
                         ])
                         ->action(function (Collection $records, array $data): void {
+                            $tagIds = $data['tags'] ?? [];
+                            if (empty($tagIds)) {
+                                return;
+                            }
+
                             foreach ($records as $record) {
-                                if ($data['mode'] === 'sync') {
-                                    $record->tags()->sync($data['tags']);
+                                if (($data['mode'] ?? 'attach') === 'sync') {
+                                    $record->tags()->sync($tagIds);
                                 } else {
-                                    $record->tags()->syncWithoutDetaching($data['tags']);
+                                    $record->tags()->syncWithoutDetaching($tagIds);
                                 }
                             }
 
