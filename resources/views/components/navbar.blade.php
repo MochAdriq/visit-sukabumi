@@ -7,8 +7,7 @@ if (isset($place) && $place->category) {
     $currentCatSlug = $currentCategory->slug;
 }
 
-$navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
-    return [
+$navItems = [
         [
             'label'    => 'Apa yang Bisa Dilakukan',
             'href'     => '/aktivitas',
@@ -55,17 +54,16 @@ $navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
         [
             'label'    => 'Seputar Sukabumi',
             'href'     => '#',
-            'activeOn' => 'information*',
+            'activeOn' => ['information*', 'panduan-wisata*'],
             'dropdown' => true,
             'intro'    => ['title' => 'Seputar Sukabumi', 'text' => 'Panduan lengkap, informasi sejarah, serta ulasan artikel blog.'],
             'links'    => [
                 ['label' => 'Tentang Sukabumi', 'href' => '/information', 'highlight' => false],
-                ['label' => 'Panduan Wisata', 'href' => '#', 'highlight' => false],
+                ['label' => 'Panduan Wisata', 'href' => '/panduan-wisata', 'highlight' => false],
                 ['label' => 'Blog / Artikel', 'href' => '/blog', 'highlight' => false],
             ],
         ],
     ];
-});
 @endphp
 
 {{-- ════════════════════════════════════════════

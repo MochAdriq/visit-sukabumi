@@ -41,6 +41,24 @@ Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.sho
 
 // Static & Legal Pages
 Route::view('/information', 'information.index')->name('information.index');
+Route::get('/panduan-wisata', function () {
+    $guidePosts = \App\Models\BlogPost::published()
+        ->where(function ($q) {
+            $q->where('category', 'like', '%panduan%')
+              ->orWhere('category', 'like', '%tips%')
+              ->orWhere('title', 'like', '%panduan%')
+              ->orWhere('title', 'like', '%tips%');
+        })
+        ->latest('published_at')
+        ->take(3)
+        ->get();
+
+    if ($guidePosts->isEmpty()) {
+        $guidePosts = \App\Models\BlogPost::published()->latest('published_at')->take(3)->get();
+    }
+
+    return view('guide.index', compact('guidePosts'));
+})->name('guide.index');
 Route::get('/pusat-informasi/{tab?}', [\App\Http\Controllers\LegalController::class, 'show'])->name('legal.show');
 Route::get('/tentang-kami', fn() => redirect()->route('legal.show', 'tentang-kami'));
 Route::get('/kebijakan-privasi', fn() => redirect()->route('legal.show', 'kebijakan-privasi'));

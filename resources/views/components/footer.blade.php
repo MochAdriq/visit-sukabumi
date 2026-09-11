@@ -102,13 +102,13 @@
             <ul class="space-y-2.5">
                 @php
                     $panduanLinks = [
-                        ['title' => 'Cara ke Sukabumi', 'url' => route('blog.index', ['search' => 'rute'])],
-                        ['title' => 'Transportasi lokal', 'url' => route('blog.index', ['search' => 'transportasi'])],
-                        ['title' => 'Peta wisata Sukabumi', 'url' => route('place.index')],
-                        ['title' => 'Tips keselamatan', 'url' => route('blog.index', ['search' => 'tips'])],
+                        ['title' => 'Panduan lengkap wisata', 'url' => route('guide.index')],
+                        ['title' => 'Cara ke Sukabumi (Rute)', 'url' => route('guide.index') . '#rute-transportasi'],
+                        ['title' => 'Rekomendasi Itinerary', 'url' => route('guide.index') . '#itinerary-rekomendasi'],
+                        ['title' => 'Tips keselamatan pantai', 'url' => route('guide.index') . '#keselamatan-pantai'],
                         ['title' => 'Hotel & penginapan', 'url' => route('penginapan.index')],
                         ['title' => 'Paket wisata', 'url' => route('place.index', ['search' => 'paket'])],
-                        ['title' => 'Kontak darurat', 'url' => route('legal.show', 'hubungi-kami')],
+                        ['title' => 'Kontak darurat', 'url' => route('guide.index') . '#kontak-darurat'],
                         ['title' => 'Tentang Sukabumi', 'url' => route('information.index')],
                     ];
                 @endphp
