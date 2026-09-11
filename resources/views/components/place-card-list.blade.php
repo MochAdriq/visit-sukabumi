@@ -116,9 +116,19 @@
         {{-- Action Button --}}
         <div class="mt-4 flex items-end justify-between border-t border-gray-100 pt-3">
             <div>
-                @if($place->price && $place->price > 0)
-                    <div class="text-[11px] font-bold text-gray-400 uppercase tracking-wide">Mulai dari</div>
-                    <div class="font-extrabold text-[#1a6bbf] text-lg">Rp {{ number_format($place->price, 0, ',', '.') }}</div>
+                @if($place->has_general_price && $place->formatted_price)
+                    @if($place->price > 0)
+                        <div class="text-[11px] font-bold text-gray-400 uppercase tracking-wide">{{ $place->is_price_range ? 'Rentang Harga' : 'Mulai dari' }}</div>
+                        <div class="font-extrabold text-[#1a6bbf] text-base md:text-lg leading-tight">{{ $place->formatted_price }}</div>
+                    @else
+                        <div class="font-bold text-[#00aa6c] text-sm flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Gratis Masuk
+                        </div>
+                    @endif
+                @elseif($place->has_ticket && $place->ticket_price)
+                    <div class="text-[11px] font-bold text-gray-400 uppercase tracking-wide">Tiket Online</div>
+                    <div class="font-extrabold text-[#1a6bbf] text-base md:text-lg leading-tight">Rp {{ number_format($place->ticket_price, 0, ',', '.') }}</div>
                 @else
                     <div class="font-bold text-[#00aa6c] text-sm flex items-center gap-1">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>

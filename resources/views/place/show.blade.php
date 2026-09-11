@@ -588,11 +588,11 @@
                         @if($hasPriceOrTicket)
                         <div class="flex justify-between items-center mb-5">
                             <div>
-                                <div class="text-2xl font-extrabold text-gray-900">
+                                <div class="text-xl md:text-2xl font-extrabold text-gray-900 leading-tight">
                                     @if($place->has_ticket && $place->ticket_price !== null)
                                         Rp {{ number_format($place->ticket_price, 0, ',', '.') }}
-                                    @elseif($place->has_general_price && $place->price !== null)
-                                        Rp {{ number_format($place->price, 0, ',', '.') }}
+                                    @elseif($place->has_general_price && $place->formatted_price)
+                                        {{ $place->formatted_price }}
                                     @else
                                         Gratis
                                     @endif
@@ -709,11 +709,11 @@
         <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 z-50 lg:hidden flex justify-between items-center shadow-[0_-4px_12px_rgba(0,0,0,0.06)]">
             <div>
                 <p class="text-xs text-gray-400">Harga per orang</p>
-                <p class="text-lg font-extrabold text-gray-900">
+                <p class="text-base sm:text-lg font-extrabold text-gray-900 leading-tight">
                     @if($place->has_ticket && $place->ticket_price)
                         Rp {{ number_format($place->ticket_price, 0, ',', '.') }}
-                    @elseif($place->price)
-                        Rp {{ number_format($place->price, 0, ',', '.') }}
+                    @elseif($place->has_general_price && $place->formatted_price)
+                        {{ $place->formatted_price }}
                     @else
                         Gratis
                     @endif

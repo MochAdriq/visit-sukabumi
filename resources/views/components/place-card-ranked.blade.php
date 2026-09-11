@@ -75,9 +75,16 @@
 
             {{-- Price --}}
             <div class="mt-auto">
-                @if($place->price)
-                    <div class="text-xs text-gray-500">Mulai dari</div>
-                    <div class="font-extrabold text-gray-900 text-sm">Rp {{ number_format($place->price, 0, ',', '.') }}</div>
+                @if($place->has_general_price && $place->formatted_price)
+                    @if($place->price > 0)
+                        <div class="text-xs text-gray-500">{{ $place->is_price_range ? 'Rentang Harga' : 'Mulai dari' }}</div>
+                        <div class="font-extrabold text-gray-900 text-sm leading-tight">{{ $place->formatted_price }}</div>
+                    @else
+                        <div class="font-bold text-green-600 text-sm mt-3">Akses Gratis</div>
+                    @endif
+                @elseif($place->has_ticket && $place->ticket_price)
+                    <div class="text-xs text-gray-500">Tiket Online</div>
+                    <div class="font-extrabold text-gray-900 text-sm leading-tight">Rp {{ number_format($place->ticket_price, 0, ',', '.') }}</div>
                 @else
                     <div class="font-bold text-green-600 text-sm mt-3">Akses Gratis</div>
                 @endif

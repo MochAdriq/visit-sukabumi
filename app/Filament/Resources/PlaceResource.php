@@ -122,9 +122,21 @@ class PlaceResource extends Resource
                     Forms\Components\TextInput::make('price')
                         ->numeric()
                         ->prefix('Rp')
-                        ->label('Harga Tiket Umum')
+                        ->label(fn(Forms\Get $get): string => $get('is_price_range') ? 'Harga Minimum (Mulai Dari)' : 'Harga Tiket Umum')
                         ->placeholder('0 = Gratis')
                         ->visible(fn(Forms\Get $get): bool => (bool) $get('has_general_price')),
+                    Forms\Components\Toggle::make('is_price_range')
+                        ->label('Gunakan Rentang Harga (Range)')
+                        ->helperText('Aktifkan jika harga bervariasi (contoh: Rp 20.000 - Rp 50.000)')
+                        ->live()
+                        ->visible(fn(Forms\Get $get): bool => (bool) $get('has_general_price')),
+                    Forms\Components\TextInput::make('max_price')
+                        ->numeric()
+                        ->prefix('Rp')
+                        ->label('Harga Maksimum (Sampai Dengan)')
+                        ->placeholder('Contoh: 50000')
+                        ->helperText('Batas atas harga tiket destinasi')
+                        ->visible(fn(Forms\Get $get): bool => (bool) $get('has_general_price') && (bool) $get('is_price_range')),
                     Forms\Components\TextInput::make('phone')
                         ->tel()
                         ->maxLength(20)

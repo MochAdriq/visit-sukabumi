@@ -15,7 +15,7 @@ class Place extends Model
         'category_id', 'name', 'slug', 'description',
         'address', 'district', 'latitude', 'longitude', 'status',
         'is_featured', 'badge_label',
-        'price', 'phone', 'website', 'youtube_url', 'video_title', 'open_hours', 'duration', 'ticket_info',
+        'price', 'max_price', 'is_price_range', 'phone', 'website', 'youtube_url', 'video_title', 'open_hours', 'duration', 'ticket_info',
         'facilities', 'nearby_places',
 
         // Master Toggles
@@ -43,6 +43,7 @@ class Place extends Model
         'hotel_facilities' => 'array',
         'tour_packages'    => 'array',
         'is_featured'               => 'boolean',
+        'is_price_range'            => 'boolean',
         'has_ticket'                => 'boolean',
         'has_accommodation'         => 'boolean',
         'has_restaurant'            => 'boolean',
@@ -136,6 +137,29 @@ class Place extends Model
         }
 
         return null;
+    }
+
+    /**
+     * Get human-readable formatted price (Single, Range, or Gratis).
+     */
+    public function getFormattedPriceAttribute(): ?string
+    {
+        if (!$this->has_general_price || $this->price === null) {
+            return null;
+        }
+
+        if ($this->price == 0 && (!$this->is_price_range || empty($this->max_price))) {
+            return 'Gratis';
+        }
+
+        $minFormatted = 'Rp ' . number_format($this->price, 0, ',', '.');
+
+        if ($this->is_price_range && !empty($this->max_price) && $this->max_price > $this->price) {
+            $maxFormatted = 'Rp ' . number_format($this->max_price, 0, ',', '.');
+            return "{$minFormatted} - {$maxFormatted}";
+        }
+
+        return $minFormatted;
     }
 
     /**

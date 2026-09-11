@@ -84,8 +84,14 @@
         
         <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
             <div>
-                @if($place->price && $place->price > 0)
-                    <div class="font-extrabold text-[#1a6bbf] text-sm">Rp {{ number_format($place->price, 0, ',', '.') }}</div>
+                @if($place->has_general_price && $place->formatted_price)
+                    @if($place->price > 0)
+                        <div class="font-extrabold text-[#1a6bbf] text-sm leading-tight">{{ $place->formatted_price }}</div>
+                    @else
+                        <div class="font-bold text-[#00aa6c] text-sm">Gratis</div>
+                    @endif
+                @elseif($place->has_ticket && $place->ticket_price)
+                    <div class="font-extrabold text-[#1a6bbf] text-sm leading-tight">Rp {{ number_format($place->ticket_price, 0, ',', '.') }}</div>
                 @else
                     <div class="font-bold text-[#00aa6c] text-sm">Gratis</div>
                 @endif
