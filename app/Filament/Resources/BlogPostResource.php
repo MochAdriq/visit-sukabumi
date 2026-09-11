@@ -42,6 +42,8 @@ class BlogPostResource extends Resource
                         Forms\Components\RichEditor::make('content')
                             ->required()
                             ->label('Isi Artikel')
+                            ->fileAttachmentsDisk('public')
+                            ->fileAttachmentsVisibility('public')
                             ->fileAttachmentsDirectory('blog_attachments')
                             ->columnSpanFull(),
                     ]),

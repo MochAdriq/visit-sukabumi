@@ -326,3 +326,130 @@
 /* =========================================================
  * MEGAMENU LINKS — konsisten dengan hover biru muda
  * ========================================================= */
+
+/* =========================================================
+ * ARTICLE BODY TYPOGRAPHY — Rata Kiri-Kanan & Spasi Lega
+ * ========================================================= */
+.article-body {
+  color: #374151;
+  font-size: 1.0625rem;
+  line-height: 1.85;
+}
+
+.article-body p {
+  margin-bottom: 1.5rem;
+  line-height: 1.85;
+  text-align: justify;
+  text-align-last: left;
+  color: #374151;
+}
+
+.article-body p:last-child {
+  margin-bottom: 0;
+}
+
+.article-body h1,
+.article-body h2,
+.article-body h3,
+.article-body h4 {
+  color: #111827;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.article-body h2 {
+  font-size: 1.65rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.article-body h3 {
+  font-size: 1.35rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.article-body h4 {
+  font-size: 1.15rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.article-body ul {
+  list-style-type: disc;
+  padding-left: 1.75rem;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.article-body ol {
+  list-style-type: decimal;
+  padding-left: 1.75rem;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.article-body li {
+  margin-bottom: 0.5rem;
+  line-height: 1.75;
+  color: #374151;
+}
+
+.article-body blockquote {
+  border-left: 4px solid #00aa6c;
+  background-color: #f8fafc;
+  padding: 1.25rem 1.5rem;
+  border-radius: 0 1rem 1rem 0;
+  font-style: italic;
+  color: #4b5563;
+  margin: 2rem 0;
+}
+
+.article-body figure,
+.article-body figure.attachment {
+  margin: 2.25rem 0;
+  display: block;
+  text-align: center;
+}
+
+.article-body img,
+.article-body figure img {
+  border-radius: 1.25rem;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5rem auto;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+}
+
+.article-body figcaption,
+.article-body .attachment__caption {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+  text-align: center;
+  font-style: italic;
+}
+
+.article-body strong,
+.article-body b {
+  font-weight: 700;
+  color: #111827;
+}
+
+.article-body a {
+  color: #1a6bbf;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+
+.article-body a:hover {
+  color: #145299;
+}
+
+.article-body hr {
+  border: 0;
+  border-top: 1px solid #e5e7eb;
+  margin: 2.5rem 0;
+}

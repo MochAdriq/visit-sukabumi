@@ -39,6 +39,22 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
             ])
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::HEAD_END,
+                fn () => new \Illuminate\Support\HtmlString('
+                    <style>
+                        trix-editor {
+                            text-align: justify !important;
+                            text-align-last: left !important;
+                            line-height: 1.85 !important;
+                            font-size: 1.05rem !important;
+                        }
+                        trix-editor p {
+                            margin-bottom: 1.25rem !important;
+                        }
+                    </style>
+                ')
+            )
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

@@ -57,7 +57,7 @@
         @endif
 
         {{-- Main Content --}}
-        <article class="prose prose-lg md:prose-xl max-w-none prose-img:rounded-2xl prose-img:shadow-md prose-headings:font-extrabold prose-a:text-[#1a6bbf] hover:prose-a:text-[#135a9e] prose-p:text-gray-700 leading-relaxed bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 mb-16">
+        <article class="article-body bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 mb-16">
             {!! $post->content !!}
         </article>
 
