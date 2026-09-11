@@ -20,7 +20,10 @@ Route::get('/event', [EventController::class, 'index'])->name('event.index');
 Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show');
 
 // Tag-based listing routes
+Route::get('/aktivitas', [TagController::class, 'indexActivity'])->name('tag.index.activity');
 Route::get('/aktivitas/{tag:slug}', [TagController::class, 'show'])->name('tag.show.activity');
+
+Route::get('/wisata', [TagController::class, 'indexWisata'])->name('tag.index.wisata');
 Route::get('/wisata/{tag:slug}', [TagController::class, 'show'])->name('tag.show.wisata');
 
 // Tempat Menginap (filter has_accommodation dari place index)
