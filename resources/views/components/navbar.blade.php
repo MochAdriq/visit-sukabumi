@@ -106,7 +106,7 @@ $navItems = [
 
         {{-- Center: Brand --}}
         <a href="/" class="flex justify-center group px-4 flex-shrink-0">
-            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="max-h-[80px] md:max-h-[100px] w-auto object-contain group-hover:opacity-90 transition-opacity drop-shadow-sm" />
+            <img src="{{ asset('images/logo-v2.png') }}" alt="Visit Sukabumi" class="max-h-[80px] md:max-h-[100px] w-auto object-contain group-hover:opacity-90 transition-opacity drop-shadow-sm" />
         </a>
 
         {{-- Right: Search & Auth --}}
@@ -208,7 +208,7 @@ $navItems = [
 
         {{-- Center: Logo --}}
         <a href="/" class="absolute inset-y-0 left-0 right-0 mx-auto w-fit flex items-center justify-center">
-            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-[100px] max-w-[260px] object-contain drop-shadow-sm" />
+            <img src="{{ asset('images/logo-v2.png') }}" alt="Visit Sukabumi" class="h-[100px] max-w-[260px] object-contain drop-shadow-sm" />
         </a>
 
         {{-- Right: Search icon only --}}
@@ -245,7 +245,7 @@ $navItems = [
         
 {{-- Drawer Header --}}
         <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-            <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-14 object-contain" />
+            <img src="{{ asset('images/logo-v2.png') }}" alt="Visit Sukabumi" class="h-14 object-contain" />
         <button onclick="closeMobileMenu()" class="text-gray-500 hover:text-gray-900 p-1">
             <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>

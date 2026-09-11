@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6 border-b border-gray-200">
         <div>
             <a href="{{ url('/') }}" class="inline-block">
-                <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-16 md:h-20 object-contain drop-shadow-sm mb-1" />
+                <img src="{{ asset('images/logo-v2.png') }}" alt="Visit Sukabumi" class="h-16 md:h-20 object-contain drop-shadow-sm mb-1" />
             </a>
             <div class="text-[11px] text-gray-500 font-semibold tracking-widest uppercase mt-0.5 px-2">Panduan Wisata Resmi</div>
         </div>
@@ -124,7 +124,7 @@
         <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div class="flex items-center gap-4">
                 <a href="{{ url('/') }}" class="bg-white px-3 py-1.5 rounded-xl shadow-sm block">
-                    <img src="{{ asset('images/logo.png') }}" alt="Visit Sukabumi" class="h-8 md:h-10 object-contain" />
+                    <img src="{{ asset('images/logo-v2.png') }}" alt="Visit Sukabumi" class="h-8 md:h-10 object-contain" />
                 </a>
                 <span class="block text-blue-100 text-[11px] md:text-[12px] font-medium leading-snug">
                     Didukung oleh Dinas Pariwisata<br class="hidden md:block"/> Kabupaten Sukabumi
