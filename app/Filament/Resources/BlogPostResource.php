@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 class BlogPostResource extends Resource
@@ -81,12 +82,18 @@ class BlogPostResource extends Resource
                             ->default('Panduan Wisata')
                             ->label('Kategori'),
                         Forms\Components\Select::make('author_id')
-                            ->relationship('author', 'name')
+                            ->relationship(
+                                name: 'author',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: fn (Builder $query, ?BlogPost $record) => 
+                                    $query->where('role', 'admin')
+                                          ->when($record?->author_id, fn ($q, $authorId) => $q->orWhere('id', $authorId))
+                            )
                             ->default(fn () => auth()->id())
                             ->searchable()
                             ->preload()
-                            ->label('Akun Penulis (Default)')
-                            ->helperText('Otomatis akun yang sedang login.'),
+                            ->label('Akun Penulis (Admin)')
+                            ->helperText('Hanya akun dengan peran Admin yang dapat dipilih sebagai penulis resmi.'),
                         Forms\Components\TextInput::make('author_name')
                             ->label('Nama Penulis Kustom (Opsional)')
                             ->placeholder('Contoh: Tim Redaksi Visit Sukabumi')
