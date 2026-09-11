@@ -108,7 +108,31 @@
 
         {{-- Connected Destinations Section --}}
         @if($post->places && $post->places->count() > 0)
-            <section class="mb-16 pt-8 border-t border-gray-200" x-data>
+            <section class="mb-16 pt-8 border-t border-gray-200" 
+                x-data="{
+                    canScrollLeft: false,
+                    canScrollRight: true,
+                    checkScroll() {
+                        const el = this.$refs.placeSlider;
+                        if (!el) return;
+                        this.canScrollLeft = el.scrollLeft > 10;
+                        this.canScrollRight = el.scrollLeft < (el.scrollWidth - el.clientWidth - 10);
+                    },
+                    scrollLeft() {
+                        const el = this.$refs.placeSlider;
+                        const card = el.querySelector('.place-slider-item');
+                        const step = card ? card.offsetWidth + 20 : 280;
+                        el.scrollBy({ left: -step, behavior: 'smooth' });
+                    },
+                    scrollRight() {
+                        const el = this.$refs.placeSlider;
+                        const card = el.querySelector('.place-slider-item');
+                        const step = card ? card.offsetWidth + 20 : 280;
+                        el.scrollBy({ left: step, behavior: 'smooth' });
+                    }
+                }"
+                x-init="$nextTick(() => checkScroll())">
+                
                 <div class="flex items-center justify-between mb-6">
                     <div>
                         <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">Daftar Destinasi</h2>
@@ -118,24 +142,28 @@
                     </div>
 
                     @if($post->places->count() > 3)
-                        {{-- Navigation Arrows (Pure SVG) --}}
-                        <div class="hidden sm:flex items-center gap-2">
+                        {{-- Navigation Arrows in Header (Pure SVG) --}}
+                        <div class="flex items-center gap-2">
                             <button 
-                                @click="$refs.placeSlider.scrollBy({ left: -$refs.placeSlider.offsetWidth, behavior: 'smooth' })"
+                                @click="scrollLeft()"
+                                :disabled="!canScrollLeft"
+                                :class="{ 'opacity-40 cursor-not-allowed': !canScrollLeft, 'hover:bg-[#1a6bbf] hover:text-white hover:border-[#1a6bbf] cursor-pointer': canScrollLeft }"
                                 type="button" 
                                 aria-label="Geser ke kiri"
                                 title="Geser ke kiri"
-                                class="w-10 h-10 rounded-full border border-gray-200 bg-white shadow-xs flex items-center justify-center text-gray-700 hover:bg-[#1a6bbf] hover:text-white hover:border-[#1a6bbf] transition-all cursor-pointer group active:scale-95">
+                                class="w-10 h-10 rounded-full border border-gray-200 bg-white shadow-xs flex items-center justify-center text-gray-700 transition-all group active:scale-95">
                                 <svg class="w-5 h-5 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
                                 </svg>
                             </button>
                             <button 
-                                @click="$refs.placeSlider.scrollBy({ left: $refs.placeSlider.offsetWidth, behavior: 'smooth' })"
+                                @click="scrollRight()"
+                                :disabled="!canScrollRight"
+                                :class="{ 'opacity-40 cursor-not-allowed': !canScrollRight, 'hover:bg-[#1a6bbf] hover:text-white hover:border-[#1a6bbf] cursor-pointer': canScrollRight }"
                                 type="button" 
                                 aria-label="Geser ke kanan"
                                 title="Geser ke kanan"
-                                class="w-10 h-10 rounded-full border border-gray-200 bg-white shadow-xs flex items-center justify-center text-gray-700 hover:bg-[#1a6bbf] hover:text-white hover:border-[#1a6bbf] transition-all cursor-pointer group active:scale-95">
+                                class="w-10 h-10 rounded-full border border-gray-200 bg-white shadow-xs flex items-center justify-center text-gray-700 transition-all group active:scale-95">
                                 <svg class="w-5 h-5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
                                 </svg>
@@ -144,14 +172,56 @@
                     @endif
                 </div>
 
-                <div 
-                    x-ref="placeSlider"
-                    class="flex gap-6 overflow-x-auto scroll-smooth pb-4 pt-1 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                    @foreach($post->places as $place)
-                        <div class="w-[280px] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] flex-shrink-0 snap-start flex flex-col h-full">
-                            <x-place-card-grid :place="$place" />
-                        </div>
-                    @endforeach
+                {{-- Relative Slider Container with Floating Overlay Arrows --}}
+                <div class="relative group/slider">
+                    @if($post->places->count() > 3)
+                        {{-- Floating Left Arrow on Card Edge --}}
+                        <button 
+                            @click="scrollLeft()"
+                            x-show="canScrollLeft"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 -translate-x-2"
+                            x-transition:enter-end="opacity-100 translate-x-0"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100 translate-x-0"
+                            x-transition:leave-end="opacity-0 -translate-x-2"
+                            type="button"
+                            aria-label="Geser ke kiri"
+                            class="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/95 backdrop-blur-sm shadow-xl border border-gray-200 text-gray-700 hover:bg-[#1a6bbf] hover:text-white hover:border-[#1a6bbf] items-center justify-center transition-all cursor-pointer hover:scale-110 active:scale-95">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                        </button>
+
+                        {{-- Floating Right Arrow on Card Edge --}}
+                        <button 
+                            @click="scrollRight()"
+                            x-show="canScrollRight"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 translate-x-2"
+                            x-transition:enter-end="opacity-100 translate-x-0"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100 translate-x-0"
+                            x-transition:leave-end="opacity-0 translate-x-2"
+                            type="button"
+                            aria-label="Geser ke kanan"
+                            class="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/95 backdrop-blur-sm shadow-xl border border-gray-200 text-gray-700 hover:bg-[#1a6bbf] hover:text-white hover:border-[#1a6bbf] items-center justify-center transition-all cursor-pointer hover:scale-110 active:scale-95">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    @endif
+
+                    <div 
+                        x-ref="placeSlider"
+                        @scroll.debounce.50ms="checkScroll()"
+                        class="flex gap-5 overflow-x-auto scroll-smooth pb-4 pt-1 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        @foreach($post->places as $place)
+                            <div class="place-slider-item w-[85%] sm:w-[calc((100%-20px)/2)] md:w-[calc((100%-40px)/3)] flex-shrink-0 snap-start flex flex-col h-full">
+                                <x-place-card-grid :place="$place" />
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </section>
         @endif
