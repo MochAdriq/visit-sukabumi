@@ -54,7 +54,7 @@
             </div>
             <div class="relative">
                 <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
-                    <img src="https://images.unsplash.com/photo-1598583483984-7546e8c87132?q=80&w=1200&auto=format&fit=crop" alt="Perkebunan Teh Sukabumi" class="w-full h-full object-cover">
+                    <img src="{{ asset('assets/images/12.jpg') }}" alt="Perkebunan Teh Sukabumi" class="w-full h-full object-cover">
                 </div>
                 {{-- Floating Badge --}}
                 <div class="absolute -bottom-8 -left-8 bg-white p-6 rounded-2xl shadow-xl max-w-xs hidden md:block">
