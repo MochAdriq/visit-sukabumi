@@ -7,9 +7,11 @@ use App\Models\Place;
 use App\Models\Tag;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 
 class PlaceResource extends Resource
 {
@@ -68,6 +70,14 @@ class PlaceResource extends Resource
                         ->maxLength(100)
                         ->label('Kecamatan')
                         ->placeholder('Contoh: Pelabuhan Ratu'),
+                    Forms\Components\Select::make('tags')
+                        ->relationship('tags', 'name')
+                        ->multiple()
+                        ->preload()
+                        ->searchable()
+                        ->columnSpanFull()
+                        ->label('Tags Destinasi')
+                        ->helperText('Pilih tag yang sesuai (misal: Wisata Pantai, Wisata Alam, Santai & Healing, dll)'),
                 ]),
 
             // ── KOORDINAT PETA ───────────────────────────────────────
@@ -367,6 +377,13 @@ class PlaceResource extends Resource
                     ->badge()
                     ->color('primary')
                     ->label('Kategori'),
+                Tables\Columns\TextColumn::make('tags.name')
+                    ->badge()
+                    ->color('info')
+                    ->separator(',')
+                    ->limitList(2)
+                    ->expandableLimitedList()
+                    ->label('Tags'),
                 Tables\Columns\TextColumn::make('district')
                     ->searchable()
                     ->label('Kecamatan'),
@@ -405,6 +422,11 @@ class PlaceResource extends Resource
                 Tables\Filters\SelectFilter::make('category')
                     ->relationship('category', 'name')
                     ->preload(),
+                Tables\Filters\SelectFilter::make('tags')
+                    ->relationship('tags', 'name')
+                    ->preload()
+                    ->multiple()
+                    ->label('Filter Tag'),
                 Tables\Filters\TernaryFilter::make('has_ticket')->label('Punya Tiket'),
                 Tables\Filters\TernaryFilter::make('has_accommodation')->label('Penginapan'),
                 Tables\Filters\TernaryFilter::make('has_restaurant')->label('Restoran'),
@@ -420,6 +442,43 @@ class PlaceResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('manageTags')
+                        ->label('Atur Tag Sekaligus')
+                        ->icon('heroicon-o-tag')
+                        ->form([
+                            Forms\Components\Select::make('tags')
+                                ->label('Pilih Tag')
+                                ->multiple()
+                                ->relationship('tags', 'name')
+                                ->preload()
+                                ->searchable()
+                                ->required()
+                                ->helperText('Pilih satu atau lebih tag yang akan diterapkan.'),
+                            Forms\Components\Radio::make('mode')
+                                ->label('Metode Penerapan')
+                                ->options([
+                                    'attach' => 'Tambahkan ke tag yang sudah ada (tidak menghapus tag lama)',
+                                    'sync'   => 'Ganti total (timpa semua tag lama dengan tag pilihan di atas)',
+                                ])
+                                ->default('attach')
+                                ->required(),
+                        ])
+                        ->action(function (Collection $records, array $data): void {
+                            foreach ($records as $record) {
+                                if ($data['mode'] === 'sync') {
+                                    $record->tags()->sync($data['tags']);
+                                } else {
+                                    $record->tags()->syncWithoutDetaching($data['tags']);
+                                }
+                            }
+
+                            Notification::make()
+                                ->title('Tag Berhasil Diperbarui')
+                                ->success()
+                                ->body('Tag berhasil diperbarui untuk ' . $records->count() . ' destinasi.')
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
