@@ -367,7 +367,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-xl md:text-2xl font-bold text-gray-900 leading-tight">Video Suasana & Tur</h2>
+                                <h2 class="text-xl md:text-2xl font-bold text-gray-900 leading-tight">{{ $place->video_title ?: 'Video Suasana & Tur' }}</h2>
                                 <p class="text-xs text-gray-500">Lihat gambaran langsung dan keseruan di {{ $place->name }}</p>
                             </div>
                         </div>
@@ -375,7 +375,7 @@
                             <iframe 
                                 class="absolute inset-0 w-full h-full"
                                 src="https://www.youtube-nocookie.com/embed/{{ $place->youtube_id }}?rel=0" 
-                                title="Video {{ $place->name }}" 
+                                title="{{ $place->video_title ?: ('Video ' . $place->name) }}" 
                                 frameborder="0" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                                 allowfullscreen>

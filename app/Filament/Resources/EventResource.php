@@ -68,6 +68,11 @@ class EventResource extends Resource
                             ->label('Link Video YouTube (Opsional)')
                             ->placeholder('Contoh: https://www.youtube.com/watch?v=E4WlUXrJgy4 atau https://youtu.be/...')
                             ->helperText('Tempel URL YouTube lengkap, pendek, ataupun shorts. Video player embed akan otomatis ditampilkan di halaman detail event.'),
+                        Forms\Components\TextInput::make('video_title')
+                            ->maxLength(255)
+                            ->label('Judul Video (Opsional)')
+                            ->placeholder('Default: Video Dokumentasi & Teaser')
+                            ->helperText('Judul kustom yang tampil di atas video (contoh: "Aftermovie & Highlight Acara"). Jika dikosongkan, akan otomatis menggunakan default "Video Dokumentasi & Teaser".'),
                         Forms\Components\RichEditor::make('description')
                             ->nullable()
                             ->label('Deskripsi Event'),

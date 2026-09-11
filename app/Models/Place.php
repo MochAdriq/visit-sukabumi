@@ -15,7 +15,7 @@ class Place extends Model
         'category_id', 'name', 'slug', 'description',
         'address', 'district', 'latitude', 'longitude', 'status',
         'is_featured', 'badge_label',
-        'price', 'phone', 'website', 'youtube_url', 'open_hours', 'duration', 'ticket_info',
+        'price', 'phone', 'website', 'youtube_url', 'video_title', 'open_hours', 'duration', 'ticket_info',
         'facilities', 'nearby_places',
 
         // Master Toggles

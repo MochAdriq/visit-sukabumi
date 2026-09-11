@@ -163,6 +163,12 @@ class PlaceResource extends Resource
                         ->label('Link Video YouTube (Opsional)')
                         ->placeholder('Contoh: https://www.youtube.com/watch?v=E4WlUXrJgy4 atau https://youtu.be/...')
                         ->helperText('Tempel URL YouTube lengkap, pendek, ataupun shorts. Video player embed akan otomatis ditampilkan di halaman detail destinasi.'),
+                    Forms\Components\TextInput::make('video_title')
+                        ->columnSpanFull()
+                        ->maxLength(255)
+                        ->label('Judul Video (Opsional)')
+                        ->placeholder('Default: Video Suasana & Tur')
+                        ->helperText('Judul kustom yang tampil di atas video (contoh: "Room Tour & Fasilitas Hotel"). Jika dikosongkan, akan otomatis menggunakan default "Video Suasana & Tur".'),
                 ]),
 
             // ── GALERI FOTO ──────────────────────────────────────────

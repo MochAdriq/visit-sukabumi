@@ -15,6 +15,7 @@ class Event extends Model
         'location_name',
         'image_path',
         'youtube_url',
+        'video_title',
         'is_active',
         'whats_included',
         'what_to_expect',

@@ -248,7 +248,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-xl md:text-2xl font-bold text-gray-900 leading-tight">Video Dokumentasi & Teaser</h2>
+                                <h2 class="text-xl md:text-2xl font-bold text-gray-900 leading-tight">{{ $event->video_title ?: 'Video Dokumentasi & Teaser' }}</h2>
                                 <p class="text-xs text-gray-500">Tonton keseruan dan suasana perjalanan event ini</p>
                             </div>
                         </div>
@@ -256,7 +256,7 @@
                             <iframe 
                                 class="absolute inset-0 w-full h-full"
                                 src="https://www.youtube-nocookie.com/embed/{{ $event->youtube_id }}?rel=0" 
-                                title="Video {{ $event->title }}" 
+                                title="{{ $event->video_title ?: ('Video ' . $event->title) }}" 
                                 frameborder="0" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                                 allowfullscreen>
