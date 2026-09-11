@@ -184,7 +184,7 @@ $activityRight = $activityTags->skip(3);
 
             {{-- 5. Seputar Sukabumi (Dropdown) --}}
             <div class="vs-nav-item">
-                <a href="#" class="vs-nav-link {{ request()->is('information*') || request()->is('tentang*') ? 'active' : '' }}">
+                <a href="#" class="vs-nav-link {{ request()->is('information*') || request()->is('blog*') ? 'active' : '' }}">
                     Seputar Sukabumi
                     <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="transition-transform duration-200">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/>
@@ -195,9 +195,9 @@ $activityRight = $activityTags->skip(3);
                         <a href="{{ route('information.index') }}" class="block px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">
                             Tentang Sukabumi
                         </a>
-                        <span class="block px-4 py-2.5 text-sm font-semibold text-gray-400 cursor-not-allowed" title="Segera Hadir">
+                        <a href="{{ route('blog.index') }}" class="block px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">
                             Blog / Artikel
-                        </span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -345,9 +345,9 @@ $activityRight = $activityTags->skip(3);
                 <a href="{{ route('information.index') }}" class="block px-8 py-2.5 text-sm text-gray-600 hover:text-[#1a6bbf] transition-colors">
                     Tentang Sukabumi
                 </a>
-                <span class="block px-8 py-2.5 text-sm text-gray-400 cursor-not-allowed">
-                    Blog / Artikel (Segera Hadir)
-                </span>
+                <a href="{{ route('blog.index') }}" class="block px-8 py-2.5 text-sm text-gray-600 hover:text-[#1a6bbf] transition-colors">
+                    Blog / Artikel
+                </a>
             </div>
         </div>
 

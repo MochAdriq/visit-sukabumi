@@ -7,6 +7,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\BlogController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -26,6 +27,10 @@ Route::get('/wisata/{tag:slug}', [TagController::class, 'show'])->name('tag.show
 Route::get('/penginapan', function () {
     return redirect()->route('place.index', ['type' => 'penginapan']);
 })->name('penginapan.index');
+
+// Blog Routes
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
 
 // Static Pages
 Route::view('/information', 'information.index')->name('information.index');
