@@ -98,7 +98,9 @@ class BlogPostResource extends Resource
                             ->directory('blog')
                             ->label('Thumbnail Artikel'),
                     ]),
-            ])->columnSpan(['lg' => 1]),
+            ])
+                ->columnSpan(['lg' => 1])
+                ->extraAttributes(['class' => 'lg:sticky lg:top-20 lg:self-start']),
         ])->columns(3);
     }
 

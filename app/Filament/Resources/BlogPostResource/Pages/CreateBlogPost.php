@@ -9,6 +9,15 @@ class CreateBlogPost extends CreateRecord
 {
     protected static string $resource = BlogPostResource::class;
 
+    protected function getHeaderActions(): array
+    {
+        return [
+            $this->getCreateFormAction()
+                ->formId('form'),
+            $this->getCancelFormAction(),
+        ];
+    }
+
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');

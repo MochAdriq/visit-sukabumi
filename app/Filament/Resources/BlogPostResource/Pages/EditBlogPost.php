@@ -13,6 +13,9 @@ class EditBlogPost extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            $this->getSaveFormAction()
+                ->formId('form'),
+            $this->getCancelFormAction(),
             Actions\DeleteAction::make(),
         ];
     }

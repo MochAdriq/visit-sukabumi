@@ -52,6 +52,24 @@ class AdminPanelProvider extends PanelProvider
                         trix-editor p {
                             margin-bottom: 1.25rem !important;
                         }
+                        .fi-fo-rich-editor {
+                            overflow: visible !important;
+                        }
+                        .fi-fo-rich-editor-toolbar,
+                        trix-toolbar {
+                            position: sticky !important;
+                            top: 4rem !important;
+                            z-index: 20 !important;
+                            background-color: rgba(255, 255, 255, 0.96) !important;
+                            backdrop-filter: blur(8px) !important;
+                            border-radius: 0.5rem 0.5rem 0 0 !important;
+                            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04) !important;
+                        }
+                        .dark .fi-fo-rich-editor-toolbar,
+                        .dark trix-toolbar {
+                            background-color: rgba(24, 24, 27, 0.96) !important;
+                            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3) !important;
+                        }
                     </style>
                 ')
             )
