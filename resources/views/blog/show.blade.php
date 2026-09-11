@@ -4,8 +4,32 @@
 @section('meta_description', Str::limit(strip_tags($post->content), 150))
 
 @section('content')
-<div class="min-h-screen bg-gray-50 font-sans text-gray-900 pb-16">
+<div class="min-h-screen bg-gray-50 font-sans text-gray-900 pb-16 relative">
     @include('components.navbar')
+
+    {{-- Floating Back to Top Button --}}
+    <div x-data="{ showTopBtn: false }" 
+         @scroll.window="showTopBtn = (window.pageYOffset > 300)"
+         class="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-40">
+        <button 
+            x-show="showTopBtn" 
+            x-cloak
+            x-transition:enter="transition ease-out duration-300 transform"
+            x-transition:enter-start="opacity-0 translate-y-4 scale-90"
+            x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+            x-transition:leave="transition ease-in duration-200 transform"
+            x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+            x-transition:leave-end="opacity-0 translate-y-4 scale-90"
+            @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+            type="button"
+            aria-label="Scroll ke atas"
+            title="Kembali ke atas"
+            class="w-12 h-12 rounded-full bg-white/95 backdrop-blur-md shadow-xl border border-gray-200/80 text-gray-700 hover:text-white hover:bg-[#1a6bbf] hover:border-[#1a6bbf] transition-all duration-300 flex items-center justify-center cursor-pointer group hover:scale-105 active:scale-95">
+            <svg class="w-6 h-6 transition-transform group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+            </svg>
+        </button>
+    </div>
 
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         
@@ -81,6 +105,165 @@
                 />
             </div>
         </div>
+
+        {{-- Connected Destinations Section --}}
+        @if($post->places && $post->places->count() > 0)
+            <section class="mb-16 pt-8 border-t border-gray-200">
+                <div class="mb-6">
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">Daftar Destinasi</h2>
+                    <p class="text-sm md:text-base text-gray-500 mt-1">
+                        {{ $post->places->count() }} tempat ditemukan.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @foreach($post->places as $place)
+                        <x-place-card-grid :place="$place" />
+                    @endforeach
+                </div>
+            </section>
+        @endif
+
+        {{-- Comments Section --}}
+        <section id="comments" class="mb-16 pt-8 border-t border-gray-200">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-blue-50 text-[#1a6bbf] flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-extrabold text-gray-900 tracking-tight">Komentar</h3>
+                        <p class="text-xs md:text-sm text-gray-500">{{ $post->comments ? $post->comments->count() : 0 }} komentar pada artikel ini</p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Success Alert --}}
+            @if(session('comment_success'))
+                <div class="mb-8 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 flex items-center gap-3 text-sm">
+                    <svg class="w-5 h-5 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>{{ session('comment_success') }}</span>
+                </div>
+            @endif
+
+            {{-- Comment Form Card --}}
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 mb-10">
+                <h4 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-[#00aa6c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                    Tinggalkan Komentar
+                </h4>
+
+                <form action="{{ route('blog.comment.store', $post->slug) }}" method="POST">
+                    @csrf
+
+                    @auth
+                        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl mb-4 border border-gray-100">
+                            <div class="w-9 h-9 rounded-full bg-[#1a6bbf] text-white flex items-center justify-center font-bold text-sm">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+                            <div class="text-sm">
+                                <span class="text-gray-500">Berkomentar sebagai</span>
+                                <span class="font-bold text-gray-800 ml-1">{{ auth()->user()->name }}</span>
+                            </div>
+                        </div>
+                    @else
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
+                                <input type="text" name="name" required value="{{ old('name') }}" placeholder="Contoh: Budi Pratama"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#1a6bbf] focus:ring-2 focus:ring-[#1a6bbf]/20 outline-none text-sm transition">
+                                @error('name')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Email (Opsional)</label>
+                                <input type="email" name="email" value="{{ old('email') }}" placeholder="alamat@email.com"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#1a6bbf] focus:ring-2 focus:ring-[#1a6bbf]/20 outline-none text-sm transition">
+                                @error('email')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    @endauth
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Isi Komentar <span class="text-red-500">*</span></label>
+                        <textarea name="comment" rows="4" required placeholder="Tuliskan pendapat, tanggapan, atau pertanyaan Anda tentang artikel ini..."
+                            class="w-full p-4 rounded-2xl border border-gray-200 focus:border-[#1a6bbf] focus:ring-2 focus:ring-[#1a6bbf]/20 outline-none text-sm transition resize-y">{{ old('comment') }}</textarea>
+                        @error('comment')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        @guest
+                            <p class="text-xs text-gray-500">
+                                Punya akun? <a href="{{ route('login') }}" class="text-[#1a6bbf] font-bold hover:underline">Masuk</a>
+                            </p>
+                        @else
+                            <div></div>
+                        @endguest
+
+                        <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 bg-[#1a6bbf] text-white font-bold text-sm rounded-full hover:bg-[#1559a3] transition shadow-sm hover:shadow active:scale-95 cursor-pointer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                            </svg>
+                            Kirim Komentar
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            {{-- Comments List --}}
+            @if($post->comments && $post->comments->count() > 0)
+                <div class="space-y-4">
+                    @foreach($post->comments as $c)
+                        <div class="bg-white rounded-2xl p-6 shadow-xs border border-gray-100">
+                            <div class="flex items-start justify-between gap-4 mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full {{ $c->is_admin ? 'bg-[#1a6bbf] text-white ring-2 ring-blue-200' : 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white' }} flex items-center justify-center font-bold text-sm flex-shrink-0 shadow-xs">
+                                        {{ $c->author_initials }}
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-bold text-gray-900 text-sm md:text-base">{{ $c->author_name }}</span>
+                                            @if($c->is_admin)
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-[#1a6bbf] border border-blue-200 uppercase tracking-wider">
+                                                    Admin
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <span class="text-xs text-gray-400 font-medium">
+                                            {{ $c->created_at->diffForHumans() }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-line pl-0 md:pl-13">
+                                {{ $c->comment }}
+                            </p>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="bg-white rounded-2xl p-8 border border-dashed border-gray-200 text-center">
+                    <div class="w-12 h-12 rounded-full bg-gray-50 text-gray-400 flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                    </div>
+                    <p class="font-bold text-gray-700 text-sm">Belum Ada Komentar</p>
+                    <p class="text-xs text-gray-500 mt-1">Jadilah yang pertama memberikan tanggapan untuk artikel ini!</p>
+                </div>
+            @endif
+        </section>
 
         {{-- Related Posts --}}
         @if($related->count() > 0)

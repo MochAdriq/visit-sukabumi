@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class BlogPost extends Model
@@ -42,6 +44,16 @@ class BlogPost extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function places(): BelongsToMany
+    {
+        return $this->belongsToMany(Place::class, 'blog_post_place');
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(BlogComment::class, 'blog_post_id')->where('is_approved', true)->latest();
     }
 
     public function scopePublished($query)

@@ -41,7 +41,7 @@ class BlogController extends Controller
             }
         }
 
-        $post->load('author');
+        $post->load(['author', 'places', 'comments.user']);
 
         $related = BlogPost::published()
             ->where('category', $post->category)

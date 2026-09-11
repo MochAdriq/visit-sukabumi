@@ -48,6 +48,19 @@ class BlogPostResource extends Resource
                             ->fileAttachmentsDirectory('blog_attachments')
                             ->columnSpanFull(),
                     ]),
+                Forms\Components\Section::make('Destinasi Terkait')
+                    ->description('Hubungkan artikel ini dengan destinasi wisata yang dibahas agar tampil sebagai kartu rekomendasi di bagian bawah artikel.')
+                    ->collapsible()
+                    ->schema([
+                        Forms\Components\Select::make('places')
+                            ->relationship('places', 'name')
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->label('Pilih Destinasi Wisata')
+                            ->placeholder('Ketik atau pilih destinasi wisata...')
+                            ->helperText('Destinasi yang dipilih akan muncul secara otomatis di bawah artikel blog.'),
+                    ]),
             ])->columnSpan(['lg' => 2]),
 
             Forms\Components\Group::make()->schema([

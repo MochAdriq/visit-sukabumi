@@ -38,6 +38,7 @@ Route::get('/penginapan', function () {
 // Blog Routes
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
+Route::post('/blog/{post:slug}/comment', [\App\Http\Controllers\BlogCommentController::class, 'store'])->name('blog.comment.store');
 
 // Static & Legal Pages
 Route::view('/information', 'information.index')->name('information.index');

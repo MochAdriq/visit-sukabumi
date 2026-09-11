@@ -169,4 +169,12 @@ class Place extends Model
     {
         return $this->belongsToMany(User::class, 'wishlists')->withTimestamps();
     }
+
+    /**
+     * Get the blog posts related to this place.
+     */
+    public function blogPosts(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(BlogPost::class, 'blog_post_place');
+    }
 }
