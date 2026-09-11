@@ -76,6 +76,25 @@ class Place extends Model
         return $this->hasOne(PlaceImage::class)->where('is_primary', true)->latestOfMany();
     }
 
+    /**
+     * Get cover image URL for cards (smart fallback to first image or static placeholder)
+     */
+    public function getCoverImageUrlAttribute(): string
+    {
+        $fallback = asset('assets/images/9.jpg');
+
+        if ($this->relationLoaded('primaryImage') && $this->primaryImage) {
+            return \Illuminate\Support\Facades\Storage::url($this->primaryImage->image_path);
+        }
+
+        $firstImage = $this->placeImages()->first();
+        if ($firstImage) {
+            return \Illuminate\Support\Facades\Storage::url($firstImage->image_path);
+        }
+
+        return $fallback;
+    }
+
     /** Average rating from reviews (0–5) */
     public function avgRating(): float
     {
