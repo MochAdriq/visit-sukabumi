@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PlaceResource\Pages;
 use App\Models\Place;
+use App\Models\Tag;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -157,6 +158,25 @@ class PlaceResource extends Resource
                         ->columns(2)
                         ->addActionLabel('+ Tambah Foto')
                         ->columnSpanFull(),
+                ]),
+
+            // ── TAG & AKTIVITAS ───────────────────────────────────────
+            Forms\Components\Section::make('Tag & Aktivitas')
+                ->description('Assign tag yang relevan. Tag menentukan di menu navbar mana destinasi ini tampil (Aktivitas / Wisata).')
+                ->icon('heroicon-o-tag')
+                ->collapsed()
+                ->schema([
+                    Forms\Components\Select::make('tags')
+                        ->multiple()
+                        ->relationship('tags', 'name')
+                        ->preload()
+                        ->searchable()
+                        ->columnSpanFull()
+                        ->label('Tag')
+                        ->helperText('Satu destinasi bisa punya banyak tag sekaligus')
+                        ->getOptionLabelFromRecordUsing(fn (Tag $record) =>
+                            '[' . ($record->type === 'activity' ? 'Aktivitas' : 'Wisata') . '] ' . $record->name
+                        ),
                 ]),
 
             // ════════════════════════════════════════════════════════

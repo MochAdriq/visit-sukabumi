@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -79,6 +80,14 @@ class Place extends Model
     public function avgRating(): float
     {
         return round($this->reviews->avg('rating') ?? 0, 1);
+    }
+
+    /**
+     * Get all tags associated with this place.
+     */
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'place_tag');
     }
 
     /**

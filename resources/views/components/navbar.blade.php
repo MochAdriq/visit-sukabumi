@@ -1,5 +1,5 @@
 @php
-// Tentukan kategori yang sedang aktif
+// Tentukan kategori/tag yang sedang aktif
 $currentCatSlug = request('category');
 if (isset($place) && $place->category) {
     $currentCatSlug = $place->category->slug;
@@ -7,83 +7,23 @@ if (isset($place) && $place->category) {
     $currentCatSlug = $currentCategory->slug;
 }
 
-$navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
-    $getTopPlaces = function(array $categorySlugs, $limit = 2) {
-        return \App\Models\Place::whereHas('category', function($q) use ($categorySlugs) {
-            $q->whereIn('slug', $categorySlugs);
-        })->where('status', 'published')
-          ->withCount('reviews')
-          ->orderByDesc('reviews_count')
-          ->take($limit)
-          ->get();
-    };
+// Tag aktif (dari URL saat ini)
+$currentTagSlug = request()->route('tag') instanceof \App\Models\Tag
+    ? request()->route('tag')->slug
+    : null;
 
-    $adrenalinPlaces = $getTopPlaces(['aktivitas-seru'], 2);
-    $healingPlaces = $getTopPlaces(['wisata-alam', 'wisata-pantai'], 2);
-    $budayaPlaces = $getTopPlaces(['wisata-budaya', 'kuliner'], 2);
-
-    $mapPlacesToLinks = function($places, $allLabel, $allHref) {
-        $links = [];
-        foreach ($places as $place) {
-            $links[] = [
-                'label' => $place->name,
-                'href' => '/place/' . $place->slug,
-                'highlight' => false
-            ];
-        }
-        $links[] = [
-            'label' => $allLabel,
-            'href' => $allHref,
-            'highlight' => true
-        ];
-        return $links;
-    };
-
-    return [
-        [
-            'label'    => 'Pacu Adrenalin',
-            'href'     => '/kategori/aktivitas-seru',
-            'activeCategories' => ['aktivitas-seru'],
-            'dropdown' => true,
-            'intro'    => ['title' => 'Pacu Adrenalin', 'text' => 'Tantang diri Anda dengan aktivitas ekstrem dan petualangan seru di Sukabumi.'],
-            'links'    => $mapPlacesToLinks($adrenalinPlaces, 'Semua Aktivitas Seru', '/kategori/aktivitas-seru'),
-        ],
-        [
-            'label'    => 'Santai & Healing',
-            'href'     => '/kategori/wisata-alam',
-            'activeCategories' => ['wisata-alam', 'wisata-pantai'],
-            'dropdown' => true,
-            'intro'    => ['title' => 'Santai & Healing', 'text' => 'Lepaskan penat dan nikmati ketenangan alam yang asri di Sukabumi.'],
-            'links'    => $mapPlacesToLinks($healingPlaces, 'Semua Wisata Alam', '/kategori/wisata-alam'),
-        ],
-        [
-            'label'    => 'Budaya & Sejarah',
-            'href'     => '/kategori/wisata-budaya',
-            'activeCategories' => ['wisata-budaya', 'kuliner'],
-            'dropdown' => true,
-            'intro'    => ['title' => 'Budaya & Sejarah', 'text' => 'Kenali lebih dekat warisan budaya, sejarah, dan kuliner otentik Sukabumi.'],
-            'links'    => $mapPlacesToLinks($budayaPlaces, 'Jelajah Budaya', '/kategori/wisata-budaya'),
-        ],
-        [
-            'label'    => 'Tempat Menginap',
-            'href'     => '/kategori/hotel-resort',
-            'activeCategories' => ['hotel-resort'],
-            'dropdown' => false,
-        ],
-        [
-            'label'    => 'Event & Festival',
-            'href'     => '/event',
-            'activeOn' => 'event*',
-            'dropdown' => false,
-        ],
-        [
-            'label'    => 'Panduan Wisata',
-            'href'     => '/information',
-            'activeOn' => 'information*',
-            'dropdown' => false,
-        ],
-    ];
+$navData = Cache::remember('navbar_v2_tags', 3600, function () {
+    $activityTags = \App\Models\Tag::activity()->get();
+    $wisataTags   = \App\Models\Tag::wisata()->get();
+    return compact('activityTags', 'wisataTags');
 });
+
+$activityTags = $navData['activityTags'];
+$wisataTags   = $navData['wisataTags'];
+
+// Bagi activity tags: kiri (3 item) dan kanan (sisanya)
+$activityLeft  = $activityTags->take(3);
+$activityRight = $activityTags->skip(3);
 @endphp
 
 {{-- ════════════════════════════════════════════
@@ -167,49 +107,100 @@ $navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
                 </svg>
             </a>
 
-            @foreach($navItems as $item)
-                @php
-                    $isActive = false;
-                    if (isset($item['activeCategories'])) {
-                        $isActive = request()->is('place*') && in_array($currentCatSlug, $item['activeCategories']);
-                    } elseif (isset($item['activeOn'])) {
-                        $isActive = request()->is($item['activeOn']);
-                    } else {
-                        $isActive = $item['href'] !== '#' && request()->is(ltrim($item['href'], '/'));
-                    }
-                @endphp
-                @if($item['dropdown'])
-                    <div class="vs-nav-item">
-                        <a href="{{ $item['href'] }}" class="vs-nav-link {{ $isActive ? 'active' : '' }}">
-                            {{ $item['label'] }}
-                            <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="transition-transform duration-200">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </a>
-                        <div class="vs-megamenu">
-                            <div class="vs-megamenu-inner">
-                                <div class="vs-megamenu-sidebar">
-                                    <div class="vs-megamenu-title">{{ $item['intro']['title'] }}</div>
-                                    <div class="vs-megamenu-text">{{ $item['intro']['text'] }}</div>
-                                </div>
-                                <ul class="vs-megamenu-links">
-                                    @foreach($item['links'] as $link)
-                                        <li>
-                                            <a href="{{ $link['href'] }}" class="{{ $link['highlight'] ? 'vs-highlight' : '' }}">
-                                                {{ $link['label'] }}
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
+            {{-- 1. Apa yang Bisa Dilakukan (Activity Tags - Megamenu) --}}
+            <div class="vs-nav-item">
+                <a href="{{ route('tag.show.activity', $activityTags->first()->slug ?? 'semua') }}" class="vs-nav-link {{ request()->is('aktivitas*') ? 'active' : '' }}">
+                    Apa yang Bisa Dilakukan
+                    <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="transition-transform duration-200">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </a>
+                <div class="vs-megamenu !w-[600px] !left-1/2 !-translate-x-1/2">
+                    <div class="p-6 grid grid-cols-2 gap-x-8 gap-y-4">
+                        {{-- Kiri --}}
+                        <div class="space-y-2">
+                            @foreach($activityLeft as $tag)
+                                <a href="{{ $tag->url }}" class="flex items-start gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group">
+                                    <div class="mt-0.5 text-gray-400 group-hover:text-[#00aa6c]">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">{!! $tag->icon_svg !!}</svg>
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-sm text-gray-900 group-hover:text-[#1a6bbf]">{{ $tag->name }}</div>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                        {{-- Kanan --}}
+                        <div class="space-y-2">
+                            @foreach($activityRight as $tag)
+                                <a href="{{ $tag->url }}" class="flex items-start gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group">
+                                    <div class="mt-0.5 text-gray-400 group-hover:text-[#00aa6c]">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">{!! $tag->icon_svg !!}</svg>
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-sm text-gray-900 group-hover:text-[#1a6bbf]">{{ $tag->name }}</div>
+                                    </div>
+                                </a>
+                            @endforeach
+                            
+                            <div class="pt-2 mt-2 border-t border-gray-100">
+                                <a href="{{ route('tag.show.activity', $activityTags->first()->slug ?? 'semua') }}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 transition-colors group">
+                                    <div class="font-bold text-sm text-[#1a6bbf]">Semua Aktivitas &rarr;</div>
+                                </a>
                             </div>
                         </div>
                     </div>
-                @else
-                    <a href="{{ $item['href'] }}" class="vs-nav-link {{ $isActive ? 'active' : '' }}">
-                        {{ $item['label'] }}
-                    </a>
-                @endif
-            @endforeach
+                </div>
+            </div>
+
+            {{-- 2. Wisata (Wisata Tags - Dropdown) --}}
+            <div class="vs-nav-item">
+                <a href="{{ route('tag.show.wisata', $wisataTags->first()->slug ?? 'semua') }}" class="vs-nav-link {{ request()->is('wisata*') ? 'active' : '' }}">
+                    Wisata
+                    <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="transition-transform duration-200">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </a>
+                <div class="absolute top-full left-0 mt-0 w-56 bg-white border border-gray-100 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                    <div class="py-2">
+                        @foreach($wisataTags as $tag)
+                            <a href="{{ $tag->url }}" class="block px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">
+                                {{ $tag->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            {{-- 3. Tempat Menginap --}}
+            <a href="{{ route('penginapan.index') }}" class="vs-nav-link {{ request('type') == 'penginapan' ? 'active' : '' }}">
+                Tempat Menginap
+            </a>
+
+            {{-- 4. Event & Festival --}}
+            <a href="{{ route('event.index') }}" class="vs-nav-link {{ request()->is('event*') ? 'active' : '' }}">
+                Event & Festival
+            </a>
+
+            {{-- 5. Seputar Sukabumi (Dropdown) --}}
+            <div class="vs-nav-item">
+                <a href="#" class="vs-nav-link {{ request()->is('information*') || request()->is('tentang*') ? 'active' : '' }}">
+                    Seputar Sukabumi
+                    <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="transition-transform duration-200">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </a>
+                <div class="absolute top-full left-0 mt-0 w-48 bg-white border border-gray-100 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                    <div class="py-2">
+                        <a href="{{ route('information.index') }}" class="block px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">
+                            Tentang Sukabumi
+                        </a>
+                        <span class="block px-4 py-2.5 text-sm font-semibold text-gray-400 cursor-not-allowed" title="Segera Hadir">
+                            Blog / Artikel
+                        </span>
+                    </div>
+                </div>
+            </div>
         </nav>
     </div>
 
@@ -295,36 +286,70 @@ $navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
             Beranda
         </a>
 
-        @foreach($navItems as $idx => $item)
-            @if($item['dropdown'])
-                {{-- Accordion item --}}
-                <div class="border-b border-gray-50">
-                    <button onclick="toggleAccordion({{ $idx }})"
-                        class="w-full flex items-center justify-between px-5 py-3.5 text-sm font-bold text-gray-900 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors text-left">
-                        <span>{{ $item['label'] }}</span>
-                        <svg id="acc-icon-{{ $idx }}" class="w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
-                        </svg>
-                    </button>
-                    <div id="acc-panel-{{ $idx }}" class="hidden bg-gray-50 pb-1">
-                        @foreach($item['links'] as $link)
-                            <a href="{{ $link['href'] }}"
-                                class="block px-8 py-2.5 text-sm {{ $link['highlight'] ? 'font-bold text-[#1a6bbf]' : 'text-gray-600' }} hover:text-[#1a6bbf] transition-colors">
-                                @if($link['highlight'])
-                                    → {{ $link['label'] }}
-                                @else
-                                    {{ $link['label'] }}
-                                @endif
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-            @else
-                <a href="{{ $item['href'] }}" class="flex items-center px-5 py-3.5 text-sm font-bold text-gray-900 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors border-b border-gray-50">
-                    {{ $item['label'] }}
+        {{-- 1. Apa yang Bisa Dilakukan (Accordion) --}}
+        <div class="border-b border-gray-50">
+            <button onclick="toggleAccordion('activity')" class="w-full flex items-center justify-between px-5 py-3.5 text-sm font-bold text-gray-900 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors text-left">
+                <span>Apa yang Bisa Dilakukan</span>
+                <svg id="acc-icon-activity" class="w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            <div id="acc-panel-activity" class="hidden bg-gray-50 pb-2 pt-1">
+                @foreach($activityTags as $tag)
+                    <a href="{{ $tag->url }}" class="block px-8 py-2.5 text-sm text-gray-600 hover:text-[#1a6bbf] transition-colors">
+                        {{ $tag->name }}
+                    </a>
+                @endforeach
+                <a href="{{ route('tag.show.activity', $activityTags->first()->slug ?? 'semua') }}" class="block px-8 py-2.5 text-sm font-bold text-[#1a6bbf] hover:text-[#135a9e] transition-colors">
+                    → Semua Aktivitas
                 </a>
-            @endif
-        @endforeach
+            </div>
+        </div>
+
+        {{-- 2. Wisata (Accordion) --}}
+        <div class="border-b border-gray-50">
+            <button onclick="toggleAccordion('wisata')" class="w-full flex items-center justify-between px-5 py-3.5 text-sm font-bold text-gray-900 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors text-left">
+                <span>Wisata</span>
+                <svg id="acc-icon-wisata" class="w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            <div id="acc-panel-wisata" class="hidden bg-gray-50 pb-2 pt-1">
+                @foreach($wisataTags as $tag)
+                    <a href="{{ $tag->url }}" class="block px-8 py-2.5 text-sm text-gray-600 hover:text-[#1a6bbf] transition-colors">
+                        {{ $tag->name }}
+                    </a>
+                @endforeach
+            </div>
+        </div>
+
+        {{-- 3. Tempat Menginap --}}
+        <a href="{{ route('penginapan.index') }}" class="flex items-center px-5 py-3.5 text-sm font-bold text-gray-900 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors border-b border-gray-50">
+            Tempat Menginap
+        </a>
+
+        {{-- 4. Event & Festival --}}
+        <a href="{{ route('event.index') }}" class="flex items-center px-5 py-3.5 text-sm font-bold text-gray-900 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors border-b border-gray-50">
+            Event & Festival
+        </a>
+
+        {{-- 5. Seputar Sukabumi (Accordion) --}}
+        <div class="border-b border-gray-50">
+            <button onclick="toggleAccordion('seputar')" class="w-full flex items-center justify-between px-5 py-3.5 text-sm font-bold text-gray-900 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors text-left">
+                <span>Seputar Sukabumi</span>
+                <svg id="acc-icon-seputar" class="w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            <div id="acc-panel-seputar" class="hidden bg-gray-50 pb-2 pt-1">
+                <a href="{{ route('information.index') }}" class="block px-8 py-2.5 text-sm text-gray-600 hover:text-[#1a6bbf] transition-colors">
+                    Tentang Sukabumi
+                </a>
+                <span class="block px-8 py-2.5 text-sm text-gray-400 cursor-not-allowed">
+                    Blog / Artikel (Segera Hadir)
+                </span>
+            </div>
+        </div>
 
         {{-- Wishlist & User actions --}}
         <div class="mt-2 border-t border-gray-100 pt-1">

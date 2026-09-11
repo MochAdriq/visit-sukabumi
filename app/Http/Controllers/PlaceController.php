@@ -25,6 +25,12 @@ class PlaceController extends Controller
             }
         }
 
+        // Filter khusus "Tempat Menginap"
+        $type = $request->query('type');
+        if ($type === 'penginapan') {
+            $query->where('has_accommodation', true);
+        }
+
         if ($request->filled('q')) {
             $search = $request->query('q');
             $query->where(function ($q) use ($search) {
@@ -36,8 +42,9 @@ class PlaceController extends Controller
 
         $places = $query->latest()->paginate(12)->withQueryString();
         $allCategories = Category::all();
+        $currentType = $type;
 
-        return view('place.index', compact('places', 'currentCategory', 'allCategories'));
+        return view('place.index', compact('places', 'currentCategory', 'allCategories', 'currentType'));
     }
 
     public function show(Place $place)

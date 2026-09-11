@@ -6,6 +6,7 @@ use App\Http\Controllers\VisitorAuthController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\TagController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -16,6 +17,15 @@ Route::get('/place/{place:slug}', [PlaceController::class, 'show'])->name('place
 
 Route::get('/event', [EventController::class, 'index'])->name('event.index');
 Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show');
+
+// Tag-based listing routes
+Route::get('/aktivitas/{tag:slug}', [TagController::class, 'show'])->name('tag.show.activity');
+Route::get('/wisata/{tag:slug}', [TagController::class, 'show'])->name('tag.show.wisata');
+
+// Tempat Menginap (filter has_accommodation dari place index)
+Route::get('/penginapan', function () {
+    return redirect()->route('place.index', ['type' => 'penginapan']);
+})->name('penginapan.index');
 
 // Static Pages
 Route::view('/information', 'information.index')->name('information.index');
