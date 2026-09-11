@@ -14,6 +14,7 @@ class BlogPost extends Model
         'content',
         'image_path',
         'author_id',
+        'author_name',
         'category',
         'status',
         'published_at',
@@ -22,6 +23,15 @@ class BlogPost extends Model
     protected $casts = [
         'published_at' => 'datetime',
     ];
+
+    protected static function booted(): void
+    {
+        static::saving(function (BlogPost $post) {
+            if ($post->status === 'published' && is_null($post->published_at)) {
+                $post->published_at = now();
+            }
+        });
+    }
 
     /** Route model binding by slug */
     public function getRouteKeyName(): string
@@ -44,5 +54,10 @@ class BlogPost extends Model
     public function getExcerptAttribute(): string
     {
         return Str::limit(strip_tags($this->content), 120);
+    }
+
+    public function getAuthorDisplayNameAttribute(): string
+    {
+        return $this->author_name ?: ($this->author?->name ?? 'Admin Visit Sukabumi');
     }
 }

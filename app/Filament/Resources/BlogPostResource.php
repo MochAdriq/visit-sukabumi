@@ -59,10 +59,17 @@ class BlogPostResource extends Resource
                             ])
                             ->required()
                             ->default('draft')
-                            ->label('Status Publikasi'),
+                            ->label('Status Publikasi')
+                            ->live()
+                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                if ($state === 'published' && ! $get('published_at')) {
+                                    $set('published_at', now()->format('Y-m-d H:i:s'));
+                                }
+                            }),
                         Forms\Components\DateTimePicker::make('published_at')
-                            ->label('Tanggal Terbit')
-                            ->default(now()),
+                            ->label('Tanggal & Waktu Terbit')
+                            ->nullable()
+                            ->helperText('Otomatis terisi saat status Published, atau bisa diatur manual.'),
                         Forms\Components\Select::make('category')
                             ->options([
                                 'Panduan Wisata' => 'Panduan Wisata',
@@ -75,9 +82,16 @@ class BlogPostResource extends Resource
                             ->label('Kategori'),
                         Forms\Components\Select::make('author_id')
                             ->relationship('author', 'name')
-                            ->default(auth()->id())
-                            ->required()
-                            ->label('Penulis'),
+                            ->default(fn () => auth()->id())
+                            ->searchable()
+                            ->preload()
+                            ->label('Akun Penulis (Default)')
+                            ->helperText('Otomatis akun yang sedang login.'),
+                        Forms\Components\TextInput::make('author_name')
+                            ->label('Nama Penulis Kustom (Opsional)')
+                            ->placeholder('Contoh: Tim Redaksi Visit Sukabumi')
+                            ->maxLength(255)
+                            ->helperText('Jika diisi, nama ini yang akan tampil di website menggantikan nama akun.'),
                         Forms\Components\FileUpload::make('image_path')
                             ->image()
                             ->imageEditor()
@@ -111,10 +125,14 @@ class BlogPostResource extends Resource
                         'success' => 'published',
                     ])
                     ->sortable(),
-                Tables\Columns\TextColumn::make('author.name')
+                Tables\Columns\TextColumn::make('author_display')
                     ->label('Penulis')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->getStateUsing(fn (BlogPost $record) => $record->author_display_name)
+                    ->searchable(query: function ($query, $search) {
+                        return $query->where('author_name', 'like', "%{$search}%")
+                            ->orWhereHas('author', fn ($q) => $q->where('name', 'like', "%{$search}%"));
+                    })
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('published_at')
                     ->label('Tanggal Terbit')
                     ->dateTime('d M Y, H:i')
