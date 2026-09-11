@@ -15,7 +15,7 @@ class Place extends Model
         'category_id', 'name', 'slug', 'description',
         'address', 'district', 'latitude', 'longitude', 'status',
         'is_featured', 'badge_label',
-        'price', 'phone', 'website', 'open_hours', 'duration', 'ticket_info',
+        'price', 'phone', 'website', 'youtube_url', 'open_hours', 'duration', 'ticket_info',
         'facilities', 'nearby_places',
 
         // Master Toggles
@@ -112,6 +112,30 @@ class Place extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'place_tag');
+    }
+
+    /**
+     * Extract YouTube Video ID from any URL format.
+     */
+    public function getYoutubeIdAttribute(): ?string
+    {
+        if (empty($this->youtube_url)) {
+            return null;
+        }
+
+        $url = trim($this->youtube_url);
+
+        // If direct 11-char ID
+        if (preg_match('/^[a-zA-Z0-9_-]{11}$/', $url)) {
+            return $url;
+        }
+
+        $pattern = '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?|shorts|live)/|.*[?&]v=)|youtu\.be/)([^"&?/\s]{11})%i';
+        if (preg_match($pattern, $url, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
     }
 
     /**

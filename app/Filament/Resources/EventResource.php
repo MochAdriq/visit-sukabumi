@@ -63,6 +63,11 @@ class EventResource extends Resource
                             ->imageEditor()
                             ->nullable()
                             ->label('Gambar Utama Event'),
+                        Forms\Components\TextInput::make('youtube_url')
+                            ->maxLength(255)
+                            ->label('Link Video YouTube (Opsional)')
+                            ->placeholder('Contoh: https://www.youtube.com/watch?v=E4WlUXrJgy4 atau https://youtu.be/...')
+                            ->helperText('Tempel URL YouTube lengkap, pendek, ataupun shorts. Video player embed akan otomatis ditampilkan di halaman detail event.'),
                         Forms\Components\RichEditor::make('description')
                             ->nullable()
                             ->label('Deskripsi Event'),

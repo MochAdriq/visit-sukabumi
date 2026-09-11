@@ -157,6 +157,12 @@ class PlaceResource extends Resource
                         ->maxLength(255)
                         ->label('Dekat Dengan (Nearby Places)')
                         ->placeholder('Contoh: 5 Menit ke Alun-Alun, Dekat Pantai Karang Hawu'),
+                    Forms\Components\TextInput::make('youtube_url')
+                        ->columnSpanFull()
+                        ->maxLength(255)
+                        ->label('Link Video YouTube (Opsional)')
+                        ->placeholder('Contoh: https://www.youtube.com/watch?v=E4WlUXrJgy4 atau https://youtu.be/...')
+                        ->helperText('Tempel URL YouTube lengkap, pendek, ataupun shorts. Video player embed akan otomatis ditampilkan di halaman detail destinasi.'),
                 ]),
 
             // ── GALERI FOTO ──────────────────────────────────────────
