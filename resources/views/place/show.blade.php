@@ -95,10 +95,14 @@
                 </div>
                 {{-- Share / Save Buttons --}}
                 <div class="flex gap-2 mt-2 md:mt-0">
-                    <button class="flex items-center px-5 py-2 border border-gray-300 rounded-full hover:bg-gray-50 font-bold text-sm transition gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
-                        Bagikan
-                    </button>
+                    <x-share-modal 
+                        :title="$place->name" 
+                        :text="'Yuk jelajahi ' . $place->name . ' di Sukabumi! ' . ($place->meta_description ?? Str::limit(strip_tags($place->description), 120))" 
+                        :url="route('place.show', $place->slug)" 
+                        :image="$place->placeImages->isNotEmpty() ? Storage::url(($place->placeImages->firstWhere('is_primary', true) ?? $place->placeImages->first())->image_path) : null"
+                        :category="$place->category ? $place->category->name : 'Destinasi'"
+                        button-class="flex items-center px-5 py-2 border border-gray-300 rounded-full hover:bg-gray-50 font-bold text-sm transition gap-2 text-gray-700 shadow-xs"
+                    />
                     <form action="{{ route('wishlist.toggle', $place->slug) }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="flex items-center px-5 py-2 border rounded-full font-bold text-sm transition gap-2 {{ auth()->check() && auth()->user()->wishlists->contains($place->id) ? 'bg-[#1a6bbf] text-white border-[#1a6bbf] hover:bg-[#145299]' : 'border-gray-300 hover:bg-gray-50' }}">

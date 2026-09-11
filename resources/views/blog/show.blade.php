@@ -24,17 +24,28 @@
                 {{ $post->title }}
             </h1>
             
-            <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-gray-500">
-                <div class="flex items-center gap-1.5">
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                    Diterbitkan {{ $post->published_at->format('d M Y') }}
-                </div>
-                @if($post->author)
-                    <div class="flex items-center gap-1.5 border-l border-gray-200 pl-4">
-                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                        Oleh <span class="font-bold text-gray-700">{{ $post->author->name }}</span>
+            <div class="flex flex-wrap items-center justify-between gap-4 text-sm text-gray-500">
+                <div class="flex flex-wrap items-center gap-4">
+                    <div class="flex items-center gap-1.5">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        Diterbitkan {{ $post->published_at->format('d M Y') }}
                     </div>
-                @endif
+                    @if($post->author)
+                        <div class="flex items-center gap-1.5 border-l border-gray-200 pl-4">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                            Oleh <span class="font-bold text-gray-700">{{ $post->author->name }}</span>
+                        </div>
+                    @endif
+                </div>
+
+                <x-share-modal 
+                    :title="$post->title" 
+                    :text="'Baca artikel menarik: ' . $post->title . ' di Visit Sukabumi! ' . Str::limit(strip_tags($post->content), 120)" 
+                    :url="route('blog.show', $post->slug)" 
+                    :image="$post->image_path ? Storage::url($post->image_path) : null"
+                    :category="$post->category"
+                    button-class="flex items-center px-4 py-1.5 border border-gray-300 rounded-full hover:bg-gray-100 font-bold text-xs transition gap-2 text-gray-700 shadow-xs"
+                />
             </div>
         </header>
 
@@ -50,12 +61,25 @@
             {!! $post->content !!}
         </article>
 
-        {{-- Back to list --}}
-        <div class="mb-16">
+        {{-- Actions: Back & Share --}}
+        <div class="mb-16 flex flex-wrap items-center justify-between gap-4">
             <a href="{{ route('blog.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 rounded-full font-bold text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] hover:border-gray-300 transition-all shadow-sm">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                 Kembali ke Daftar Artikel
             </a>
+
+            <div class="flex items-center gap-3">
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider hidden sm:inline">Suka artikel ini?</span>
+                <x-share-modal 
+                    :title="$post->title" 
+                    :text="'Baca artikel menarik: ' . $post->title . ' di Visit Sukabumi! ' . Str::limit(strip_tags($post->content), 120)" 
+                    :url="route('blog.show', $post->slug)" 
+                    :image="$post->image_path ? Storage::url($post->image_path) : null"
+                    :category="$post->category"
+                    button-class="flex items-center px-5 py-2.5 bg-[#00aa6c] text-white hover:bg-[#008f5a] font-bold text-sm rounded-full transition gap-2 shadow-xs"
+                    button-text="Bagikan Artikel"
+                />
+            </div>
         </div>
 
         {{-- Related Posts --}}
