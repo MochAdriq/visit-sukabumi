@@ -14,6 +14,7 @@ class Place extends Model
         // Core
         'category_id', 'name', 'slug', 'description',
         'address', 'district', 'latitude', 'longitude', 'status',
+        'is_featured', 'badge_label',
         'price', 'phone', 'website', 'open_hours', 'duration', 'ticket_info',
         'facilities', 'nearby_places',
 
@@ -41,6 +42,7 @@ class Place extends Model
         'facilities'       => 'array',
         'hotel_facilities' => 'array',
         'tour_packages'    => 'array',
+        'is_featured'               => 'boolean',
         'has_ticket'                => 'boolean',
         'has_accommodation'         => 'boolean',
         'has_restaurant'            => 'boolean',

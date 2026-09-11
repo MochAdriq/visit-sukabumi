@@ -18,6 +18,7 @@ Route::get('/place/{place:slug}', [PlaceController::class, 'show'])->name('place
 Route::get('/search', function (\Illuminate\Http\Request $request) {
     return redirect()->route('place.index', $request->query());
 })->name('search');
+Route::get('/api/places/nearby', [PlaceController::class, 'nearby'])->name('api.places.nearby');
 
 Route::get('/event', [EventController::class, 'index'])->name('event.index');
 Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show');

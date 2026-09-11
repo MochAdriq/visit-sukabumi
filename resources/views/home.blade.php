@@ -26,7 +26,7 @@
                     </form>
                 </div>
                 <div class="flex flex-wrap justify-center gap-2">
-                    @foreach($exploreCategories as $cat)
+                    @foreach($categories ?? [] as $cat)
                     <a href="{{ url('/place?category=' . $cat->slug) }}" class="px-3 py-1 md:px-4 md:py-1.5 bg-white/20 backdrop-blur border border-white/40 text-white text-[12px] md:text-[13px] font-semibold rounded-full hover:bg-white hover:text-[#1a6bbf] transition-all">{{ $cat->name }}</a>
                     @endforeach
                 </div>
@@ -69,91 +69,232 @@
             </div>
         </div>
 
-        {{-- SECTION 2: DESTINASI TERPOPULER --}}
+        {{-- SECTION: MUST-SEES SUKABUMI (RECREATE SESUAI SCREENSHOT REFERENCE) --}}
+        <style>
+            .must-see-card .must-see-desc {
+                max-height: 0;
+                opacity: 0;
+                transform: translateY(14px);
+                transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+                overflow: hidden;
+            }
+            .must-see-card:hover .must-see-desc {
+                max-height: 90px;
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .must-see-card:hover .must-see-title {
+                text-decoration: underline;
+                text-decoration-thickness: 2px;
+                text-underline-offset: 4px;
+                text-decoration-color: #ffffff;
+            }
+        </style>
+
+        <div class="bg-[#fafbfc] py-10 md:py-14 border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 md:px-6">
+                <div class="mb-6 md:mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1.5">Must-sees</h2>
+                    <p class="text-[13px] md:text-[14px] text-gray-600 max-w-3xl">Liburan ke Sukabumi belum lengkap tanpa merasakan atraksi paling ikonik, petualangan seru, dan pengalaman otentik pilihan berikut.</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
+                    {{-- 1. Pacu Adrenalin --}}
+                    <a href="{{ route('place.index', ['search' => 'arung jeram']) }}" class="must-see-card group relative block aspect-square rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gray-900">
+                        <img src="https://images.unsplash.com/photo-1530866495561-507c9faab2ed?w=600&auto=format&fit=crop&q=80" 
+                             alt="Pacu Adrenalin" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent group-hover:from-black/90 group-hover:via-black/45 transition-colors duration-300 pointer-events-none"></div>
+
+                        {{-- Folded Ribbon Badge --}}
+                        <div class="absolute top-3 left-0 z-10">
+                            <span class="bg-[#f89e3b] text-gray-950 text-[11px] md:text-xs font-bold px-3 py-1 rounded-r-md shadow-md tracking-tight">
+                                Tantang Nyali
+                            </span>
+                        </div>
+
+                        {{-- Text Container (Strictly Center-Aligned) --}}
+                        <div class="absolute bottom-0 inset-x-0 p-4 md:p-5 z-10 flex flex-col items-center justify-end text-center">
+                            <h3 class="must-see-title text-[15px] md:text-[17px] font-bold text-white text-center leading-snug drop-shadow-sm transition-all duration-300">
+                                Pacu Adrenalin
+                            </h3>
+                            <div class="must-see-desc">
+                                <p class="text-[11px] md:text-[12px] text-white/95 leading-relaxed pt-1.5 text-center line-clamp-3">
+                                    Arung jeram, offroad & petualangan menantang pemacu adrenalin.
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+
+                    {{-- 2. Sukabumi untuk Anak --}}
+                    <a href="{{ route('place.index', ['search' => 'keluarga']) }}" class="must-see-card group relative block aspect-square rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gray-900">
+                        <img src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=600&auto=format&fit=crop&q=80" 
+                             alt="Sukabumi untuk Anak" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent group-hover:from-black/90 group-hover:via-black/45 transition-colors duration-300 pointer-events-none"></div>
+
+                        {{-- Text Container (Strictly Center-Aligned) --}}
+                        <div class="absolute bottom-0 inset-x-0 p-4 md:p-5 z-10 flex flex-col items-center justify-end text-center">
+                            <h3 class="must-see-title text-[15px] md:text-[17px] font-bold text-white text-center leading-snug drop-shadow-sm transition-all duration-300">
+                                Sukabumi untuk Anak
+                            </h3>
+                            <div class="must-see-desc">
+                                <p class="text-[11px] md:text-[12px] text-white/95 leading-relaxed pt-1.5 text-center line-clamp-3">
+                                    Taman rekreasi ramah anak & aktivitas seru untuk keluarga.
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+
+                    {{-- 3. Kuliner dan Makanan --}}
+                    <a href="{{ route('place.index', ['category' => 'kuliner']) }}" class="must-see-card group relative block aspect-square rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gray-900">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&auto=format&fit=crop&q=80" 
+                             alt="Kuliner dan Makanan" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent group-hover:from-black/90 group-hover:via-black/45 transition-colors duration-300 pointer-events-none"></div>
+
+                        {{-- Folded Ribbon Badge --}}
+                        <div class="absolute top-3 left-0 z-10">
+                            <span class="bg-[#f89e3b] text-gray-950 text-[11px] md:text-xs font-bold px-3 py-1 rounded-r-md shadow-md tracking-tight">
+                                Wajib Dicoba
+                            </span>
+                        </div>
+
+                        {{-- Text Container (Strictly Center-Aligned) --}}
+                        <div class="absolute bottom-0 inset-x-0 p-4 md:p-5 z-10 flex flex-col items-center justify-end text-center">
+                            <h3 class="must-see-title text-[15px] md:text-[17px] font-bold text-white text-center leading-snug drop-shadow-sm transition-all duration-300">
+                                Kuliner dan Makanan
+                            </h3>
+                            <div class="must-see-desc">
+                                <p class="text-[11px] md:text-[12px] text-white/95 leading-relaxed pt-1.5 text-center line-clamp-3">
+                                    Mochi legendaris & santapan lezat otentik Sukabumi.
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+
+                    {{-- 4. Budaya dan Sejarah --}}
+                    <a href="{{ route('place.index', ['search' => 'sejarah']) }}" class="must-see-card group relative block aspect-square rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gray-900">
+                        <img src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=600&auto=format&fit=crop&q=80" 
+                             alt="Budaya dan Sejarah" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent group-hover:from-black/90 group-hover:via-black/45 transition-colors duration-300 pointer-events-none"></div>
+
+                        {{-- Text Container (Strictly Center-Aligned) --}}
+                        <div class="absolute bottom-0 inset-x-0 p-4 md:p-5 z-10 flex flex-col items-center justify-end text-center">
+                            <h3 class="must-see-title text-[15px] md:text-[17px] font-bold text-white text-center leading-snug drop-shadow-sm transition-all duration-300">
+                                Budaya dan Sejarah
+                            </h3>
+                            <div class="must-see-desc">
+                                <p class="text-[11px] md:text-[12px] text-white/95 leading-relaxed pt-1.5 text-center line-clamp-3">
+                                    Kasepuhan adat & warisan sejarah tempo dulu.
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+
+                    {{-- 5. Santai & Healing --}}
+                    <a href="{{ route('place.index', ['search' => 'curug']) }}" class="must-see-card group relative block aspect-square rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gray-900">
+                        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600&auto=format&fit=crop&q=80" 
+                             alt="Santai & Healing" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent group-hover:from-black/90 group-hover:via-black/45 transition-colors duration-300 pointer-events-none"></div>
+
+                        {{-- Folded Ribbon Badge --}}
+                        <div class="absolute top-3 left-0 z-10">
+                            <span class="bg-[#f89e3b] text-gray-950 text-[11px] md:text-xs font-bold px-3 py-1 rounded-r-md shadow-md tracking-tight">
+                                Favorit
+                            </span>
+                        </div>
+
+                        {{-- Text Container (Strictly Center-Aligned) --}}
+                        <div class="absolute bottom-0 inset-x-0 p-4 md:p-5 z-10 flex flex-col items-center justify-end text-center">
+                            <h3 class="must-see-title text-[15px] md:text-[17px] font-bold text-white text-center leading-snug drop-shadow-sm transition-all duration-300">
+                                Santai & Healing
+                            </h3>
+                            <div class="must-see-desc">
+                                <p class="text-[11px] md:text-[12px] text-white/95 leading-relaxed pt-1.5 text-center line-clamp-3">
+                                    Curug asri berhawa sejuk & pemandian air panas alami.
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {{-- SECTION 2: PILIHAN TERBAIK (DINAMIS ⇄ DESTINASI TERDEKAT) --}}
         <div class="bg-white py-10 md:py-14 border-b border-gray-100">
             <div class="max-w-7xl mx-auto px-4 md:px-6">
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-5 md:mb-7">
                     <div>
-                        <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-1">Destinasi Terpopuler</h2>
-                        <p class="text-[13px] md:text-[14px] text-gray-500">Pilihan terbaik berdasarkan review ribuan wisatawan</p>
+                        <div class="flex flex-wrap items-center gap-2.5 mb-1">
+                            <h2 id="popular-section-title" class="text-xl md:text-3xl font-bold text-gray-900">Pilihan Terbaik</h2>
+                            <button type="button" id="btn-user-location" onclick="handleUserLocationClick()" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all duration-200 bg-blue-50/80 text-[#1a6bbf] border-blue-200 hover:bg-blue-100 hover:border-blue-300 cursor-pointer shadow-xs" title="Tampilkan tempat wisata terdekat dari posisi Anda">
+                                <svg class="w-3.5 h-3.5 text-[#1a6bbf] flex-shrink-0 transition-transform" id="icon-location-pin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                                <span id="label-user-location">Gunakan Lokasi Saya</span>
+                            </button>
+                        </div>
+                        <p id="popular-section-subtitle" class="text-[13px] md:text-[14px] text-gray-500">Destinasi rekomendasi kurasi khusus untuk pengalaman terbaik di Sukabumi</p>
                     </div>
-                    <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide" id="ticket-tabs">
-                        <button onclick="switchTab('alam')" id="tab-alam" class="vs-tab-pill active flex-shrink-0">Wisata Alam</button>
-                        <button onclick="switchTab('pantai')" id="tab-pantai" class="vs-tab-pill flex-shrink-0">Wisata Pantai</button>
-                        <button onclick="switchTab('kuliner')" id="tab-kuliner" class="vs-tab-pill flex-shrink-0">Kuliner</button>
-                    </div>
                 </div>
 
-                @php
-                $placeCardTemplate = function($place, $loop) {
-                    return $place;
-                };
-                @endphp
-
-                <div id="content-alam" class="vs-tab-content grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                    @forelse($popularAlam as $place)
+                {{-- Default: Pilihan Terbaik (Diambil dari database via toggle Admin is_featured) --}}
+                <div id="content-best-choice" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
+                    @forelse($bestChoices as $place)
                     <a href="{{ route('place.show', $place->slug) }}" class="group block">
-                        <div class="overflow-hidden rounded-xl mb-2 aspect-[3/4] relative bg-gray-100">
-                            @if($loop->first)<span class="absolute top-2 left-0 bg-[#f9a826] text-gray-900 text-[10px] font-bold px-2 py-0.5 z-10 rounded-r shadow-sm">Pilihan Utama</span>@endif
-                            <img src="{{ $place->primaryImage ? Storage::url($place->primaryImage->image_path) : 'https://placehold.co/320x427/e5e7eb/9ca3af?text=' . urlencode($place->name) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                        {{-- Photo Container --}}
+                        <div class="overflow-hidden rounded-2xl mb-2.5 aspect-[4/3] bg-gray-100 relative">
+                            @if($place->badge_label)
+                                <span class="absolute top-2.5 left-2.5 bg-gradient-to-r from-amber-500 to-amber-400 text-gray-950 text-[10px] md:text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-md z-10 flex items-center gap-1">
+                                    <svg class="w-3 h-3 text-gray-950 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                    {{ $place->badge_label }}
+                                </span>
+                            @elseif($place->is_featured)
+                                <span class="absolute top-2.5 left-2.5 bg-amber-400 text-gray-950 text-[10px] md:text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-sm z-10 flex items-center gap-1">
+                                    <svg class="w-2.5 h-2.5 text-gray-950 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                    Pilihan Terbaik
+                                </span>
+                            @endif
+
+                            <img src="{{ $place->primaryImage ? Storage::url($place->primaryImage->image_path) : 'https://placehold.co/400x300/e2e8f0/64748b?text=' . urlencode($place->name) }}" 
+                                 alt="{{ $place->name }}" 
+                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                            <div class="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors"></div>
                         </div>
-                        <h4 class="text-[13px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-tight mb-1">{{ $place->name }}</h4>
-                        <div class="flex items-center gap-1 mb-1">
-                            <svg class="w-3 h-3 text-[#f9a826] fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                            <span class="text-[11px] font-bold text-gray-700">{{ number_format($place->reviews_avg_rating ?? 0, 1) }}</span>
-                            <span class="text-[10px] text-gray-400">({{ $place->reviews_count ?? 0 }})</span>
+
+                        {{-- Content Below Photo --}}
+                        <h4 class="text-[14px] md:text-[15px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-snug mb-1 truncate transition-colors">
+                            {{ $place->name }}
+                        </h4>
+
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-1.5">
+                            <div class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 text-[#f9a826] fill-current flex-shrink-0" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span class="font-bold text-gray-800">{{ number_format($place->reviews_avg_rating ?? 0, 1) }}</span>
+                                <span class="text-gray-400">({{ $place->reviews_count ?? 0 }})</span>
+                            </div>
+                            @if($place->district)
+                                <span class="text-gray-300">•</span>
+                                <span class="truncate max-w-[110px]">{{ $place->district }}</span>
+                            @endif
                         </div>
-                        @if($place->has_general_price)
-                        <span class="text-[11px] font-bold text-[#1a6bbf]">Mulai Rp {{ number_format($place->price ?? 0, 0, ',', '.') }}</span>
+
+                        @if($place->description)
+                            <p class="text-[12px] text-gray-500 leading-relaxed line-clamp-2">{{ Str::limit(strip_tags($place->description), 90) }}</p>
                         @endif
                     </a>
                     @empty
-                    <p class="text-gray-400 text-sm col-span-full">Belum ada data.</p>
+                    <p class="text-gray-400 text-sm col-span-full">Belum ada destinasi pilihan.</p>
                     @endforelse
                 </div>
 
-                <div id="content-pantai" class="vs-tab-content hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                    @forelse($popularPantai as $place)
-                    <a href="{{ route('place.show', $place->slug) }}" class="group block">
-                        <div class="overflow-hidden rounded-xl mb-2 aspect-[3/4] relative bg-gray-100">
-                            @if($loop->first)<span class="absolute top-2 left-0 bg-[#f9a826] text-gray-900 text-[10px] font-bold px-2 py-0.5 z-10 rounded-r shadow-sm">Pilihan Utama</span>@endif
-                            <img src="{{ $place->primaryImage ? Storage::url($place->primaryImage->image_path) : 'https://placehold.co/320x427/e5e7eb/9ca3af?text=' . urlencode($place->name) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-                        </div>
-                        <h4 class="text-[13px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-tight mb-1">{{ $place->name }}</h4>
-                        <div class="flex items-center gap-1 mb-1">
-                            <svg class="w-3 h-3 text-[#f9a826] fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                            <span class="text-[11px] font-bold text-gray-700">{{ number_format($place->reviews_avg_rating ?? 0, 1) }}</span>
-                            <span class="text-[10px] text-gray-400">({{ $place->reviews_count ?? 0 }})</span>
-                        </div>
-                        @if($place->has_general_price)
-                        <span class="text-[11px] font-bold text-[#1a6bbf]">Mulai Rp {{ number_format($place->price ?? 0, 0, ',', '.') }}</span>
-                        @endif
-                    </a>
-                    @empty
-                    <p class="text-gray-400 text-sm col-span-full">Belum ada data.</p>
-                    @endforelse
-                </div>
-
-                <div id="content-kuliner" class="vs-tab-content hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                    @forelse($popularKuliner as $place)
-                    <a href="{{ route('place.show', $place->slug) }}" class="group block">
-                        <div class="overflow-hidden rounded-xl mb-2 aspect-[3/4] relative bg-gray-100">
-                            @if($loop->first)<span class="absolute top-2 left-0 bg-[#f9a826] text-gray-900 text-[10px] font-bold px-2 py-0.5 z-10 rounded-r shadow-sm">Pilihan Utama</span>@endif
-                            <img src="{{ $place->primaryImage ? Storage::url($place->primaryImage->image_path) : 'https://placehold.co/320x427/e5e7eb/9ca3af?text=' . urlencode($place->name) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-                        </div>
-                        <h4 class="text-[13px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-tight mb-1">{{ $place->name }}</h4>
-                        <div class="flex items-center gap-1 mb-1">
-                            <svg class="w-3 h-3 text-[#f9a826] fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                            <span class="text-[11px] font-bold text-gray-700">{{ number_format($place->reviews_avg_rating ?? 0, 1) }}</span>
-                            <span class="text-[10px] text-gray-400">({{ $place->reviews_count ?? 0 }})</span>
-                        </div>
-                        @if($place->has_general_price)
-                        <span class="text-[11px] font-bold text-[#1a6bbf]">Mulai Rp {{ number_format($place->price ?? 0, 0, ',', '.') }}</span>
-                        @endif
-                    </a>
-                    @empty
-                    <p class="text-gray-400 text-sm col-span-full">Belum ada data.</p>
-                    @endforelse
+                {{-- Container Khusus: Destinasi Terdekat (Hidden secara default, aktif saat izin lokasi diberikan) --}}
+                <div id="content-nearby" class="hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
+                    {{-- Diisi secara dinamis via JavaScript --}}
                 </div>
 
                 <div class="mt-8 text-center">
@@ -165,26 +306,69 @@
             </div>
         </div>
 
-        {{-- SECTION 3: JELAJAHI KATEGORI --}}
-        <div class="bg-gray-50 py-10 md:py-14 border-b border-gray-100">
+        {{-- SECTION 3: DESTINASI TERPOPULER (ALL-IN-ONE 5 CARD BY REVIEW) --}}
+        <div class="bg-[#f0f7ff] py-10 md:py-14 border-b border-blue-100">
             <div class="max-w-7xl mx-auto px-4 md:px-6">
-                <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-1">Jelajahi Sukabumi</h2>
-                <p class="text-[13px] md:text-[14px] text-gray-500 mb-6 md:mb-8">Dari petualangan ekstrem hingga ketenangan alam — temukan pengalaman terbaik-mu</p>
-                <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5">
-                    @foreach($exploreCategories as $cat)
-                    <a href="{{ url('/place?category=' . $cat->slug) }}" class="group block">
-                        <div class="overflow-hidden rounded-2xl mb-3 aspect-[4/3] bg-gray-200 flex items-center justify-center relative">
-                            @if($cat->cover_image)
-                                <img src="{{ Storage::url($cat->cover_image) }}" alt="{{ $cat->custom_title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-                                <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors rounded-2xl"></div>
-                            @else
-                                <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-6 md:mb-8">
+                    <div>
+                        <div class="inline-flex items-center gap-1.5 border border-blue-200 bg-blue-100/70 text-[#1a6bbf] px-3 py-1 rounded-full text-xs font-bold mb-2.5 uppercase tracking-wider">
+                            <svg class="w-3.5 h-3.5 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                            </svg>
+                            Paling Favorit
+                        </div>
+                        <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-1">Destinasi Terpopuler</h2>
+                        <p class="text-[13px] md:text-[14px] text-gray-600">Paling banyak dikunjungi dan direkomendasikan oleh ribuan wisatawan</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
+                    @forelse($popularPlaces as $place)
+                    <a href="{{ route('place.show', $place->slug) }}" class="group block">
+                        {{-- Photo Container --}}
+                        <div class="overflow-hidden rounded-2xl mb-2.5 aspect-[4/3] bg-gray-100 relative">
+                            @if($place->badge_label)
+                                <span class="absolute top-2.5 left-2.5 bg-gradient-to-r from-amber-500 to-amber-400 text-gray-950 text-[10px] md:text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-md z-10 flex items-center gap-1">
+                                    <svg class="w-3 h-3 text-gray-950 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                    {{ $place->badge_label }}
+                                </span>
+                            @elseif($loop->first)
+                                <span class="absolute top-2.5 left-2.5 bg-[#1a6bbf] text-white text-[10px] md:text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm z-10 flex items-center gap-1">
+                                    <svg class="w-2.5 h-2.5 text-amber-300 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                    Top #1 Populer
+                                </span>
+                            @endif
+
+                            <img src="{{ $place->primaryImage ? Storage::url($place->primaryImage->image_path) : 'https://placehold.co/400x300/e2e8f0/64748b?text=' . urlencode($place->name) }}" 
+                                 alt="{{ $place->name }}" 
+                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                            <div class="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors"></div>
+                        </div>
+
+                        {{-- Content Below Photo --}}
+                        <h4 class="text-[14px] md:text-[15px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-snug mb-1 truncate transition-colors">
+                            {{ $place->name }}
+                        </h4>
+
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-1.5">
+                            <div class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 text-[#f9a826] fill-current flex-shrink-0" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span class="font-bold text-gray-800">{{ number_format($place->reviews_avg_rating ?? 0, 1) }}</span>
+                                <span class="text-gray-400">({{ $place->reviews_count ?? 0 }})</span>
+                            </div>
+                            @if($place->district)
+                                <span class="text-gray-300">•</span>
+                                <span class="truncate max-w-[110px]">{{ $place->district }}</span>
                             @endif
                         </div>
-                        <h3 class="text-[15px] font-bold text-gray-900 group-hover:text-[#1a6bbf] transition-colors mb-1">{{ $cat->custom_title }}</h3>
-                        <p class="text-[12px] text-gray-500 leading-relaxed line-clamp-2">{{ $cat->custom_subtitle }}</p>
+
+                        @if($place->description)
+                            <p class="text-[12px] text-gray-500 leading-relaxed line-clamp-2">{{ Str::limit(strip_tags($place->description), 90) }}</p>
+                        @endif
                     </a>
-                    @endforeach
+                    @empty
+                    <p class="text-gray-400 text-sm col-span-full">Belum ada data destinasi terpopuler.</p>
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -324,12 +508,130 @@
 
 @push('scripts')
 <script>
-    function switchTab(tab) {
-        document.querySelectorAll('.vs-tab-content').forEach(el => el.classList.add('hidden'));
-        document.querySelectorAll('.vs-tab-pill').forEach(el => el.classList.remove('active'));
-        document.getElementById('content-' + tab).classList.remove('hidden');
-        document.getElementById('tab-' + tab).classList.add('active');
+    function handleUserLocationClick() {
+        const btn = document.getElementById('btn-user-location');
+        const label = document.getElementById('label-user-location');
+
+        if (!navigator.geolocation) {
+            alert('Browser Anda tidak mendukung fitur lokasi GPS.');
+            return;
+        }
+
+        if (!window.isSecureContext) {
+            btn.disabled = false;
+            label.textContent = 'Gunakan Lokasi Saya';
+            alert('Fitur akses lokasi GPS memerlukan koneksi aman (HTTPS). Silakan buka website ini melalui https://' + window.location.host);
+            return;
+        }
+
+        label.textContent = 'Mendeteksi...';
+        btn.disabled = true;
+
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                sessionStorage.setItem('user_lat', lat);
+                sessionStorage.setItem('user_lng', lng);
+                loadNearbyPlaces(lat, lng);
+            },
+            function(error) {
+                btn.disabled = false;
+                label.textContent = 'Gunakan Lokasi Saya';
+                console.warn('Geolocation error:', error);
+                if (error.code === 1) {
+                    alert('Izin akses lokasi ditolak. Silakan izinkan akses lokasi pada browser Anda.');
+                } else {
+                    alert('Gagal mendeteksi lokasi saat ini. Pastikan GPS/fitur lokasi Anda aktif.');
+                }
+            },
+            { timeout: 10000, enableHighAccuracy: false }
+        );
     }
+
+    function loadNearbyPlaces(lat, lng) {
+        const bestChoiceContainer = document.getElementById('content-best-choice');
+        const nearbyContainer = document.getElementById('content-nearby');
+        const title = document.getElementById('popular-section-title');
+        const subtitle = document.getElementById('popular-section-subtitle');
+        const btn = document.getElementById('btn-user-location');
+        const label = document.getElementById('label-user-location');
+        const pinIcon = document.getElementById('icon-location-pin');
+
+        label.textContent = 'Memuat Destinasi...';
+
+        fetch(`/api/places/nearby?lat=${lat}&lng=${lng}`)
+            .then(res => res.json())
+            .then(res => {
+                if (!res.success || !res.data || res.data.length === 0) {
+                    label.textContent = 'Gunakan Lokasi Saya';
+                    btn.disabled = false;
+                    return;
+                }
+
+                let html = '';
+                res.data.forEach((place, index) => {
+                    const isFirst = index === 0;
+                    let badgeHtml = '';
+                    if (place.badge_label) {
+                        badgeHtml = `<span class="absolute top-2.5 left-2.5 bg-gradient-to-r from-amber-500 to-amber-400 text-gray-950 text-[10px] md:text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-md z-10 flex items-center gap-1"><svg class="w-3 h-3 text-gray-950 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>${place.badge_label}</span>`;
+                    } else if (isFirst) {
+                        badgeHtml = `<span class="absolute top-2.5 left-2.5 bg-emerald-500 text-white text-[10px] md:text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-md z-10 flex items-center gap-1"><svg class="w-2.5 h-2.5 text-white fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>Paling Dekat</span>`;
+                    }
+                    const badgeJarak = place.distance_formatted ? `<span class="absolute top-2.5 right-2.5 bg-black/65 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-sm border border-white/20 z-10"><svg class="w-2.5 h-2.5 text-[#f9a826]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>${place.distance_formatted}</span>` : '';
+                    const districtHtml = place.district ? `<span class="text-gray-300">•</span><span class="truncate max-w-[110px]">${place.district}</span>` : '';
+                    const descHtml = place.description ? `<p class="text-[12px] text-gray-500 leading-relaxed line-clamp-2">${place.description}</p>` : '';
+
+                    html += `
+                    <a href="${place.url}" class="group block">
+                        <div class="overflow-hidden rounded-2xl mb-2.5 aspect-[4/3] bg-gray-100 relative">
+                            ${badgeHtml}
+                            ${badgeJarak}
+                            <img src="${place.cover_image}" alt="${place.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                            <div class="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors"></div>
+                        </div>
+                        <h4 class="text-[14px] md:text-[15px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-snug mb-1 truncate transition-colors">${place.name}</h4>
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-1.5">
+                            <div class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 text-[#f9a826] fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span class="font-bold text-gray-800">${Number(place.rating).toFixed(1)}</span>
+                                <span class="text-gray-400">(${place.reviews_count})</span>
+                            </div>
+                            ${districtHtml}
+                        </div>
+                        ${descHtml}
+                    </a>`;
+                });
+
+                nearbyContainer.innerHTML = html;
+
+                // Sembunyikan content best choice, tampilkan nearby
+                if (bestChoiceContainer) bestChoiceContainer.classList.add('hidden');
+                nearbyContainer.classList.remove('hidden');
+
+                // Perbarui judul dan teks tombol
+                title.textContent = 'Destinasi Terdekat dari Anda';
+                subtitle.textContent = 'Menampilkan rekomendasi tempat wisata terdekat dari posisi Anda saat ini';
+                btn.classList.remove('bg-blue-50/80', 'text-[#1a6bbf]', 'border-blue-200');
+                btn.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-300');
+                if (pinIcon) pinIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>`;
+                label.textContent = 'Lokasi Aktif (Perbarui)';
+                btn.disabled = false;
+            })
+            .catch(err => {
+                console.error('Error loading nearby places:', err);
+                label.textContent = 'Gunakan Lokasi Saya';
+                btn.disabled = false;
+            });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const savedLat = sessionStorage.getItem('user_lat');
+        const savedLng = sessionStorage.getItem('user_lng');
+        if (savedLat && savedLng) {
+            loadNearbyPlaces(savedLat, savedLng);
+        }
+    });
 
     document.addEventListener("DOMContentLoaded", function() {
         const firstBtn = document.querySelector('.event-filter-btn');

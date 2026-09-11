@@ -72,6 +72,31 @@ class PlaceResource extends Resource
                         ->placeholder('Contoh: Pelabuhan Ratu'),
                 ]),
 
+            // ── PILIHAN TERBAIK & BADGE ──────────────────────────────
+            Forms\Components\Section::make('Pilihan Terbaik & Badge Promosi')
+                ->description('Tandai destinasi ini sebagai rekomendasi pilihan untuk tampil di baris utama beranda.')
+                ->icon('heroicon-o-star')
+                ->columns(2)
+                ->schema([
+                    Forms\Components\Toggle::make('is_featured')
+                        ->label('Tampilkan di Pilihan Terbaik')
+                        ->helperText('Jika aktif, destinasi ini akan tampil di bagian Pilihan Terbaik di halaman depan.')
+                        ->default(false),
+                    Forms\Components\Select::make('badge_label')
+                        ->label('Badge Khusus (Label Kartu)')
+                        ->helperText('Pilih label penanda visual di sudut kartu destinasi')
+                        ->options([
+                            'Pilihan Editor' => 'Pilihan Editor',
+                            'Top Rated'      => 'Top Rated',
+                            'Featured'       => 'Featured',
+                            'Trending'       => 'Trending',
+                            'Favorite'       => 'Favorite',
+                            'Hidden Gem'     => 'Hidden Gem',
+                        ])
+                        ->placeholder('Tanpa Badge')
+                        ->nullable(),
+                ]),
+
             // ── KOORDINAT PETA ───────────────────────────────────────
             Forms\Components\Section::make('Koordinat Peta')
                 ->columns(2)
@@ -383,6 +408,13 @@ class PlaceResource extends Resource
                 Tables\Columns\TextColumn::make('district')
                     ->searchable()
                     ->label('Kecamatan'),
+                Tables\Columns\ToggleColumn::make('is_featured')
+                    ->label('Pilihan Terbaik'),
+                Tables\Columns\TextColumn::make('badge_label')
+                    ->badge()
+                    ->color('warning')
+                    ->placeholder('-')
+                    ->label('Badge'),
                 Tables\Columns\IconColumn::make('has_ticket')
                     ->boolean()
                     ->label('Tiket'),
@@ -413,6 +445,7 @@ class PlaceResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                Tables\Filters\TernaryFilter::make('is_featured')->label('Pilihan Terbaik'),
                 Tables\Filters\SelectFilter::make('status')
                     ->options(['published' => 'Published', 'draft' => 'Draft']),
                 Tables\Filters\SelectFilter::make('category')
