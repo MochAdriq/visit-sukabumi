@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Storage;
 
 class Tag extends Model
 {
@@ -39,6 +40,19 @@ class Tag extends Model
             'wisata'   => 'Wisata',
             default    => ucfirst($this->type),
         };
+    }
+
+    /** URL gambar sampul dinamis (diambil dari salah satu tempat di dalamnya) */
+    public function getCoverImageAttribute(): string
+    {
+        $place = $this->places()->whereHas('primaryImage')->with('primaryImage')->inRandomOrder()->first();
+        if ($place && $place->primaryImage) {
+            return Storage::url($place->primaryImage->image_path);
+        }
+        // Fallback images based on type
+        return $this->type === 'wisata' 
+            ? asset('assets/images/12.jpg')
+            : asset('assets/images/11.jpg');
     }
 
     /** URL halaman listing tag ini */

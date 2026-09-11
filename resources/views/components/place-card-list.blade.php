@@ -1,8 +1,7 @@
 @props(['place'])
 
 @php
-    $fallbackImage = "https://images.unsplash.com/photo-1542662565-7e4fd1e56993?q=80&w=640&h=480&fit=crop";
-    $image = $place->primaryImage ? Storage::url($place->primaryImage->image_path) : $fallbackImage;
+    $image = $place->cover_image_url;
     $rating = $place->reviews_avg_rating ?? 0;
     $fullBubbles = floor($rating);
     $halfBubble = ($rating - $fullBubbles) >= 0.5;
@@ -14,6 +13,13 @@
         <a href="{{ route('place.show', $place->slug) }}" class="block w-full h-full">
             <img alt="{{ $place->name }}" src="{{ $image }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
         </a>
+        
+        {{-- Popular Badge --}}
+        @if($rating >= 4.5 && ($place->reviews_count ?? 0) >= 10)
+            <div class="absolute top-3 left-3 bg-[#f9a826] text-gray-900 text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-full shadow-sm z-10">
+                Pilihan Populer
+            </div>
+        @endif
         <!-- Wishlist Icon -->
         <div class="absolute top-3 right-3 z-20">
             @auth
@@ -80,9 +86,19 @@
             </div>
 
             {{-- Description Snippet --}}
-            <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed">
+            <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed mb-3">
                 {{ $place->description }}
             </p>
+
+            {{-- Best Review Snippet (TripAdvisor Style) --}}
+            @if(isset($place->reviews) && $place->reviews->count() > 0)
+                @php $bestReview = $place->reviews->first(); @endphp
+                <div class="bg-[#f8f9fa] rounded-lg p-3 text-sm italic text-gray-700 border-l-4 border-[#00aa6c] relative">
+                    <svg class="absolute top-2 right-2 w-6 h-6 text-gray-200" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                    <p class="line-clamp-2 pr-6">"{{ $bestReview->content }}"</p>
+                    <div class="mt-1 font-semibold text-gray-500 text-[11px] not-italic">— {{ explode(' ', $bestReview->user->name)[0] }}</div>
+                </div>
+            @endif
             
             {{-- Facilities tags (if any) --}}
             @if(is_array($place->facilities) && count($place->facilities) > 0)
@@ -100,14 +116,17 @@
         {{-- Action Button --}}
         <div class="mt-4 flex items-end justify-between border-t border-gray-100 pt-3">
             <div>
-                @if($place->price)
-                    <div class="text-xs text-gray-500">Mulai dari</div>
-                    <div class="font-extrabold text-gray-900 text-lg">Rp {{ number_format($place->price, 0, ',', '.') }}</div>
+                @if($place->price && $place->price > 0)
+                    <div class="text-[11px] font-bold text-gray-400 uppercase tracking-wide">Mulai dari</div>
+                    <div class="font-extrabold text-[#1a6bbf] text-lg">Rp {{ number_format($place->price, 0, ',', '.') }}</div>
                 @else
-                    <div class="font-bold text-green-600 text-sm">Akses Gratis</div>
+                    <div class="font-bold text-[#00aa6c] text-sm flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Gratis Masuk
+                    </div>
                 @endif
             </div>
-            <a href="{{ route('place.show', $place->slug) }}" class="bg-[#f9a826] hover:bg-[#e8971e] text-gray-900 text-sm font-bold px-5 py-2 rounded-full transition-colors shadow-sm">
+            <a href="{{ route('place.show', $place->slug) }}" class="bg-gray-900 hover:bg-[#1a6bbf] text-white text-sm font-bold px-6 py-2.5 rounded-xl transition-colors shadow-sm">
                 Lihat Detail
             </a>
         </div>

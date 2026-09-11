@@ -9,7 +9,7 @@
         {{-- SECTION 1: HERO --}}
         <div class="relative bg-gray-900" style="height: 60vh; min-height: 420px;">
             <div class="absolute inset-0">
-                <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920&h=800&fit=crop" alt="Pemandangan Sukabumi" />
+                <img class="w-full h-full object-cover" src="{{ asset('assets/images/1.webp') }}" alt="Pemandangan Sukabumi" />
                 <div class="absolute inset-0 bg-black opacity-35"></div>
             </div>
             <div class="relative max-w-7xl mx-auto px-4 md:px-6 h-full flex flex-col items-center justify-center gap-5 md:gap-8">

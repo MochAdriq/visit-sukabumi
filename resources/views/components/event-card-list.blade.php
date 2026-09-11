@@ -1,7 +1,7 @@
 @props(['event'])
 
 @php
-    $fallbackImage = "https://images.unsplash.com/photo-1542662565-7e4fd1e56993?q=80&w=640&h=480&fit=crop";
+    $fallbackImage = asset('assets/images/10.jpg');
     $image = $event->image_path ? Storage::url($event->image_path) : $fallbackImage;
     $rating = $event->reviews_avg_rating ?? 0;
     $fullBubbles = floor($rating);

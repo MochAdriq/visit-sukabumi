@@ -11,7 +11,7 @@
     <section class="relative h-[85vh] min-h-[600px] w-full flex items-center justify-center overflow-hidden">
         {{-- Background Image (High quality) --}}
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1543888363-228ea1df8e21?q=80&w=2000&auto=format&fit=crop" alt="Pemandangan Sukabumi" class="w-full h-full object-cover filter brightness-[0.6] transform hover:scale-105 transition-transform duration-[20s] ease-out">
+            <img src="{{ asset('assets/images/7.jpg') }}" alt="Pemandangan Sukabumi" class="w-full h-full object-cover filter brightness-[0.6] transform hover:scale-105 transition-transform duration-[20s] ease-out">
         </div>
         
         {{-- Gradient Overlay --}}
@@ -123,7 +123,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 h-auto md:h-[500px]">
             {{-- Surfing --}}
             <div class="group relative rounded-3xl overflow-hidden h-[250px] md:h-full lg:col-span-2">
-                <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <img src="{{ asset('assets/images/galeri seputar 1.webp') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 to-transparent"></div>
                 <div class="absolute bottom-6 left-6 right-6">
                     <h3 class="text-2xl font-bold text-white mb-2">Ombak Kelas Dunia</h3>
@@ -133,7 +133,7 @@
             
             {{-- Kuliner --}}
             <div class="group relative rounded-3xl overflow-hidden h-[250px] md:h-full">
-                <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <img src="{{ asset('assets/images/galeri seputar 2.jpg') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 to-transparent"></div>
                 <div class="absolute bottom-6 left-6 right-6">
                     <h3 class="text-xl font-bold text-white mb-2">Cita Rasa Otentik</h3>
@@ -143,7 +143,7 @@
 
             {{-- Curug --}}
             <div class="group relative rounded-3xl overflow-hidden h-[250px] md:h-full">
-                <img src="https://images.unsplash.com/photo-1432405972618-c600f5171b74?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <img src="{{ asset('assets/images/galeri seputar 3.jpg') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 to-transparent"></div>
                 <div class="absolute bottom-6 left-6 right-6">
                     <h3 class="text-xl font-bold text-white mb-2">1001 Curug</h3>

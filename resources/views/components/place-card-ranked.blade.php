@@ -1,8 +1,7 @@
 @props(['place', 'rank'])
 
 @php
-    $fallbackImage = "https://images.unsplash.com/photo-1542662565-7e4fd1e56993?q=80&w=640&h=480&fit=crop";
-    $image = $place->primaryImage ? Storage::url($place->primaryImage->image_path) : $fallbackImage;
+    $image = $place->cover_image_url;
     $rating = $place->reviews_avg_rating ?? 0;
     $fullBubbles = floor($rating);
     $halfBubble = ($rating - $fullBubbles) >= 0.5;

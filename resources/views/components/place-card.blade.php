@@ -1,19 +1,7 @@
 @props(['place'])
 
 @php
-    // Basic array of Unsplash IDs to act as beautiful placeholders
-    $randomIds = [
-        'wisata-alam' => ['1542662565-7e4fd1e56993', '1596404554311-66774e50ebec', '1448375240586-882707db888b', '1610486001224-b0402b8552fc'],
-        'wisata-pantai' => ['1507525428034-b723cf961d3e', '1506905925346-21bda4d32df4'],
-        'kuliner' => ['1555939594-58d7cb561ad1', '1565299624946-b28f40a0ae38', '1512621776951-a57141f2eefd'],
-        'hotel-resort' => ['1566073771259-6a8506099945', '1582719508461-89dac9aa45ce'],
-    ];
-    $catSlug = $place->category ? $place->category->slug : 'wisata-alam';
-    $catImages = $randomIds[$catSlug] ?? ['1610486001224-b0402b8552fc', '1542662565-7e4fd1e56993'];
-    $randomImageId = $catImages[$place->id % count($catImages)];
-    
-    $fallbackImage = "https://images.unsplash.com/photo-{$randomImageId}?q=80&w=640&h=480&fit=crop";
-    $image = $place->primaryImage ? Storage::url($place->primaryImage->image_path) : $fallbackImage;
+    $image = $place->cover_image_url;
     
     // Assign a badge dynamically just for demo
     $badges = ['Top Rated', 'Special offer', 'An itinerary essential', 'Popular', 'Staff Pick'];

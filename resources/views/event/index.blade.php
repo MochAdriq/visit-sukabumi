@@ -7,7 +7,7 @@
     {{-- HERO BANNER --}}
     <div class="w-full h-[350px] md:h-[550px] relative md:mt-4 max-w-[1400px] mx-auto md:px-4 sm:px-6 lg:px-8">
         <div class="w-full h-full md:rounded-[2rem] overflow-hidden relative shadow-lg group">
-            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1920&h=1080&fit=crop" alt="Event & Festival" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[10s]">
+            <img src="{{ asset('assets/images/6.jpg') }}" alt="Event & Festival" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[10s]">
             <div class="absolute inset-0 bg-black/40"></div>
             
             <div class="absolute inset-0 flex flex-col items-center justify-center px-4 md:px-10 text-center">

@@ -3,7 +3,7 @@
 @section('content')
 <div class="min-h-screen flex items-center justify-center relative bg-gray-900 py-12">
     {{-- Background Image with overlay --}}
-    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920&h=1080&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay fixed" alt="Sukabumi Background">
+    <img src="{{ asset('assets/images/2.webp') }}" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay fixed" alt="Sukabumi Background">
     
     <div class="absolute inset-0 bg-gradient-to-b from-gray-900/40 via-gray-900/80 to-gray-900 fixed"></div>
 
