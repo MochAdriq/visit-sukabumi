@@ -337,12 +337,12 @@ $navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
 {{-- ════════════════════════════════════════════
      GLOBAL SEARCH MODAL (Desktop & Mobile)
      ════════════════════════════════════════════ --}}
-<div id="search-modal" class="fixed inset-0 z-[1001] hidden items-start justify-center pt-16 md:pt-24 px-4">
+<div id="search-modal" style="display: none; position: fixed; inset: 0; z-index: 99999;" class="items-center justify-center p-4">
     {{-- Backdrop --}}
-    <div id="search-modal-backdrop" onclick="closeSearchModal()" class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
+    <div id="search-modal-backdrop" onclick="closeSearchModal()" style="position: fixed; inset: 0; z-index: 1;" class="bg-black/70 backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
 
     {{-- Modal Content Card --}}
-    <div id="search-modal-box" class="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden transform scale-95 opacity-0 transition-all duration-300 z-10 border border-gray-100">
+    <div id="search-modal-box" onclick="event.stopPropagation()" style="position: relative; z-index: 2;" class="w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden transform scale-95 opacity-0 transition-all duration-300 border border-gray-100 my-auto">
         {{-- Search Input Form --}}
         <form action="{{ route('place.index') }}" method="GET" class="p-4 md:p-6 border-b border-gray-100">
             <div class="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus-within:border-[#1a6bbf] focus-within:ring-2 focus-within:ring-[#1a6bbf]/20 transition-all">
@@ -476,17 +476,20 @@ function openSearchModal() {
     const input = document.getElementById('global-search-input');
 
     if (!modal) return;
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+    modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 
-    requestAnimationFrame(() => {
-        backdrop.classList.remove('opacity-0');
-        backdrop.classList.add('opacity-100');
-        box.classList.remove('scale-95', 'opacity-0');
-        box.classList.add('scale-100', 'opacity-100');
+    setTimeout(() => {
+        if (backdrop) {
+            backdrop.classList.remove('opacity-0');
+            backdrop.classList.add('opacity-100');
+        }
+        if (box) {
+            box.classList.remove('scale-95', 'opacity-0');
+            box.classList.add('scale-100', 'opacity-100');
+        }
         if (input) input.focus();
-    });
+    }, 20);
 }
 
 function closeSearchModal() {
@@ -495,22 +498,25 @@ function closeSearchModal() {
     const box = document.getElementById('search-modal-box');
 
     if (!modal) return;
-    backdrop.classList.remove('opacity-100');
-    backdrop.classList.add('opacity-0');
-    box.classList.remove('scale-100', 'opacity-100');
-    box.classList.add('scale-95', 'opacity-0');
+    if (backdrop) {
+        backdrop.classList.remove('opacity-100');
+        backdrop.classList.add('opacity-0');
+    }
+    if (box) {
+        box.classList.remove('scale-100', 'opacity-100');
+        box.classList.add('scale-95', 'opacity-0');
+    }
     document.body.style.overflow = '';
 
     setTimeout(() => {
-        modal.classList.remove('flex');
-        modal.classList.add('hidden');
-    }, 200);
+        modal.style.display = 'none';
+    }, 250);
 }
 
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         const modal = document.getElementById('search-modal');
-        if (modal && !modal.classList.contains('hidden')) {
+        if (modal && modal.style.display === 'flex') {
             closeSearchModal();
         }
     }
