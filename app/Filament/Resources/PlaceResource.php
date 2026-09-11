@@ -70,14 +70,6 @@ class PlaceResource extends Resource
                         ->maxLength(100)
                         ->label('Kecamatan')
                         ->placeholder('Contoh: Pelabuhan Ratu'),
-                    Forms\Components\Select::make('tags')
-                        ->relationship('tags', 'name')
-                        ->multiple()
-                        ->preload()
-                        ->searchable()
-                        ->columnSpanFull()
-                        ->label('Tags Destinasi')
-                        ->helperText('Pilih tag yang sesuai (misal: Wisata Pantai, Wisata Alam, Santai & Healing, dll)'),
                 ]),
 
             // ── KOORDINAT PETA ───────────────────────────────────────
@@ -176,7 +168,6 @@ class PlaceResource extends Resource
             Forms\Components\Section::make('Tag & Aktivitas')
                 ->description('Assign tag yang relevan. Tag menentukan di menu navbar mana destinasi ini tampil (Aktivitas / Wisata).')
                 ->icon('heroicon-o-tag')
-                ->collapsed()
                 ->schema([
                     Forms\Components\Select::make('tags')
                         ->multiple()
@@ -363,11 +354,16 @@ class PlaceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('primaryImage.image_path')
+                Tables\Columns\ImageColumn::make('cover_image')
                     ->label('')
                     ->square()
                     ->size(50)
-                    ->disk('public'),
+                    ->disk('public')
+                    ->state(function (Place $record): ?string {
+                        return $record->primaryImage?->image_path
+                            ?? $record->placeImages()->where('is_primary', true)->first()?->image_path
+                            ?? $record->placeImages()->first()?->image_path;
+                    }),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable()

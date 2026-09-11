@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
+use App\Models\Place;
 use App\Models\Tag;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -111,6 +113,37 @@ class TagSeeder extends Seeder
             );
         }
 
-        $this->command->info('✅ Tag seeder selesai — ' . count($tags) . ' tag berhasil di-seed.');
+        // Auto-mapping tag ke destinasi yang ada berdasarkan kategori
+        $map = [
+            'wisata-pantai'  => ['wisata-pantai'],
+            'wisata-alam'    => ['wisata-alam'],
+            'wisata-budaya'  => ['budaya-sejarah'],
+            'aktivitas-seru' => ['pacu-adrenalin'],
+            'kuliner'        => ['kuliner-makanan'],
+        ];
+
+        $mappedCount = 0;
+        foreach ($map as $catSlug => $tagSlugs) {
+            $category = Category::where('slug', $catSlug)->first();
+            if ($category) {
+                $tagIds = Tag::whereIn('slug', $tagSlugs)->pluck('id');
+                $places = Place::where('category_id', $category->id)->get();
+                foreach ($places as $place) {
+                    $place->tags()->syncWithoutDetaching($tagIds);
+                    $mappedCount++;
+                }
+            }
+        }
+
+        // Pastikan destinasi yang mengandung kata "Pantai" mendapatkan tag wisata-pantai
+        $pantaiTag = Tag::where('slug', 'wisata-pantai')->first();
+        if ($pantaiTag) {
+            $pantaiPlaces = Place::where('name', 'like', '%Pantai%')->get();
+            foreach ($pantaiPlaces as $place) {
+                $place->tags()->syncWithoutDetaching([$pantaiTag->id]);
+            }
+        }
+
+        $this->command->info('✅ Tag seeder selesai — ' . count($tags) . ' tag di-seed, dan destinasi berhasil dipetakan tag-nya.');
     }
 }

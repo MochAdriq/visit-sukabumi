@@ -73,7 +73,11 @@ class Place extends Model
 
     public function primaryImage(): HasOne
     {
-        return $this->hasOne(PlaceImage::class)->where('is_primary', true)->latestOfMany();
+        return $this->hasOne(PlaceImage::class)->ofMany([
+            'id' => 'max',
+        ], function ($query) {
+            $query->where('is_primary', true);
+        });
     }
 
     /**
@@ -83,13 +87,12 @@ class Place extends Model
     {
         $fallback = asset('assets/images/9.jpg');
 
-        if ($this->relationLoaded('primaryImage') && $this->primaryImage) {
-            return \Illuminate\Support\Facades\Storage::url($this->primaryImage->image_path);
-        }
+        $primary = $this->primaryImage
+            ?? $this->placeImages()->where('is_primary', true)->first()
+            ?? $this->placeImages()->first();
 
-        $firstImage = $this->placeImages()->first();
-        if ($firstImage) {
-            return \Illuminate\Support\Facades\Storage::url($firstImage->image_path);
+        if ($primary && $primary->image_path) {
+            return \Illuminate\Support\Facades\Storage::url($primary->image_path);
         }
 
         return $fallback;

@@ -25,6 +25,11 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // Seed master tags & mapping
+        $this->call([
+            TagSeeder::class,
+        ]);
+
         // Hapus komentar di bawah jika ingin men-seed data destinasi dan event secara otomatis:
         // $this->call([
         //     VisitSukabumiSeeder::class,
