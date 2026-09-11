@@ -39,8 +39,14 @@ Route::get('/penginapan', function () {
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
 
-// Static Pages
+// Static & Legal Pages
 Route::view('/information', 'information.index')->name('information.index');
+Route::get('/pusat-informasi/{tab?}', [\App\Http\Controllers\LegalController::class, 'show'])->name('legal.show');
+Route::get('/tentang-kami', fn() => redirect()->route('legal.show', 'tentang-kami'));
+Route::get('/kebijakan-privasi', fn() => redirect()->route('legal.show', 'kebijakan-privasi'));
+Route::get('/syarat-ketentuan', fn() => redirect()->route('legal.show', 'syarat-ketentuan'));
+Route::get('/aksesibilitas', fn() => redirect()->route('legal.show', 'aksesibilitas'));
+Route::get('/hubungi-kami', fn() => redirect()->route('legal.show', 'hubungi-kami'));
 
 // Visitor Authentication Routes
 Route::get('/login', [VisitorAuthController::class, 'showLoginForm'])->name('login');

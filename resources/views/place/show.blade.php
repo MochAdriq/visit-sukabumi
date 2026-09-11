@@ -126,10 +126,12 @@
                         <svg class="w-16 h-16 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     </div>
                 @elseif($total == 1)
-                    <a href="{{ Storage::url($mainImg->image_path) }}" class="glightbox block w-full h-72 rounded-2xl overflow-hidden relative bg-gray-100 shadow-sm" data-gallery="place-gallery">
-                        <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover"/>
+                    <div class="relative w-full h-72 rounded-2xl overflow-hidden bg-gray-100 shadow-sm group">
+                        <a href="{{ Storage::url($mainImg->image_path) }}" class="glightbox block w-full h-full cursor-pointer" data-gallery="place-gallery">
+                            <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover"/>
+                        </a>
                         <x-image-copyright :img="$mainImg" />
-                    </a>
+                    </div>
                 @else
                     {{-- Interactive Slider (Swipeable + Arrow Buttons + Dots + Counter) --}}
                     <div x-data="{
@@ -165,10 +167,12 @@
                              class="flex w-full overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
                              style="scrollbar-width: none; -ms-overflow-style: none;">
                             @foreach($images as $img)
-                                <a href="{{ Storage::url($img->image_path) }}" class="glightbox block w-full shrink-0 snap-center relative h-72 sm:h-80 bg-gray-100 overflow-hidden" data-gallery="place-gallery">
-                                    <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover"/>
+                                <div class="w-full shrink-0 snap-center relative h-72 sm:h-80 bg-gray-100 overflow-hidden group">
+                                    <a href="{{ Storage::url($img->image_path) }}" class="glightbox block w-full h-full cursor-pointer" data-gallery="place-gallery">
+                                        <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover"/>
+                                    </a>
                                     <x-image-copyright :img="$img" />
-                                </a>
+                                </div>
                             @endforeach
                         </div>
 
@@ -221,77 +225,97 @@
                         <svg class="w-20 h-20 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     </div>
                 @elseif($total == 1)
-                    <a href="{{ Storage::url($mainImg->image_path) }}" class="glightbox block w-full h-[440px] rounded-2xl overflow-hidden relative bg-gray-100 group cursor-pointer shadow-sm" data-gallery="place-gallery">
-                        <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                    <div class="relative w-full h-[440px] rounded-2xl overflow-hidden bg-gray-100 group shadow-sm">
+                        <a href="{{ Storage::url($mainImg->image_path) }}" class="glightbox block w-full h-full cursor-pointer" data-gallery="place-gallery">
+                            <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                        </a>
                         <x-image-copyright :img="$mainImg" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
-                    </a>
+                    </div>
                 @elseif($total == 2)
                     <div class="grid grid-cols-2 gap-2 h-[440px] rounded-2xl overflow-hidden shadow-sm">
-                        <a href="{{ Storage::url($mainImg->image_path) }}" class="glightbox relative overflow-hidden bg-gray-100 group cursor-pointer" data-gallery="place-gallery">
-                            <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-                            <x-image-copyright :img="$mainImg" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
-                        </a>
-                        @foreach($otherImages->take(1) as $img)
-                            <a href="{{ Storage::url($img->image_path) }}" class="glightbox relative overflow-hidden bg-gray-100 group cursor-pointer" data-gallery="place-gallery">
-                                <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-                                <x-image-copyright :img="$img" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
+                        <div class="relative overflow-hidden bg-gray-100 group">
+                            <a href="{{ Storage::url($mainImg->image_path) }}" class="glightbox block w-full h-full cursor-pointer" data-gallery="place-gallery">
+                                <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
                             </a>
+                            <x-image-copyright :img="$mainImg" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
+                        </div>
+                        @foreach($otherImages->take(1) as $img)
+                            <div class="relative overflow-hidden bg-gray-100 group">
+                                <a href="{{ Storage::url($img->image_path) }}" class="glightbox block w-full h-full cursor-pointer" data-gallery="place-gallery">
+                                    <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                                </a>
+                                <x-image-copyright :img="$img" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
+                            </div>
                         @endforeach
                     </div>
                 @elseif($total == 3)
                     <div class="grid grid-cols-3 gap-2 h-[440px] rounded-2xl overflow-hidden shadow-sm">
-                        <a href="{{ Storage::url($mainImg->image_path) }}" class="glightbox col-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer" data-gallery="place-gallery">
-                            <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                        <div class="col-span-2 relative overflow-hidden bg-gray-100 group">
+                            <a href="{{ Storage::url($mainImg->image_path) }}" class="glightbox block w-full h-full cursor-pointer" data-gallery="place-gallery">
+                                <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                            </a>
                             <x-image-copyright :img="$mainImg" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
-                        </a>
+                        </div>
                         <div class="grid grid-rows-2 gap-2">
                         @foreach($otherImages->take(2) as $img)
-                            <a href="{{ Storage::url($img->image_path) }}" class="glightbox relative overflow-hidden bg-gray-100 group cursor-pointer" data-gallery="place-gallery">
-                                <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                            <div class="relative overflow-hidden bg-gray-100 group">
+                                <a href="{{ Storage::url($img->image_path) }}" class="glightbox block w-full h-full cursor-pointer" data-gallery="place-gallery">
+                                    <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                                </a>
                                 <x-image-copyright :img="$img" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
-                            </a>
+                            </div>
                         @endforeach
                         </div>
                     </div>
                 @elseif($total == 4)
                     <div class="grid grid-cols-3 grid-rows-2 gap-2 h-[440px] rounded-2xl overflow-hidden shadow-sm">
-                        <a href="{{ Storage::url($mainImg->image_path) }}" class="glightbox col-span-2 row-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer" data-gallery="place-gallery">
-                            <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-                            <x-image-copyright :img="$mainImg" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
-                        </a>
-                        @foreach($otherImages->take(2) as $img)
-                            <a href="{{ Storage::url($img->image_path) }}" class="glightbox relative overflow-hidden bg-gray-100 group cursor-pointer" data-gallery="place-gallery">
-                                <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-                                <x-image-copyright :img="$img" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
+                        <div class="col-span-2 row-span-2 relative overflow-hidden bg-gray-100 group">
+                            <a href="{{ Storage::url($mainImg->image_path) }}" class="glightbox block w-full h-full cursor-pointer" data-gallery="place-gallery">
+                                <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
                             </a>
+                            <x-image-copyright :img="$mainImg" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
+                        </div>
+                        @foreach($otherImages->take(2) as $img)
+                            <div class="relative overflow-hidden bg-gray-100 group">
+                                <a href="{{ Storage::url($img->image_path) }}" class="glightbox block w-full h-full cursor-pointer" data-gallery="place-gallery">
+                                    <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                                </a>
+                                <x-image-copyright :img="$img" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
+                            </div>
                         @endforeach
                     </div>
                 @else
                     {{-- 5+ Images Grid --}}
                     <div class="grid grid-cols-4 grid-rows-2 gap-2 h-[440px] rounded-2xl overflow-hidden shadow-sm">
-                        <a href="{{ Storage::url($mainImg->image_path) }}" class="glightbox col-span-2 row-span-2 relative overflow-hidden bg-gray-100 group cursor-pointer" data-gallery="place-gallery">
-                            <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                        <div class="col-span-2 row-span-2 relative overflow-hidden bg-gray-100 group">
+                            <a href="{{ Storage::url($mainImg->image_path) }}" class="glightbox block w-full h-full cursor-pointer" data-gallery="place-gallery">
+                                <img src="{{ Storage::url($mainImg->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                            </a>
                             <x-image-copyright :img="$mainImg" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
-                        </a>
+                        </div>
                         @foreach($otherImages->take(3) as $img)
                             @if($loop->last && $total > 5)
-                                <a href="{{ Storage::url($img->image_path) }}" class="glightbox relative overflow-hidden bg-gray-100 group cursor-pointer" data-gallery="place-gallery">
-                                    <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 brightness-50"/>
-                                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                        <span class="text-white text-xl md:text-2xl font-bold">+{{ $total - 4 }} Foto</span>
-                                    </div>
+                                <div class="relative overflow-hidden bg-gray-100 group">
+                                    <a href="{{ Storage::url($img->image_path) }}" class="glightbox block w-full h-full cursor-pointer" data-gallery="place-gallery">
+                                        <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 brightness-50"/>
+                                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                            <span class="text-white text-xl md:text-2xl font-bold">+{{ $total - 4 }} Foto</span>
+                                        </div>
+                                    </a>
                                     <x-image-copyright :img="$img" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
-                                </a>
+                                </div>
                                 
                                 {{-- Hidden links for remaining images so they appear in lightbox --}}
                                 @foreach($otherImages->slice(3) as $hiddenImg)
                                     <a href="{{ Storage::url($hiddenImg->image_path) }}" class="glightbox hidden" data-gallery="place-gallery"></a>
                                 @endforeach
                             @else
-                                <a href="{{ Storage::url($img->image_path) }}" class="glightbox relative overflow-hidden bg-gray-100 group cursor-pointer" data-gallery="place-gallery">
-                                    <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                                <div class="relative overflow-hidden bg-gray-100 group">
+                                    <a href="{{ Storage::url($img->image_path) }}" class="glightbox block w-full h-full cursor-pointer" data-gallery="place-gallery">
+                                        <img src="{{ Storage::url($img->image_path) }}" alt="{{ $place->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                                    </a>
                                     <x-image-copyright :img="$img" className="bottom-3 left-3 text-[11px] px-2.5 py-1.5" />
-                                </a>
+                                </div>
                             @endif
                         @endforeach
                     </div>
