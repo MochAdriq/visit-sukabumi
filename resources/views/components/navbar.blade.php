@@ -113,11 +113,11 @@ $navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
 
         {{-- Right: Search & Auth --}}
         <div class="flex items-center gap-4 z-10 justify-end flex-1">
-            <a href="/search" class="text-gray-500 hover:text-[#1a6bbf] p-2 transition-colors">
+            <button type="button" onclick="openSearchModal()" class="text-gray-500 hover:text-[#1a6bbf] p-2 transition-colors cursor-pointer" aria-label="Buka Pencarian" title="Pencarian">
                 <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
-            </a>
+            </button>
 
             @auth
                 <div class="flex items-center gap-4 border-l border-gray-200 pl-4">
@@ -215,7 +215,7 @@ $navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
 
         {{-- Right: Search icon only --}}
         <div class="flex items-center z-10">
-            <button onclick="toggleMobileSearch()" class="flex items-center justify-center w-10 h-10 text-gray-700 hover:text-[#1a6bbf] transition-colors" aria-label="Search">
+            <button type="button" onclick="openSearchModal()" class="flex items-center justify-center w-10 h-10 text-gray-700 hover:text-[#1a6bbf] transition-colors cursor-pointer" aria-label="Search">
                 <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
@@ -334,6 +334,67 @@ $navItems = Cache::remember('dynamic_navbar_items', 3600, function () {
     </div>
 </div>
 
+{{-- ════════════════════════════════════════════
+     GLOBAL SEARCH MODAL (Desktop & Mobile)
+     ════════════════════════════════════════════ --}}
+<div id="search-modal" class="fixed inset-0 z-[1001] hidden items-start justify-center pt-16 md:pt-24 px-4">
+    {{-- Backdrop --}}
+    <div id="search-modal-backdrop" onclick="closeSearchModal()" class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
+
+    {{-- Modal Content Card --}}
+    <div id="search-modal-box" class="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden transform scale-95 opacity-0 transition-all duration-300 z-10 border border-gray-100">
+        {{-- Search Input Form --}}
+        <form action="{{ route('place.index') }}" method="GET" class="p-4 md:p-6 border-b border-gray-100">
+            <div class="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus-within:border-[#1a6bbf] focus-within:ring-2 focus-within:ring-[#1a6bbf]/20 transition-all">
+                <svg class="w-6 h-6 text-[#1a6bbf] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input type="text" id="global-search-input" name="q" placeholder="Cari destinasi, wisata, pantai, hotel, kuliner..." class="w-full bg-transparent text-gray-800 text-base md:text-lg font-medium outline-none placeholder-gray-400 border-none focus:ring-0 p-0" autocomplete="off" />
+                <button type="button" onclick="closeSearchModal()" class="text-gray-400 hover:text-gray-600 p-1 transition-colors cursor-pointer" title="Tutup">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="flex items-center justify-between mt-3 text-xs text-gray-500">
+                <span>Tekan <kbd class="px-1.5 py-0.5 bg-gray-100 border border-gray-200 rounded text-[10px] font-semibold text-gray-700">Enter</kbd> untuk mencari</span>
+                <span class="hidden sm:inline">Tekan <kbd class="px-1.5 py-0.5 bg-gray-100 border border-gray-200 rounded text-[10px] font-semibold text-gray-700">Esc</kbd> untuk menutup</span>
+            </div>
+        </form>
+
+        {{-- Quick Suggested Keywords --}}
+        <div class="px-4 md:px-6 py-4 bg-gray-50/70">
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2.5">Pencarian Populer:</p>
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('place.index', ['q' => 'Pantai']) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-gray-200 text-xs font-semibold text-gray-700 hover:border-[#1a6bbf] hover:text-[#1a6bbf] hover:bg-blue-50/50 transition-all shadow-sm">
+                    <svg class="w-3.5 h-3.5 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    Wisata Pantai
+                </a>
+                <a href="{{ route('place.index', ['q' => 'Curug']) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-gray-200 text-xs font-semibold text-gray-700 hover:border-[#1a6bbf] hover:text-[#1a6bbf] hover:bg-blue-50/50 transition-all shadow-sm">
+                    <svg class="w-3.5 h-3.5 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l7 4 7-4M5 3v10l7 4 7-4V3"/></svg>
+                    Curug & Air Terjun
+                </a>
+                <a href="{{ route('place.index', ['type' => 'penginapan']) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-gray-200 text-xs font-semibold text-gray-700 hover:border-[#1a6bbf] hover:text-[#1a6bbf] hover:bg-blue-50/50 transition-all shadow-sm">
+                    <svg class="w-3.5 h-3.5 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    Hotel & Penginapan
+                </a>
+                <a href="{{ route('place.index', ['q' => 'Kuliner']) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-gray-200 text-xs font-semibold text-gray-700 hover:border-[#1a6bbf] hover:text-[#1a6bbf] hover:bg-blue-50/50 transition-all shadow-sm">
+                    <svg class="w-3.5 h-3.5 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    Kuliner Khas
+                </a>
+                <a href="{{ route('place.index', ['q' => 'Palabuhanratu']) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-gray-200 text-xs font-semibold text-gray-700 hover:border-[#1a6bbf] hover:text-[#1a6bbf] hover:bg-blue-50/50 transition-all shadow-sm">
+                    <svg class="w-3.5 h-3.5 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    Palabuhanratu
+                </a>
+                <a href="{{ route('place.index', ['q' => 'Ciletuh']) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-gray-200 text-xs font-semibold text-gray-700 hover:border-[#1a6bbf] hover:text-[#1a6bbf] hover:bg-blue-50/50 transition-all shadow-sm">
+                    <svg class="w-3.5 h-3.5 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
+                    Geopark Ciletuh
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{-- Google Translate Widget (Hidden) --}}
 <div id="google_translate_element" style="display:none;"></div>
 <script type="text/javascript">
@@ -399,10 +460,60 @@ function toggleAccordion(idx) {
 
 function toggleMobileSearch() {
     const bar = document.getElementById('mobile-search-bar');
-    bar.classList.toggle('hidden');
-    if (!bar.classList.contains('hidden')) {
-        bar.querySelector('input').focus();
+    if (bar) {
+        bar.classList.toggle('hidden');
+        if (!bar.classList.contains('hidden')) {
+            bar.querySelector('input').focus();
+        }
     }
 }
+
+// ── GLOBAL SEARCH MODAL ──────────────────────────────
+function openSearchModal() {
+    const modal = document.getElementById('search-modal');
+    const backdrop = document.getElementById('search-modal-backdrop');
+    const box = document.getElementById('search-modal-box');
+    const input = document.getElementById('global-search-input');
+
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+
+    requestAnimationFrame(() => {
+        backdrop.classList.remove('opacity-0');
+        backdrop.classList.add('opacity-100');
+        box.classList.remove('scale-95', 'opacity-0');
+        box.classList.add('scale-100', 'opacity-100');
+        if (input) input.focus();
+    });
+}
+
+function closeSearchModal() {
+    const modal = document.getElementById('search-modal');
+    const backdrop = document.getElementById('search-modal-backdrop');
+    const box = document.getElementById('search-modal-box');
+
+    if (!modal) return;
+    backdrop.classList.remove('opacity-100');
+    backdrop.classList.add('opacity-0');
+    box.classList.remove('scale-100', 'opacity-100');
+    box.classList.add('scale-95', 'opacity-0');
+    document.body.style.overflow = '';
+
+    setTimeout(() => {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }, 200);
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('search-modal');
+        if (modal && !modal.classList.contains('hidden')) {
+            closeSearchModal();
+        }
+    }
+});
 </script>
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
