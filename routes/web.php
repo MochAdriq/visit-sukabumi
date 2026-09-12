@@ -76,6 +76,10 @@ Route::get('/register', [VisitorAuthController::class, 'showRegisterForm'])->nam
 Route::post('/register', [VisitorAuthController::class, 'register']);
 Route::post('/logout', [VisitorAuthController::class, 'logout'])->name('logout');
 
+// Google OAuth Routes
+Route::get('/auth/google', [VisitorAuthController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [VisitorAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
 // Review Route (Requires Auth)
 Route::post('/place/{place}/review', [ReviewController::class, 'store'])->middleware('auth')->name('review.store');
 Route::post('/event/{event}/review', [ReviewController::class, 'storeEvent'])->middleware('auth')->name('review.store.event');

@@ -38,6 +38,7 @@ class User extends Authenticatable implements FilamentUser
     protected $fillable = [
         'name',
         'email',
+        'google_id',
         'password',
         'role',
         'avatar',
@@ -60,11 +61,14 @@ class User extends Authenticatable implements FilamentUser
 
     /**
      * URL avatar untuk ditampilkan di UI.
-     * Fallback ke inisial nama jika tidak ada avatar.
+     * Mendukung URL eksternal (Google OAuth), file storage lokal, dan fallback inisial.
      */
     public function getAvatarUrlAttribute(): string
     {
         if ($this->avatar) {
+            if (str_starts_with($this->avatar, 'http://') || str_starts_with($this->avatar, 'https://')) {
+                return $this->avatar;
+            }
             return Storage::url($this->avatar);
         }
         return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=1a6bbf&color=fff&bold=true&size=128';
