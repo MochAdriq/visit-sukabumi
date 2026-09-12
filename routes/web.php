@@ -10,8 +10,12 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PlaceClaimController;
+use App\Http\Controllers\SitemapController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Sitemap XML
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 Route::get('/kategori/{category:slug}', [App\Http\Controllers\CategoryController::class, 'show'])->name('category.show');
 

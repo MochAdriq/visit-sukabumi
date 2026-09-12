@@ -1,5 +1,55 @@
 @extends('layouts.app')
 
+{{-- \u2550\u2550 SEO META: Homepage \u2550\u2550 --}}
+@section('title', 'Visit Sukabumi \u2014 Panduan Wisata Terlengkap Kabupaten Sukabumi')
+@section('meta_description', 'Temukan destinasi wisata alam, pantai, geopark, event, kuliner, dan penginapan terbaik di Kabupaten Sukabumi. Panduan perjalanan lengkap dari Visit Sukabumi.')
+@section('canonical', url('/'))
+@section('og_type', 'website')
+@section('og_title', 'Visit Sukabumi \u2014 Panduan Wisata Kabupaten Sukabumi')
+@section('og_description', 'Temukan destinasi wisata alam, pantai, geopark, event, kuliner, dan penginapan terbaik di Kabupaten Sukabumi.')
+@section('og_image', asset('assets/images/og-default.jpg'))
+@section('og_image_alt', 'Visit Sukabumi \u2014 Panduan Wisata Kabupaten Sukabumi')
+
+{{-- \u2550\u2550 JSON-LD: Organization + WebSite \u2550\u2550 --}}
+@push('structured_data')
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "Organization",
+            "name": "Visit Sukabumi",
+            "url": "{{ url('/') }}",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "{{ asset('assets/images/logo.png') }}"
+            },
+            "sameAs": [],
+            "description": "Platform panduan wisata resmi Kabupaten Sukabumi \u2014 destinasi, event, kuliner, penginapan, dan inspirasi perjalanan.",
+            "areaServed": {
+                "@type": "AdministrativeArea",
+                "name": "Kabupaten Sukabumi"
+            }
+        },
+        {
+            "@type": "WebSite",
+            "name": "Visit Sukabumi",
+            "url": "{{ url('/') }}",
+            "inLanguage": "id",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "{{ url('/destinasi') }}?search={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
+            }
+        }
+    ]
+}
+</script>
+@endpush
+
 @section('content')
 <div class="min-h-screen bg-white font-sans text-gray-900">
     @include('components.navbar')

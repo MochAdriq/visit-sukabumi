@@ -1,5 +1,75 @@
 @extends('layouts.app')
 
+@php
+    use Illuminate\Support\Str;
+    $seoTitle       = $event->title . ' \u2014 Event Wisata Sukabumi | Visit Sukabumi';
+    $seoDescription = Str::limit(strip_tags($event->description ?? ''), 155) ?: 'Ikuti event ' . $event->title . ' di Sukabumi. Temukan info jadwal, lokasi, dan cara mendaftar di Visit Sukabumi.';
+    $seoImage       = $event->image_path ? asset('storage/' . $event->image_path) : asset('assets/images/og-default.jpg');
+    $seoUrl         = route('event.show', $event->slug);
+    $startDate      = optional($event->start_date)->toIso8601String();
+    $endDate        = optional($event->end_date)->toIso8601String();
+@endphp
+
+{{-- \u2550\u2550 SEO META \u2550\u2550 --}}
+@section('title', $seoTitle)
+@section('meta_description', $seoDescription)
+@section('canonical', $seoUrl)
+@section('og_type', 'article')
+@section('og_title', $event->title . ' \u2014 Visit Sukabumi')
+@section('og_description', $seoDescription)
+@section('og_image', $seoImage)
+@section('og_image_alt', 'Poster event ' . $event->title)
+
+{{-- \u2550\u2550 JSON-LD: Event + BreadcrumbList \u2550\u2550 --}}
+@push('structured_data')
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "Event",
+            "name": "{{ addslashes($event->title) }}",
+            "description": "{{ addslashes(Str::limit(strip_tags($event->description ?? ''), 200)) }}",
+            "url": "{{ $seoUrl }}",
+            "image": "{{ $seoImage }}",
+            "eventStatus": "https://schema.org/EventScheduled",
+            "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+            @if($startDate)
+            "startDate": "{{ $startDate }}",
+            @endif
+            @if($endDate)
+            "endDate": "{{ $endDate }}",
+            @endif
+            "location": {
+                "@type": "Place",
+                "name": "{{ addslashes($event->location_name ?? 'Sukabumi') }}",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Sukabumi",
+                    "addressRegion": "Jawa Barat",
+                    "addressCountry": "ID"
+                }
+            },
+            "organizer": {
+                "@type": "Organization",
+                "name": "Visit Sukabumi",
+                "url": "{{ url('/') }}"
+            },
+            "inLanguage": "id"
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ url('/') }}" },
+                { "@type": "ListItem", "position": 2, "name": "Event", "item": "{{ route('event.index') }}" },
+                { "@type": "ListItem", "position": 3, "name": "{{ addslashes($event->title) }}", "item": "{{ $seoUrl }}" }
+            ]
+        }
+    ]
+}
+</script>
+@endpush
+
 @section('content')
 <div class="min-h-screen bg-white font-sans text-gray-900 pb-20">
     @include('components.navbar')

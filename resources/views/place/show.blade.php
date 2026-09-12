@@ -3,7 +3,77 @@
 @php
     $waText = urlencode("Halo, saya mendapatkan informasi tempat ini (*{$place->name}*) dari website panduan wisata *Visit Sukabumi* (visitsukabumi.com).\n\nSaya ingin bertanya untuk informasi lebih lanjut.");
     $restoWaText = urlencode("Halo, saya mendapatkan informasi restoran ini (*{$place->name}*) dari website panduan wisata *Visit Sukabumi* (visitsukabumi.com).\n\nSaya ingin bertanya terkait reservasi meja.");
+    $seoTitle       = $place->name . ' — ' . (optional($place->category)->name ?? 'Destinasi Wisata') . ' Sukabumi | Visit Sukabumi';
+    $seoDescription = Str::limit(strip_tags($place->description ?? ''), 155) ?: 'Temukan info lengkap, harga tiket, ulasan pengunjung, dan fasilitas ' . $place->name . ' di Sukabumi.';
+    $seoImage       = $place->cover_image_url;
+    $seoUrl         = route('place.show', $place->slug);
+    $avgRating      = round($place->reviews()->avg('rating') ?? 0, 1);
+    $reviewCount    = $place->reviews()->count();
 @endphp
+
+{{-- ══ SEO META ══ --}}
+@section('title', $seoTitle)
+@section('meta_description', $seoDescription)
+@section('canonical', $seoUrl)
+@section('og_type', 'article')
+@section('og_title', $place->name . ' — Visit Sukabumi')
+@section('og_description', $seoDescription)
+@section('og_image', $seoImage)
+@section('og_image_alt', 'Foto ' . $place->name . ' di Sukabumi')
+
+{{-- ══ JSON-LD: TouristAttraction + BreadcrumbList ══ --}}
+@push('structured_data')
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "TouristAttraction",
+            "name": "{{ addslashes($place->name) }}",
+            "description": "{{ addslashes(Str::limit(strip_tags($place->description ?? ''), 200)) }}",
+            "url": "{{ $seoUrl }}",
+            "image": "{{ $seoImage }}",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "{{ addslashes($place->district ?? 'Sukabumi') }}",
+                "addressRegion": "Jawa Barat",
+                "addressCountry": "ID"
+            },
+            @if($place->latitude && $place->longitude)
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": {{ $place->latitude }},
+                "longitude": {{ $place->longitude }}
+            },
+            @endif
+            @if($reviewCount > 0)
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "{{ $avgRating }}",
+                "reviewCount": "{{ $reviewCount }}",
+                "bestRating": "5",
+                "worstRating": "1"
+            },
+            @endif
+            @if($place->phone)
+            "telephone": "{{ $place->phone }}",
+            @endif
+            "inLanguage": "id",
+            "isAccessibleForFree": {{ (!$place->has_ticket && !$place->has_general_price) ? 'true' : 'false' }},
+            "touristType": "Wisatawan Umum"
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ url('/') }}" },
+                { "@type": "ListItem", "position": 2, "name": "Destinasi", "item": "{{ route('place.index') }}" },
+                { "@type": "ListItem", "position": 3, "name": "{{ addslashes($place->name) }}", "item": "{{ $seoUrl }}" }
+            ]
+        }
+    ]
+}
+</script>
+@endpush
 
 @section('content')
 <div class="min-h-screen bg-white font-sans text-gray-900">

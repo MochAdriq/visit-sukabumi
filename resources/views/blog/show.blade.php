@@ -1,7 +1,68 @@
 @extends('layouts.app')
 
-@section('title', $post->title . ' — Visit Sukabumi')
-@section('meta_description', Str::limit(strip_tags($post->content), 150))
+@php
+    $seoDescription = Str::limit(strip_tags($post->content), 155);
+    $seoImage       = $post->image_path ? asset('storage/' . $post->image_path) : asset('assets/images/og-default.jpg');
+    $seoUrl         = route('blog.show', $post->slug);
+    $authorName     = $post->author_name ?? optional($post->author)->name ?? 'Tim Visit Sukabumi';
+    $publishedAt    = optional($post->published_at)->toIso8601String();
+    $modifiedAt     = optional($post->updated_at)->toIso8601String();
+@endphp
+
+{{-- \u2550\u2550 SEO META \u2550\u2550 --}}
+@section('title', $post->title . ' \u2014 Visit Sukabumi')
+@section('meta_description', $seoDescription)
+@section('canonical', $seoUrl)
+@section('og_type', 'article')
+@section('og_title', $post->title)
+@section('og_description', $seoDescription)
+@section('og_image', $seoImage)
+@section('og_image_alt', 'Ilustrasi artikel: ' . $post->title)
+
+{{-- \u2550\u2550 JSON-LD: Article + BreadcrumbList \u2550\u2550 --}}
+@push('structured_data')
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "Article",
+            "headline": "{{ addslashes($post->title) }}",
+            "description": "{{ addslashes($seoDescription) }}",
+            "image": "{{ $seoImage }}",
+            "url": "{{ $seoUrl }}",
+            "datePublished": "{{ $publishedAt }}",
+            "dateModified": "{{ $modifiedAt }}",
+            "author": {
+                "@type": "Person",
+                "name": "{{ addslashes($authorName) }}"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "Visit Sukabumi",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "{{ asset('assets/images/logo.png') }}"
+                }
+            },
+            "inLanguage": "id",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "{{ $seoUrl }}"
+            }
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ url('/') }}" },
+                { "@type": "ListItem", "position": 2, "name": "Blog", "item": "{{ route('blog.index') }}" },
+                { "@type": "ListItem", "position": 3, "name": "{{ addslashes($post->title) }}", "item": "{{ $seoUrl }}" }
+            ]
+        }
+    ]
+}
+</script>
+@endpush
 
 @section('content')
 <div class="min-h-screen bg-gray-50 font-sans text-gray-900 pb-16 relative">

@@ -1,2 +1,11 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Blokir halaman admin & autentikasi dari indeks
+Disallow: /admin/
+Disallow: /login
+Disallow: /register
+Disallow: /profile/claim/
+
+# Sitemap
+Sitemap: https://visitsukabumi.com/sitemap.xml
