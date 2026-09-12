@@ -8,6 +8,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PlaceClaimController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -79,8 +81,20 @@ Route::post('/place/{place}/review', [ReviewController::class, 'store'])->middle
 Route::post('/event/{event}/review', [ReviewController::class, 'storeEvent'])->middleware('auth')->name('review.store.event');
 Route::post('/review/{review}/like', [ReviewController::class, 'toggleLike'])->middleware('auth')->name('review.like');
 
-// Wishlist Routes (Requires Auth)
+// Routes yang memerlukan autentikasi
 Route::middleware('auth')->group(function () {
+    // Profil Pengguna
+    Route::get('/profil', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profil/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
+    // Klaim Destinasi
+    Route::get('/klaim/{place:slug}', [PlaceClaimController::class, 'create'])->name('claim.create');
+    Route::post('/klaim', [PlaceClaimController::class, 'store'])->name('claim.store');
+    Route::delete('/klaim/{claim}', [PlaceClaimController::class, 'destroy'])->name('claim.destroy');
+
+    // Wishlist
     Route::get('/my-wishlist', [\App\Http\Controllers\WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/place/{place}/wishlist', [\App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
 });
+

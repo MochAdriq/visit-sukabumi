@@ -47,9 +47,39 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4">
             <div class="flex flex-col md:flex-row justify-between items-start gap-4">
                 <div class="flex-1">
-                    <h1 class="text-2xl md:text-4xl font-extrabold text-gray-900 mb-2 leading-tight">
-                        {{ $place->name }}
-                    </h1>
+                    <div class="flex flex-wrap items-center gap-2.5 md:gap-3 mb-2">
+                        <h1 class="text-2xl md:text-4xl font-extrabold text-gray-900 leading-tight">
+                            {{ $place->name }}
+                        </h1>
+
+                        @if($place->is_claimed)
+                            @if(auth()->check() && auth()->id() === $place->owner_id)
+                                <a href="{{ url('/kelola') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-[#1a6bbf] border border-blue-200 hover:bg-blue-100 transition shadow-2xs">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                    Kelola Tempat
+                                </a>
+                            @else
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
+                                    <svg class="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Terverifikasi Resmi
+                                </span>
+                            @endif
+                        @else
+                            <a href="{{ route('claim.create', $place->slug) }}" 
+                               title="Klaim kepemilikan destinasi ini"
+                               class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100/80 hover:bg-amber-50 text-gray-600 hover:text-amber-800 border border-gray-200/90 hover:border-amber-300 transition-all duration-200 group shadow-2xs">
+                                <svg class="w-3.5 h-3.5 text-gray-400 group-hover:text-amber-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                </svg>
+                                <span>Belum Diklaim</span>
+                                <span class="text-xs text-[#1a6bbf] group-hover:text-amber-700 font-bold underline decoration-dotted">· Klaim Tempat</span>
+                            </a>
+                        @endif
+                    </div>
                     <div class="flex flex-wrap items-center gap-2 md:gap-4 text-xs md:text-sm mb-3">
                         {{-- Feature badges --}}
                         @if($place->has_ticket)
@@ -763,6 +793,47 @@
                 </button>
             @endif
         </div>
+
+    {{-- ══ BANNER KLAIM DESTINASI ══ --}}
+    @if(!$place->is_claimed)
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="bg-gradient-to-r from-[#0f4c81] to-[#1a6bbf] rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 text-white">
+            <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                </svg>
+            </div>
+            <div class="flex-1 text-center md:text-left">
+                <h3 class="font-extrabold text-lg">Apakah Anda pengelola destinasi ini?</h3>
+                <p class="text-blue-200 text-sm mt-1">
+                    Klaim kepemilikan {{ $place->name }} untuk memperbarui informasi, jam operasional, dan merespons ulasan pengunjung secara resmi.
+                </p>
+            </div>
+            @auth
+            <a href="{{ route('claim.create', $place->slug) }}"
+               class="flex-shrink-0 px-6 py-3 bg-white text-[#1a6bbf] font-bold rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition-all text-sm">
+                Klaim Destinasi Ini
+            </a>
+            @else
+            <a href="{{ route('login') }}?redirect={{ urlencode(route('claim.create', $place->slug)) }}"
+               class="flex-shrink-0 px-6 py-3 bg-white text-[#1a6bbf] font-bold rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition-all text-sm">
+                Login untuk Klaim
+            </a>
+            @endauth
+        </div>
+    </div>
+    @elseif($place->is_claimed && $place->owner)
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6">
+        <div class="bg-green-50 border border-green-200 rounded-2xl px-5 py-3 flex items-center gap-3">
+            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <p class="text-sm text-green-800">
+                <span class="font-bold">Destinasi Terverifikasi</span> — Dikelola secara resmi oleh <strong>{{ $place->owner->name }}</strong>.
+            </p>
+        </div>
+    </div>
+    @endif
 
     </main>
 

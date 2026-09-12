@@ -18,6 +18,9 @@ class Place extends Model
         'price', 'max_price', 'is_price_range', 'phone', 'website', 'youtube_url', 'video_title', 'open_hours', 'duration', 'ticket_info',
         'facilities', 'nearby_places',
 
+        // Kepemilikan
+        'owner_id', 'is_claimed',
+
         // Master Toggles
         'has_ticket', 'has_accommodation', 'has_restaurant',
         'has_tour_package', 'has_accessibility_warning', 'has_general_price',
@@ -44,6 +47,7 @@ class Place extends Model
         'tour_packages'    => 'array',
         'is_featured'               => 'boolean',
         'is_price_range'            => 'boolean',
+        'is_claimed'                => 'boolean',
         'has_ticket'                => 'boolean',
         'has_accommodation'         => 'boolean',
         'has_restaurant'            => 'boolean',
@@ -176,5 +180,21 @@ class Place extends Model
     public function blogPosts(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(BlogPost::class, 'blog_post_place');
+    }
+
+    /**
+     * Pengelola resmi tempat ini (jika sudah diklaim dan disetujui).
+     */
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    /**
+     * Semua pengajuan klaim untuk tempat ini.
+     */
+    public function claims(): HasMany
+    {
+        return $this->hasMany(PlaceClaim::class);
     }
 }
