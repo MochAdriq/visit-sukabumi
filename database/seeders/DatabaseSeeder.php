@@ -25,8 +25,9 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Seed master tags & mapping
+        // Seed master tags & admin users
         $this->call([
+            AdminUserSeeder::class,
             TagSeeder::class,
         ]);
 

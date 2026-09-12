@@ -253,7 +253,7 @@
             @endif
 
             {{-- Comment Form Card --}}
-            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 mb-10">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 mb-10" x-data="blogCommentComponent()">
                 <h4 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <svg class="w-4 h-4 text-[#00aa6c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
@@ -261,7 +261,15 @@
                     Tinggalkan Komentar
                 </h4>
 
-                <form action="{{ route('blog.comment.store', $post->slug) }}" method="POST">
+                {{-- Restored Draft Alert Banner --}}
+                <div x-show="draftRestored" class="mb-5 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs flex items-center gap-2.5" style="display: none;">
+                    <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span><strong>Draf komentar Anda berhasil dipulihkan!</strong> Silakan periksa kembali dan klik <strong>Kirim Komentar</strong>.</span>
+                </div>
+
+                <form action="{{ route('blog.comment.store', $post->slug) }}" method="POST" @submit.prevent="submitBlogComment($event)">
                     @csrf
 
                     @auth
@@ -275,29 +283,17 @@
                             </div>
                         </div>
                     @else
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
-                                <input type="text" name="name" required value="{{ old('name') }}" placeholder="Contoh: Budi Pratama"
-                                    class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#1a6bbf] focus:ring-2 focus:ring-[#1a6bbf]/20 outline-none text-sm transition">
-                                @error('name')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Email (Opsional)</label>
-                                <input type="email" name="email" value="{{ old('email') }}" placeholder="alamat@email.com"
-                                    class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#1a6bbf] focus:ring-2 focus:ring-[#1a6bbf]/20 outline-none text-sm transition">
-                                @error('email')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
+                        <div class="flex items-center gap-2.5 p-3.5 bg-blue-50/70 border border-blue-100 rounded-2xl mb-4 text-xs text-blue-800">
+                            <svg class="w-4 h-4 text-[#1a6bbf] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span>Anda dapat mengetik komentar di bawah ini. Draf akan tersimpan secara otomatis dan Anda akan diarahkan untuk masuk/daftar saat mengirim.</span>
                         </div>
                     @endauth
 
                     <div class="mb-4">
                         <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Isi Komentar <span class="text-red-500">*</span></label>
-                        <textarea name="comment" rows="4" required placeholder="Tuliskan pendapat, tanggapan, atau pertanyaan Anda tentang artikel ini..."
+                        <textarea name="comment" x-ref="commentInput" rows="4" required placeholder="Tuliskan pendapat, tanggapan, atau pertanyaan Anda tentang artikel ini..."
                             class="w-full p-4 rounded-2xl border border-gray-200 focus:border-[#1a6bbf] focus:ring-2 focus:ring-[#1a6bbf]/20 outline-none text-sm transition resize-y">{{ old('comment') }}</textarea>
                         @error('comment')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -394,5 +390,70 @@
     </main>
 </div>
 @include('components.footer')
+
+<script>
+    function blogCommentComponent() {
+        return {
+            isLoggedIn: {{ Auth::check() ? 'true' : 'false' }},
+            draftRestored: false,
+
+            init() {
+                this.checkRestoredDraft();
+            },
+
+            checkRestoredDraft() {
+                try {
+                    const saved = localStorage.getItem('vs_pending_blog_comment');
+                    if (!saved) return;
+                    const draft = JSON.parse(saved);
+                    if (draft.slug === '{{ $post->slug }}') {
+                        // Draf berlaku dalam 24 jam terakhir
+                        if (Date.now() - (draft.timestamp || 0) < 24 * 60 * 60 * 1000) {
+                            setTimeout(() => {
+                                const textarea = this.$refs.commentInput;
+                                if (textarea && draft.comment) {
+                                    textarea.value = draft.comment;
+                                    this.draftRestored = true;
+                                    const commentSec = document.getElementById('comments');
+                                    if (commentSec) {
+                                        commentSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                    }
+                                }
+                            }, 350);
+                        }
+                    }
+                } catch (e) {
+                    console.error('Gagal memulihkan draf komentar blog:', e);
+                }
+            },
+
+            submitBlogComment(e) {
+                const form = e.target;
+                const textarea = this.$refs.commentInput;
+                const commentVal = textarea ? textarea.value.trim() : '';
+
+                if (!commentVal) {
+                    return;
+                }
+
+                if (!this.isLoggedIn) {
+                    const draft = {
+                        slug: '{{ $post->slug }}',
+                        comment: commentVal,
+                        timestamp: Date.now()
+                    };
+                    localStorage.setItem('vs_pending_blog_comment', JSON.stringify(draft));
+
+                    const currentUrl = window.location.href.split('#')[0] + '#comments';
+                    window.location.href = '{{ route('login') }}?redirect=' + encodeURIComponent(currentUrl);
+                    return;
+                }
+
+                localStorage.removeItem('vs_pending_blog_comment');
+                form.submit();
+            }
+        };
+    }
+</script>
 @endsection
 

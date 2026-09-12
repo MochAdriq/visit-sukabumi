@@ -12,11 +12,15 @@ use Laravel\Socialite\Facades\Socialite;
 
 class VisitorAuthController extends Controller
 {
-    public function showLoginForm()
+    public function showLoginForm(Request $request)
     {
+        if ($request->filled('redirect')) {
+            session(['url.intended' => $request->get('redirect')]);
+        }
+
         // Jika sudah login, redirect kembali ke sebelumnya atau home
         if (Auth::check()) {
-            if (Auth::user()->role === 'admin') {
+            if (Auth::user()->role === 'admin' && !session()->has('url.intended')) {
                 return redirect()->intended('/admin');
             }
             return redirect()->intended('/');
@@ -87,8 +91,11 @@ class VisitorAuthController extends Controller
     /**
      * Redirect pengguna ke halaman otentikasi Google.
      */
-    public function redirectToGoogle()
+    public function redirectToGoogle(Request $request)
     {
+        if ($request->filled('redirect')) {
+            session(['url.intended' => $request->get('redirect')]);
+        }
         return Socialite::driver('google')->redirect();
     }
 
@@ -148,7 +155,9 @@ class VisitorAuthController extends Controller
             Auth::login($user, true);
             request()->session()->regenerate();
 
-            if ($user->role === 'admin') {
+            // Jika ada intended URL (misal kembali ke ulasan/komentar), prioritaskan itu
+            $hasIntendedUrl = session()->has('url.intended');
+            if ($user->role === 'admin' && !$hasIntendedUrl) {
                 return redirect()->intended('/admin');
             }
 

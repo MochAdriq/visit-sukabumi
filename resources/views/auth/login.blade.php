@@ -29,7 +29,7 @@
 
             {{-- ══ TOMBOL GOOGLE SIGN-IN RESMI (1-KLIK) ══ --}}
             <div>
-                <a href="{{ route('auth.google') }}"
+                <a href="{{ route('auth.google', array_filter(['redirect' => request('redirect', session('url.intended'))])) }}"
                    class="w-full flex items-center justify-center py-3.5 px-4 rounded-xl shadow-md text-sm font-bold text-gray-800 bg-white hover:bg-gray-50 border border-gray-200 transition-all duration-200 hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] group">
                     <svg class="w-5 h-5 mr-3 flex-shrink-0" viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>

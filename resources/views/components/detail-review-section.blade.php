@@ -47,19 +47,12 @@
             <button @click="scrollToReviews()" class="text-sm font-semibold text-gray-700 underline cursor-pointer hover:text-black">
                 Semua ulasan ({{ number_format($totalReviews) }})
             </button>
-            @auth
-                @if(!$userHasReviewed)
-                    <button @click="showReviewModal = true" class="bg-[#002f20] hover:bg-[#001e14] text-white font-bold py-2.5 px-5 rounded-full flex items-center gap-2 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                        Tulis ulasan
-                    </button>
-                @endif
-            @else
-                <a href="{{ route('login') }}" class="bg-[#002f20] hover:bg-[#001e14] text-white font-bold py-2.5 px-5 rounded-full flex items-center gap-2 transition-colors">
+            @if(!$userHasReviewed)
+                <button @click="showReviewModal = true" class="bg-[#002f20] hover:bg-[#001e14] text-white font-bold py-2.5 px-5 rounded-full flex items-center gap-2 transition-colors cursor-pointer shadow-xs">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                     Tulis ulasan
-                </a>
-            @endauth
+                </button>
+            @endif
         </div>
     </div>
 
@@ -192,14 +185,12 @@
             <h3 class="text-xl font-bold text-gray-900">
                 Semua ulasan (<span x-text="filteredReviews.length"></span>)
             </h3>
-            @auth
-                @if(!$userHasReviewed)
-                    <button @click="showReviewModal = true" class="bg-[#002f20] hover:bg-[#001e14] text-white font-bold py-2 px-5 rounded-full flex items-center gap-2 text-sm transition-colors self-start sm:self-auto">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                        Tulis ulasan
-                    </button>
-                @endif
-            @endauth
+            @if(!$userHasReviewed)
+                <button @click="showReviewModal = true" class="bg-[#002f20] hover:bg-[#001e14] text-white font-bold py-2 px-5 rounded-full flex items-center gap-2 text-sm transition-colors self-start sm:self-auto">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                    Tulis ulasan
+                </button>
+            @endif
         </div>
         
         <p class="text-xs text-gray-500 mb-6">Ulasan merupakan opini subjektif dari wisatawan anggota komunitas Visit Sukabumi. Kami melakukan verifikasi untuk memastikan ulasan tetap informatif dan terpercaya.</p>
@@ -510,7 +501,6 @@
     </div>
 
     {{-- WRITE REVIEW MODAL --}}
-    @auth
     @if(!$userHasReviewed)
     <div x-show="showReviewModal" 
          x-transition:enter="transition ease-out duration-300"
@@ -541,7 +531,15 @@
 
             {{-- Modal Body (Scrollable) --}}
             <div class="p-6 overflow-y-auto">
-                <form action="{{ $storeRoute }}" method="POST" enctype="multipart/form-data">
+                {{-- Banner Draf Dipulihkan --}}
+                <div x-show="draftRestored" class="mb-5 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs flex items-center gap-2.5">
+                    <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span><strong>Draf ulasan Anda berhasil dipulihkan!</strong> Silakan periksa kembali dan klik <strong>Kirim Ulasan</strong>.</span>
+                </div>
+
+                <form action="{{ $storeRoute }}" method="POST" enctype="multipart/form-data" @submit.prevent="submitReview($event)">
                     @csrf
                     
                     <h4 class="font-bold text-gray-900 mb-6 text-xl">{{ $type === 'event' ? $model->title : $model->name }}</h4>
@@ -602,7 +600,6 @@
          </div>
     </div>
     @endif
-    @endauth
 
 </div>
 
@@ -611,9 +608,68 @@
         return {
             showReviewModal: false,
             showLoginNotice: false,
+            draftRestored: false,
             isLoggedIn: {{ Auth::check() ? 'true' : 'false' }},
             likeRouteBase: '{{ url('/review') }}',
             csrfToken: '{{ csrf_token() }}',
+
+            init() {
+                this.checkRestoredDraft();
+            },
+
+            checkRestoredDraft() {
+                try {
+                    const saved = localStorage.getItem('vs_pending_review');
+                    if (!saved) return;
+                    const draft = JSON.parse(saved);
+                    if (draft.slug === '{{ $model->slug }}' && draft.type === '{{ $type }}') {
+                        // Jika draf tersimpan dalam 24 jam terakhir
+                        if (Date.now() - (draft.timestamp || 0) < 24 * 60 * 60 * 1000) {
+                            setTimeout(() => {
+                                if (draft.rating && typeof setModalRating === 'function') {
+                                    setModalRating(parseInt(draft.rating));
+                                }
+                                const textarea = document.querySelector('textarea[name="content"]');
+                                if (textarea && draft.content) {
+                                    textarea.value = draft.content;
+                                }
+                                const select = document.querySelector('select[name="visit_type"]');
+                                if (select && draft.visit_type) {
+                                    select.value = draft.visit_type;
+                                }
+                                this.showReviewModal = true;
+                                this.draftRestored = true;
+                            }, 350);
+                        }
+                    }
+                } catch (e) {
+                    console.error('Gagal memulihkan draf ulasan:', e);
+                }
+            },
+
+            submitReview(e) {
+                const form = e.target;
+                if (!this.isLoggedIn) {
+                    const ratingInput = document.getElementById('modal-rating-input');
+                    const draft = {
+                        slug: '{{ $model->slug }}',
+                        type: '{{ $type }}',
+                        rating: ratingInput ? ratingInput.value : 5,
+                        content: form.content ? form.content.value : '',
+                        visit_type: form.visit_type ? form.visit_type.value : '',
+                        timestamp: Date.now()
+                    };
+                    localStorage.setItem('vs_pending_review', JSON.stringify(draft));
+
+                    const currentUrl = window.location.href.split('#')[0] + '#reviews';
+                    window.location.href = '{{ route('login') }}?redirect=' + encodeURIComponent(currentUrl);
+                    return;
+                }
+
+                // Jika sudah login, bersihkan draf dan submit form
+                localStorage.removeItem('vs_pending_review');
+                form.submit();
+            },
 
             allReviews: @json($reviewsData),
             searchQuery: '',
