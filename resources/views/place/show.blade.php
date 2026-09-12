@@ -388,12 +388,100 @@
                         </div>
                     @endif
 
-                    @if($place->nearby_places)
-                        <div class="mt-6">
-                            <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2">Dekat Dengan</h3>
-                            <div class="text-sm text-gray-700 bg-[#f9a826]/10 p-4 rounded-xl border border-[#f9a826]/20 leading-relaxed flex gap-3 items-start">
-                                <svg class="w-5 h-5 text-[#f9a826] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                <div>{{ $place->nearby_places }}</div>
+                    {{-- ══ DEKAT DENGAN (DESTINASI & TITIK TERDEKAT AUTO-DETECT) ══ --}}
+                    @if(isset($nearbyPlaces) && $nearbyPlaces->isNotEmpty())
+                        <div class="mt-8 pt-6 border-t border-gray-100">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-8 h-8 rounded-xl bg-emerald-50 text-[#00aa6c] flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm md:text-base font-bold text-gray-900 leading-tight">Dekat Dengan Destinasi Menarik</h3>
+                                        <p class="text-xs text-gray-500">Tempat wisata dan atraksi populer di sekitar area ini</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if($place->nearby_places)
+                                <div class="mb-4 text-xs text-gray-600 bg-amber-50/70 p-3 rounded-xl border border-amber-200/60 flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span><strong>Catatan Akses:</strong> {{ $place->nearby_places }}</span>
+                                </div>
+                            @endif
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                                @foreach($nearbyPlaces as $near)
+                                    @php
+                                        $dist = isset($near->distance) ? round((float) $near->distance, 1) : null;
+                                        $distText = $dist !== null ? ($dist < 1 ? round($dist * 1000) . ' m' : $dist . ' km') : null;
+                                        $estMinutes = $dist !== null ? max(1, round($dist * 2)) : null;
+                                    @endphp
+                                    <a href="{{ route('place.show', $near->slug) }}" 
+                                       class="group flex items-center gap-3.5 p-3 rounded-2xl bg-white border border-gray-100 hover:border-emerald-200 hover:shadow-md transition-all duration-200">
+                                        
+                                        {{-- Image Thumbnail --}}
+                                        <div class="w-16 h-16 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0 relative">
+                                            <img src="{{ $near->cover_image_url }}" 
+                                                 alt="{{ $near->name }}" 
+                                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                        </div>
+
+                                        {{-- Info --}}
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center gap-1.5 mb-1">
+                                                @if($distText)
+                                                    <span class="inline-flex items-center text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                                                        <svg class="w-2.5 h-2.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                                        </svg>
+                                                        {{ $distText }}
+                                                    </span>
+                                                    @if($estMinutes)
+                                                        <span class="text-[10px] text-gray-400 font-medium">
+                                                            ~{{ $estMinutes }} mnt
+                                                        </span>
+                                                    @endif
+                                                @elseif($near->district)
+                                                    <span class="inline-flex items-center text-[10px] font-medium text-gray-600 bg-gray-100 px-2 py-0.5 rounded-md">
+                                                        {{ $near->district }}
+                                                    </span>
+                                                @endif
+                                            </div>
+
+                                            <h4 class="text-sm font-bold text-gray-900 group-hover:text-[#00aa6c] transition-colors truncate">
+                                                {{ $near->name }}
+                                            </h4>
+
+                                            <div class="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                                                @if($near->category)
+                                                    <span class="truncate">{{ $near->category->name }}</span>
+                                                @endif
+                                                @if($near->reviews_avg_rating)
+                                                    <span class="text-gray-300">•</span>
+                                                    <span class="flex items-center gap-0.5 font-bold text-amber-500 text-[11px]">
+                                                        <svg class="w-3 h-3 fill-current" viewBox="0 0 20 20">
+                                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                        </svg>
+                                                        {{ round($near->reviews_avg_rating, 1) }}
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        {{-- Arrow --}}
+                                        <div class="w-8 h-8 rounded-full bg-gray-50 group-hover:bg-emerald-50 text-gray-400 group-hover:text-[#00aa6c] flex items-center justify-center flex-shrink-0 transition-colors">
+                                            <svg class="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </div>
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
                     @endif

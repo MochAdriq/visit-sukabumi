@@ -71,7 +71,63 @@ class PlaceController extends Controller
             ->limit(4)
             ->get();
 
-        return view('place.show', compact('place', 'related'));
+        // Auto-detect Destinasi & Titik Terdekat via koordinat GPS (Haversine formula)
+        $nearbyPlaces = collect();
+        if ($place->latitude && $place->longitude && (float)$place->latitude != 0 && (float)$place->longitude != 0) {
+            $lat = (float) $place->latitude;
+            $lng = (float) $place->longitude;
+
+            $nearbyPlaces = Place::select('*')
+                ->selectRaw(
+                    '(6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))) AS distance',
+                    [$lat, $lng, $lat]
+                )
+                ->where('status', 'published')
+                ->where('id', '!=', $place->id)
+                ->whereNotNull('latitude')
+                ->whereNotNull('longitude')
+                ->where('latitude', '!=', 0)
+                ->where('longitude', '!=', 0)
+                ->orderBy('distance', 'asc')
+                ->with(['primaryImage', 'placeImages', 'category'])
+                ->withAvg('reviews', 'rating')
+                ->withCount('reviews')
+                ->limit(4)
+                ->get();
+        }
+
+        // Fallback cerdas jika tempat belum ada koordinat atau hasil < 4
+        if ($nearbyPlaces->count() < 4) {
+            $existingIds = $nearbyPlaces->pluck('id')->push($place->id)->toArray();
+            $query = Place::where('status', 'published')
+                ->whereNotIn('id', $existingIds)
+                ->with(['primaryImage', 'placeImages', 'category'])
+                ->withAvg('reviews', 'rating')
+                ->withCount('reviews');
+
+            if ($place->district) {
+                $query->where('district', $place->district);
+            }
+
+            $fillers = $query->limit(4 - $nearbyPlaces->count())->get();
+
+            // Jika masih kurang, ambil destinasi terpopuler lainnya
+            if ($nearbyPlaces->count() + $fillers->count() < 4) {
+                $allUsedIds = array_merge($existingIds, $fillers->pluck('id')->toArray());
+                $moreFillers = Place::where('status', 'published')
+                    ->whereNotIn('id', $allUsedIds)
+                    ->with(['primaryImage', 'placeImages', 'category'])
+                    ->withAvg('reviews', 'rating')
+                    ->withCount('reviews')
+                    ->limit(4 - ($nearbyPlaces->count() + $fillers->count()))
+                    ->get();
+                $fillers = $fillers->concat($moreFillers);
+            }
+
+            $nearbyPlaces = $nearbyPlaces->concat($fillers);
+        }
+
+        return view('place.show', compact('place', 'related', 'nearbyPlaces'));
     }
 
     /**
