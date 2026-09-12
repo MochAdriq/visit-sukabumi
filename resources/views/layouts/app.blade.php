@@ -4,25 +4,35 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {{-- ══ SEO: Title & Meta Dasar ══ --}}
-    @hasSection('title')
-        <title>@yield('title')</title>
-    @else
-        <title>Visit Sukabumi — Panduan Wisata Kabupaten Sukabumi</title>
-    @endif
+    @php
+        $pageTitle = trim($__env->yieldContent('title'));
+        $defaultTitle = 'Visit Sukabumi — Panduan Wisata Kabupaten Sukabumi';
+        $metaTitle = $pageTitle ?: $defaultTitle;
 
-    <meta name="description" content="@yield('meta_description', 'Temukan destinasi wisata, event, penginapan, dan kuliner terbaik di Kabupaten Sukabumi. Panduan perjalanan lengkap dari Visit Sukabumi.')">
+        $pageDesc = trim($__env->yieldContent('meta_description'));
+        $defaultDesc = 'Temukan destinasi wisata, event, penginapan, dan kuliner terbaik di Kabupaten Sukabumi. Panduan perjalanan lengkap dari Visit Sukabumi.';
+        $metaDesc = $pageDesc ?: $defaultDesc;
+
+        $ogTitle = trim($__env->yieldContent('og_title')) ?: $metaTitle;
+        $ogDesc  = trim($__env->yieldContent('og_description')) ?: $metaDesc;
+        $ogImage = trim($__env->yieldContent('og_image')) ?: asset('assets/images/og-default.jpg');
+        $ogUrl   = trim($__env->yieldContent('canonical')) ?: url()->current();
+    @endphp
+
+    {{-- ══ SEO: Title & Meta Dasar ══ --}}
+    <title>{{ $metaTitle }}</title>
+    <meta name="description" content="{{ $metaDesc }}">
     <meta name="robots" content="@yield('meta_robots', 'index, follow')">
-    <link rel="canonical" href="@yield('canonical', url()->current())">
+    <link rel="canonical" href="{{ $ogUrl }}">
 
     {{-- ══ Open Graph (WhatsApp, Facebook, Telegram, LinkedIn) ══ --}}
     <meta property="og:site_name"   content="Visit Sukabumi">
     <meta property="og:locale"      content="id_ID">
     <meta property="og:type"        content="@yield('og_type', 'website')">
-    <meta property="og:title"       content="@yield('og_title', '@yield('title', 'Visit Sukabumi — Panduan Wisata Kabupaten Sukabumi')')">
-    <meta property="og:description" content="@yield('og_description', '@yield('meta_description', 'Temukan destinasi wisata, event, penginapan, dan kuliner terbaik di Kabupaten Sukabumi.')')">
-    <meta property="og:url"         content="@yield('canonical', url()->current())">
-    <meta property="og:image"       content="@yield('og_image', asset('assets/images/og-default.jpg'))">
+    <meta property="og:title"       content="{{ $ogTitle }}">
+    <meta property="og:description" content="{{ $ogDesc }}">
+    <meta property="og:url"         content="{{ $ogUrl }}">
+    <meta property="og:image"       content="{{ $ogImage }}">
     <meta property="og:image:width"  content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt"   content="@yield('og_image_alt', 'Visit Sukabumi')">
@@ -30,9 +40,9 @@
     {{-- ══ Twitter / X Card ══ --}}
     <meta name="twitter:card"        content="summary_large_image">
     <meta name="twitter:site"        content="@visitsukabumi">
-    <meta name="twitter:title"       content="@yield('og_title', '@yield('title', 'Visit Sukabumi')')">
-    <meta name="twitter:description" content="@yield('og_description', '@yield('meta_description', 'Temukan destinasi wisata terbaik di Kabupaten Sukabumi.')')">
-    <meta name="twitter:image"       content="@yield('og_image', asset('assets/images/og-default.jpg'))">
+    <meta name="twitter:title"       content="{{ $ogTitle }}">
+    <meta name="twitter:description" content="{{ $ogDesc }}">
+    <meta name="twitter:image"       content="{{ $ogImage }}">
 
     {{-- ══ Structured Data / JSON-LD (per-halaman) ══ --}}
     @stack('structured_data')

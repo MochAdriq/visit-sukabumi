@@ -10,43 +10,43 @@
 @section('og_image', asset('assets/images/og-default.jpg'))
 @section('og_image_alt', 'Visit Sukabumi \u2014 Panduan Wisata Kabupaten Sukabumi')
 
-{{-- \u2550\u2550 JSON-LD: Organization + WebSite \u2550\u2550 --}}
+{{-- ══ JSON-LD: Organization + WebSite ══ --}}
 @push('structured_data')
+@php
+    $homeSchema = [
+        [
+            '@type' => 'Organization',
+            'name' => 'Visit Sukabumi',
+            'url' => url('/'),
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => asset('assets/images/logo.png'),
+            ],
+            'sameAs' => [],
+            'description' => 'Platform panduan wisata resmi Kabupaten Sukabumi — destinasi, event, kuliner, penginapan, dan inspirasi perjalanan.',
+            'areaServed' => [
+                '@type' => 'AdministrativeArea',
+                'name' => 'Kabupaten Sukabumi',
+            ],
+        ],
+        [
+            '@type' => 'WebSite',
+            'name' => 'Visit Sukabumi',
+            'url' => url('/'),
+            'inLanguage' => 'id',
+            'potentialAction' => [
+                '@type' => 'SearchAction',
+                'target' => [
+                    '@type' => 'EntryPoint',
+                    'urlTemplate' => url('/destinasi') . '?search={search_term_string}',
+                ],
+                'query-input' => 'required name=search_term_string',
+            ],
+        ],
+    ];
+@endphp
 <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@graph": [
-        {
-            "@type": "Organization",
-            "name": "Visit Sukabumi",
-            "url": "{{ url('/') }}",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "{{ asset('assets/images/logo.png') }}"
-            },
-            "sameAs": [],
-            "description": "Platform panduan wisata resmi Kabupaten Sukabumi \u2014 destinasi, event, kuliner, penginapan, dan inspirasi perjalanan.",
-            "areaServed": {
-                "@type": "AdministrativeArea",
-                "name": "Kabupaten Sukabumi"
-            }
-        },
-        {
-            "@type": "WebSite",
-            "name": "Visit Sukabumi",
-            "url": "{{ url('/') }}",
-            "inLanguage": "id",
-            "potentialAction": {
-                "@type": "SearchAction",
-                "target": {
-                    "@type": "EntryPoint",
-                    "urlTemplate": "{{ url('/destinasi') }}?search={search_term_string}"
-                },
-                "query-input": "required name=search_term_string"
-            }
-        }
-    ]
-}
+{!! json_encode(['@context' => 'https://schema.org', '@graph' => $homeSchema], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
 </script>
 @endpush
 

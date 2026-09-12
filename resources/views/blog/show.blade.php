@@ -19,48 +19,63 @@
 @section('og_image', $seoImage)
 @section('og_image_alt', 'Ilustrasi artikel: ' . $post->title)
 
-{{-- \u2550\u2550 JSON-LD: Article + BreadcrumbList \u2550\u2550 --}}
+{{-- ══ JSON-LD: Article + BreadcrumbList ══ --}}
 @push('structured_data')
+@php
+    $blogSchema = [
+        [
+            '@type' => 'Article',
+            'headline' => $post->title,
+            'description' => $seoDescription,
+            'image' => $seoImage,
+            'url' => $seoUrl,
+            'datePublished' => $publishedAt,
+            'dateModified' => $modifiedAt,
+            'author' => [
+                '@type' => 'Person',
+                'name' => $authorName,
+            ],
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'Visit Sukabumi',
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => asset('assets/images/logo.png'),
+                ],
+            ],
+            'inLanguage' => 'id',
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => $seoUrl,
+            ],
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                [
+                    '@type' => 'ListItem',
+                    'position' => 1,
+                    'name' => 'Home',
+                    'item' => url('/'),
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 2,
+                    'name' => 'Blog',
+                    'item' => route('blog.index'),
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 3,
+                    'name' => $post->title,
+                    'item' => $seoUrl,
+                ],
+            ],
+        ],
+    ];
+@endphp
 <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@graph": [
-        {
-            "@type": "Article",
-            "headline": "{{ addslashes($post->title) }}",
-            "description": "{{ addslashes($seoDescription) }}",
-            "image": "{{ $seoImage }}",
-            "url": "{{ $seoUrl }}",
-            "datePublished": "{{ $publishedAt }}",
-            "dateModified": "{{ $modifiedAt }}",
-            "author": {
-                "@type": "Person",
-                "name": "{{ addslashes($authorName) }}"
-            },
-            "publisher": {
-                "@type": "Organization",
-                "name": "Visit Sukabumi",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "{{ asset('assets/images/logo.png') }}"
-                }
-            },
-            "inLanguage": "id",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "{{ $seoUrl }}"
-            }
-        },
-        {
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ url('/') }}" },
-                { "@type": "ListItem", "position": 2, "name": "Blog", "item": "{{ route('blog.index') }}" },
-                { "@type": "ListItem", "position": 3, "name": "{{ addslashes($post->title) }}", "item": "{{ $seoUrl }}" }
-            ]
-        }
-    ]
-}
+{!! json_encode(['@context' => 'https://schema.org', '@graph' => $blogSchema], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
 </script>
 @endpush
 

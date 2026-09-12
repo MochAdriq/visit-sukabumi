@@ -23,55 +23,73 @@
 
 {{-- ══ JSON-LD: TouristAttraction + BreadcrumbList ══ --}}
 @push('structured_data')
+@php
+    $schemaGraph = [
+        [
+            '@type' => 'TouristAttraction',
+            'name' => $place->name,
+            'description' => Str::limit(strip_tags($place->description ?? ''), 200),
+            'url' => $seoUrl,
+            'image' => $seoImage,
+            'address' => [
+                '@type' => 'PostalAddress',
+                'addressLocality' => $place->district ?? 'Sukabumi',
+                'addressRegion' => 'Jawa Barat',
+                'addressCountry' => 'ID',
+            ],
+            'inLanguage' => 'id',
+            'isAccessibleForFree' => (!$place->has_ticket && !$place->has_general_price),
+            'touristType' => 'Wisatawan Umum',
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                [
+                    '@type' => 'ListItem',
+                    'position' => 1,
+                    'name' => 'Home',
+                    'item' => url('/'),
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 2,
+                    'name' => 'Destinasi',
+                    'item' => route('place.index'),
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 3,
+                    'name' => $place->name,
+                    'item' => $seoUrl,
+                ],
+            ],
+        ],
+    ];
+
+    if ($place->latitude && $place->longitude) {
+        $schemaGraph[0]['geo'] = [
+            '@type' => 'GeoCoordinates',
+            'latitude' => (float) $place->latitude,
+            'longitude' => (float) $place->longitude,
+        ];
+    }
+
+    if ($reviewCount > 0) {
+        $schemaGraph[0]['aggregateRating'] = [
+            '@type' => 'AggregateRating',
+            'ratingValue' => (string) $avgRating,
+            'reviewCount' => (string) $reviewCount,
+            'bestRating' => '5',
+            'worstRating' => '1',
+        ];
+    }
+
+    if ($place->phone) {
+        $schemaGraph[0]['telephone'] = $place->phone;
+    }
+@endphp
 <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@graph": [
-        {
-            "@type": "TouristAttraction",
-            "name": "{{ addslashes($place->name) }}",
-            "description": "{{ addslashes(Str::limit(strip_tags($place->description ?? ''), 200)) }}",
-            "url": "{{ $seoUrl }}",
-            "image": "{{ $seoImage }}",
-            "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "{{ addslashes($place->district ?? 'Sukabumi') }}",
-                "addressRegion": "Jawa Barat",
-                "addressCountry": "ID"
-            },
-            @if($place->latitude && $place->longitude)
-            "geo": {
-                "@type": "GeoCoordinates",
-                "latitude": {{ $place->latitude }},
-                "longitude": {{ $place->longitude }}
-            },
-            @endif
-            @if($reviewCount > 0)
-            "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "{{ $avgRating }}",
-                "reviewCount": "{{ $reviewCount }}",
-                "bestRating": "5",
-                "worstRating": "1"
-            },
-            @endif
-            @if($place->phone)
-            "telephone": "{{ $place->phone }}",
-            @endif
-            "inLanguage": "id",
-            "isAccessibleForFree": {{ (!$place->has_ticket && !$place->has_general_price) ? 'true' : 'false' }},
-            "touristType": "Wisatawan Umum"
-        },
-        {
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ url('/') }}" },
-                { "@type": "ListItem", "position": 2, "name": "Destinasi", "item": "{{ route('place.index') }}" },
-                { "@type": "ListItem", "position": 3, "name": "{{ addslashes($place->name) }}", "item": "{{ $seoUrl }}" }
-            ]
-        }
-    ]
-}
+{!! json_encode(['@context' => 'https://schema.org', '@graph' => $schemaGraph], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
 </script>
 @endpush
 

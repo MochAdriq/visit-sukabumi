@@ -20,53 +20,69 @@
 @section('og_image', $seoImage)
 @section('og_image_alt', 'Poster event ' . $event->title)
 
-{{-- \u2550\u2550 JSON-LD: Event + BreadcrumbList \u2550\u2550 --}}
+{{-- ══ JSON-LD: Event + BreadcrumbList ══ --}}
 @push('structured_data')
+@php
+    $eventSchema = [
+        [
+            '@type' => 'Event',
+            'name' => $event->title,
+            'description' => Str::limit(strip_tags($event->description ?? ''), 200),
+            'url' => $seoUrl,
+            'image' => $seoImage,
+            'eventStatus' => 'https://schema.org/EventScheduled',
+            'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+            'location' => [
+                '@type' => 'Place',
+                'name' => $event->location_name ?? 'Sukabumi',
+                'address' => [
+                    '@type' => 'PostalAddress',
+                    'addressLocality' => 'Sukabumi',
+                    'addressRegion' => 'Jawa Barat',
+                    'addressCountry' => 'ID',
+                ],
+            ],
+            'organizer' => [
+                '@type' => 'Organization',
+                'name' => 'Visit Sukabumi',
+                'url' => url('/'),
+            ],
+            'inLanguage' => 'id',
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                [
+                    '@type' => 'ListItem',
+                    'position' => 1,
+                    'name' => 'Home',
+                    'item' => url('/'),
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 2,
+                    'name' => 'Event',
+                    'item' => route('event.index'),
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 3,
+                    'name' => $event->title,
+                    'item' => $seoUrl,
+                ],
+            ],
+        ],
+    ];
+
+    if ($startDate) {
+        $eventSchema[0]['startDate'] = $startDate;
+    }
+    if ($endDate) {
+        $eventSchema[0]['endDate'] = $endDate;
+    }
+@endphp
 <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@graph": [
-        {
-            "@type": "Event",
-            "name": "{{ addslashes($event->title) }}",
-            "description": "{{ addslashes(Str::limit(strip_tags($event->description ?? ''), 200)) }}",
-            "url": "{{ $seoUrl }}",
-            "image": "{{ $seoImage }}",
-            "eventStatus": "https://schema.org/EventScheduled",
-            "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-            @if($startDate)
-            "startDate": "{{ $startDate }}",
-            @endif
-            @if($endDate)
-            "endDate": "{{ $endDate }}",
-            @endif
-            "location": {
-                "@type": "Place",
-                "name": "{{ addslashes($event->location_name ?? 'Sukabumi') }}",
-                "address": {
-                    "@type": "PostalAddress",
-                    "addressLocality": "Sukabumi",
-                    "addressRegion": "Jawa Barat",
-                    "addressCountry": "ID"
-                }
-            },
-            "organizer": {
-                "@type": "Organization",
-                "name": "Visit Sukabumi",
-                "url": "{{ url('/') }}"
-            },
-            "inLanguage": "id"
-        },
-        {
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ url('/') }}" },
-                { "@type": "ListItem", "position": 2, "name": "Event", "item": "{{ route('event.index') }}" },
-                { "@type": "ListItem", "position": 3, "name": "{{ addslashes($event->title) }}", "item": "{{ $seoUrl }}" }
-            ]
-        }
-    ]
-}
+{!! json_encode(['@context' => 'https://schema.org', '@graph' => $eventSchema], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
 </script>
 @endpush
 
