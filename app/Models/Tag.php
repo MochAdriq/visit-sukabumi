@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 class Tag extends Model
 {
@@ -20,6 +21,21 @@ class Tag extends Model
     protected $casts = [
         'sort_order' => 'integer',
     ];
+
+    protected static function booted()
+    {
+        static::saved(function ($tag) {
+            Cache::forget('tags_page_activity');
+            Cache::forget('tags_page_wisata');
+            Cache::forget("tag_cover_{$tag->id}");
+        });
+
+        static::deleted(function ($tag) {
+            Cache::forget('tags_page_activity');
+            Cache::forget('tags_page_wisata');
+            Cache::forget("tag_cover_{$tag->id}");
+        });
+    }
 
     /** Route model binding by slug */
     public function getRouteKeyName(): string
@@ -45,14 +61,20 @@ class Tag extends Model
     /** URL gambar sampul dinamis (diambil dari salah satu tempat di dalamnya) */
     public function getCoverImageAttribute(): string
     {
-        $place = $this->places()->whereHas('primaryImage')->with('primaryImage')->inRandomOrder()->first();
-        if ($place && $place->primaryImage) {
-            return Storage::url($place->primaryImage->image_path);
-        }
-        // Fallback images based on type
-        return $this->type === 'wisata' 
-            ? asset('assets/images/12.jpg')
-            : asset('assets/images/11.jpg');
+        return Cache::remember("tag_cover_{$this->id}", 86400, function () {
+            $place = $this->places()
+                ->whereHas('primaryImage')
+                ->with('primaryImage')
+                ->first();
+
+            if ($place && $place->primaryImage) {
+                return Storage::url($place->primaryImage->image_path);
+            }
+
+            return $this->type === 'wisata' 
+                ? asset('assets/images/12.jpg')
+                : asset('assets/images/11.jpg');
+        });
     }
 
     /** URL halaman listing tag ini */

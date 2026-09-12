@@ -393,4 +393,6 @@
 
     </main>
 </div>
+@include('components.footer')
 @endsection
+

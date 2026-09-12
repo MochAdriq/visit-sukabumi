@@ -9,7 +9,7 @@
     {{-- HERO BANNER --}}
     <div class="w-full h-[350px] md:h-[450px] relative">
         <div class="absolute inset-0">
-            <img src="{{ $heroImage }}" alt="{{ $title }}" class="w-full h-full object-cover">
+            <img src="{{ $heroImage }}" alt="{{ $title }}" fetchpriority="high" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
         </div>
         
@@ -35,7 +35,7 @@
             @foreach($tags as $tag)
                 <a href="{{ $tag->url }}" class="group relative block w-full aspect-square rounded-2xl md:rounded-[2rem] overflow-hidden shadow-lg border border-white/10 hover:shadow-2xl transition-all duration-300">
                     {{-- Cover Image --}}
-                    <img src="{{ $tag->cover_image }}" alt="{{ $tag->name }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <img src="{{ $tag->cover_image }}" alt="{{ $tag->name }}" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     
                     {{-- Gradient Overlay --}}
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10 group-hover:from-black/80 transition-colors"></div>

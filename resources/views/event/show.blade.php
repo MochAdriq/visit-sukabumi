@@ -498,7 +498,7 @@
         </div>
     </main>
 
-    <x-footer />
+    @include('components.footer')
 </div>
 
 {{-- CSS for smooth scrolling --}}

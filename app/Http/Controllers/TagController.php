@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tag;
 use App\Models\Place;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class TagController extends Controller
 {
@@ -13,7 +14,14 @@ class TagController extends Controller
      */
     public function indexActivity()
     {
-        $tags = Tag::where('type', 'activity')->orderBy('sort_order')->withCount('places')->get();
+        $tags = Cache::remember('tags_page_activity', 86400, function () {
+            $list = Tag::where('type', 'activity')->orderBy('sort_order')->withCount('places')->get();
+            foreach ($list as $tag) {
+                $tag->cover_image = $tag->cover_image;
+            }
+            return $list;
+        });
+
         return view('tag.index', [
             'type' => 'aktivitas',
             'title' => 'Apa yang Bisa Dilakukan di Sukabumi',
@@ -28,7 +36,14 @@ class TagController extends Controller
      */
     public function indexWisata()
     {
-        $tags = Tag::where('type', 'wisata')->orderBy('sort_order')->withCount('places')->get();
+        $tags = Cache::remember('tags_page_wisata', 86400, function () {
+            $list = Tag::where('type', 'wisata')->orderBy('sort_order')->withCount('places')->get();
+            foreach ($list as $tag) {
+                $tag->cover_image = $tag->cover_image;
+            }
+            return $list;
+        });
+
         return view('tag.index', [
             'type' => 'wisata',
             'title' => 'Destinasi Wisata Memukau',
