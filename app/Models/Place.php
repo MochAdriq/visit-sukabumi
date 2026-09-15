@@ -88,18 +88,33 @@ class Place extends Model
     }
 
     /**
-     * Get cover image URL for cards (smart fallback to first image or static placeholder)
+     * Get cover image URL for cards (smart fallback to primary, first image, or rotating scenic photo)
      */
     public function getCoverImageUrlAttribute(): string
     {
-        $fallback = asset('assets/images/9.jpg');
+        $fallbacks = ['9.jpg', '10.jpg', '11.jpg', '12.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg'];
+        $fallbackIndex = abs($this->id ?? 0) % count($fallbacks);
+        $fallback = asset('assets/images/' . $fallbacks[$fallbackIndex]);
 
-        $primary = $this->primaryImage
-            ?? $this->placeImages()->where('is_primary', true)->first()
-            ?? $this->placeImages()->first();
+        // Prioritize primaryImage relation
+        if ($this->relationLoaded('primaryImage') && $this->primaryImage && $this->primaryImage->image_path) {
+            return \Illuminate\Support\Facades\Storage::url($this->primaryImage->image_path);
+        }
 
-        if ($primary && $primary->image_path) {
-            return \Illuminate\Support\Facades\Storage::url($primary->image_path);
+        if ($this->primaryImage && $this->primaryImage->image_path) {
+            return \Illuminate\Support\Facades\Storage::url($this->primaryImage->image_path);
+        }
+
+        // Fallback to placeImages if primaryImage is not set
+        if ($this->relationLoaded('placeImages') && $this->placeImages->isNotEmpty()) {
+            $firstImg = $this->placeImages->firstWhere('is_primary', true) ?? $this->placeImages->first();
+            if ($firstImg && $firstImg->image_path) {
+                return \Illuminate\Support\Facades\Storage::url($firstImg->image_path);
+            }
+        } elseif ($firstImg = $this->placeImages()->first()) {
+            if ($firstImg->image_path) {
+                return \Illuminate\Support\Facades\Storage::url($firstImg->image_path);
+            }
         }
 
         return $fallback;

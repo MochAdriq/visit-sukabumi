@@ -11,7 +11,7 @@ class HomeController extends Controller
     public function index()
     {
         // 1. Must Sees
-        $mustSees = Place::with(['category', 'primaryImage'])
+        $mustSees = Place::with(['category', 'primaryImage', 'placeImages'])
             ->withCount('reviews')
             ->withAvg('reviews', 'rating')
             ->where('status', 'published')
@@ -27,7 +27,7 @@ class HomeController extends Controller
             ->get();
 
         // 3. Pilihan Terbaik (Curated by Admin via is_featured toggle)
-        $bestChoices = Place::with(['category', 'primaryImage'])
+        $bestChoices = Place::with(['category', 'primaryImage', 'placeImages'])
             ->withCount('reviews')
             ->withAvg('reviews', 'rating')
             ->where('status', 'published')
@@ -39,7 +39,7 @@ class HomeController extends Controller
         // Fallback jika yang di-toggle is_featured di admin belum sampai 5
         if ($bestChoices->count() < 5) {
             $existingIds = $bestChoices->pluck('id')->toArray();
-            $fillers = Place::with(['category', 'primaryImage'])
+            $fillers = Place::with(['category', 'primaryImage', 'placeImages'])
                 ->withCount('reviews')
                 ->withAvg('reviews', 'rating')
                 ->where('status', 'published')
@@ -53,7 +53,7 @@ class HomeController extends Controller
         }
 
         // 4. Destinasi Terpopuler (All-in-One: 5 tempat paling hits by review count & rating)
-        $popularPlaces = Place::with(['category', 'primaryImage'])
+        $popularPlaces = Place::with(['category', 'primaryImage', 'placeImages'])
             ->withCount('reviews')
             ->withAvg('reviews', 'rating')
             ->where('status', 'published')

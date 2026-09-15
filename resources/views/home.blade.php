@@ -310,7 +310,7 @@
                                 </span>
                             @endif
 
-                            <img src="{{ $place->primaryImage ? Storage::url($place->primaryImage->image_path) : 'https://placehold.co/400x300/e2e8f0/64748b?text=' . urlencode($place->name) }}" 
+                            <img src="{{ $place->cover_image_url }}" 
                                  alt="{{ $place->name }}" 
                                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
                             <div class="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors"></div>
@@ -389,7 +389,7 @@
                                 </span>
                             @endif
 
-                            <img src="{{ $place->primaryImage ? Storage::url($place->primaryImage->image_path) : 'https://placehold.co/400x300/e2e8f0/64748b?text=' . urlencode($place->name) }}" 
+                            <img src="{{ $place->cover_image_url }}" 
                                  alt="{{ $place->name }}" 
                                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
                             <div class="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors"></div>
