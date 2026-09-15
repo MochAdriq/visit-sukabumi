@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 {{-- \u2550\u2550 SEO META: Homepage \u2550\u2550 --}}
-@section('title', 'Visit Sukabumi \u2014 Panduan Wisata Terlengkap Kabupaten Sukabumi')
+@section('title', 'Visit Sukabumi — Panduan Wisata Terlengkap Kabupaten Sukabumi')
 @section('meta_description', 'Temukan destinasi wisata alam, pantai, geopark, event, kuliner, dan penginapan terbaik di Kabupaten Sukabumi. Panduan perjalanan lengkap dari Visit Sukabumi.')
 @section('canonical', url('/'))
 @section('og_type', 'website')
-@section('og_title', 'Visit Sukabumi \u2014 Panduan Wisata Kabupaten Sukabumi')
+@section('og_title', 'Visit Sukabumi — Panduan Wisata Kabupaten Sukabumi')
 @section('og_description', 'Temukan destinasi wisata alam, pantai, geopark, event, kuliner, dan penginapan terbaik di Kabupaten Sukabumi.')
 @section('og_image', asset('assets/images/og-default.jpg'))
-@section('og_image_alt', 'Visit Sukabumi \u2014 Panduan Wisata Kabupaten Sukabumi')
+@section('og_image_alt', 'Visit Sukabumi — Panduan Wisata Kabupaten Sukabumi')
 
 {{-- ══ JSON-LD: Organization + WebSite ══ --}}
 @push('structured_data')
@@ -141,7 +141,7 @@
             }
         </style>
 
-        <div class="bg-[#fafbfc] py-10 md:py-14 border-b border-gray-100">
+        <div class="bg-white py-10 md:py-14 border-b border-gray-100">
             <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="mb-6 md:mb-8">
                     <h2 class="text-[28px] md:text-[34px] font-extrabold text-gray-950 mb-2 tracking-tight">Must-sees</h2>
@@ -278,16 +278,7 @@
             <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-5 md:mb-7">
                     <div>
-                        <div class="flex flex-wrap items-center gap-2.5 mb-1.5">
-                            <h2 id="popular-section-title" class="text-[26px] md:text-[34px] font-extrabold text-gray-950 tracking-tight">Pilihan Terbaik</h2>
-                            <button type="button" id="btn-user-location" onclick="handleUserLocationClick()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs md:text-sm font-bold border transition-all duration-200 bg-blue-50/80 text-[#1a6bbf] border-blue-200 hover:bg-blue-100 hover:border-blue-300 cursor-pointer shadow-xs" title="Tampilkan tempat wisata terdekat dari posisi Anda">
-                                <svg class="w-3.5 h-3.5 text-[#1a6bbf] flex-shrink-0 transition-transform" id="icon-location-pin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                </svg>
-                                <span id="label-user-location">Gunakan Lokasi Saya</span>
-                            </button>
-                        </div>
+                        <h2 id="popular-section-title" class="text-[26px] md:text-[34px] font-extrabold text-gray-950 mb-1 tracking-tight">Pilihan Terbaik</h2>
                         <p id="popular-section-subtitle" class="text-[16px] md:text-[18px] text-gray-700 leading-relaxed">Destinasi rekomendasi kurasi khusus untuk pengalaman terbaik di Sukabumi</p>
                     </div>
                 </div>
@@ -357,16 +348,10 @@
         </div>
 
         {{-- SECTION 3: DESTINASI TERPOPULER (ALL-IN-ONE 5 CARD BY REVIEW) --}}
-        <div class="bg-[#f0f7ff] py-10 md:py-14 border-b border-blue-100">
+        <div class="bg-white py-10 md:py-14 border-b border-gray-100">
             <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-6 md:mb-8">
                     <div>
-                        <div class="inline-flex items-center gap-1.5 border border-blue-200 bg-blue-100/70 text-[#1a6bbf] px-3.5 py-1 rounded-full text-xs font-bold mb-2.5 uppercase tracking-wider">
-                            <svg class="w-3.5 h-3.5 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
-                            </svg>
-                            Paling Favorit
-                        </div>
                         <h2 class="text-[26px] md:text-[34px] font-extrabold text-gray-950 mb-1 tracking-tight">Destinasi Terpopuler</h2>
                         <p class="text-[16px] md:text-[18px] text-gray-700 leading-relaxed">Paling banyak dikunjungi dan direkomendasikan oleh ribuan wisatawan</p>
                     </div>
@@ -419,6 +404,82 @@
                     @empty
                     <p class="text-gray-400 text-sm col-span-full">Belum ada data destinasi terpopuler.</p>
                     @endforelse
+                </div>
+            </div>
+        </div>
+
+        {{-- SECTION 3B: KULINER TERPOPULER (5 CARD BY REVIEW & RATING) --}}
+        <div class="bg-white py-10 md:py-14 border-b border-gray-100">
+            <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-6 md:mb-8">
+                    <div>
+                        <h2 class="text-[26px] md:text-[34px] font-extrabold text-gray-950 mb-1 tracking-tight">Kuliner Terfavorit & Populer</h2>
+                        <p class="text-[16px] md:text-[18px] text-gray-700 leading-relaxed">Cita rasa khas dan tempat makan paling direkomendasikan di Sukabumi</p>
+                    </div>
+                    <div>
+                        <a href="{{ route('place.index', ['category' => 'kuliner']) }}" class="hidden md:inline-flex items-center gap-1.5 text-sm font-bold text-[#1a6bbf] hover:underline">
+                            Lihat semua kuliner
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
+                    @forelse($popularCulinaries as $place)
+                    <a href="{{ route('place.show', $place->slug) }}" class="group block">
+                        {{-- Photo Container --}}
+                        <div class="overflow-hidden rounded-2xl mb-2.5 aspect-[4/3] bg-gray-100 relative">
+                            @if($place->badge_label)
+                                <span class="absolute top-2.5 left-2.5 bg-gradient-to-r from-amber-500 to-amber-400 text-gray-950 text-xs font-black px-3 py-0.5 rounded-full shadow-md z-10 flex items-center gap-1">
+                                    <svg class="w-3 h-3 text-gray-950 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                    {{ $place->badge_label }}
+                                </span>
+                            @elseif($loop->first)
+                                <span class="absolute top-2.5 left-2.5 bg-[#d97706] text-white text-xs font-bold px-3 py-0.5 rounded-full shadow-sm z-10 flex items-center gap-1">
+                                    <svg class="w-2.5 h-2.5 text-amber-200 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                    Top #1 Kuliner
+                                </span>
+                            @endif
+
+                            <img src="{{ $place->cover_image_url }}" 
+                                 alt="{{ $place->name }}" 
+                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                            <div class="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors"></div>
+                        </div>
+
+                        {{-- Content Below Photo --}}
+                        <h4 class="text-[16px] md:text-[17px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-snug mb-1 truncate transition-colors">
+                            {{ $place->name }}
+                        </h4>
+
+                        <div class="flex items-center gap-1.5 text-sm text-gray-500 mb-1.5">
+                            <div class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 text-[#f9a826] fill-current flex-shrink-0" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span class="font-bold text-gray-800">{{ number_format($place->reviews_avg_rating ?? 0, 1) }}</span>
+                                <span class="text-gray-400">({{ $place->reviews_count ?? 0 }})</span>
+                            </div>
+                            @if($place->district)
+                                <span class="text-gray-300">•</span>
+                                <span class="truncate max-w-[130px]">{{ $place->district }}</span>
+                            @endif
+                        </div>
+
+                        @if($place->description)
+                            <p class="text-[13px] text-gray-600 leading-relaxed line-clamp-2">{{ Str::limit(strip_tags($place->description), 90) }}</p>
+                        @endif
+                    </a>
+                    @empty
+                    <p class="text-gray-400 text-sm col-span-full">Belum ada data kuliner terpopuler.</p>
+                    @endforelse
+                </div>
+
+                <div class="mt-8 text-center md:hidden">
+                    <a href="{{ route('place.index', ['category' => 'kuliner']) }}" class="inline-flex items-center gap-2 px-6 py-2.5 border border-gray-300 text-gray-700 font-bold rounded-full hover:bg-gray-50 text-sm transition-colors">
+                        Lihat semua kuliner
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
                 </div>
             </div>
         </div>
@@ -495,12 +556,9 @@
                 animation: scroll-y linear infinite;
             }
         </style>
-        <div class="bg-[#f0f7ff] py-10 md:py-16 relative overflow-hidden">
+        <div class="bg-white py-10 md:py-16 border-b border-gray-100 relative overflow-hidden">
             <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="text-center max-w-2xl mx-auto mb-10">
-                    <div class="inline-block border border-blue-200 bg-blue-50 text-[#1a6bbf] px-4 py-1.5 rounded-full text-xs font-bold mb-4 tracking-wider uppercase">
-                        Testimonials
-                    </div>
                     <h2 class="text-2xl md:text-4xl lg:text-5xl font-extrabold text-gray-950 tracking-tight">Apa Kata Mereka</h2>
                     <p class="text-[16px] md:text-[18px] text-gray-700 mt-4 leading-relaxed">
                         Ulasan nyata dari ribuan wisatawan yang sudah menikmati indahnya pesona Sukabumi bersama kami.
@@ -608,14 +666,14 @@
         const label = document.getElementById('label-user-location');
         const pinIcon = document.getElementById('icon-location-pin');
 
-        label.textContent = 'Memuat Destinasi...';
+        if (label) label.textContent = 'Memuat Destinasi...';
 
         fetch(`/api/places/nearby?lat=${lat}&lng=${lng}`)
             .then(res => res.json())
             .then(res => {
                 if (!res.success || !res.data || res.data.length === 0) {
-                    label.textContent = 'Gunakan Lokasi Saya';
-                    btn.disabled = false;
+                    if (label) label.textContent = 'Gunakan Lokasi Saya';
+                    if (btn) btn.disabled = false;
                     return;
                 }
 
@@ -626,52 +684,56 @@
                     if (place.badge_label) {
                         badgeHtml = `<span class="absolute top-2.5 left-2.5 bg-gradient-to-r from-amber-500 to-amber-400 text-gray-950 text-[10px] md:text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-md z-10 flex items-center gap-1"><svg class="w-3 h-3 text-gray-950 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>${place.badge_label}</span>`;
                     } else if (isFirst) {
-                        badgeHtml = `<span class="absolute top-2.5 left-2.5 bg-emerald-500 text-white text-[10px] md:text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-md z-10 flex items-center gap-1"><svg class="w-2.5 h-2.5 text-white fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>Paling Dekat</span>`;
+                        badgeHtml = `<span class="absolute top-2.5 left-2.5 bg-[#1a6bbf] text-white text-[10px] md:text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm z-10 flex items-center gap-1"><svg class="w-2.5 h-2.5 text-amber-300 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>Terdekat</span>`;
                     }
-                    const badgeJarak = place.distance_formatted ? `<span class="absolute top-2.5 right-2.5 bg-black/65 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-sm border border-white/20 z-10"><svg class="w-2.5 h-2.5 text-[#f9a826]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>${place.distance_formatted}</span>` : '';
-                    const districtHtml = place.district ? `<span class="text-gray-300">•</span><span class="truncate max-w-[110px]">${place.district}</span>` : '';
-                    const descHtml = place.description ? `<p class="text-[12px] text-gray-500 leading-relaxed line-clamp-2">${place.description}</p>` : '';
+
+                    const rating = place.reviews_avg_rating ? parseFloat(place.reviews_avg_rating).toFixed(1) : '0.0';
+                    const reviewsCount = place.reviews_count ?? 0;
+                    const distance = place.distance ? `${place.distance.toFixed(1)} km` : '';
+                    const district = place.district ? `<span class="text-gray-300">•</span><span class="truncate max-w-[130px]">${place.district}</span>` : '';
+                    const distanceBadge = distance ? `<span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">${distance}</span>` : '';
+                    const desc = place.description ? `<p class="text-[13px] text-gray-600 leading-relaxed line-clamp-2">${place.description}</p>` : '';
 
                     html += `
-                    <a href="${place.url}" class="group block">
+                    <a href="/place/${place.slug}" class="group block">
                         <div class="overflow-hidden rounded-2xl mb-2.5 aspect-[4/3] bg-gray-100 relative">
                             ${badgeHtml}
-                            ${badgeJarak}
-                            <img src="${place.cover_image}" alt="${place.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                            <img src="${place.cover_image_url}" alt="${place.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
                             <div class="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors"></div>
                         </div>
-                        <h4 class="text-[14px] md:text-[15px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-snug mb-1 truncate transition-colors">${place.name}</h4>
-                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-1.5">
+                        <h4 class="text-[16px] md:text-[17px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-snug mb-1 truncate transition-colors">${place.name}</h4>
+                        <div class="flex items-center gap-1.5 text-sm text-gray-500 mb-1.5 flex-wrap">
                             <div class="flex items-center gap-1">
-                                <svg class="w-3.5 h-3.5 text-[#f9a826] fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                <span class="font-bold text-gray-800">${Number(place.rating).toFixed(1)}</span>
-                                <span class="text-gray-400">(${place.reviews_count})</span>
+                                <svg class="w-3.5 h-3.5 text-[#f9a826] fill-current flex-shrink-0" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span class="font-bold text-gray-800">${rating}</span>
+                                <span class="text-gray-400">(${reviewsCount})</span>
                             </div>
-                            ${districtHtml}
+                            ${district}
+                            ${distanceBadge}
                         </div>
-                        ${descHtml}
+                        ${desc}
                     </a>`;
                 });
 
-                nearbyContainer.innerHTML = html;
-
-                // Sembunyikan content best choice, tampilkan nearby
                 if (bestChoiceContainer) bestChoiceContainer.classList.add('hidden');
-                nearbyContainer.classList.remove('hidden');
-
-                // Perbarui judul dan teks tombol
-                title.textContent = 'Destinasi Terdekat dari Anda';
-                subtitle.textContent = 'Menampilkan rekomendasi tempat wisata terdekat dari posisi Anda saat ini';
-                btn.classList.remove('bg-blue-50/80', 'text-[#1a6bbf]', 'border-blue-200');
-                btn.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-300');
-                if (pinIcon) pinIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>`;
-                label.textContent = 'Lokasi Aktif (Perbarui)';
-                btn.disabled = false;
+                if (nearbyContainer) {
+                    nearbyContainer.innerHTML = html;
+                    nearbyContainer.classList.remove('hidden');
+                }
+                if (title) title.textContent = 'Destinasi Terdekat';
+                if (subtitle) subtitle.textContent = 'Menampilkan destinasi wisata yang paling dekat dari lokasi Anda saat ini';
+                if (label) label.textContent = 'Lokasi Terdeteksi';
+                if (btn) {
+                    btn.classList.remove('bg-blue-50/80', 'text-[#1a6bbf]', 'border-blue-200');
+                    btn.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+                    btn.disabled = false;
+                }
+                if (pinIcon) pinIcon.classList.add('text-emerald-600');
             })
             .catch(err => {
                 console.error('Error loading nearby places:', err);
-                label.textContent = 'Gunakan Lokasi Saya';
-                btn.disabled = false;
+                if (label) label.textContent = 'Gunakan Lokasi Saya';
+                if (btn) btn.disabled = false;
             });
     }
 

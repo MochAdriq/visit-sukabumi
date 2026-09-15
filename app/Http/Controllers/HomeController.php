@@ -62,6 +62,19 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
 
+        // 4b. Kuliner Terpopuler (5 tempat kuliner rating & ulasan tertinggi)
+        $popularCulinaries = Place::with(['category', 'primaryImage', 'placeImages'])
+            ->whereHas('category', function($q) {
+                $q->where('slug', 'kuliner');
+            })
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
+            ->where('status', 'published')
+            ->orderByDesc('reviews_count')
+            ->orderByDesc('reviews_avg_rating')
+            ->limit(5)
+            ->get();
+
         // 5. Upcoming Events
         $upcomingEvents = \App\Models\Event::where('is_active', true)
             ->where('start_date', '>=', now())
@@ -82,6 +95,6 @@ class HomeController extends Controller
         // 7. Categories for Hero Quick Filter Pills
         $categories = \App\Models\Category::all();
 
-        return view('home', compact('mustSees', 'recentReviews', 'bestChoices', 'popularPlaces', 'upcomingEvents', 'bannerImage', 'categories'));
+        return view('home', compact('mustSees', 'recentReviews', 'bestChoices', 'popularPlaces', 'popularCulinaries', 'upcomingEvents', 'bannerImage', 'categories'));
     }
 }

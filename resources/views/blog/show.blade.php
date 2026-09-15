@@ -9,8 +9,8 @@
     $modifiedAt     = optional($post->updated_at)->toIso8601String();
 @endphp
 
-{{-- \u2550\u2550 SEO META \u2550\u2550 --}}
-@section('title', $post->title . ' \u2014 Visit Sukabumi')
+{{-- ══ SEO META ══ --}}
+@section('title', $post->title . ' — Visit Sukabumi')
 @section('meta_description', $seoDescription)
 @section('canonical', $seoUrl)
 @section('og_type', 'article')

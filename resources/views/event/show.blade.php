@@ -2,7 +2,7 @@
 
 @php
     use Illuminate\Support\Str;
-    $seoTitle       = $event->title . ' \u2014 Event Wisata Sukabumi | Visit Sukabumi';
+    $seoTitle       = $event->title . ' — Event Wisata Sukabumi | Visit Sukabumi';
     $seoDescription = Str::limit(strip_tags($event->description ?? ''), 155) ?: 'Ikuti event ' . $event->title . ' di Sukabumi. Temukan info jadwal, lokasi, dan cara mendaftar di Visit Sukabumi.';
     $seoImage       = $event->image_path ? asset('storage/' . $event->image_path) : asset('assets/images/og-default.jpg');
     $seoUrl         = route('event.show', $event->slug);
@@ -10,12 +10,12 @@
     $endDate        = optional($event->end_date)->toIso8601String();
 @endphp
 
-{{-- \u2550\u2550 SEO META \u2550\u2550 --}}
+{{-- ══ SEO META ══ --}}
 @section('title', $seoTitle)
 @section('meta_description', $seoDescription)
 @section('canonical', $seoUrl)
 @section('og_type', 'article')
-@section('og_title', $event->title . ' \u2014 Visit Sukabumi')
+@section('og_title', $event->title . ' — Visit Sukabumi')
 @section('og_description', $seoDescription)
 @section('og_image', $seoImage)
 @section('og_image_alt', 'Poster event ' . $event->title)
