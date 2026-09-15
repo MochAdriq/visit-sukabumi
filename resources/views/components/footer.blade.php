@@ -1,11 +1,11 @@
 <footer class="bg-white border-t border-gray-200 relative">
     {{-- Top Brand Bar --}}
-    <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6 border-b border-gray-200">
+    <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6 border-b border-gray-200">
         <div>
             <a href="{{ url('/') }}" class="inline-block">
                 <img src="{{ asset('images/logo-v2.png') }}" alt="Visit Sukabumi" class="h-16 md:h-20 object-contain drop-shadow-sm mb-1" />
             </a>
-            <div class="text-[11px] text-gray-500 font-semibold tracking-widest uppercase mt-0.5 px-2">Panduan Wisata Resmi</div>
+            <div class="text-xs text-gray-500 font-semibold tracking-widest uppercase mt-0.5 px-2">Panduan Wisata Resmi</div>
         </div>
         <div class="text-gray-300 hidden md:block">
             <svg width="220" height="55" viewBox="0 0 220 55" fill="none" stroke="currentColor" stroke-width="1.2">
@@ -29,7 +29,7 @@
     </div>
 
     {{-- 4 Columns Navigation Grid --}}
-    <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 border-b border-gray-200">
+    <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 border-b border-gray-200">
         {{-- 1. WISATA --}}
         <div>
             <h4 class="text-[11px] font-black uppercase tracking-widest text-gray-900 mb-4 pb-2 border-b border-gray-200">WISATA</h4>
@@ -47,14 +47,14 @@
                     ];
                 @endphp
                 @foreach($wisataLinks as $l)
-                <li><a href="{{ $l['url'] }}" class="text-[13px] text-gray-600 hover:text-[#1a6bbf] hover:underline transition">{{ $l['title'] }}</a></li>
+                <li><a href="{{ $l['url'] }}" class="text-[14px] md:text-[15px] text-gray-600 hover:text-[#1a6bbf] hover:underline transition">{{ $l['title'] }}</a></li>
                 @endforeach
             </ul>
         </div>
 
         {{-- 2. DESTINASI POPULER --}}
         <div>
-            <h4 class="text-[11px] font-black uppercase tracking-widest text-gray-900 mb-4 pb-2 border-b border-gray-200">DESTINASI POPULER</h4>
+            <h4 class="text-xs font-black uppercase tracking-widest text-gray-900 mb-4 pb-2 border-b border-gray-200">DESTINASI POPULER</h4>
             <ul class="space-y-2.5">
                 @php
                     $populerLinks = [
@@ -69,14 +69,14 @@
                     ];
                 @endphp
                 @foreach($populerLinks as $l)
-                <li><a href="{{ $l['url'] }}" class="text-[13px] text-gray-600 hover:text-[#1a6bbf] hover:underline transition">{{ $l['title'] }}</a></li>
+                <li><a href="{{ $l['url'] }}" class="text-[14px] md:text-[15px] text-gray-600 hover:text-[#1a6bbf] hover:underline transition">{{ $l['title'] }}</a></li>
                 @endforeach
             </ul>
         </div>
 
         {{-- 3. AKTIVITAS TERBAIK --}}
         <div>
-            <h4 class="text-[11px] font-black uppercase tracking-widest text-gray-900 mb-4 pb-2 border-b border-gray-200">AKTIVITAS TERBAIK</h4>
+            <h4 class="text-xs font-black uppercase tracking-widest text-gray-900 mb-4 pb-2 border-b border-gray-200">AKTIVITAS TERBAIK</h4>
             <ul class="space-y-2.5">
                 @php
                     $aktivitasLinks = [
@@ -91,14 +91,14 @@
                     ];
                 @endphp
                 @foreach($aktivitasLinks as $l)
-                <li><a href="{{ $l['url'] }}" class="text-[13px] text-gray-600 hover:text-[#1a6bbf] hover:underline transition">{{ $l['title'] }}</a></li>
+                <li><a href="{{ $l['url'] }}" class="text-[14px] md:text-[15px] text-gray-600 hover:text-[#1a6bbf] hover:underline transition">{{ $l['title'] }}</a></li>
                 @endforeach
             </ul>
         </div>
 
         {{-- 4. PANDUAN PERJALANAN --}}
         <div>
-            <h4 class="text-[11px] font-black uppercase tracking-widest text-gray-900 mb-4 pb-2 border-b border-gray-200">PANDUAN PERJALANAN</h4>
+            <h4 class="text-xs font-black uppercase tracking-widest text-gray-900 mb-4 pb-2 border-b border-gray-200">PANDUAN PERJALANAN</h4>
             <ul class="space-y-2.5">
                 @php
                     $panduanLinks = [
@@ -113,7 +113,7 @@
                     ];
                 @endphp
                 @foreach($panduanLinks as $l)
-                <li><a href="{{ $l['url'] }}" class="text-[13px] text-gray-600 hover:text-[#1a6bbf] hover:underline transition">{{ $l['title'] }}</a></li>
+                <li><a href="{{ $l['url'] }}" class="text-[14px] md:text-[15px] text-gray-600 hover:text-[#1a6bbf] hover:underline transition">{{ $l['title'] }}</a></li>
                 @endforeach
             </ul>
         </div>
@@ -121,27 +121,27 @@
 
     {{-- Bottom Blue Official Bar --}}
     <div class="bg-[#1a6bbf]">
-        <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div class="flex items-center gap-4">
                 <a href="{{ url('/') }}" class="bg-white px-3 py-1.5 rounded-xl shadow-sm block">
                     <img src="{{ asset('images/logo-v2.png') }}" alt="Visit Sukabumi" class="h-8 md:h-10 object-contain" />
                 </a>
-                <span class="block text-blue-100 text-[11px] md:text-[12px] font-medium leading-snug">
+                <span class="block text-blue-100 text-[12px] md:text-[13px] font-medium leading-snug">
                     Didukung oleh Dinas Pariwisata<br class="hidden md:block"/> Kabupaten Sukabumi
                 </span>
             </div>
             
             {{-- Official & Legal Links + Cookie Preferences Trigger --}}
             <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
-                <a href="{{ route('legal.show', 'hubungi-kami') }}" class="text-blue-100 hover:text-white text-[12px] font-medium transition">Hubungi Kami</a>
-                <a href="{{ route('legal.show', 'tentang-kami') }}" class="text-blue-100 hover:text-white text-[12px] font-medium transition">Tentang Kami</a>
-                <a href="{{ route('legal.show', 'kebijakan-privasi') }}" class="text-blue-100 hover:text-white text-[12px] font-medium transition">Kebijakan Privasi</a>
-                <a href="{{ route('legal.show', 'aksesibilitas') }}" class="text-blue-100 hover:text-white text-[12px] font-medium transition">Aksesibilitas</a>
-                <a href="{{ route('legal.show', 'syarat-ketentuan') }}" class="text-blue-100 hover:text-white text-[12px] font-medium transition">Syarat & Ketentuan</a>
+                <a href="{{ route('legal.show', 'hubungi-kami') }}" class="text-blue-100 hover:text-white text-[13px] md:text-[14px] font-medium transition">Hubungi Kami</a>
+                <a href="{{ route('legal.show', 'tentang-kami') }}" class="text-blue-100 hover:text-white text-[13px] md:text-[14px] font-medium transition">Tentang Kami</a>
+                <a href="{{ route('legal.show', 'kebijakan-privasi') }}" class="text-blue-100 hover:text-white text-[13px] md:text-[14px] font-medium transition">Kebijakan Privasi</a>
+                <a href="{{ route('legal.show', 'aksesibilitas') }}" class="text-blue-100 hover:text-white text-[13px] md:text-[14px] font-medium transition">Aksesibilitas</a>
+                <a href="{{ route('legal.show', 'syarat-ketentuan') }}" class="text-blue-100 hover:text-white text-[13px] md:text-[14px] font-medium transition">Syarat & Ketentuan</a>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-6 pb-5">
-            <p class="text-blue-200 text-[11px] leading-relaxed max-w-3xl">Visit Sukabumi adalah platform panduan wisata resmi untuk Kabupaten dan Kota Sukabumi. Kami mendukung pariwisata lokal dan UMKM.</p>
+        <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 pb-5">
+            <p class="text-blue-200 text-[12px] md:text-[13px] leading-relaxed max-w-3xl">Visit Sukabumi adalah platform panduan wisata resmi untuk Kabupaten dan Kota Sukabumi. Kami mendukung pariwisata lokal dan UMKM.</p>
         </div>
     </div>
 

@@ -74,32 +74,32 @@ $navItems = [
     {{-- ── DESKTOP: Row 1 Brand bar ── --}}
     <div class="vs-brand-row hidden md:flex relative">
         {{-- Left: Language + Currency --}}
-        <div class="flex items-center gap-3 z-10 flex-1">
+        <div class="flex items-center gap-4 z-10 flex-1">
             <div class="relative group z-50">
-                <button class="flex items-center gap-1 text-[13px] font-semibold text-gray-700 hover:text-[#1a6bbf] transition-colors py-2">
-                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="9.5" stroke-width="1.5"/>
-                        <path d="M2.5 12h19M12 2.5c-2.5 3-4 6-4 9.5s1.5 6.5 4 9.5M12 2.5c2.5 3 4 6 4 9.5s-1.5 6.5-4 9.5" stroke-width="1.3"/>
+                <button class="flex items-center gap-1.5 text-[14px] font-bold text-gray-800 hover:text-[#1a6bbf] transition-colors py-2 cursor-pointer">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="text-gray-700">
+                        <circle cx="12" cy="12" r="9.5" stroke-width="1.6"/>
+                        <path d="M2.5 12h19M12 2.5c-2.5 3-4 6-4 9.5s1.5 6.5 4 9.5M12 2.5c2.5 3 4 6 4 9.5s-1.5 6.5-4 9.5" stroke-width="1.4"/>
                     </svg>
                     <span id="current-lang">ID</span>
-                    <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/>
+                    <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="text-gray-500">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
                     </svg>
                 </button>
                 <div class="absolute left-0 top-full mt-0 w-36 bg-white border border-gray-100 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
                     <div class="py-1">
-                        <button onclick="changeGTranslate('id', 'ID')" class="w-full text-left px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Indonesia</button>
-                        <button onclick="changeGTranslate('en', 'EN')" class="w-full text-left px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Inggris</button>
-                        <button onclick="changeGTranslate('zh-CN', 'CN')" class="w-full text-left px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Mandarin</button>
-                        <button onclick="changeGTranslate('ja', 'JA')" class="w-full text-left px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Jepang</button>
-                        <button onclick="changeGTranslate('ar', 'AR')" class="w-full text-left px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Arab</button>
+                        <button onclick="changeGTranslate('id', 'ID')" class="w-full text-left px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Indonesia</button>
+                        <button onclick="changeGTranslate('en', 'EN')" class="w-full text-left px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Inggris</button>
+                        <button onclick="changeGTranslate('zh-CN', 'CN')" class="w-full text-left px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Mandarin</button>
+                        <button onclick="changeGTranslate('ja', 'JA')" class="w-full text-left px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Jepang</button>
+                        <button onclick="changeGTranslate('ar', 'AR')" class="w-full text-left px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Arab</button>
                     </div>
                 </div>
             </div>
-            <button class="flex items-center gap-1 text-[13px] font-semibold text-gray-700 hover:text-[#1a6bbf] transition-colors">
+            <button class="flex items-center gap-1.5 text-[14px] font-bold text-gray-800 hover:text-[#1a6bbf] transition-colors cursor-pointer">
                 <span>Rp&ensp;IDR</span>
-                <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/>
+                <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="text-gray-500">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
                 </svg>
             </button>
         </div>
@@ -216,9 +216,9 @@ $navItems = [
 
     {{-- ── DESKTOP: Row 2 Nav bar with megamenu ── --}}
     <div class="vs-nav-row hidden md:block sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
-        <nav class="max-w-7xl mx-auto px-6 w-full flex items-center justify-center">
-            <a href="/" class="vs-nav-link vs-nav-link-home flex items-center justify-center {{ request()->is('/') ? 'active' : '' }}">
-                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <nav class="max-w-6xl mx-auto px-6 w-full flex items-center justify-start gap-2 lg:gap-6">
+            <a href="/" class="vs-nav-link vs-nav-link-home flex items-center justify-center {{ request()->is('/') ? 'active' : '' }}" title="Beranda" aria-label="Beranda">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                 </svg>
             </a>
@@ -238,8 +238,8 @@ $navItems = [
                     <div class="vs-nav-item">
                         <a href="{{ $item['href'] }}" class="vs-nav-link {{ $isActive ? 'active' : '' }}">
                             {{ $item['label'] }}
-                            <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="transition-transform duration-200">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/>
+                            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="transition-transform duration-200 ml-0.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </a>
                         <div class="vs-megamenu">

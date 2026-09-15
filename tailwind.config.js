@@ -14,7 +14,7 @@ export default {
                 secondary: '#145299',
             },
             fontFamily: {
-                sans: ['Inter', 'sans-serif'],
+                sans: ['Arial', '"Helvetica Neue"', 'Helvetica', 'sans-serif'],
             }
         },
     },

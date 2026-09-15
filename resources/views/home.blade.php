@@ -62,22 +62,22 @@
                 <img class="w-full h-full object-cover" src="{{ asset('assets/images/1.webp') }}" alt="Pemandangan Sukabumi" />
                 <div class="absolute inset-0 bg-black opacity-35"></div>
             </div>
-            <div class="relative max-w-7xl mx-auto px-4 md:px-6 h-full flex flex-col items-center justify-center gap-5 md:gap-8">
-                <h1 class="text-3xl md:text-7xl font-bold text-white drop-shadow-lg text-center" style="text-shadow: 0 4px 12px rgba(0,0,0,0.4);">
+            <div class="relative max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col items-center justify-center gap-5 md:gap-8">
+                <h1 class="text-4xl md:text-7xl font-extrabold text-white drop-shadow-lg text-center" style="text-shadow: 0 4px 14px rgba(0,0,0,0.5);">
                     Jelajahi Sukabumi
                 </h1>
                 <div class="relative w-full max-w-3xl px-0">
-                    <form action="{{ route('place.index') }}" method="GET" class="bg-white h-[52px] md:h-[64px] rounded-full flex items-center justify-between pl-5 md:pl-8 pr-2 shadow-2xl">
-                        <div class="flex items-center flex-1 gap-2 min-w-0">
+                    <form action="{{ route('place.index') }}" method="GET" class="bg-white h-[54px] md:h-[66px] rounded-full flex items-center justify-between pl-5 md:pl-8 pr-2 shadow-2xl">
+                        <div class="flex items-center flex-1 gap-2.5 min-w-0">
                             <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                            <input type="text" name="q" placeholder="Cari destinasi..." class="w-full text-[15px] md:text-[17px] text-gray-700 bg-transparent border-none focus:ring-0 outline-none placeholder-gray-400 font-medium min-w-0">
+                            <input type="text" name="q" placeholder="Cari destinasi..." class="w-full text-[16px] md:text-[18px] text-gray-800 bg-transparent border-none focus:ring-0 outline-none placeholder-gray-400 font-medium min-w-0">
                         </div>
-                        <button type="submit" class="h-10 md:h-12 px-5 md:px-8 bg-[#1a6bbf] hover:bg-[#145299] rounded-full flex items-center justify-center text-white font-bold transition-colors shadow-md ml-2 flex-shrink-0 text-sm md:text-base">Cari</button>
+                        <button type="submit" class="h-10 md:h-12 px-6 md:px-8 bg-[#1a6bbf] hover:bg-[#145299] rounded-full flex items-center justify-center text-white font-bold transition-colors shadow-md ml-2 flex-shrink-0 text-[15px] md:text-base cursor-pointer">Cari</button>
                     </form>
                 </div>
                 <div class="flex flex-wrap justify-center gap-2">
                     @foreach($categories ?? [] as $cat)
-                    <a href="{{ url('/place?category=' . $cat->slug) }}" class="px-3 py-1 md:px-4 md:py-1.5 bg-white/20 backdrop-blur border border-white/40 text-white text-[12px] md:text-[13px] font-semibold rounded-full hover:bg-white hover:text-[#1a6bbf] transition-all">{{ $cat->name }}</a>
+                    <a href="{{ url('/place?category=' . $cat->slug) }}" class="px-3.5 py-1.5 md:px-4 md:py-2 bg-white/20 backdrop-blur border border-white/40 text-white text-[13px] md:text-[14px] font-semibold rounded-full hover:bg-white hover:text-[#1a6bbf] transition-all">{{ $cat->name }}</a>
                     @endforeach
                 </div>
             </div>
@@ -85,12 +85,12 @@
 
         {{-- BANNER INFO (seperti baris merah Visit London) --}}
         <div class="bg-[#1a6bbf] text-white py-5 md:py-6 border-b-4 border-[#145299]">
-            <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8">
                     
                     {{-- Title --}}
                     <div class="text-center lg:text-left flex-shrink-0">
-                        <h2 class="text-xl md:text-2xl font-extrabold leading-tight">Panduan Resmi<br class="hidden lg:block"> Wisata Sukabumi</h2>
+                        <h2 class="text-2xl md:text-[28px] font-extrabold leading-tight">Panduan Resmi<br class="hidden lg:block"> Wisata Sukabumi</h2>
                     </div>
                     
                     {{-- Features List --}}
@@ -99,19 +99,19 @@
                         {{-- Feature 1 --}}
                         <div class="flex items-center gap-3">
                             <svg class="w-8 h-8 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                            <p class="text-sm leading-tight">Menginspirasi <span class="font-bold">ribuan wisatawan</span> setiap tahun</p>
+                            <p class="text-[15px] md:text-[17px] leading-snug">Menginspirasi <span class="font-extrabold">ribuan wisatawan</span> setiap tahun</p>
                         </div>
 
                         {{-- Feature 2 --}}
                         <div class="flex items-center gap-3">
                             <svg class="w-8 h-8 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-                            <p class="text-sm leading-tight"><span class="font-bold">Akses mudah</span> ke berbagai destinasi terbaik</p>
+                            <p class="text-[15px] md:text-[17px] leading-snug"><span class="font-extrabold">Akses mudah</span> ke berbagai destinasi terbaik</p>
                         </div>
 
                         {{-- Feature 3 --}}
                         <div class="flex items-center gap-3">
                             <svg class="w-8 h-8 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            <p class="text-sm leading-tight">Kunjungan Anda <span class="font-bold">mendukung ekonomi lokal</span></p>
+                            <p class="text-[15px] md:text-[17px] leading-snug">Kunjungan Anda <span class="font-extrabold">mendukung ekonomi lokal</span></p>
                         </div>
 
                     </div>
@@ -142,10 +142,10 @@
         </style>
 
         <div class="bg-[#fafbfc] py-10 md:py-14 border-b border-gray-100">
-            <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="mb-6 md:mb-8">
-                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1.5">Must-sees</h2>
-                    <p class="text-[13px] md:text-[14px] text-gray-600 max-w-3xl">Liburan ke Sukabumi belum lengkap tanpa merasakan atraksi paling ikonik, petualangan seru, dan pengalaman otentik pilihan berikut.</p>
+                    <h2 class="text-[28px] md:text-[34px] font-extrabold text-gray-950 mb-2 tracking-tight">Must-sees</h2>
+                    <p class="text-[16px] md:text-[18px] text-gray-700 max-w-4xl leading-relaxed">Liburan ke Sukabumi belum lengkap tanpa merasakan atraksi paling ikonik, petualangan seru, dan pengalaman otentik pilihan berikut.</p>
                 </div>
 
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
@@ -275,12 +275,12 @@
 
         {{-- SECTION 2: PILIHAN TERBAIK (DINAMIS ⇄ DESTINASI TERDEKAT) --}}
         <div class="bg-white py-10 md:py-14 border-b border-gray-100">
-            <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-5 md:mb-7">
                     <div>
-                        <div class="flex flex-wrap items-center gap-2.5 mb-1">
-                            <h2 id="popular-section-title" class="text-xl md:text-3xl font-bold text-gray-900">Pilihan Terbaik</h2>
-                            <button type="button" id="btn-user-location" onclick="handleUserLocationClick()" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all duration-200 bg-blue-50/80 text-[#1a6bbf] border-blue-200 hover:bg-blue-100 hover:border-blue-300 cursor-pointer shadow-xs" title="Tampilkan tempat wisata terdekat dari posisi Anda">
+                        <div class="flex flex-wrap items-center gap-2.5 mb-1.5">
+                            <h2 id="popular-section-title" class="text-[26px] md:text-[34px] font-extrabold text-gray-950 tracking-tight">Pilihan Terbaik</h2>
+                            <button type="button" id="btn-user-location" onclick="handleUserLocationClick()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs md:text-sm font-bold border transition-all duration-200 bg-blue-50/80 text-[#1a6bbf] border-blue-200 hover:bg-blue-100 hover:border-blue-300 cursor-pointer shadow-xs" title="Tampilkan tempat wisata terdekat dari posisi Anda">
                                 <svg class="w-3.5 h-3.5 text-[#1a6bbf] flex-shrink-0 transition-transform" id="icon-location-pin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -288,7 +288,7 @@
                                 <span id="label-user-location">Gunakan Lokasi Saya</span>
                             </button>
                         </div>
-                        <p id="popular-section-subtitle" class="text-[13px] md:text-[14px] text-gray-500">Destinasi rekomendasi kurasi khusus untuk pengalaman terbaik di Sukabumi</p>
+                        <p id="popular-section-subtitle" class="text-[16px] md:text-[18px] text-gray-700 leading-relaxed">Destinasi rekomendasi kurasi khusus untuk pengalaman terbaik di Sukabumi</p>
                     </div>
                 </div>
 
@@ -299,12 +299,12 @@
                         {{-- Photo Container --}}
                         <div class="overflow-hidden rounded-2xl mb-2.5 aspect-[4/3] bg-gray-100 relative">
                             @if($place->badge_label)
-                                <span class="absolute top-2.5 left-2.5 bg-gradient-to-r from-amber-500 to-amber-400 text-gray-950 text-[10px] md:text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-md z-10 flex items-center gap-1">
+                                <span class="absolute top-2.5 left-2.5 bg-gradient-to-r from-amber-500 to-amber-400 text-gray-950 text-xs font-black px-3 py-0.5 rounded-full shadow-md z-10 flex items-center gap-1">
                                     <svg class="w-3 h-3 text-gray-950 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                                     {{ $place->badge_label }}
                                 </span>
                             @elseif($place->is_featured)
-                                <span class="absolute top-2.5 left-2.5 bg-amber-400 text-gray-950 text-[10px] md:text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-sm z-10 flex items-center gap-1">
+                                <span class="absolute top-2.5 left-2.5 bg-amber-400 text-gray-950 text-xs font-extrabold px-3 py-0.5 rounded-full shadow-sm z-10 flex items-center gap-1">
                                     <svg class="w-2.5 h-2.5 text-gray-950 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                                     Pilihan Terbaik
                                 </span>
@@ -317,11 +317,11 @@
                         </div>
 
                         {{-- Content Below Photo --}}
-                        <h4 class="text-[14px] md:text-[15px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-snug mb-1 truncate transition-colors">
+                        <h4 class="text-[16px] md:text-[17px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-snug mb-1 truncate transition-colors">
                             {{ $place->name }}
                         </h4>
 
-                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-1.5">
+                        <div class="flex items-center gap-1.5 text-sm text-gray-500 mb-1.5">
                             <div class="flex items-center gap-1">
                                 <svg class="w-3.5 h-3.5 text-[#f9a826] fill-current flex-shrink-0" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                                 <span class="font-bold text-gray-800">{{ number_format($place->reviews_avg_rating ?? 0, 1) }}</span>
@@ -329,12 +329,12 @@
                             </div>
                             @if($place->district)
                                 <span class="text-gray-300">•</span>
-                                <span class="truncate max-w-[110px]">{{ $place->district }}</span>
+                                <span class="truncate max-w-[130px]">{{ $place->district }}</span>
                             @endif
                         </div>
 
                         @if($place->description)
-                            <p class="text-[12px] text-gray-500 leading-relaxed line-clamp-2">{{ Str::limit(strip_tags($place->description), 90) }}</p>
+                            <p class="text-[13px] text-gray-600 leading-relaxed line-clamp-2">{{ Str::limit(strip_tags($place->description), 90) }}</p>
                         @endif
                     </a>
                     @empty
@@ -348,7 +348,7 @@
                 </div>
 
                 <div class="mt-8 text-center">
-                    <a href="{{ route('place.index') }}" class="inline-flex items-center gap-2 px-8 py-3 border-2 border-[#1a6bbf] text-[#1a6bbf] font-bold rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors text-[14px]">
+                    <a href="{{ route('place.index') }}" class="inline-flex items-center gap-2 px-8 py-3.5 border-2 border-[#1a6bbf] text-[#1a6bbf] font-bold rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors text-[15px] md:text-base">
                         Lihat semua destinasi
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                     </a>
@@ -358,17 +358,17 @@
 
         {{-- SECTION 3: DESTINASI TERPOPULER (ALL-IN-ONE 5 CARD BY REVIEW) --}}
         <div class="bg-[#f0f7ff] py-10 md:py-14 border-b border-blue-100">
-            <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-6 md:mb-8">
                     <div>
-                        <div class="inline-flex items-center gap-1.5 border border-blue-200 bg-blue-100/70 text-[#1a6bbf] px-3 py-1 rounded-full text-xs font-bold mb-2.5 uppercase tracking-wider">
+                        <div class="inline-flex items-center gap-1.5 border border-blue-200 bg-blue-100/70 text-[#1a6bbf] px-3.5 py-1 rounded-full text-xs font-bold mb-2.5 uppercase tracking-wider">
                             <svg class="w-3.5 h-3.5 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
                             </svg>
                             Paling Favorit
                         </div>
-                        <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-1">Destinasi Terpopuler</h2>
-                        <p class="text-[13px] md:text-[14px] text-gray-600">Paling banyak dikunjungi dan direkomendasikan oleh ribuan wisatawan</p>
+                        <h2 class="text-[26px] md:text-[34px] font-extrabold text-gray-950 mb-1 tracking-tight">Destinasi Terpopuler</h2>
+                        <p class="text-[16px] md:text-[18px] text-gray-700 leading-relaxed">Paling banyak dikunjungi dan direkomendasikan oleh ribuan wisatawan</p>
                     </div>
                 </div>
 
@@ -378,12 +378,12 @@
                         {{-- Photo Container --}}
                         <div class="overflow-hidden rounded-2xl mb-2.5 aspect-[4/3] bg-gray-100 relative">
                             @if($place->badge_label)
-                                <span class="absolute top-2.5 left-2.5 bg-gradient-to-r from-amber-500 to-amber-400 text-gray-950 text-[10px] md:text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-md z-10 flex items-center gap-1">
+                                <span class="absolute top-2.5 left-2.5 bg-gradient-to-r from-amber-500 to-amber-400 text-gray-950 text-xs font-black px-3 py-0.5 rounded-full shadow-md z-10 flex items-center gap-1">
                                     <svg class="w-3 h-3 text-gray-950 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                                     {{ $place->badge_label }}
                                 </span>
                             @elseif($loop->first)
-                                <span class="absolute top-2.5 left-2.5 bg-[#1a6bbf] text-white text-[10px] md:text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm z-10 flex items-center gap-1">
+                                <span class="absolute top-2.5 left-2.5 bg-[#1a6bbf] text-white text-xs font-bold px-3 py-0.5 rounded-full shadow-sm z-10 flex items-center gap-1">
                                     <svg class="w-2.5 h-2.5 text-amber-300 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                                     Top #1 Populer
                                 </span>
@@ -396,11 +396,11 @@
                         </div>
 
                         {{-- Content Below Photo --}}
-                        <h4 class="text-[14px] md:text-[15px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-snug mb-1 truncate transition-colors">
+                        <h4 class="text-[16px] md:text-[17px] font-bold text-gray-900 group-hover:text-[#1a6bbf] leading-snug mb-1 truncate transition-colors">
                             {{ $place->name }}
                         </h4>
 
-                        <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-1.5">
+                        <div class="flex items-center gap-1.5 text-sm text-gray-500 mb-1.5">
                             <div class="flex items-center gap-1">
                                 <svg class="w-3.5 h-3.5 text-[#f9a826] fill-current flex-shrink-0" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                                 <span class="font-bold text-gray-800">{{ number_format($place->reviews_avg_rating ?? 0, 1) }}</span>
@@ -408,12 +408,12 @@
                             </div>
                             @if($place->district)
                                 <span class="text-gray-300">•</span>
-                                <span class="truncate max-w-[110px]">{{ $place->district }}</span>
+                                <span class="truncate max-w-[130px]">{{ $place->district }}</span>
                             @endif
                         </div>
 
                         @if($place->description)
-                            <p class="text-[12px] text-gray-500 leading-relaxed line-clamp-2">{{ Str::limit(strip_tags($place->description), 90) }}</p>
+                            <p class="text-[13px] text-gray-600 leading-relaxed line-clamp-2">{{ Str::limit(strip_tags($place->description), 90) }}</p>
                         @endif
                     </a>
                     @empty
@@ -425,17 +425,17 @@
 
         {{-- SECTION 4: EVENT MENDATANG --}}
         <div class="bg-white py-10 md:py-14 border-b border-gray-100">
-            <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-5 md:mb-7">
                     <div>
-                        <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-1">Event & Festival Mendatang</h2>
-                        <p class="text-[13px] md:text-[14px] text-gray-500">Jangan sampai ketinggalan acara seru di Sukabumi</p>
+                        <h2 class="text-[26px] md:text-[34px] font-extrabold text-gray-950 mb-1 tracking-tight">Event & Festival Mendatang</h2>
+                        <p class="text-[16px] md:text-[18px] text-gray-700 leading-relaxed">Jangan sampai ketinggalan acara seru di Sukabumi</p>
                     </div>
                     <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide" id="event-filters">
-                        <button onclick="filterEvents('minggu-ini', this)" class="event-filter-btn flex-shrink-0 px-3 py-1.5 border-2 border-[#1a6bbf] text-[#1a6bbf] bg-white text-[12px] font-bold rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors">Minggu ini</button>
-                        <button onclick="filterEvents('akhir-pekan', this)" class="event-filter-btn flex-shrink-0 px-3 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-[12px] font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Akhir pekan</button>
-                        <button onclick="filterEvents('bulan-ini', this)" class="event-filter-btn flex-shrink-0 px-3 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-[12px] font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Bulan ini</button>
-                        <button onclick="filterEvents('semua', this)" class="event-filter-btn flex-shrink-0 px-3 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-[12px] font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Semua</button>
+                        <button onclick="filterEvents('minggu-ini', this)" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-[#1a6bbf] text-[#1a6bbf] bg-white text-xs md:text-sm font-bold rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors">Minggu ini</button>
+                        <button onclick="filterEvents('akhir-pekan', this)" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Akhir pekan</button>
+                        <button onclick="filterEvents('bulan-ini', this)" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Bulan ini</button>
+                        <button onclick="filterEvents('semua', this)" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Semua</button>
                     </div>
                 </div>
 
@@ -451,14 +451,14 @@
                         @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                         <div class="absolute top-3 left-3 bg-white rounded-lg px-2 py-1 text-center shadow">
-                            <div class="text-[9px] font-black text-red-500 uppercase">{{ $event->start_date->translatedFormat('M') }}</div>
+                            <div class="text-[10px] font-black text-red-500 uppercase">{{ $event->start_date->translatedFormat('M') }}</div>
                             <div class="text-base font-black text-gray-900 leading-none">{{ $event->start_date->format('d') }}</div>
                         </div>
                         <div class="absolute bottom-0 inset-x-0 p-4">
-                            <h4 class="text-white font-bold text-[14px] leading-tight group-hover:underline mb-1">{{ $event->title }}</h4>
+                            <h4 class="text-white font-bold text-[15px] md:text-[16px] leading-tight group-hover:underline mb-1">{{ $event->title }}</h4>
                             @if($event->location_name)
-                            <div class="flex items-center text-white/70 text-[11px]">
-                                <svg class="w-3 h-3 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <div class="flex items-center text-white/80 text-[12px] md:text-[13px]">
+                                <svg class="w-3.5 h-3.5 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                 {{ $event->location_name }}
                             </div>
                             @endif
@@ -469,8 +469,8 @@
                         <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gray-100 mb-3">
                             <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </div>
-                        <h3 class="text-base font-bold text-gray-900">Belum ada event dalam waktu dekat</h3>
-                        <p class="text-gray-400 text-sm mt-1">Pantau terus halaman ini ya!</p>
+                        <h3 class="text-lg font-bold text-gray-900">Belum ada event dalam waktu dekat</h3>
+                        <p class="text-gray-500 text-sm mt-1">Pantau terus halaman ini ya!</p>
                     </div>
                     @endforelse
                 </div>
@@ -496,13 +496,13 @@
             }
         </style>
         <div class="bg-[#f0f7ff] py-10 md:py-16 relative overflow-hidden">
-            <div class="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+            <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="text-center max-w-2xl mx-auto mb-10">
                     <div class="inline-block border border-blue-200 bg-blue-50 text-[#1a6bbf] px-4 py-1.5 rounded-full text-xs font-bold mb-4 tracking-wider uppercase">
                         Testimonials
                     </div>
-                    <h2 class="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight">Apa Kata Mereka</h2>
-                    <p class="text-[14px] md:text-base text-gray-500 mt-4 leading-relaxed">
+                    <h2 class="text-2xl md:text-4xl lg:text-5xl font-extrabold text-gray-950 tracking-tight">Apa Kata Mereka</h2>
+                    <p class="text-[16px] md:text-[18px] text-gray-700 mt-4 leading-relaxed">
                         Ulasan nyata dari ribuan wisatawan yang sudah menikmati indahnya pesona Sukabumi bersama kami.
                     </p>
                 </div>

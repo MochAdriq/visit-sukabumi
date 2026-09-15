@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
 @theme {
+  --font-sans: Arial, "Helvetica Neue", Helvetica, sans-serif;
   --color-primary: #1a6bbf;
   --color-secondary: #145299;
+}
+
+html, body {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 
 /* =========================================================
@@ -14,27 +19,18 @@
   position: relative;
   align-items: center;
   justify-content: space-between;
-  height: 130px;
-  max-width: 80rem;
+  height: 120px;
+  max-width: 72rem;
   margin: 0 auto;
   padding: 0 24px;
   border-bottom: 1px solid #e5e7eb;
 }
 
-/* Nav row */
+/* Nav row with crisp bottom border like Visit London */
 .vs-nav-row {
   background: #fff;
-}
-
-/* Blue accent bar on far right of nav row, like VL's red bar */
-.vs-nav-row::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 5px;
-  background: #1a6bbf;
+  border-bottom: 2.5px solid #1a6bbf;
+  position: relative;
 }
 
 /* Nav link base */
@@ -43,10 +39,10 @@
   align-content: center;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 5px;
   height: 50px;
-  padding: 0 16px;
-  font-size: 13px;
+  padding: 0 14px;
+  font-size: 15px;
   font-weight: 700;
   color: #1f2937;
   white-space: nowrap;
@@ -54,7 +50,14 @@
   position: relative;
 }
 
-/* Top bar animation on hover */
+@media (min-width: 1280px) {
+  .vs-nav-link {
+    font-size: 16px;
+    padding: 0 16px;
+  }
+}
+
+/* Top bar animation on hover & active (seperti Gambar 2) */
 .vs-nav-link::before {
   content: '';
   position: absolute;
@@ -63,7 +66,7 @@
   right: 0;
   height: 4px;
   background: #1a6bbf;
-  transform: translateY(5px);
+  transform: translateY(-4px);
   opacity: 0;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
@@ -81,11 +84,15 @@
 
 /* Home icon link */
 .vs-nav-link-home {
-  padding: 0 12px;
+  padding: 0 14px 0 0;
   color: #1a6bbf;
 }
 
 .vs-nav-link-home::before {
+  top: 0;
+  left: 0;
+  right: 14px;
+  height: 4px;
   background: #1a6bbf;
   transform: translateY(0);
   opacity: 1;
@@ -106,13 +113,14 @@
   right: 0;
   top: 100%;
   background: #ffffff !important;
-  border-top: 3px solid #1a6bbf;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 2px solid #1a6bbf;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
   z-index: 200;
 }
 
 .vs-megamenu-inner {
-  max-width: 80rem;
+  max-width: 72rem;
   margin: 0 auto;
   display: flex;
   gap: 40px;
@@ -135,7 +143,7 @@
 }
 
 .vs-megamenu-title {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 900;
   color: #1a6bbf;
   margin-bottom: 10px;
@@ -143,8 +151,8 @@
 }
 
 .vs-megamenu-text {
-  font-size: 13px;
-  color: #6b7280;
+  font-size: 15px;
+  color: #4b5563;
   line-height: 1.6;
 }
 
@@ -164,8 +172,8 @@
 
 .vs-megamenu-links li a {
   display: block;
-  padding: 7px 12px;
-  font-size: 13px;
+  padding: 8px 14px;
+  font-size: 15px;
   color: #374151;
   white-space: nowrap;
   transition: color 0.15s, background 0.15s;
