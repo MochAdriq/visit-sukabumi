@@ -4,30 +4,139 @@
 <div class="min-h-screen bg-white font-sans text-gray-900 pb-16">
     @include('components.navbar')
 
-    {{-- HERO BANNER --}}
-    <div class="w-full h-[350px] md:h-[550px] relative md:mt-4 max-w-[1400px] mx-auto md:px-4 sm:px-6 lg:px-8">
-        <div class="w-full h-full md:rounded-[2rem] overflow-hidden relative shadow-lg group">
-            <img src="{{ asset('assets/images/6.jpg') }}" alt="Event & Festival" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[10s]">
-            <div class="absolute inset-0 bg-black/40"></div>
+    {{-- HERO BANNER (Full Width Edge-to-Edge) --}}
+    <div class="w-full h-[320px] md:h-[420px] lg:h-[460px] relative overflow-hidden group">
+        {{-- Image Background --}}
+        <img src="{{ asset('assets/images/6.jpg') }}" alt="Event & Festival" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[10s]">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/30"></div>
+        
+        <div class="absolute inset-0 flex flex-col items-center justify-center px-4 md:px-10 text-center">
+            <h1 class="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 md:mb-8 tracking-tight drop-shadow-lg leading-tight max-w-3xl">
+                Discover Sukabumi's Best Events
+            </h1>
             
-            <div class="absolute inset-0 flex flex-col items-center justify-center px-4 md:px-10 text-center">
-                <h1 class="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 md:mb-8 tracking-tight drop-shadow-lg leading-tight max-w-3xl">
-                    Discover Sukabumi's Best Events
-                </h1>
-                
-                {{-- SEARCH BAR --}}
-                <form action="{{ route('event.index') }}" method="GET" class="w-full max-w-2xl bg-white rounded-full p-2 flex items-center shadow-2xl relative z-10">
-                    <div class="pl-3 md:pl-4 text-gray-400">
-                        <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                    </div>
-                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari judul event atau lokasi..." class="w-full bg-transparent border-none focus:ring-0 text-gray-900 text-base md:text-lg px-3 md:px-4 py-2 md:py-3 outline-none font-medium placeholder-gray-500">
-                    <button type="submit" class="bg-[#00aa6c] hover:bg-[#008a57] text-white px-6 md:px-8 py-2 md:py-3.5 rounded-full font-bold text-base md:text-lg transition shadow-md whitespace-nowrap">
-                        Search
-                    </button>
-                </form>
-            </div>
+            {{-- SEARCH BAR --}}
+            <form action="{{ route('event.index') }}" method="GET" class="w-full max-w-2xl bg-white rounded-full p-2 flex items-center shadow-2xl relative z-10">
+                <div class="pl-3 md:pl-4 text-gray-400">
+                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                </div>
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari judul event atau lokasi..." class="w-full bg-transparent border-none focus:ring-0 text-gray-900 text-base md:text-lg px-3 md:px-4 py-2 md:py-3 outline-none font-medium placeholder-gray-500">
+                <button type="submit" class="bg-[#00aa6c] hover:bg-[#008a57] text-white px-6 md:px-8 py-2 md:py-3.5 rounded-full font-bold text-base md:text-lg transition shadow-md whitespace-nowrap">
+                    Search
+                </button>
+            </form>
         </div>
     </div>
+
+    {{-- BREADCRUMBS STRIP (Di Bawah Banner) --}}
+    <div class="border-b border-gray-100 py-3.5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="flex text-xs md:text-sm text-gray-500 gap-2 items-center flex-wrap">
+                <a href="{{ url('/') }}" class="hover:text-[#1a6bbf] transition-colors font-medium">Home</a>
+                <span class="text-gray-300">›</span>
+                <span class="font-bold text-gray-900">Event & Festival</span>
+            </nav>
+        </div>
+    </div>
+
+    {{-- EDITORIAL SECTION (Ala VisitLondon Magazine) --}}
+    @if(!request()->has('q'))
+    <section class="border-b border-gray-100 bg-white py-10 md:py-14">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+                
+                {{-- Kolom Utama: Narasi Cerita Editorial (65% width) --}}
+                <div class="lg:col-span-8">
+                    <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-950 tracking-tight mb-3">
+                        Mengenal Semarak Event & Tradisi Budaya Sukabumi
+                    </h2>
+                    <div class="w-14 h-1 bg-[#1a6bbf] rounded-full mb-6"></div>
+
+                    <div class="text-[16px] md:text-[17px] text-gray-700 leading-relaxed space-y-4 font-normal [&>p]:mb-4 [&>p]:leading-relaxed [&>p>strong]:text-gray-950 [&>p>strong]:font-bold">
+                        <p>
+                            Kalender pariwisata Kabupaten Sukabumi senantiasa berdenyut hidup sepanjang tahun, mempersembahkan perpaduan memukau antara khazanah adat Sunda Pasundan yang sakral, tradisi maritim pesisir Samudra Hindia, hingga gelaran festival seni, musik, dan olahraga petualangan alam bebas. Setiap agenda menghadirkan narasi kebudayaan otentik yang telah diwariskan turun-temurun oleh masyarakat tatar Pasundan.
+                        </p>
+                        <p>
+                            Salah satu perayaan budaya paling megah yang menarik perhatian peneliti dan wisatawan adalah <strong>Upacara Adat Seren Taun</strong> di Kasepuhan Banten Kidul (seperti Kasepuhan Ciptagelar dan Sinar Resmi), sebuah ritual ungkapan syukur atas panen padi dengan tradisi sakral <em>ngampihkeun pare ka leuit</em>. Di pesisir selatan, kemeriahan <strong>Festival Hari Nelayan Palabuhanratu</strong> menyuguhkan parade karnaval rakyat, larung sesaji laut, serta pentas seni tradisional. Bagi pencinta olahraga ekstrem, pesisir Cimaja juga rutin menjadi tuan rumah kompetisi selancar kelas dunia yang menguji nyali surfer internasional.
+                        </p>
+                        <p>
+                            Saat merencanakan kunjungan untuk menghadiri acara adat atau festival di Sukabumi, wisatawan diimbau untuk selalu menghormati norma dan kearifan lokal setempat, mengenakan pakaian yang sopan, serta memantau kalender jadwal resmi karena pelaksanaan ritual adat kasepuhan kerap mengikuti perhitungan penanggalan tradisional Sunda.
+                        </p>
+                    </div>
+                </div>
+
+                {{-- Kolom Samping: Quick Facts / Sekilas Panduan (35% width) --}}
+                <aside class="lg:col-span-4">
+                    <div class="bg-slate-50/90 rounded-2xl border border-slate-200/80 p-6 shadow-sm sticky top-24">
+                        <div class="flex items-center gap-2.5 pb-4 mb-5 border-b border-slate-200/80">
+                            <div class="w-9 h-9 rounded-xl bg-blue-100 text-[#1a6bbf] flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-gray-900 leading-tight">Sekilas Panduan Event</h3>
+                                <p class="text-xs text-gray-500">Agenda & tradisi Sukabumi</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 text-sm">
+                            {{-- Info 1: Karakter Acara --}}
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0 text-[#1a6bbf] mt-0.5">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Karakter Acara</span>
+                                    <span class="font-bold text-gray-900">Upacara Adat, Festival Seni & Bahari</span>
+                                </div>
+                            </div>
+
+                            {{-- Info 2: Agenda Ikonik --}}
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0 text-amber-600 mt-0.5">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Agenda Ikonik</span>
+                                    <span class="font-bold text-gray-900">Seren Taun Kasepuhan & Hari Nelayan</span>
+                                </div>
+                            </div>
+
+                            {{-- Info 3: Tips Traveler --}}
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0 text-indigo-600 mt-0.5">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Etika Berkunjung</span>
+                                    <span class="font-bold text-gray-900">Kenakan Pakaian Sopan & Hormati Adat</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Tombol Lompat ke Daftar --}}
+                        <div class="mt-6 pt-4 border-t border-slate-200/80">
+                            <a href="#daftar-event" class="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-[#1a6bbf] hover:bg-[#15589c] text-white font-bold text-xs transition shadow-sm">
+                                <span>Lihat Agenda Event</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </aside>
+
+            </div>
+        </div>
+    </section>
+    @endif
 
     {{-- HIGHLIGHT FEATURES --}}
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 md:mt-16 mb-12 md:mb-20 hidden md:grid grid-cols-3 gap-8 text-center">
@@ -107,7 +216,7 @@
     @endif
 
     {{-- ALL EVENTS (GRID) --}}
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 mt-8">
+    <div id="daftar-event" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 mt-8 scroll-mt-20">
         <div class="flex justify-between items-end mb-6">
             <div>
                 <h2 class="text-xl md:text-2xl font-bold text-gray-900">

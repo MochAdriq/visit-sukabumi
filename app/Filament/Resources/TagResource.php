@@ -60,9 +60,14 @@ class TagResource extends Resource
 
                     Forms\Components\Textarea::make('description')
                         ->columnSpanFull()
-                        ->rows(3)
-                        ->label('Deskripsi')
-                        ->helperText('Ditampilkan di halaman listing tag'),
+                        ->rows(2)
+                        ->label('Deskripsi Singkat')
+                        ->helperText('Ditampilkan di hero banner dan kartu ringkasan'),
+
+                    Forms\Components\RichEditor::make('long_description')
+                        ->columnSpanFull()
+                        ->label('Panduan & Narasi Lengkap (Editorial)')
+                        ->helperText('Artikel pengantar lengkap yang tampil di bawah hero banner kategori'),
 
                     Forms\Components\Textarea::make('icon_svg')
                         ->columnSpanFull()

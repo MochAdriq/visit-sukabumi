@@ -14,6 +14,7 @@ class Tag extends Model
         'slug',
         'type',
         'description',
+        'long_description',
         'icon_svg',
         'sort_order',
     ];
