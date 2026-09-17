@@ -95,11 +95,12 @@ button { cursor:pointer; }
 .rail-title span,.rail-title b { display:block; }
 .rail-title span { color:#c64834; font:700 .59rem/1 Viga,sans-serif; letter-spacing:.15em; }
 .rail-title b { margin-top:4px; font:700 .83rem/1 Viga,sans-serif; letter-spacing:.04em; }
-.destination-card { position:relative; display:flex; align-items:center; gap:12px; width:100%; min-height:84px; padding:8px 12px 8px 8px; color:var(--blue-deep); background:rgba(255,253,246,.97); border:3px solid var(--blue-deep); border-radius:12px; box-shadow:5px 5px 0 rgba(22,55,102,.22); text-decoration:none; cursor:pointer; text-align:left; overflow:hidden; transition:transform .2s ease,box-shadow .2s ease; font-family:inherit; }
+.destination-card { position:relative; display:flex; align-items:center; gap:12px; width:100%; min-height:84px; max-height:92px; padding:8px 12px 8px 8px; color:var(--blue-deep); background:rgba(255,253,246,.97); border:3px solid var(--blue-deep); border-radius:12px; box-shadow:5px 5px 0 rgba(22,55,102,.22); text-decoration:none; cursor:pointer; text-align:left; overflow:hidden; transition:transform .2s ease,box-shadow .2s ease; font-family:inherit; box-sizing:border-box; }
+.destination-card::before,.destination-card::after { display:none !important; content:"" !important; width:0 !important; height:0 !important; }
 .destination-card:hover,.destination-card:focus-visible { transform:translate(-3px,-3px); box-shadow:8px 8px 0 rgba(22,55,102,.28); outline:none; }
 .destination-card:active { transform:translate(1px,1px); box-shadow:3px 3px 0 rgba(22,55,102,.28); }
-.card-thumb { position:relative; width:80px; min-width:80px; height:72px; border-radius:8px; overflow:hidden; background:#e2e8f0; border:2px solid rgba(22,55,102,.25); flex-shrink:0; }
-.card-thumb img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .3s ease; }
+.card-thumb { position:relative; width:80px !important; min-width:80px !important; max-width:80px !important; height:72px !important; max-height:72px !important; border-radius:8px; overflow:hidden !important; background:#e2e8f0; border:2px solid rgba(22,55,102,.25); flex-shrink:0 !important; }
+.card-thumb img { width:100% !important; max-width:100% !important; height:100% !important; max-height:100% !important; object-fit:cover !important; display:block !important; transition:transform .3s ease; }
 .destination-card:hover .card-thumb img { transform:scale(1.08); }
 .card-info { flex:1; min-width:0; display:flex; flex-direction:column; justify-content:center; }
 .card-info small { display:block; color:#b64d34; font:700 .55rem/1 Viga,sans-serif; letter-spacing:.1em; margin-bottom:2px; }
@@ -196,8 +197,8 @@ button { cursor:pointer; }
   .destination-rail { left:8vw; top:10vh; width:84vw; display:grid; grid-auto-flow:column; grid-auto-columns:min(280px,78vw); grid-template-rows:auto; gap:9px; overflow-x:auto; padding:25px 6px 10px; scroll-snap-type:x mandatory; scrollbar-width:none; }
   .destination-rail::-webkit-scrollbar { display:none; }
   .rail-title { position:absolute; left:5px; top:0; }
-  .destination-card { min-height:86px; padding:7px 10px 7px 7px; scroll-snap-align:start; }
-  .card-thumb { width:72px; min-width:72px; height:68px; }
+  .destination-card { min-height:86px; max-height:92px; padding:7px 10px 7px 7px; scroll-snap-align:start; }
+  .card-thumb { width:72px !important; min-width:72px !important; max-width:72px !important; height:68px !important; max-height:68px !important; }
   .card-info strong { font-size:.88rem; }
   .card-info span { font-size:.64rem; }
   .gateway-sign { left:8vw; width:79vw; top:21vh; padding:19px 15px; border-width:6px; }
