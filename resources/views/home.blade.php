@@ -54,7 +54,7 @@
 <div class="min-h-screen bg-white font-sans text-gray-900">
     @include('components.navbar')
 
-    <main>
+<main>
 
         {{-- SECTION 1: HERO --}}
         <div class="relative bg-gray-900" style="height: 60vh; min-height: 420px;">
@@ -82,7 +82,7 @@
                 </div>
             </div>
         </div>
-
+        
         {{-- BANNER INFO (seperti baris merah Visit London) --}}
         <div class="bg-[#1a6bbf] text-white py-5 md:py-6 border-b-4 border-[#145299]">
             <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -118,6 +118,9 @@
                 </div>
             </div>
         </div>
+
+<br>
+<center><div style="float:center; background:#eee;"><div style="max-width:970px; padding:10px; margin: 5 0 0 5 0; border:1px; border-color:#ccc;"><a href="https://visitsukabumi.com/jelajahsukabumi" target="https://visitsukabumi.com/z_blank"><img src="https://visitsukabumi.com/images/ads/adsvis.gif" width="100%"></a></div></div>  </center><br>
 
         {{-- SECTION: MUST-SEES SUKABUMI (RECREATE SESUAI SCREENSHOT REFERENCE) --}}
         <style>

@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#83bede">
+  <meta name="description" content="Perjalanan visual interaktif dari Jakarta menuju destinasi wisata Kota dan Kabupaten Sukabumi.">
+  <title>Jelajah Sukabumi — Perjalanan Visual Interaktif</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Leckerli+One&family=Viga&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23163766'/%3E%3Cpath d='M10 43h44v8H10z' fill='%23f8be2c'/%3E%3Cpath d='m13 39 12-20 8 12 7-10 12 18z' fill='%2374bd62'/%3E%3C/svg%3E">
+</head>
+<body class="is-intro">
+  <div class="intro" id="intro" role="dialog" aria-modal="true" aria-labelledby="intro-title">
+    <div class="intro-sky"></div>
+    <div class="intro-card">
+      <p class="presented">VISUAL INTERAKTIF PARIWISATA</p>
+      <h1 id="intro-title"><span>Jelajah</span><strong>Sukabumi</strong></h1>
+      <p class="intro-copy">Mulai perjalanan dari Jakarta, lewati gerbang utara Sukabumi, lalu temukan pegunungan, pantai, dan cerita di sepanjang jalan.</p>
+      <button class="engine-button" id="startJourney" type="button">
+        <span class="engine-ring"><i></i></span>
+        <b>START<br>JOURNEY</b>
+      </button>
+      <p class="audio-note"><span>♪</span> Cerita ini dilengkapi dengan audio</p>
+      <div class="partner">Official journey vehicle <b>Mitsubishi Xpander</b></div>
+    </div>
+    <div class="intro-road"></div>
+  </div>
+
+  <header class="hud" aria-label="Kontrol perjalanan">
+    <a class="hud-brand" href="#journey" aria-label="Jelajah Sukabumi">
+      <span>Jelajah</span><b>SUKABUMI</b>
+    </a>
+    <div class="hud-route" aria-label="Kemajuan rute">
+      <span>JAKARTA</span>
+      <i><b id="routeProgress"></b></i>
+      <span>SUKABUMI</span>
+    </div>
+    <div class="hud-actions">
+      <button id="openMap" type="button" aria-label="Buka peta perjalanan">PETA</button>
+      <button id="soundToggle" type="button" aria-pressed="true" aria-label="Matikan suara"><span class="sound-wave">)))</span></button>
+    </div>
+  </header>
+
+  <main id="journey" class="journey" aria-label="Perjalanan visual Jakarta menuju Kota dan Kabupaten Sukabumi">
+    <div class="stage">
+      <div class="sky" aria-hidden="true"></div>
+      <div class="sun" aria-hidden="true"></div>
+
+      <div class="world" id="world">
+        <div class="panorama panorama-urban" aria-hidden="true"></div>
+        <div class="panorama panorama-sukabumi" aria-hidden="true"></div>
+
+        <section class="scene scene-cover" style="--x: 0vw" aria-labelledby="cover-title">
+          <div class="cover-title">
+            <p>ROAD TRIP FROM JAKARTA</p>
+            <h2 id="cover-title"><span>Jelajah</span><strong>Sukabumi</strong></h2>
+            <p class="cover-subtitle">Satu perjalanan. Beragam cerita.</p>
+          </div>
+          <div class="start-house" aria-hidden="true"><i></i><b></b></div>
+        </section>
+
+        <section class="scene" style="--x: 92vw" aria-labelledby="story-title">
+          <article class="road-board board-paper">
+            <span class="board-label">PERJALANAN DIMULAI</span>
+            <h3 id="story-title">Keluar dari riuhnya ibu kota</h3>
+            <p>Gedung-gedung perlahan tertinggal. Di depan, jalur selatan Jawa Barat mengantar kita menuju bentang alam yang berbeda.</p>
+            <div class="board-route"><b>JAKARTA</b><i></i><b>SUKABUMI</b></div>
+          </article>
+        </section>
+
+        <section class="scene" style="--x: 177vw" aria-labelledby="family-title">
+          <article class="road-board board-yellow">
+            <span class="board-label">OFFICIAL JOURNEY VEHICLE</span>
+            <h3 id="family-title">Ruang untuk setiap cerita</h3>
+            <p>Mitsubishi Xpander menjadi teman perjalanan keluarga dari kota, pegunungan, hingga pesisir selatan.</p>
+            <div class="feature-row"><span><b>7</b> Kursi</span><span><b>∞</b> Cerita</span><span><b>1</b> Tujuan</span></div>
+          </article>
+        </section>
+
+        <section class="scene scene-gateway" style="--x: 260vw" aria-labelledby="gateway-title">
+          <div class="gateway-pillars" aria-hidden="true"><i></i><i></i></div>
+          <div class="gateway-sign">
+            <small>SELAMAT DATANG DI</small>
+            <h3 id="gateway-title">KABUPATEN SUKABUMI</h3>
+            <span>Jawa Barat, Indonesia</span>
+          </div>
+        </section>
+
+        <section class="scene has-resources" style="--x: 350vw" aria-labelledby="cicurug-title">
+          <article class="road-board board-paper board-cicurug">
+            <span class="board-label">GERBANG UTARA</span>
+            <h3 id="cicurug-title">Cicurug</h3>
+            <p>Di sinilah Sukabumi menyambut perjalanan dari arah Jakarta dan Bogor. Udara mulai sejuk, bukit mulai mendekat.</p>
+            <div class="chips"><span>Kuliner</span><span>Oleh-oleh</span><span>Singgah</span></div>
+          </article>
+          <aside class="destination-rail" aria-label="Destinasi di koridor utara Sukabumi">
+            <p class="rail-title"><span>DI SEPANJANG RUTE</span><b>Pintasan Visit Sukabumi</b></p>
+            <a class="destination-card tone-forest" href="https://www.visitsukabumi.com/place/trekking-kawah-ratu-via-cidahu" target="_blank" rel="noopener noreferrer">
+              <small>CIDAHU · ALAM</small><strong>Kawah Ratu</strong><span>Trekking hutan menuju lanskap vulkanik Gunung Salak.</span><em>Buka destinasi ↗</em>
+            </a>
+            <a class="destination-card tone-river" href="https://www.visitsukabumi.com/place/arung-jeram-sungai-citarik-cikidang" target="_blank" rel="noopener noreferrer">
+              <small>CIKIDANG · ADVENTURE</small><strong>Arung Jeram Citarik</strong><span>Singgah untuk petualangan jeram di jalur menuju pesisir.</span><em>Buka destinasi ↗</em>
+            </a>
+          </aside>
+        </section>
+
+        <section class="scene has-resources" style="--x: 440vw" aria-labelledby="city-title">
+          <article class="road-board board-city">
+            <span class="board-label">CITY STOPOVER</span>
+            <h3 id="city-title">Kota Sukabumi</h3>
+            <p>Jeda sejenak di pusat kota untuk mencicipi kuliner, mencari oleh-oleh, dan merasakan denyut Sukabumi sebelum melanjutkan perjalanan.</p>
+            <div class="chips"><span>Kuliner</span><span>Oleh-oleh</span><span>Kota</span></div>
+          </article>
+          <aside class="destination-rail" aria-label="Destinasi di Kota Sukabumi">
+            <p class="rail-title"><span>PUSAT KOTA</span><b>Pintasan Visit Sukabumi</b></p>
+            <a class="destination-card tone-city" href="https://www.visitsukabumi.com/place/soedirman-street-food" target="_blank" rel="noopener noreferrer">
+              <small>PUSAT KOTA · KULINER</small><strong>Soedirman Street Food</strong><span>Suasana kuliner santai dan kekinian di jantung kota.</span><em>Buka destinasi ↗</em>
+            </a>
+            <a class="destination-card tone-sunset" href="https://www.visitsukabumi.com/place/mochi-kaswari-lampion" target="_blank" rel="noopener noreferrer">
+              <small>CIKOLE · OLEH-OLEH</small><strong>Mochi Kaswari Lampion</strong><span>Singgah untuk membawa pulang rasa khas Sukabumi.</span><em>Buka destinasi ↗</em>
+            </a>
+          </aside>
+        </section>
+
+        <section class="scene has-resources" style="--x: 530vw" aria-labelledby="mountain-title">
+          <div class="fact-ribbon">TAHUKAH ANDA?</div>
+          <article class="road-board board-fact">
+            <span class="board-label">MOUNTAIN ESCAPE</span>
+            <h3 id="mountain-title">Situ Gunung</h3>
+            <p>Jalur menuju Kadudampit membawa Anda ke hutan pegunungan, danau, curug, serta jembatan gantung yang ikonik.</p>
+            <a class="board-action" href="https://www.visitsukabumi.com/place?q=Situ+Gunung" target="_blank" rel="noopener noreferrer">Jelajahi kawasan ↗</a>
+          </article>
+          <aside class="destination-rail" aria-label="Destinasi di Situ Gunung">
+            <p class="rail-title"><span>KADUDAMPIT</span><b>Pintasan Visit Sukabumi</b></p>
+            <a class="destination-card tone-forest" href="https://www.visitsukabumi.com/place/jembatan-gantung-suspension-bridge" target="_blank" rel="noopener noreferrer">
+              <small>IKON · PANORAMA</small><strong>Suspension Bridge</strong><span>Berjalan di atas kanopi hutan pegunungan.</span><em>Buka destinasi ↗</em>
+            </a>
+            <a class="destination-card tone-river" href="https://www.visitsukabumi.com/place/curug-lembah-purba" target="_blank" rel="noopener noreferrer">
+              <small>TREKKING · CURUG</small><strong>Lembah Purba</strong><span>Jalur rimbun menuju air terjun tersembunyi.</span><em>Buka destinasi ↗</em>
+            </a>
+            <a class="destination-card tone-sunset" href="https://www.visitsukabumi.com/place/keranjang-sultan-situ-gunung" target="_blank" rel="noopener noreferrer">
+              <small>WAHANA · KELUARGA</small><strong>Keranjang Sultan</strong><span>Melintas di ketinggian dengan sudut pandang berbeda.</span><em>Buka destinasi ↗</em>
+            </a>
+          </aside>
+        </section>
+
+        <section class="scene has-resources" style="--x: 620vw" aria-labelledby="ocean-title">
+          <article class="road-board board-ocean">
+            <span class="board-label">OCEAN JOURNEY</span>
+            <h3 id="ocean-title">Palabuhanratu</h3>
+            <p>Jalan terus turun menuju teluk, ombak Samudra Hindia, hidangan laut, dan matahari terbenam di pesisir Sukabumi.</p>
+            <div class="wave-mark" aria-hidden="true">≈ ≈ ≈</div>
+          </article>
+          <aside class="destination-rail" aria-label="Destinasi di Palabuhanratu">
+            <p class="rail-title"><span>PESISIR SELATAN</span><b>Pintasan Visit Sukabumi</b></p>
+            <a class="destination-card tone-ocean" href="https://www.visitsukabumi.com/place/pantai-pelabuhan-ratu" target="_blank" rel="noopener noreferrer">
+              <small>PALABUHANRATU · PANTAI</small><strong>Pantai Pelabuhan Ratu</strong><span>Ikon teluk dan gerbang wisata pesisir Sukabumi.</span><em>Buka destinasi ↗</em>
+            </a>
+            <a class="destination-card tone-sunset" href="https://www.visitsukabumi.com/place/pantai-citepus" target="_blank" rel="noopener noreferrer">
+              <small>CITEPUS · SUNSET</small><strong>Pantai Citepus</strong><span>Garis pantai luas untuk menikmati sore di selatan.</span><em>Buka destinasi ↗</em>
+            </a>
+            <a class="destination-card tone-city" href="https://www.visitsukabumi.com/place/pondok-dewata" target="_blank" rel="noopener noreferrer">
+              <small>PALABUHANRATU · SINGGAH</small><strong>Pondok Dewata</strong><span>Pilihan singgah untuk perjalanan keluarga di pesisir.</span><em>Buka destinasi ↗</em>
+            </a>
+          </aside>
+        </section>
+
+        <section class="scene has-resources" style="--x: 710vw" aria-labelledby="ciletuh-title">
+          <article class="road-board board-paper">
+            <span class="board-label">EARTH STORY</span>
+            <h3 id="ciletuh-title">Ciletuh–Palabuhanratu</h3>
+            <p>Air terjun, tebing, pantai, dan bentang geologi menyusun perjalanan yang terasa seperti memasuki dunia lain.</p>
+            <button class="board-action" id="mapFromBoard" type="button">Lihat peta perjalanan</button>
+          </article>
+          <aside class="destination-rail" aria-label="Destinasi di Ciletuh">
+            <p class="rail-title"><span>CIEMAS · GEOPARK</span><b>Pintasan Visit Sukabumi</b></p>
+            <a class="destination-card tone-forest" href="https://www.visitsukabumi.com/place/panenjoan-ciletuh" target="_blank" rel="noopener noreferrer">
+              <small>VIEWPOINT · PANORAMA</small><strong>Panenjoan Ciletuh</strong><span>Pandang amfiteater alam Ciletuh dari ketinggian.</span><em>Buka destinasi ↗</em>
+            </a>
+            <a class="destination-card tone-river" href="https://www.visitsukabumi.com/place/curug-sodong" target="_blank" rel="noopener noreferrer">
+              <small>CIEMAS · AIR TERJUN</small><strong>Curug Sodong</strong><span>Air terjun kembar di jantung lanskap Geopark Ciletuh.</span><em>Buka destinasi ↗</em>
+            </a>
+            <a class="destination-card tone-ocean" href="https://www.visitsukabumi.com/place/pantai-palangpang" target="_blank" rel="noopener noreferrer">
+              <small>CIEMAS · PANTAI</small><strong>Pantai Palangpang</strong><span>Hamparan pesisir yang menyatu dengan bentang geopark.</span><em>Buka destinasi ↗</em>
+            </a>
+          </aside>
+        </section>
+
+        <section class="scene scene-choice" style="--x: 800vw" aria-labelledby="choice-title">
+          <div class="choice-card">
+            <p>PILIH CERITA ANDA</p>
+            <h3 id="choice-title">Ke mana kita melaju?</h3>
+            <div class="choice-grid">
+              <a href="https://www.visitsukabumi.com/place?q=Situ+Gunung" target="_blank" rel="noopener noreferrer"><span>△</span><b>Mountain</b><small>Situ Gunung · Kadudampit ↗</small></a>
+              <a href="https://www.visitsukabumi.com/place?q=Pantai" target="_blank" rel="noopener noreferrer"><span>≈</span><b>Ocean</b><small>Palabuhanratu · Ciletuh ↗</small></a>
+              <a href="https://www.visitsukabumi.com/place" target="_blank" rel="noopener noreferrer"><span>✦</span><b>Hidden</b><small>Desa · Kuliner · Budaya ↗</small></a>
+            </div>
+            <a class="visit-credit" href="https://www.visitsukabumi.com/" target="_blank" rel="noopener noreferrer">Data destinasi terhubung ke VisitSukabumi.com ↗</a>
+          </div>
+        </section>
+
+        <div class="road" aria-hidden="true"><div class="curb"></div><div class="lane-marks"></div></div>
+      </div>
+
+      <div class="car" id="car" aria-label="Mitsubishi Xpander dalam perjalanan">
+        <img src="assets/xpander-vector.webp" alt="Mitsubishi Xpander kuning tampak samping">
+        <span class="car-shadow"></span>
+      </div>
+
+      <div class="speedometer" aria-label="Jarak perjalanan"><span id="kilometer">0</span><small>KM</small></div>
+      <div class="drive-controls">
+        <button class="pedal pedal-back" id="driveBack" type="button" aria-label="Mundur dalam cerita">‹</button>
+        <button class="pedal pedal-go" id="driveForward" type="button" aria-label="Tekan dan tahan untuk maju"><span>GAS</span><i>››</i></button>
+      </div>
+      <div class="scroll-instruction" id="scrollInstruction"><i></i> Scroll atau tahan pedal untuk melaju</div>
+    </div>
+  </main>
+
+  <dialog class="map-dialog" id="mapDialog">
+    <button class="dialog-close" id="closeMap" type="button" aria-label="Tutup peta">×</button>
+    <div class="tablet">
+      <div class="tablet-screen">
+        <p>PETA PERJALANAN</p>
+        <h2>Jakarta → Sukabumi</h2>
+        <div class="map-route" aria-label="Rute Jakarta, Bogor, Cicurug, Kota Sukabumi, dan pesisir">
+          <span><b>01</b>Jakarta</span><i></i><span><b>02</b>Bogor</span><i></i><span><b>03</b>Cicurug</span><i></i><span><b>04</b>Kota</span><i></i><span><b>05</b>Pesisir</span>
+        </div>
+        <small>Pilih rute wisata setelah tiba di gerbang Sukabumi.</small>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="place-dialog" id="placeDialog">
+    <button class="dialog-close" id="closePlace" type="button" aria-label="Tutup informasi">×</button>
+    <span class="place-kicker">DESTINATION PREVIEW</span>
+    <h2 id="placeName">Situ Gunung</h2>
+    <p>Destinasi ini akan menjadi bab perjalanan tersendiri pada pengembangan berikutnya.</p>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
