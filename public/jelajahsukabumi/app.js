@@ -131,7 +131,7 @@ function openPlaceModal(data) {
   if (placeCategory) placeCategory.textContent = data.category || 'DESTINASI SUKABUMI';
   if (placeDescription) placeDescription.textContent = data.desc || 'Informasi destinasi wisata di Sukabumi.';
   if (placeImage) {
-    placeImage.src = data.img || '/assets/images/9.jpg';
+    placeImage.src = data.img || 'assets/destinations/kawah-ratu.webp';
     placeImage.alt = data.name || 'Destinasi';
   }
   if (placeLink) {
