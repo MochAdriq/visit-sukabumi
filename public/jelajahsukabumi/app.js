@@ -118,14 +118,57 @@ soundToggle.addEventListener('click', () => setSound(soundToggle.getAttribute('a
 document.querySelector('#openMap').addEventListener('click', openMap);
 document.querySelector('#mapFromBoard').addEventListener('click', openMap);
 document.querySelector('#closeMap').addEventListener('click', () => mapDialog.close());
-document.querySelector('#closePlace').addEventListener('click', () => placeDialog.close());
+const closePlace = document.querySelector('#closePlace');
+const placeDismiss = document.querySelector('#placeDismiss');
+const placeImage = document.querySelector('#placeImage');
+const placeCategory = document.querySelector('#placeCategory');
+const placeName = document.querySelector('#placeName');
+const placeDescription = document.querySelector('#placeDescription');
+const placeLink = document.querySelector('#placeLink');
+
+function openPlaceModal(data) {
+  if (placeName) placeName.textContent = data.name || 'Destinasi';
+  if (placeCategory) placeCategory.textContent = data.category || 'DESTINASI SUKABUMI';
+  if (placeDescription) placeDescription.textContent = data.desc || 'Informasi destinasi wisata di Sukabumi.';
+  if (placeImage) {
+    placeImage.src = data.img || '/assets/images/9.jpg';
+    placeImage.alt = data.name || 'Destinasi';
+  }
+  if (placeLink) {
+    placeLink.href = data.url || '#';
+  }
+  if (typeof placeDialog.showModal === 'function') {
+    placeDialog.showModal();
+  }
+}
+
+if (closePlace) closePlace.addEventListener('click', () => placeDialog.close());
+if (placeDismiss) placeDismiss.addEventListener('click', () => placeDialog.close());
 mapDialog.addEventListener('click', event => { if (event.target === mapDialog) mapDialog.close(); });
 placeDialog.addEventListener('click', event => { if (event.target === placeDialog) placeDialog.close(); });
 
+document.querySelectorAll('.destination-card').forEach(card => {
+  card.addEventListener('click', event => {
+    event.preventDefault();
+    openPlaceModal({
+      name: card.dataset.name,
+      category: card.dataset.category,
+      desc: card.dataset.desc,
+      img: card.dataset.img,
+      url: card.dataset.url
+    });
+  });
+});
+
 document.querySelectorAll('[data-place]').forEach(button => {
   button.addEventListener('click', () => {
-    document.querySelector('#placeName').textContent = button.dataset.place;
-    placeDialog.showModal();
+    openPlaceModal({
+      name: button.dataset.place,
+      category: 'KABUPATEN SUKABUMI',
+      desc: 'Destinasi ini akan menjadi bab perjalanan tersendiri pada rute berikutnya.',
+      img: '/assets/images/3.jpg',
+      url: 'https://www.visitsukabumi.com/place?q=' + encodeURIComponent(button.dataset.place)
+    });
   });
 });
 

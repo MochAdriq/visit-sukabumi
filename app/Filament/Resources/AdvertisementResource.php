@@ -24,20 +24,55 @@ class AdvertisementResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('url')
-                    ->url()
-                    ->maxLength(255),
-                Forms\Components\FileUpload::make('image_path')
-                    ->image()
-                    ->directory('ads')
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\Toggle::make('is_active')
-                    ->required()
-                    ->default(true),
+                Forms\Components\Section::make('Informasi Banner')
+                    ->description('Kelola detail banner iklan, penempatan posisi, dan tautan tujuannya.')
+                    ->schema([
+                        Forms\Components\TextInput::make('title')
+                            ->label('Judul Iklan / Banner')
+                            ->placeholder('Contoh: Jelajah Sukabumi Interaktif')
+                            ->required()
+                            ->maxLength(255),
+
+                        Forms\Components\Select::make('position')
+                            ->label('Posisi Penempatan')
+                            ->options([
+                                'homepage_middle' => 'Banner Utama Beranda (Tengah)',
+                                'place_sidebar'   => 'Sidebar Detail Halaman Tempat',
+                            ])
+                            ->default('homepage_middle')
+                            ->required(),
+
+                        Forms\Components\TextInput::make('url')
+                            ->label('Tautan Target (URL)')
+                            ->placeholder('Contoh: /jelajahsukabumi atau https://...')
+                            ->helperText('Bisa menggunakan path internal seperti /jelajahsukabumi atau URL eksternal lengkap.')
+                            ->maxLength(255),
+
+                        Forms\Components\TextInput::make('sort_order')
+                            ->label('Urutan Prioritas')
+                            ->numeric()
+                            ->default(0)
+                            ->helperText('Semakin kecil angka (0, 1, 2...), semakin awal banner ditampilkan.'),
+
+                        Forms\Components\FileUpload::make('image_path')
+                            ->label('Gambar / GIF Banner')
+                            ->image()
+                            ->directory('ads')
+                            ->helperText('Dukung format JPG, PNG, WebP, dan GIF animasi. Rekomendasi rasio landscape memanjang (misal 970x250).')
+                            ->required()
+                            ->columnSpanFull(),
+
+                        Forms\Components\Toggle::make('open_in_new_tab')
+                            ->label('Buka di Tab Baru (_blank)')
+                            ->helperText('Aktifkan jika tautan mengarah ke web eksternal.')
+                            ->default(false),
+
+                        Forms\Components\Toggle::make('is_active')
+                            ->label('Status Aktif')
+                            ->helperText('Hanya banner aktif yang akan ditampilkan kepada pengunjung.')
+                            ->required()
+                            ->default(true),
+                    ])->columns(2),
             ]);
     }
 
@@ -45,25 +80,59 @@ class AdvertisementResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('image_path'),
+                Tables\Columns\ImageColumn::make('image_path')
+                    ->label('Preview')
+                    ->height(45),
+
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('url')
-                    ->limit(50)
-                    ->searchable(),
-                Tables\Columns\IconColumn::make('is_active')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Judul Banner')
+                    ->searchable()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->weight('bold'),
+
+                Tables\Columns\TextColumn::make('position')
+                    ->label('Posisi')
+                    ->badge()
+                    ->formatStateUsing(fn ($state) => match($state) {
+                        'homepage_middle' => 'Beranda Tengah',
+                        'place_sidebar'   => 'Sidebar Tempat',
+                        default           => $state ?? 'Beranda Tengah',
+                    })
+                    ->color(fn ($state) => match($state) {
+                        'homepage_middle' => 'success',
+                        'place_sidebar'   => 'info',
+                        default           => 'gray',
+                    }),
+
+                Tables\Columns\TextColumn::make('url')
+                    ->label('URL Target')
+                    ->limit(35)
+                    ->searchable(),
+
+                Tables\Columns\ToggleColumn::make('is_active')
+                    ->label('Aktif')
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('sort_order')
+                    ->label('Urutan')
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Terakhir Diubah')
+                    ->dateTime('d M Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('sort_order', 'asc')
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('position')
+                    ->label('Posisi')
+                    ->options([
+                        'homepage_middle' => 'Beranda Tengah',
+                        'place_sidebar'   => 'Sidebar Tempat',
+                    ]),
+                Tables\Filters\TernaryFilter::make('is_active')
+                    ->label('Status Aktif'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

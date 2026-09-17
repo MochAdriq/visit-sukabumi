@@ -95,6 +95,15 @@ class HomeController extends Controller
         // 7. Categories for Hero Quick Filter Pills
         $categories = \App\Models\Category::all();
 
-        return view('home', compact('mustSees', 'recentReviews', 'bestChoices', 'popularPlaces', 'popularCulinaries', 'upcomingEvents', 'bannerImage', 'categories'));
+        // 8. Dynamic Homepage Advertisement (Banner Promo Tengah)
+        $homeAd = \App\Models\Advertisement::where('is_active', true)
+            ->where(function($q) {
+                $q->where('position', 'homepage_middle')->orWhereNull('position');
+            })
+            ->orderBy('sort_order', 'asc')
+            ->latest('updated_at')
+            ->first();
+
+        return view('home', compact('mustSees', 'recentReviews', 'bestChoices', 'popularPlaces', 'popularCulinaries', 'upcomingEvents', 'bannerImage', 'categories', 'homeAd'));
     }
 }

@@ -118,9 +118,25 @@
                 </div>
             </div>
         </div>
-
-<br>
-<center><div style="float:center; background:#eee;"><div style="max-width:970px; padding:10px; margin: 5 0 0 5 0; border:1px; border-color:#ccc;"><a href="https://visitsukabumi.com/jelajahsukabumi" target="https://visitsukabumi.com/z_blank"><img src="https://visitsukabumi.com/images/ads/adsvis.gif" width="100%"></a></div></div>  </center><br>
+        {{-- PROMO BANNER DINAMIS --}}
+        @php
+            $targetUrl = $homeAd?->url ? (str_starts_with($homeAd->url, 'http') ? $homeAd->url : url($homeAd->url)) : url('/jelajahsukabumi');
+            $bannerImg = $homeAd?->image_url ?: asset('images/ads/adsvis.gif');
+            $bannerTitle = $homeAd?->title ?: 'Jelajah Sukabumi — Perjalanan Visual Interaktif';
+            $openInNewTab = $homeAd ? $homeAd->open_in_new_tab : false;
+        @endphp
+        <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+            <div class="max-w-[970px] mx-auto bg-gray-50 rounded-2xl p-2 sm:p-3 border border-gray-200/80 shadow-xs hover:shadow-md transition-shadow">
+                <a href="{{ $targetUrl }}" 
+                   @if($openInNewTab) target="_blank" rel="noopener noreferrer" @endif
+                   class="block overflow-hidden rounded-xl group" 
+                   title="{{ $bannerTitle }}">
+                    <img src="{{ $bannerImg }}" 
+                         alt="{{ $bannerTitle }}" 
+                         class="w-full h-auto object-cover group-hover:scale-[1.01] transition-transform duration-300">
+                </a>
+            </div>
+        </div>
 
         {{-- SECTION: MUST-SEES SUKABUMI (RECREATE SESUAI SCREENSHOT REFERENCE) --}}
         <style>
