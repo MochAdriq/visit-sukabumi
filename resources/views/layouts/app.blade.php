@@ -17,6 +17,24 @@
         $ogDesc  = trim($__env->yieldContent('og_description')) ?: $metaDesc;
         $ogImage = trim($__env->yieldContent('og_image')) ?: asset('assets/images/og-default.jpg');
         $ogUrl   = trim($__env->yieldContent('canonical')) ?: url()->current();
+
+        // Hindari .avif untuk og:image karena WhatsApp/FB crawler tidak mendukung AVIF
+        if (str_ends_with(strtolower(strtok($ogImage, '?')), '.avif')) {
+            $ogImage = asset('assets/images/og-default.jpg');
+        }
+
+        // Pastikan ogImage dan ogUrl menggunakan protokol https jika request secure
+        if (request()->isSecure() || str_starts_with(url()->current(), 'https://')) {
+            $ogImage = preg_replace('/^http:/i', 'https:', $ogImage);
+            $ogUrl   = preg_replace('/^http:/i', 'https:', $ogUrl);
+        }
+
+        $imagePathOnly = strtolower(strtok($ogImage, '?'));
+        $ogImageType = trim($__env->yieldContent('og_image_type')) ?: (
+            str_ends_with($imagePathOnly, '.png') ? 'image/png' :
+            (str_ends_with($imagePathOnly, '.webp') ? 'image/webp' :
+            (str_ends_with($imagePathOnly, '.gif') ? 'image/gif' : 'image/jpeg'))
+        );
     @endphp
 
     {{-- ══ SEO: Title & Meta Dasar ══ --}}
@@ -26,16 +44,18 @@
     <link rel="canonical" href="{{ $ogUrl }}">
 
     {{-- ══ Open Graph (WhatsApp, Facebook, Telegram, LinkedIn) ══ --}}
-    <meta property="og:site_name"   content="Visit Sukabumi">
-    <meta property="og:locale"      content="id_ID">
-    <meta property="og:type"        content="@yield('og_type', 'website')">
-    <meta property="og:title"       content="{{ $ogTitle }}">
-    <meta property="og:description" content="{{ $ogDesc }}">
-    <meta property="og:url"         content="{{ $ogUrl }}">
-    <meta property="og:image"       content="{{ $ogImage }}">
-    <meta property="og:image:width"  content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt"   content="@yield('og_image_alt', 'Visit Sukabumi')">
+    <meta property="og:site_name"        content="Visit Sukabumi">
+    <meta property="og:locale"           content="id_ID">
+    <meta property="og:type"             content="@yield('og_type', 'website')">
+    <meta property="og:title"            content="{{ $ogTitle }}">
+    <meta property="og:description"      content="{{ $ogDesc }}">
+    <meta property="og:url"              content="{{ $ogUrl }}">
+    <meta property="og:image"            content="{{ $ogImage }}">
+    <meta property="og:image:secure_url" content="{{ $ogImage }}">
+    <meta property="og:image:type"       content="{{ $ogImageType }}">
+    <meta property="og:image:width"      content="1200">
+    <meta property="og:image:height"     content="630">
+    <meta property="og:image:alt"        content="@yield('og_image_alt', 'Visit Sukabumi')">
 
     {{-- ══ Twitter / X Card ══ --}}
     <meta name="twitter:card"        content="summary_large_image">

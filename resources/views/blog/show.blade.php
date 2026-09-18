@@ -2,7 +2,10 @@
 
 @php
     $seoDescription = Str::limit(strip_tags($post->content), 155);
-    $seoImage       = $post->image_path ? asset('storage/' . $post->image_path) : asset('assets/images/og-default.jpg');
+    
+    // Hindari format .avif untuk og:image karena WhatsApp/FB crawler tidak mendukung AVIF
+    $hasCompatibleImage = $post->image_path && !str_ends_with(strtolower(strtok($post->image_path, '?')), '.avif');
+    $seoImage       = $hasCompatibleImage ? asset('storage/' . $post->image_path) : asset('assets/images/og-default.jpg');
     $seoUrl         = route('blog.show', $post->slug);
     $authorName     = $post->author_name ?? optional($post->author)->name ?? 'Tim Visit Sukabumi';
     $publishedAt    = optional($post->published_at)->toIso8601String();

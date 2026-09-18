@@ -116,7 +116,8 @@ class BlogPostResource extends Resource
                             ->image()
                             ->imageEditor()
                             ->directory('blog')
-                            ->label('Thumbnail Artikel'),
+                            ->label('Thumbnail Artikel')
+                            ->helperText('Disarankan format JPG atau PNG (rasio 1200x630, <300KB) agar gambar muncul optimal saat artikel di-share ke WhatsApp dan media sosial.'),
                     ]),
             ])
                 ->columnSpan(['lg' => 1])
