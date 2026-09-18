@@ -176,51 +176,299 @@ button { cursor:pointer; }
 .place-btn-secondary:hover { background:#e2e8f0; color:#1e293b; }
 
 @media (max-width:780px) {
-  .hud { height:60px; padding:0 12px; }
-  .hud-brand span { font-size:1.15rem; }
-  .hud-brand b { font-size:.68rem; }
-  .hud-route { position:absolute; top:56px; left:20px; right:20px; justify-content:center; }
-  .hud-route i { width:45vw; }
-  .hud-actions button { min-width:38px; height:36px; font-size:.55rem; }
+  .hud { height:54px; padding:0 14px; }
+  .hud-brand span { font-size:1.25rem; }
+  .hud-brand b { font-size:.74rem; }
+  .hud-route { position:absolute; top:52px; left:16px; right:16px; justify-content:center; }
+  .hud-route i { width:38vw; max-width:180px; height:4px; }
+  .hud-actions button { min-width:36px; height:34px; font-size:.56rem; border-radius:50%; }
+  
   .journey { height:1080vh; }
   .world { width:990vw; }
   .panorama { bottom:24vh; height:65vh; }
   .panorama-urban,.panorama-sukabumi { background-size:auto 65vh; }
-  .cover-title { left:7vw; top:20vh; }
-  .cover-title h2 span { font-size:clamp(4.2rem,20vw,6.2rem); }
-  .cover-title h2 strong { font-size:clamp(2.35rem,11vw,3.6rem); }
-  .start-house { transform:scale(.72); transform-origin:left bottom; }
-  .road-board { top:20vh; left:9vw; width:76vw; min-height:225px; padding:25px 24px; border-width:5px; }
-  .road-board p { font-size:.87rem; }
-  .has-resources .road-board { top:34vh; min-height:210px; }
-  .has-resources .fact-ribbon { display:none; }
-  .destination-rail { left:8vw; top:10vh; width:84vw; display:grid; grid-auto-flow:column; grid-auto-columns:min(280px,78vw); grid-template-rows:auto; gap:9px; overflow-x:auto; padding:25px 6px 10px; scroll-snap-type:x mandatory; scrollbar-width:none; }
+  
+  /* Scene Cover */
+  .cover-title { left:50%; transform:translateX(-50%); top:14vh; width:86vw; text-align:center; }
+  .cover-title h2 span { font-size:clamp(3.2rem,14vw,4.8rem); text-align:center; }
+  .cover-title h2 strong { font-size:clamp(1.8rem,8vw,2.7rem); }
+  .cover-subtitle { margin-top:10px; font-size:.84rem; }
+  .start-house { transform:scale(.65); transform-origin:left bottom; bottom:24vh; }
+
+  /* Road Board (Compact & Elegant, tidak menutupi lanskap pegunungan) */
+  .road-board { 
+    position:absolute; 
+    left:50%; 
+    transform:translateX(-50%); 
+    top:17vh; 
+    width:min(340px,86vw); 
+    min-height:auto; 
+    padding:16px 18px; 
+    border-width:4px; 
+    border-radius:18px; 
+    box-shadow:6px 6px 0 var(--blue-deep); 
+  }
+  .road-board::before,
+  .road-board::after { 
+    display:none !important; /* Hilangkan gantungan kawat di mobile agar rapi */
+  }
+  .road-board h3 { 
+    margin:4px 0 8px; 
+    font-size:1.35rem; 
+    line-height:1.15; 
+  }
+  .road-board p { 
+    font-size:.8rem; 
+    line-height:1.45; 
+    color:#334155; 
+  }
+  .board-label { 
+    font-size:.62rem; 
+    letter-spacing:.12em; 
+  }
+  .board-route { 
+    margin-top:12px; 
+    font-size:.62rem; 
+  }
+  .feature-row { 
+    margin-top:12px; 
+    padding-top:8px; 
+  }
+  .feature-row b { 
+    font-size:1.15rem; 
+  }
+  .chips { 
+    margin-top:10px; 
+    gap:5px; 
+  }
+  .chips span { 
+    padding:4px 9px; 
+    font-size:.64rem; 
+  }
+  
+  /* Scene yang memiliki kartu pintasan destinasi */
+  .has-resources .road-board { 
+    top:28.5vh; 
+    width:min(340px,88vw);
+    padding:12px 15px;
+  }
+  .has-resources .road-board p {
+    -webkit-line-clamp:2;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .has-resources .fact-ribbon { 
+    display:none; 
+  }
+
+  /* Destination Rail (Pintasan Visit Sukabumi) - 2 Row Layout */
+  .destination-rail { 
+    left:50%; 
+    transform:translateX(-50%); 
+    top:6.5vh; 
+    width:min(340px,88vw); 
+    display:flex; 
+    flex-direction:column; 
+    gap:6px; 
+    overflow:visible; 
+    padding:0; 
+  }
   .destination-rail::-webkit-scrollbar { display:none; }
-  .rail-title { position:absolute; left:5px; top:0; }
-  .destination-card { min-height:86px; max-height:92px; padding:7px 10px 7px 7px; scroll-snap-align:start; }
-  .card-thumb { width:72px !important; min-width:72px !important; max-width:72px !important; height:68px !important; max-height:68px !important; }
-  .card-info strong { font-size:.88rem; }
-  .card-info span { font-size:.64rem; }
-  .gateway-sign { left:8vw; width:79vw; top:21vh; padding:19px 15px; border-width:6px; }
-  .gateway-pillars { left:15vw; width:65vw; top:39vh; }
-  .fact-ribbon { left:13vw; top:12vh; }
-  .board-fact { top:24vh; }
-  .choice-card { top:13vh; left:7vw; width:83vw; min-height:62vh; padding:25px 20px; }
-  .choice-grid { grid-template-columns:1fr; }
-  .choice-grid a { min-height:94px; display:grid; grid-template-columns:55px 1fr; grid-template-rows:auto auto; align-items:center; }
-  .choice-grid span { grid-row:1/3; font-size:2rem; }
-  .choice-grid b { margin:0; }
-  .choice-grid small { font-size:.67rem; }
+  .rail-title { 
+    position:static; 
+    margin:0 0 1px; 
+    padding:0 2px;
+  }
+  .rail-title span { 
+    font-size:.52rem; 
+    letter-spacing:.12em; 
+    color:#c64834; 
+  }
+  .rail-title b { 
+    font-size:.74rem; 
+    margin-top:1px; 
+    color:var(--blue-deep); 
+  }
+  .destination-card { 
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+    min-height:56px; 
+    max-height:62px; 
+    padding:5px 10px 5px 6px; 
+    border-width:2.5px; 
+    border-radius:10px; 
+    box-shadow:3px 3px 0 rgba(22,55,102,.2); 
+    box-sizing:border-box;
+  }
+  .card-thumb { 
+    width:52px !important; 
+    min-width:52px !important; 
+    max-width:52px !important; 
+    height:48px !important; 
+    max-height:48px !important; 
+    border-radius:6px; 
+  }
+  .card-info {
+    flex:1;
+    min-width:0;
+  }
+  .card-info small { 
+    font-size:.48rem; 
+    margin-bottom:1px; 
+    display:block;
+  }
+  .card-info strong { 
+    font-size:.78rem; 
+    margin:1px 0; 
+    display:block;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .card-info span { 
+    font-size:.56rem; 
+    -webkit-line-clamp:1; 
+    line-height:1.2; 
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .card-more { 
+    margin-top:2px; 
+    font-size:.52rem; 
+    display:inline-flex;
+    align-items:center;
+    gap:3px;
+  }
+  .card-more svg {
+    width:10px;
+    height:10px;
+  }
+
+  /* Gateway Sign */
+  .gateway-sign { 
+    left:50%; 
+    transform:translateX(-50%); 
+    width:min(340px,86vw); 
+    top:18vh; 
+    padding:16px 14px; 
+    border-width:5px; 
+    border-radius:14px; 
+  }
+  .gateway-sign h3 { 
+    font-size:1.65rem; 
+    margin:4px 0; 
+  }
+  .gateway-pillars { 
+    left:50%; 
+    transform:translateX(-50%); 
+    width:min(320px,80vw); 
+    top:32vh; 
+    height:44vh; 
+    border-left-width:14px; 
+    border-right-width:14px; 
+  }
+  
+  .fact-ribbon { left:10vw; top:12vh; font-size:.74rem; padding:7px 18px; }
+  .board-fact { top:22vh; }
+  
+  /* Choice Card */
+  .choice-card { 
+    top:11vh; 
+    left:50%; 
+    transform:translateX(-50%); 
+    width:min(340px,88vw); 
+    min-height:auto; 
+    padding:20px 16px; 
+    border-radius:18px; 
+    border-width:6px; 
+  }
+  .choice-card h3 { 
+    font-size:1.55rem; 
+    margin:4px 0 16px; 
+  }
+  .choice-grid { grid-template-columns:1fr; gap:9px; }
+  .choice-grid a { 
+    min-height:68px; 
+    padding:10px 14px; 
+    border-radius:10px; 
+    display:grid; 
+    grid-template-columns:40px 1fr; 
+    align-items:center; 
+  }
+  .choice-grid span { font-size:1.5rem; grid-row:1/3; }
+  .choice-grid b { margin:0; font-size:1.05rem; }
+  .choice-grid small { font-size:.65rem; }
+  .visit-credit { margin-top:14px; font-size:.64rem; }
+
+  /* Road & Car */
   .road { height:24vh; }
-  .car { left:-7vw; bottom:8vh; width:min(78vw,430px); }
-  .speedometer { transform:scale(.8); transform-origin:left bottom; left:8px; bottom:9px; }
-  .drive-controls { right:8px; bottom:8px; transform:scale(.88); transform-origin:right bottom; }
-  .scroll-instruction { bottom:19px; max-width:45vw; text-align:center; line-height:1.4; }
-  .map-route { margin:35px 0; overflow-x:auto; padding-bottom:10px; }
-  .map-route span { min-width:62px; }
-  .map-route i { min-width:40px; }
+  .curb { height:14px; top:-13px; }
+  .car { 
+    left:4vw; 
+    bottom:6.5vh; 
+    width:clamp(190px,52vw,270px); 
+  }
+
+  /* Bottom Controls: Speedometer, Drive Pedals, Instruction */
+  .speedometer { 
+    left:10px; 
+    bottom:10px; 
+    width:64px; 
+    height:44px; 
+    border-width:3px; 
+    border-radius:12px 12px 4px 4px; 
+    box-shadow:inset 0 0 0 2px #0d2748; 
+    transform:none; 
+  }
+  .speedometer span { font-size:1.15rem; }
+  .speedometer small { font-size:.48rem; }
+  
+  .drive-controls { 
+    right:10px; 
+    bottom:10px; 
+    gap:6px; 
+    transform:none; 
+  }
+  .pedal-back { 
+    width:38px; 
+    height:48px; 
+    border-radius:8px; 
+    font-size:1.25rem; 
+    border-width:3px; 
+  }
+  .pedal-go { 
+    width:58px; 
+    height:72px; 
+    border-radius:12px 12px 6px 6px; 
+    border-width:3px; 
+    font-size:.64rem; 
+    gap:4px; 
+  }
+  .pedal-go i { font-size:1.1rem; }
+  
+  .scroll-instruction { 
+    bottom:18px; 
+    left:50%; 
+    transform:translateX(-50%); 
+    max-width:36vw; 
+    font-size:.58rem; 
+    text-align:center; 
+    line-height:1.35; 
+    white-space:nowrap; 
+    overflow:hidden; 
+    text-overflow:ellipsis; 
+  }
+  .scroll-instruction i { display:none; }
+
+  .map-route { margin:30px 0; overflow-x:auto; padding-bottom:10px; }
+  .map-route span { min-width:58px; }
+  .map-route i { min-width:36px; }
   .tablet { padding:13px; border-width:8px; }
-  .tablet-screen { min-height:380px; }
+  .tablet-screen { min-height:360px; }
 }
 
 @media (max-height:560px) and (orientation:landscape) {
