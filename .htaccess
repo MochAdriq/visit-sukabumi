@@ -1,7 +1,10 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Tangani jelajahsukabumi agar URL bersih tanpa /public/
+    RewriteRule ^jelajahsukabumi/?$ public/jelajahsukabumi/index.html [L]
+    RewriteRule ^jelajahsukabumi/(.+)$ public/jelajahsukabumi/$1 [L]
+
     RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(.*)$ public/$1 [L,QSA]
-    
-    RewriteRule ^jelajahsukabumi$ /jelajahsukabumi/index.html [L]
 </IfModule>

@@ -120,7 +120,10 @@
         </div>
         {{-- PROMO BANNER DINAMIS --}}
         @php
-            $targetUrl = $homeAd?->url ? (str_starts_with($homeAd->url, 'http') ? $homeAd->url : url($homeAd->url)) : url('/jelajahsukabumi');
+            $rawTarget = $homeAd?->url ?: '/jelajahsukabumi/';
+            $targetUrl = str_starts_with($rawTarget, 'http') 
+                ? $rawTarget 
+                : url(rtrim($rawTarget, '/') . '/');
             $bannerImg = $homeAd?->image_url ?: asset('images/ads/adsvis.gif');
             $bannerTitle = $homeAd?->title ?: 'Jelajah Sukabumi — Perjalanan Visual Interaktif';
             $openInNewTab = $homeAd ? $homeAd->open_in_new_tab : false;
