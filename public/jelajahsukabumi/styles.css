@@ -125,8 +125,8 @@ button { cursor:pointer; }
 .curb { position:absolute; top:-17px; left:0; right:0; height:18px; background:repeating-linear-gradient(90deg,#fff 0 46px,#111 46px 92px); }
 .lane-marks { position:absolute; left:0; right:0; top:62%; height:8px; background:repeating-linear-gradient(90deg,transparent 0 70px,#f4f2df 70px 190px,transparent 190px 260px); }
 
-.car { position:fixed; z-index:30; left:6vw; bottom:6vh; width:clamp(260px,32vw,560px); pointer-events:none; animation:car-bob 1.3s ease-in-out infinite; transform-origin:center bottom; }
-.car img { display:block; width:100%; position:relative; z-index:2; }
+.car { position:fixed; z-index:30; left:6vw; bottom:6vh; width:clamp(260px,32vw,560px); pointer-events:none; animation:car-bob 1.3s ease-in-out infinite; transform-origin:center bottom; transform:none !important; }
+.car img { display:block; width:100%; position:relative; z-index:2; transform:none !important; }
 .car-shadow { position:absolute; z-index:1; left:14%; right:9%; bottom:1%; height:11%; border-radius:50%; background:rgba(0,0,0,.35); filter:blur(10px); }
 .car.driving img { filter:drop-shadow(0 5px 1px rgba(0,0,0,.12)); }
 @keyframes car-bob { 0%,100% { margin-bottom:0; } 50% { margin-bottom:3px; } }
@@ -418,7 +418,7 @@ button { cursor:pointer; }
     left:4vw; 
     bottom:calc(6.5vh + env(safe-area-inset-bottom, 0px)); 
     width:clamp(180px,50vw,260px); 
-    transform:none; 
+    transform:none !important; 
   }
 
   /* Bottom Controls: Speedometer, Drive Pedals, Instruction */
