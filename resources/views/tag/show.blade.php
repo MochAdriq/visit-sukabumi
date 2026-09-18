@@ -8,31 +8,61 @@
     @include('components.navbar')
 
     {{-- ══════════════════════════════════════════
-         1. HERO BANNER (Full Width Edge-to-Edge)
+         1. HERO SECTION (Immersive & Premium)
     ══════════════════════════════════════════ --}}
-    <div class="w-full h-[300px] md:h-[400px] lg:h-[440px] relative overflow-hidden group">
-        {{-- Image Background --}}
-        <img src="{{ $tag->cover_image }}" alt="{{ $tag->name }}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[10s]">
-        {{-- Overlay Gradient --}}
-        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/30"></div>
+    <section class="relative h-[80vh] min-h-[580px] w-full flex items-center justify-center overflow-hidden">
+        {{-- Background Image (Dinamis dari Tag Cover Image) --}}
+        <div class="absolute inset-0 z-0">
+            <img src="{{ $tag->cover_image }}" alt="{{ $tag->name }}" class="w-full h-full object-cover filter brightness-[0.55] transform scale-105 hover:scale-110 transition-transform duration-[20s] ease-out">
+        </div>
         
-        <div class="absolute inset-0 flex flex-col items-center justify-center px-4 md:px-10 text-center">
-            <h1 class="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-3 md:mb-4 tracking-tight drop-shadow-lg leading-tight max-w-4xl">
+        {{-- Elegant Multi-Stop Gradient Overlay --}}
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0a192f] via-black/45 to-black/30 z-10"></div>
+        
+        {{-- Hero Content --}}
+        <div class="relative z-20 text-center px-4 max-w-4xl mx-auto mt-12">
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-tight drop-shadow-2xl mb-4 uppercase">
                 {{ $tag->name }}
             </h1>
             
             @if($tag->description)
-            <p class="text-white/90 text-sm md:text-lg max-w-2xl mx-auto drop-shadow-md font-normal leading-relaxed">
+            <p class="text-base sm:text-xl text-gray-200 font-medium max-w-2xl mx-auto leading-relaxed drop-shadow-md mb-8">
                 {{ $tag->description }}
             </p>
             @endif
+            
+            {{-- SEARCH BAR (Integrated in Hero) --}}
+            <form action="{{ $tag->url }}" method="GET" class="w-full max-w-2xl mx-auto bg-white rounded-full p-2 flex items-center shadow-2xl relative z-10 border border-white/20">
+                <div class="pl-3 md:pl-4 text-gray-400">
+                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari tempat di {{ $tag->name }}..." class="w-full bg-transparent border-none focus:ring-0 text-gray-900 text-sm md:text-base px-3 md:px-4 py-2 md:py-3 outline-none font-medium placeholder-gray-400">
+                
+                @if(request()->has('sort'))
+                    <input type="hidden" name="sort" value="{{ request('sort') }}">
+                @endif
+
+                <button type="submit" class="bg-[#00aa6c] hover:bg-[#008a57] text-white px-6 md:px-8 py-2 md:py-3 rounded-full font-bold text-sm md:text-base transition shadow-md whitespace-nowrap">
+                    Cari
+                </button>
+            </form>
         </div>
-    </div>
+
+        {{-- Scroll Indicator --}}
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center animate-bounce">
+            <span class="text-white/70 text-[11px] font-bold tracking-widest uppercase mb-1.5">Jelajahi</span>
+            <svg class="w-5 h-5 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+        </div>
+    </section>
 
     {{-- ══════════════════════════════════════════
-         2. BREADCRUMBS STRIP (Di Bawah Banner)
+         2. BREADCRUMBS STRIP
     ══════════════════════════════════════════ --}}
-    <div class="border-b border-gray-100 py-3.5">
+    <div class="border-b border-gray-100 py-3.5 bg-gray-50/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav class="flex text-xs md:text-sm text-gray-500 gap-2 items-center flex-wrap">
                 <a href="{{ url('/') }}" class="hover:text-[#1a6bbf] transition-colors font-medium">Home</a>
@@ -45,30 +75,39 @@
     </div>
 
     {{-- ══════════════════════════════════════════
-         2. EDITORIAL & GUIDE SECTION (Ala VisitLondon Magazine Layout)
+         3. EDITORIAL & GUIDE SECTION (Ala Magazine Portal)
     ══════════════════════════════════════════ --}}
-    @if($tag->long_description)
-    <section class="border-b border-gray-100 bg-white py-10 md:py-14">
+    @if(!request()->has('q'))
+    <section class="border-b border-gray-100 bg-white py-12 md:py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
                 
                 {{-- Kolom Utama: Narasi Cerita Editorial (65% width) --}}
                 <div class="lg:col-span-8">
-                    <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-950 tracking-tight mb-3">
+                    <h2 class="text-2xl md:text-3xl lg:text-4xl font-black text-gray-950 tracking-tight mb-3">
                         Mengenal Lebih Dekat {{ $tag->name }}
                     </h2>
-                    <div class="w-14 h-1 bg-[#1a6bbf] rounded-full mb-6"></div>
+                    <div class="w-16 h-1.5 bg-[#00aa6c] rounded-full mb-6"></div>
 
-                    <div class="text-[16px] md:text-[17px] text-gray-700 leading-relaxed space-y-4 font-normal [&>p]:mb-4 [&>p]:leading-relaxed [&>p>strong]:text-gray-950 [&>p>strong]:font-bold">
-                        {!! $tag->long_description !!}
+                    <div class="text-[15px] md:text-[16px] text-gray-700 leading-relaxed space-y-4 font-normal">
+                        @if($tag->long_description)
+                            {!! $tag->long_description !!}
+                        @else
+                            <p>
+                                Kawasan <strong>{{ $tag->name }}</strong> di Kabupaten Sukabumi menawarkan keragaman pengalaman wisata yang memesona bagi para penjelajah. Dikelilingi oleh keasrian bentang alam Tatar Pasundan, area ini menjadi salah satu daya tarik utama bagi wisatawan yang menginginkan rekreasi berkualitas tinggi, pemandangan memukau, dan suasana otentik.
+                            </p>
+                            <p>
+                                Setiap sudut destinasi dalam kategori ini memberikan keunikan tersendiri, mulai dari keindahan panorama alam hingga fasilitas pendukung yang memudahkan kunjungan keluarga, komunitas, maupun traveler solo.
+                            </p>
+                        @endif
                     </div>
                 </div>
 
-                {{-- Kolom Samping: Quick Facts / Sekilas Panduan (35% width) --}}
+                {{-- Kolom Samping: Quick Guide / Sekilas Panduan (35% width) --}}
                 <aside class="lg:col-span-4">
-                    <div class="bg-slate-50/90 rounded-2xl border border-slate-200/80 p-6 shadow-sm sticky top-24">
-                        <div class="flex items-center gap-2.5 pb-4 mb-5 border-b border-slate-200/80">
-                            <div class="w-9 h-9 rounded-xl bg-blue-100 text-[#1a6bbf] flex items-center justify-center shrink-0">
+                    <div class="bg-slate-50 rounded-3xl border border-slate-200/80 p-6 sm:p-7 shadow-sm sticky top-24">
+                        <div class="flex items-center gap-3 pb-4 mb-5 border-b border-slate-200/80">
+                            <div class="w-10 h-10 rounded-xl bg-blue-100 text-[#1a6bbf] flex items-center justify-center shrink-0">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
@@ -80,7 +119,7 @@
                         </div>
 
                         <div class="space-y-4 text-sm">
-                            {{-- Info 1: Kategori --}}
+                            {{-- Info 1 --}}
                             <div class="flex items-start gap-3">
                                 <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0 text-[#1a6bbf] mt-0.5">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,7 +132,7 @@
                                 </div>
                             </div>
 
-                            {{-- Info 2: Wilayah --}}
+                            {{-- Info 2 --}}
                             <div class="flex items-start gap-3">
                                 <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0 text-amber-600 mt-0.5">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,7 +145,7 @@
                                 </div>
                             </div>
 
-                            {{-- Info 3: Waktu Kunjungan --}}
+                            {{-- Info 3 --}}
                             <div class="flex items-start gap-3">
                                 <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0 text-indigo-600 mt-0.5">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,7 +154,7 @@
                                 </div>
                                 <div>
                                     <span class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Waktu Kunjungan</span>
-                                    <span class="font-bold text-gray-900">Pagi - Sore (Cuaca Cerah)</span>
+                                    <span class="font-bold text-gray-900">Pagi – Sore (Cuaca Cerah)</span>
                                 </div>
                             </div>
                         </div>
@@ -138,14 +177,14 @@
     @endif
 
     {{-- ══════════════════════════════════════════
-         3. MAIN LISTING SECTION WITH INTEGRATED CONTROLS
+         4. MAIN LISTING SECTION (GRID & PAGINATION)
     ══════════════════════════════════════════ --}}
-    <div id="daftar-destinasi" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 md:mt-14 mb-16 scroll-mt-20">
+    <section id="daftar-destinasi" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 md:mt-14 mb-16 scroll-mt-20">
         
-        {{-- HEADER, SEARCH & SORTING (Ala VisitLondon In-Context) --}}
+        {{-- HEADER & SORTING --}}
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4 border-b border-gray-200 pb-5">
             <div>
-                <h2 class="text-xl md:text-2xl font-bold text-gray-900">
+                <h2 class="text-2xl md:text-3xl font-black text-gray-900">
                     {{ request()->has('q') ? 'Hasil Pencarian: "' . request('q') . '"' : 'Daftar Destinasi ' . $tag->name }}
                 </h2>
                 <p class="text-sm md:text-base text-gray-500 mt-1">
@@ -153,27 +192,20 @@
                 </p>
             </div>
 
-            {{-- SEARCH & SORT CONTROLS --}}
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
-                {{-- Search Form In-Context --}}
-                <form action="{{ $tag->url }}#daftar-destinasi" method="GET" class="relative flex items-center min-w-[260px] sm:w-72">
-                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari di kategori ini..." class="w-full bg-gray-50 hover:bg-white focus:bg-white border border-gray-300 rounded-xl pl-10 pr-9 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1a6bbf] focus:border-transparent transition-all">
-                    <div class="absolute left-3 text-gray-400 pointer-events-none">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                    </div>
-                    @if(request()->has('q'))
-                        <a href="{{ $tag->url }}#daftar-destinasi" class="absolute right-3 text-gray-400 hover:text-gray-600 transition" title="Hapus pencarian">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                        </a>
-                    @endif
-                    @if(request()->has('sort'))
-                        <input type="hidden" name="sort" value="{{ request('sort') }}">
-                    @endif
-                </form>
+            {{-- SORT CONTROLS --}}
+            <div class="flex items-center gap-3 w-full lg:w-auto justify-between lg:justify-end">
+                @if(request()->has('q'))
+                    <a href="{{ $tag->url }}#daftar-destinasi" class="inline-flex items-center gap-1.5 text-sm font-bold text-[#1a6bbf] hover:text-[#15589c] transition-colors mr-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        <span>Hapus Pencarian</span>
+                    </a>
+                @endif
 
                 {{-- Dropdown Sorting --}}
                 <div class="relative shrink-0" x-data="{ open: false }">
-                    <button @click="open = !open" class="flex items-center justify-between w-full sm:w-48 bg-white border border-gray-300 rounded-xl px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-xs focus:outline-none focus:ring-2 focus:ring-[#1a6bbf] transition-colors">
+                    <button @click="open = !open" class="flex items-center justify-between w-48 bg-white border border-gray-300 rounded-xl px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-xs focus:outline-none focus:ring-2 focus:ring-[#1a6bbf] transition-colors">
                         <span class="truncate">
                             @php
                                 $sortLabel = match(request('sort')) {
@@ -188,7 +220,7 @@
                         </span>
                         <svg class="w-4 h-4 ml-2 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                     </button>
-                    <div x-show="open" @click.away="open = false" x-transition.opacity class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-1.5 z-40 overflow-hidden" style="display: none;">
+                    <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-1.5 z-40 overflow-hidden">
                         <a href="{{ request()->fullUrlWithQuery(['sort' => 'recommended']) }}#daftar-destinasi" class="block px-4 py-2 text-sm {{ request('sort', 'recommended') === 'recommended' ? 'bg-blue-50 text-[#1a6bbf] font-bold' : 'text-gray-700 hover:bg-gray-50' }}">Rekomendasi (Default)</a>
                         <a href="{{ request()->fullUrlWithQuery(['sort' => 'highest_rated']) }}#daftar-destinasi" class="block px-4 py-2 text-sm {{ request('sort') === 'highest_rated' ? 'bg-blue-50 text-[#1a6bbf] font-bold' : 'text-gray-700 hover:bg-gray-50' }}">Rating Tertinggi</a>
                         <a href="{{ request()->fullUrlWithQuery(['sort' => 'most_reviewed']) }}#daftar-destinasi" class="block px-4 py-2 text-sm {{ request('sort') === 'most_reviewed' ? 'bg-blue-50 text-[#1a6bbf] font-bold' : 'text-gray-700 hover:bg-gray-50' }}">Ulasan Terbanyak</a>
@@ -213,21 +245,71 @@
             </div>
         @else
             {{-- Empty State --}}
-            <div class="bg-gray-50 rounded-2xl border border-gray-100 p-12 flex flex-col items-center justify-center text-center mt-4">
-                <svg class="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                </svg>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Destinasi Tidak Ditemukan</h3>
-                <p class="text-gray-500 max-w-md mx-auto mb-6">
-                    Maaf, tidak ada tempat yang sesuai dengan pencarian Anda di kategori ini.
+            <div class="bg-gray-50 rounded-3xl border border-gray-200 p-12 flex flex-col items-center justify-center text-center mt-4">
+                <div class="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-400 mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-1">Destinasi Tidak Ditemukan</h3>
+                <p class="text-gray-500 text-sm max-w-sm mb-6">
+                    Maaf, tidak ada tempat yang sesuai dengan pencarian Anda di kategori {{ $tag->name }}.
                 </p>
-                <a href="{{ $tag->url }}" class="bg-[#1a6bbf] text-white px-6 py-2.5 rounded-full font-bold hover:bg-[#15589c] transition shadow-sm">
+                <a href="{{ $tag->url }}" class="px-6 py-2.5 rounded-full bg-[#00aa6c] hover:bg-[#008a57] text-white font-bold text-sm transition shadow-sm">
                     Tampilkan Semua Destinasi
                 </a>
             </div>
         @endif
+    </section>
+
+    {{-- ══════════════════════════════════════════
+         5. MOSAIK EKSPLORASI (Bento Grid Visual)
+    ══════════════════════════════════════════ --}}
+    @if(!request()->has('q'))
+    <section class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-gray-100">
+        <div class="text-center mb-14">
+            <span class="text-xs font-bold tracking-widest uppercase text-[#1a6bbf] block mb-2">Potret Tatar Pasundan</span>
+            <h2 class="text-3xl sm:text-4xl font-black text-gray-900 mb-3">Mosaik Keindahan Sukabumi</h2>
+            <p class="text-gray-500 text-sm sm:text-base max-w-xl mx-auto">Dari amfiteater alam purba UNESCO hingga pesona rimbun hutan dan ombak samudra.</p>
+        </div>
         
-    </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 h-auto md:h-[480px]">
+            {{-- Geopark Ciletuh --}}
+            <div class="group relative rounded-3xl overflow-hidden h-[260px] md:h-full lg:col-span-2 shadow-md">
+                <img src="{{ asset('assets/images/4.jpg') }}" alt="UNESCO Geopark Ciletuh Sukabumi" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-900/30 to-transparent"></div>
+                <div class="absolute bottom-6 left-6 right-6">
+                    <span class="text-xs font-bold text-amber-300 uppercase tracking-wider block mb-1">Warisan Dunia</span>
+                    <h3 class="text-2xl font-bold text-white mb-1.5">UNESCO Global Geopark Ciletuh</h3>
+                    <p class="text-gray-300 text-xs sm:text-sm">Amfiteater tapal kuda raksasa dan deretan air terjun megah yang menghadap samudra lepas.</p>
+                </div>
+            </div>
+            
+            {{-- Situ Gunung Highland --}}
+            <div class="group relative rounded-3xl overflow-hidden h-[260px] md:h-full shadow-md">
+                <img src="{{ asset('assets/images/3.jpg') }}" alt="Highland & Situ Gunung Sukabumi" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-900/30 to-transparent"></div>
+                <div class="absolute bottom-6 left-6 right-6">
+                    <span class="text-xs font-bold text-cyan-300 uppercase tracking-wider block mb-1">Highland & Rimba</span>
+                    <h3 class="text-xl font-bold text-white mb-1.5">Situ Gunung & Gede</h3>
+                    <p class="text-gray-300 text-xs sm:text-sm">Jembatan gantung terpanjang, danau berkabut, dan udara dingin pegunungan.</p>
+                </div>
+            </div>
+
+            {{-- Pantai & Samudra --}}
+            <div class="group relative rounded-3xl overflow-hidden h-[260px] md:h-full shadow-md">
+                <img src="{{ asset('assets/images/5.jpg') }}" alt="Pesisir Samudra & Pantai Sukabumi" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-900/30 to-transparent"></div>
+                <div class="absolute bottom-6 left-6 right-6">
+                    <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider block mb-1">Samudra Hindia</span>
+                    <h3 class="text-xl font-bold text-white mb-1.5">Pesisir & Petualangan</h3>
+                    <p class="text-gray-300 text-xs sm:text-sm">Gulungan ombak legendaris Cimaja dan arung jeram deras sungai Citarik.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    @endif
+
+    @include('components.footer')
 </div>
-@include('components.footer')
 @endsection

@@ -30,7 +30,9 @@ html, body {
 .vs-nav-row {
   background: #fff;
   border-bottom: 2.5px solid #1a6bbf;
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
 /* Nav link base */
