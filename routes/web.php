@@ -6,6 +6,7 @@ use App\Http\Controllers\VisitorAuthController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProfileController;
@@ -28,6 +29,18 @@ Route::get('/api/places/nearby', [PlaceController::class, 'nearby'])->name('api.
 
 Route::get('/event', [EventController::class, 'index'])->name('event.index');
 Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show');
+
+// Pemesanan & Rincian Pajak (Booking & Tax Breakdown)
+Route::post('/booking/calculate', [BookingController::class, 'calculate'])->name('booking.calculate');
+Route::post('/booking/checkout', [BookingController::class, 'store'])->name('booking.store');
+Route::get('/booking/{booking_code}', [BookingController::class, 'show'])->name('booking.show');
+Route::post('/booking/{booking_code}/pay-simulation', [BookingController::class, 'simulatePayment'])->name('booking.pay_simulation');
+Route::get('/dinas/tax-withdrawals/{withdrawal_code}/print', function (string $withdrawal_code) {
+    $withdrawal = \App\Models\TaxWithdrawal::with(['rkudAccount', 'requester', 'approver'])
+        ->where('withdrawal_code', $withdrawal_code)
+        ->firstOrFail();
+    return view('dinas.withdrawal-receipt', compact('withdrawal'));
+})->name('dinas.tax_withdrawal.print');
 
 // Tag-based listing routes
 Route::get('/aktivitas', [TagController::class, 'indexActivity'])->name('tag.index.activity');

@@ -705,15 +705,197 @@
                                     @endforeach
                                 </div>
                             @endif
-                            @if($place->hotel_booking_url)
+                        @php
+                            $activeRooms = $place->rooms ? $place->rooms->where('is_active', true) : collect();
+                        @endphp
+
+                        @if($activeRooms->count() > 0)
+                            <div class="mt-6 pt-6 border-t border-purple-200/60">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h3 class="text-base font-bold text-gray-900">Reservasi Kamar Langsung</h3>
+                                        <p class="text-xs text-gray-500">Transparansi harga sewa dan Pajak Daerah PBJT (10%)</p>
+                                    </div>
+                                    <span class="text-xs font-bold text-purple-700 bg-purple-100 px-3 py-1 rounded-full">Resmi Mitra</span>
+                                </div>
+
+                                <div class="space-y-4">
+                                    @foreach($activeRooms as $room)
+                                        <div class="bg-white rounded-2xl p-5 border border-purple-100 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                            <div class="space-y-1">
+                                                <div class="flex items-center gap-2">
+                                                    <h4 class="font-bold text-gray-900 text-base">{{ $room->name }}</h4>
+                                                    <span class="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">Maks. {{ $room->max_guests }} Tamu</span>
+                                                </div>
+                                                <p class="text-xs text-gray-600 leading-relaxed">{{ $room->description ?: 'Kamar nyaman dan lengkap dengan fasilitas standar hotel.' }}</p>
+                                                <div class="pt-1">
+                                                    <span class="text-xs text-gray-500">Mulai dari</span>
+                                                    <span class="text-lg font-black text-gray-900 font-mono">Rp {{ number_format($room->price_per_night, 0, ',', '.') }}</span>
+                                                    <span class="text-xs text-gray-500">/ malam</span>
+                                                </div>
+                                            </div>
+
+                                            <button type="button" 
+                                                    onclick="openHotelModal({{ $room->id }}, '{{ addslashes($room->name) }}', {{ (float) $room->price_per_night }})"
+                                                    class="w-full md:w-auto px-6 py-2.5 rounded-full bg-[#163766] hover:bg-[#102747] text-white font-bold text-xs transition flex items-center justify-center gap-2 shadow-sm whitespace-nowrap">
+                                                <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                                Pilih & Hitung Pajak
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @elseif($place->hotel_booking_url)
+                            <div class="mt-4 pt-4 border-t border-purple-200/60">
                                 <a href="{{ $place->hotel_booking_url }}" target="_blank"
                                     class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-full transition shadow-sm text-sm">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                     Cek Ketersediaan Kamar
                                 </a>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
+                </div>
+
+                {{-- Hotel Room Reservation Modal --}}
+                <div id="hotelBookingModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+                    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+                        <button type="button" onclick="closeHotelModal()" class="absolute top-5 right-5 text-gray-400 hover:text-black">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+
+                        <div class="mb-4">
+                            <span class="text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded-full border border-purple-200">Reservasi Kamar</span>
+                            <h3 id="modalRoomName" class="text-xl font-black text-gray-900 mt-2">Pesan Kamar</h3>
+                            <p class="text-xs text-gray-500">{{ $place->name }}</p>
+                        </div>
+
+                        <form action="{{ route('booking.store') }}" method="POST" id="hotelBookingForm" class="space-y-4">
+                            @csrf
+                            <input type="hidden" name="booking_type" value="hotel">
+                            <input type="hidden" name="item_id" id="modalRoomId" value="">
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-700 uppercase mb-1">Check-in</label>
+                                    <input type="date" name="check_in_date" id="modalCheckIn" required class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-700 uppercase mb-1">Check-out</label>
+                                    <input type="date" name="check_out_date" id="modalCheckOut" required class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-700 uppercase mb-1">Jumlah Kamar</label>
+                                <select name="rooms_count" id="modalRoomsCount" class="w-full text-xs font-bold px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200">
+                                    <option value="1">1 Kamar</option>
+                                    <option value="2">2 Kamar</option>
+                                    <option value="3">3 Kamar</option>
+                                    <option value="4">4 Kamar</option>
+                                </select>
+                            </div>
+
+                            {{-- Live Breakdown Box --}}
+                            <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 space-y-2 text-xs">
+                                <div class="flex justify-between text-gray-600 font-medium">
+                                    <span>Subtotal (<span id="modalNightsText">1</span> malam, <span id="modalRoomsText">1</span> kamar)</span>
+                                    <span id="modalSubtotal" class="font-mono text-gray-900 font-bold">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between items-center text-amber-800 bg-amber-50/80 p-2 rounded-lg border border-amber-200/60">
+                                    <span class="flex items-center gap-1.5 font-bold">
+                                        <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        Pajak Daerah (PBJT Hotel 10%)
+                                    </span>
+                                    <span id="modalTax" class="font-mono font-bold text-amber-700">Rp 0</span>
+                                </div>
+                                <div class="pt-2 border-t border-gray-200 flex justify-between items-center text-sm font-black text-gray-900">
+                                    <span>Total Tagihan</span>
+                                    <span id="modalTotal" class="font-mono text-[#00aa6c] text-base font-black">Rp 0</span>
+                                </div>
+                            </div>
+
+                            {{-- Data Tamu --}}
+                            <div class="space-y-3 pt-2 border-t border-gray-100">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">Nama Tamu</label>
+                                    <input type="text" name="customer_name" required placeholder="Nama Lengkap Sesuai KTP" value="{{ auth()->user()?->name ?? '' }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200">
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">Email</label>
+                                        <input type="email" name="customer_email" required placeholder="email@domain.com" value="{{ auth()->user()?->email ?? '' }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">No. WhatsApp</label>
+                                        <input type="tel" name="customer_phone" required placeholder="08xxxxxxxxxx" value="{{ auth()->user()?->phone ?? '' }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-[#163766] hover:bg-[#102747] text-white font-bold py-3.5 px-6 rounded-2xl transition text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20">
+                                <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                                Konfirmasi & Bayar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <script>
+                let currentRoomPrice = 0;
+
+                function openHotelModal(id, name, price) {
+                    currentRoomPrice = price;
+                    document.getElementById('modalRoomId').value = id;
+                    document.getElementById('modalRoomName').textContent = name;
+
+                    const today = new Date();
+                    const tomorrow = new Date();
+                    tomorrow.setDate(today.getDate() + 1);
+
+                    const formatDate = d => d.toISOString().split('T')[0];
+                    const checkInInput = document.getElementById('modalCheckIn');
+                    const checkOutInput = document.getElementById('modalCheckOut');
+
+                    if (!checkInInput.value) checkInInput.value = formatDate(today);
+                    if (!checkOutInput.value) checkOutInput.value = formatDate(tomorrow);
+
+                    recalcHotelModal();
+                    document.getElementById('hotelBookingModal').classList.remove('hidden');
+                }
+
+                function closeHotelModal() {
+                    document.getElementById('hotelBookingModal').classList.add('hidden');
+                }
+
+                function recalcHotelModal() {
+                    const checkInVal = document.getElementById('modalCheckIn').value;
+                    const checkOutVal = document.getElementById('modalCheckOut').value;
+                    const roomsCount = parseInt(document.getElementById('modalRoomsCount').value || 1);
+
+                    let nights = 1;
+                    if (checkInVal && checkOutVal) {
+                        const d1 = new Date(checkInVal);
+                        const d2 = new Date(checkOutVal);
+                        const diffTime = d2 - d1;
+                        nights = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+                    }
+
+                    const subtotal = currentRoomPrice * nights * roomsCount;
+                    const tax = Math.round(subtotal * 0.10); // PBJT 10%
+                    const total = subtotal + tax;
+
+                    document.getElementById('modalNightsText').textContent = nights;
+                    document.getElementById('modalRoomsText').textContent = roomsCount;
+                    document.getElementById('modalSubtotal').textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
+                    document.getElementById('modalTax').textContent = 'Rp ' + tax.toLocaleString('id-ID');
+                    document.getElementById('modalTotal').textContent = 'Rp ' + total.toLocaleString('id-ID');
+                }
+
+                document.getElementById('modalCheckIn')?.addEventListener('change', recalcHotelModal);
+                document.getElementById('modalCheckOut')?.addEventListener('change', recalcHotelModal);
+                document.getElementById('modalRoomsCount')?.addEventListener('change', recalcHotelModal);
+                </script>
                 @endif
 
                 {{-- ══ RESTORAN / KULINER ══ --}}

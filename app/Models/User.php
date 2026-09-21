@@ -28,6 +28,10 @@ class User extends Authenticatable implements FilamentUser
             return $this->role === 'admin';
         }
 
+        if ($panel->getId() === 'dinas') {
+            return in_array($this->role, ['dinas', 'admin']);
+        }
+
         if ($panel->getId() === 'kelola') {
             return $this->claims()->where('status', 'approved')->exists();
         }

@@ -34,6 +34,11 @@ class Event extends Model
         return $this->hasMany(EventItinerary::class)->orderBy('order_num');
     }
 
+    public function tickets()
+    {
+        return $this->hasMany(EventTicket::class);
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';

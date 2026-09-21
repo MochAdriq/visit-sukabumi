@@ -504,42 +504,159 @@
 
             {{-- ── RIGHT: Sticky Booking Card ── --}}
             <div class="lg:col-span-1">
-                <div class="sticky top-[140px] space-y-6">
-                    
+                <div class="sticky top-28 space-y-6">
                     {{-- Primary Booking Card --}}
-                    <div class="bg-white border border-gray-200 rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-6">
-                        <div class="mb-5">
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-xl md:text-2xl font-black text-gray-900">Rp 150.000</span>
-                                <span class="text-sm text-gray-500">per orang</span>
-                            </div>
-                            <div class="text-xs font-bold text-green-600 mt-1 flex items-center gap-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                                Jaminan Harga Terbaik
-                            </div>
-                        </div>
-
-                        {{-- Date & Guests Selection --}}
-                        <div class="flex flex-col gap-2 mb-4">
-                            <button class="w-full text-left px-4 py-3 border-2 border-gray-900 rounded-xl font-bold flex justify-between items-center">
-                                <span>{{ $event->start_date->translatedFormat('D, d M') }}</span>
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                            </button>
-                            <button class="w-full text-left px-4 py-3 border-2 border-gray-300 rounded-xl flex justify-between items-center text-gray-600">
-                                <span>2 Orang Dewasa</span>
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                            </button>
-                        </div>
-
-                        {{-- WhatsApp CTA --}}
+                    <div class="bg-white border border-gray-200 rounded-3xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-6">
                         @php
-                            $waText = "Halo, saya mendapatkan informasi paket tour ini (*{$event->title}*) dari website panduan wisata *Visit Sukabumi* (visitsukabumi.com).\n\nBoleh minta informasi lebih lanjut terkait pemesanan paket ini?";
+                            $activeTickets = $event->tickets->where('is_active', true);
                             $waPhone = "6282298285558";
+                            $waText = "Halo, saya ingin bertanya seputar pemesanan tiket event (*{$event->title}*) dari website Visit Sukabumi.";
                         @endphp
-                        <a href="https://wa.me/{{ $waPhone }}?text={{ urlencode($waText) }}" target="_blank"
-                           class="w-full block text-center bg-[#00aa6c] hover:bg-[#008a57] text-white font-bold py-3.5 px-6 rounded-full transition text-[15px] mb-4">
-                            Cek Ketersediaan
-                        </a>
+
+                        @if($activeTickets->count() > 0)
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">Tiket Resmi</span>
+                                    <span class="text-xs text-gray-500 font-medium">Pajak Daerah Transparan</span>
+                                </div>
+                                <h3 class="text-lg font-black text-gray-900 mt-2">Beli Tiket Acara</h3>
+                            </div>
+
+                            <form action="{{ route('booking.store') }}" method="POST" id="eventBookingForm" class="space-y-4">
+                                @csrf
+                                <input type="hidden" name="booking_type" value="event">
+
+                                {{-- Pilihan Kategori Tiket --}}
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Pilih Kategori Tiket</label>
+                                    <select name="item_id" id="ticketSelect" required class="w-full text-sm font-semibold border-2 border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 focus:bg-white focus:border-black transition">
+                                        @foreach($activeTickets as $t)
+                                            <option value="{{ $t->id }}" data-price="{{ (float) $t->price }}" data-quota="{{ $t->available_quota ?? 999 }}">
+                                                {{ $t->name }} — Rp {{ number_format($t->price, 0, ',', '.') }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                {{-- Jumlah Tiket --}}
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Jumlah Tiket</label>
+                                    <div class="flex items-center border-2 border-gray-200 rounded-xl bg-gray-50 overflow-hidden">
+                                        <button type="button" id="btnMinusQty" class="w-12 py-2.5 text-lg font-bold text-gray-600 hover:bg-gray-200 transition">-</button>
+                                        <input type="number" name="quantity" id="ticketQty" value="1" min="1" max="10" readonly class="w-full text-center font-bold text-gray-900 bg-transparent border-0 focus:ring-0">
+                                        <button type="button" id="btnPlusQty" class="w-12 py-2.5 text-lg font-bold text-gray-600 hover:bg-gray-200 transition">+</button>
+                                    </div>
+                                </div>
+
+                                {{-- Breakdown Box --}}
+                                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 space-y-2 text-xs">
+                                    <div class="flex justify-between text-gray-600 font-medium">
+                                        <span>Subtotal (<span id="summaryQtyText">1</span> Tiket)</span>
+                                        <span id="summarySubtotal" class="font-mono text-gray-900 font-bold">Rp 0</span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-amber-800 bg-amber-50/80 p-2 rounded-lg border border-amber-200/60">
+                                        <span class="flex items-center gap-1.5 font-bold">
+                                            <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                            Pajak Daerah (PBJT 10%)
+                                        </span>
+                                        <span id="summaryTax" class="font-mono font-bold text-amber-700">Rp 0</span>
+                                    </div>
+                                    <div class="pt-2 border-t border-gray-200 flex justify-between items-center text-sm font-black text-gray-900">
+                                        <span>Total Bayar</span>
+                                        <span id="summaryTotal" class="font-mono text-[#00aa6c] text-base font-black">Rp 0</span>
+                                    </div>
+                                </div>
+
+                                {{-- Data Pemesan Form Toggle --}}
+                                <div id="customerFields" class="space-y-3 pt-2 border-t border-gray-100">
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">Nama Lengkap</label>
+                                        <input type="text" name="customer_name" required placeholder="Nama Anda" value="{{ auth()->user()?->name ?? '' }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200 focus:border-black">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">Email</label>
+                                        <input type="email" name="customer_email" required placeholder="email@domain.com" value="{{ auth()->user()?->email ?? '' }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200 focus:border-black">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">No. WhatsApp</label>
+                                        <input type="tel" name="customer_phone" required placeholder="08xxxxxxxxxx" value="{{ auth()->user()?->phone ?? '' }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200 focus:border-black">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="w-full bg-[#163766] hover:bg-[#102747] text-white font-bold py-3.5 px-6 rounded-2xl transition text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20">
+                                    <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                                    Lanjut ke Pembayaran
+                                </button>
+                            </form>
+
+                            <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const ticketSelect = document.getElementById('ticketSelect');
+                                const qtyInput = document.getElementById('ticketQty');
+                                const btnMinus = document.getElementById('btnMinusQty');
+                                const btnPlus = document.getElementById('btnPlusQty');
+                                const summaryQtyText = document.getElementById('summaryQtyText');
+                                const summarySubtotal = document.getElementById('summarySubtotal');
+                                const summaryTax = document.getElementById('summaryTax');
+                                const summaryTotal = document.getElementById('summaryTotal');
+
+                                function updatePricing() {
+                                    if(!ticketSelect) return;
+                                    const selectedOption = ticketSelect.options[ticketSelect.selectedIndex];
+                                    const basePrice = parseFloat(selectedOption.getAttribute('data-price') || 0);
+                                    const qty = parseInt(qtyInput.value || 1);
+
+                                    const subtotal = basePrice * qty;
+                                    const tax = Math.round(subtotal * 0.10); // PBJT 10%
+                                    const total = subtotal + tax;
+
+                                    summaryQtyText.textContent = qty;
+                                    summarySubtotal.textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
+                                    summaryTax.textContent = 'Rp ' + tax.toLocaleString('id-ID');
+                                    summaryTotal.textContent = 'Rp ' + total.toLocaleString('id-ID');
+                                }
+
+                                btnMinus.addEventListener('click', function() {
+                                    let current = parseInt(qtyInput.value);
+                                    if(current > 1) {
+                                        qtyInput.value = current - 1;
+                                        updatePricing();
+                                    }
+                                });
+
+                                btnPlus.addEventListener('click', function() {
+                                    let current = parseInt(qtyInput.value);
+                                    if(current < 10) {
+                                        qtyInput.value = current + 1;
+                                        updatePricing();
+                                    }
+                                });
+
+                                ticketSelect.addEventListener('change', updatePricing);
+                                updatePricing();
+                            });
+                            </script>
+                        @else
+                            {{-- Fallback: Belum ada tiket terdaftar, gunakan CTA WhatsApp --}}
+                            <div class="mb-5">
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-xl md:text-2xl font-black text-gray-900">Rp 150.000</span>
+                                    <span class="text-sm text-gray-500">per orang</span>
+                                </div>
+                                <div class="text-xs font-bold text-green-600 mt-1 flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                    Jaminan Harga Terbaik
+                                </div>
+                            </div>
+
+                            @php
+                                $waOrderText = "Halo, saya ingin memesan tiket event (*{$event->title}*) dari website Visit Sukabumi.\n\nBoleh minta informasi lebih lanjut terkait pemesanan?";
+                            @endphp
+                            <a href="https://wa.me/{{ $waPhone }}?text={{ urlencode($waOrderText) }}" target="_blank"
+                               class="w-full block text-center bg-[#00aa6c] hover:bg-[#008a57] text-white font-bold py-3.5 px-6 rounded-full transition text-[15px] mb-4">
+                                Cek Ketersediaan via WhatsApp
+                            </a>
+                        @endif
 
                         {{-- Value Props --}}
                         <div class="space-y-4 pt-2">

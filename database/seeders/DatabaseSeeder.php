@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminUserSeeder::class,
             TagSeeder::class,
+            TaxSettingSeeder::class,
         ]);
 
         // Hapus komentar di bawah jika ingin men-seed data destinasi dan event secara otomatis:

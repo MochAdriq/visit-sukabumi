@@ -78,6 +78,16 @@ class Place extends Model
         return $this->hasMany(PlaceImage::class);
     }
 
+    public function rooms(): HasMany
+    {
+        return $this->hasMany(HotelRoom::class);
+    }
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
     public function primaryImage(): HasOne
     {
         return $this->hasOne(PlaceImage::class)->ofMany([
