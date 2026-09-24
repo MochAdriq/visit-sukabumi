@@ -129,11 +129,17 @@ html, body {
   padding: 28px 24px;
 }
 
-.vs-nav-item:hover .vs-megamenu {
+.vs-nav-item:hover .vs-megamenu,
+.vs-nav-item.is-open .vs-megamenu {
   visibility: visible;
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+}
+
+.vs-nav-item:hover > .vs-nav-link svg,
+.vs-nav-item.is-open > .vs-nav-link svg {
+  transform: rotate(180deg);
 }
 
 .vs-megamenu-sidebar {
@@ -193,6 +199,74 @@ html, body {
 
 .vs-megamenu-links li a.vs-highlight:hover {
   text-decoration: underline;
+}
+
+/* Dropdown Container (Bahasa, Akun/User di Row 1) - Hover & Click Support */
+.vs-dropdown-container.is-open .vs-dropdown-menu,
+.vs-dropdown-container:hover .vs-dropdown-menu {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+.vs-dropdown-container.is-open .vs-dropdown-arrow,
+.vs-dropdown-container:hover .vs-dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+/* =========================================================
+ * TABLET REFLOW (760px - 1023px) - Anti-Slop Mobile Layout
+ * ========================================================= */
+@media (min-width: 760px) and (max-width: 1023px) {
+  .vs-brand-row {
+    height: 96px;
+    padding: 0 16px;
+  }
+  .vs-nav-row nav {
+    padding-left: 12px;
+    padding-right: 12px;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .vs-nav-row nav::-webkit-scrollbar {
+    display: none;
+  }
+  .vs-nav-link {
+    height: 48px; /* Target sentuh minimal 44px+ */
+    padding: 0 8px;
+    font-size: 13px;
+    gap: 3px;
+  }
+  .vs-nav-link svg {
+    width: 10px;
+    height: 10px;
+  }
+  .vs-megamenu-inner {
+    padding: 20px 16px;
+    gap: 20px;
+  }
+  .vs-megamenu-sidebar {
+    min-width: 170px;
+    max-width: 190px;
+    padding-right: 16px;
+  }
+  .vs-megamenu-title {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .vs-megamenu-text {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .vs-megamenu-links {
+    column-gap: 12px;
+  }
+  .vs-megamenu-links li a {
+    padding: 6px 8px;
+    font-size: 13px;
+  }
 }
 
 /* =========================================================

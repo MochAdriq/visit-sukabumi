@@ -75,18 +75,18 @@ $navItems = [
     <div class="vs-brand-row hidden md:flex relative">
         {{-- Left: Language + Currency --}}
         <div class="flex items-center gap-4 z-10 flex-1">
-            <div class="relative group z-50">
-                <button class="flex items-center gap-1.5 text-[14px] font-bold text-gray-800 hover:text-[#1a6bbf] transition-colors py-2 cursor-pointer">
+            <div class="relative group z-50 vs-dropdown-container">
+                <button type="button" class="flex items-center gap-1.5 text-[14px] font-bold text-gray-800 hover:text-[#1a6bbf] transition-colors py-2 cursor-pointer vs-dropdown-btn" aria-haspopup="true">
                     <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="text-gray-700">
                         <circle cx="12" cy="12" r="9.5" stroke-width="1.6"/>
                         <path d="M2.5 12h19M12 2.5c-2.5 3-4 6-4 9.5s1.5 6.5 4 9.5M12 2.5c2.5 3 4 6 4 9.5s-1.5 6.5-4 9.5" stroke-width="1.4"/>
                     </svg>
                     <span id="current-lang">ID</span>
-                    <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="text-gray-500">
+                    <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="text-gray-500 vs-dropdown-arrow transition-transform duration-200">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
                     </svg>
                 </button>
-                <div class="absolute left-0 top-full mt-0 w-36 bg-white border border-gray-100 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                <div class="absolute left-0 top-full mt-0 w-36 bg-white border border-gray-100 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible vs-dropdown-menu transition-all">
                     <div class="py-1">
                         <button onclick="changeGTranslate('id', 'ID')" class="w-full text-left px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Indonesia</button>
                         <button onclick="changeGTranslate('en', 'EN')" class="w-full text-left px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">Inggris</button>
@@ -120,19 +120,19 @@ $navItems = [
             @auth
                 <div class="flex items-center gap-3 border-l border-gray-200 pl-4">
                     {{-- User Dropdown Menu --}}
-                    <div class="relative group z-50">
-                        <button type="button" class="flex items-center gap-2 py-1.5 px-2 rounded-full hover:bg-gray-50 border border-transparent hover:border-gray-200 transition-all cursor-pointer">
+                    <div class="relative group z-50 vs-dropdown-container">
+                        <button type="button" class="flex items-center gap-2 py-1.5 px-2 rounded-full hover:bg-gray-50 border border-transparent hover:border-gray-200 transition-all cursor-pointer vs-dropdown-btn" aria-haspopup="true">
                             <img src="{{ Auth::user()->avatar_url }}" alt="{{ Auth::user()->name }}" class="w-8 h-8 rounded-full object-cover border border-gray-200 flex-shrink-0 shadow-2xs">
                             <span class="text-[13px] font-bold text-gray-800 hidden lg:inline max-w-[120px] truncate">
                                 {{ explode(' ', Auth::user()->name)[0] }}
                             </span>
-                            <svg class="w-3.5 h-3.5 text-gray-500 group-hover:text-[#1a6bbf] transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-3.5 h-3.5 text-gray-500 vs-dropdown-arrow group-hover:text-[#1a6bbf] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
 
                         {{-- Dropdown Card --}}
-                        <div class="absolute right-0 top-full mt-1.5 w-60 bg-white border border-gray-100 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-1 overflow-hidden">
+                        <div class="absolute right-0 top-full mt-1.5 w-60 bg-white border border-gray-100 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible vs-dropdown-menu transition-all duration-200 transform group-hover:translate-y-0 translate-y-1 overflow-hidden">
                             {{-- User Mini Info --}}
                             <div class="px-4 py-3 bg-gradient-to-r from-blue-50/70 to-indigo-50/50 border-b border-gray-100">
                                 <div class="flex items-center justify-between gap-1 mb-0.5">
@@ -236,12 +236,12 @@ $navItems = [
                 @endphp
                 @if($item['dropdown'])
                     <div class="vs-nav-item">
-                        <a href="{{ $item['href'] }}" class="vs-nav-link {{ $isActive ? 'active' : '' }}">
-                            {{ $item['label'] }}
-                            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="transition-transform duration-200 ml-0.5">
+                        <button type="button" class="vs-nav-link vs-nav-dropdown-toggle {{ $isActive ? 'active' : '' }}" aria-expanded="false" aria-haspopup="true">
+                            <span>{{ $item['label'] }}</span>
+                            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="transition-transform duration-200 ml-0.5 pointer-events-none">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
                             </svg>
-                        </a>
+                        </button>
                         <div class="vs-megamenu">
                             <div class="vs-megamenu-inner">
                                 <div class="vs-megamenu-sidebar">
@@ -525,6 +525,89 @@ function changeGTranslate(langCode, langLabel) {
         document.getElementById('current-lang').innerText = langLabel;
     }
 }
+
+// ── DESKTOP & TABLET MEGAMENU TOGGLE (Touch & Click Support) ──
+document.addEventListener('DOMContentLoaded', function() {
+    // Megamenu click/tap toggle
+    document.querySelectorAll('.vs-nav-item').forEach(item => {
+        const btn = item.querySelector('.vs-nav-dropdown-toggle');
+        if (!btn) return;
+
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const isOpen = item.classList.contains('is-open');
+
+            // Tutup dropdown megamenu lainnya
+            document.querySelectorAll('.vs-nav-item.is-open').forEach(other => {
+                if (other !== item) {
+                    other.classList.remove('is-open');
+                    const otherBtn = other.querySelector('.vs-nav-dropdown-toggle');
+                    if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            if (isOpen) {
+                item.classList.remove('is-open');
+                btn.setAttribute('aria-expanded', 'false');
+            } else {
+                item.classList.add('is-open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+
+    // Dropdown Container toggle (Bahasa & Akun User di Row 1)
+    document.querySelectorAll('.vs-dropdown-container').forEach(container => {
+        const btn = container.querySelector('.vs-dropdown-btn');
+        if (!btn) return;
+
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isOpen = container.classList.contains('is-open');
+
+            document.querySelectorAll('.vs-dropdown-container.is-open').forEach(c => {
+                if (c !== container) c.classList.remove('is-open');
+            });
+
+            if (isOpen) {
+                container.classList.remove('is-open');
+            } else {
+                container.classList.add('is-open');
+            }
+        });
+    });
+
+    // Tutup jika mengklik di luar area dropdown
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.vs-nav-item')) {
+            document.querySelectorAll('.vs-nav-item.is-open').forEach(item => {
+                item.classList.remove('is-open');
+                const btn = item.querySelector('.vs-nav-dropdown-toggle');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+            });
+        }
+        if (!e.target.closest('.vs-dropdown-container')) {
+            document.querySelectorAll('.vs-dropdown-container.is-open').forEach(c => {
+                c.classList.remove('is-open');
+            });
+        }
+    });
+
+    // Tutup saat menekan tombol Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.vs-nav-item.is-open').forEach(item => {
+                item.classList.remove('is-open');
+                const btn = item.querySelector('.vs-nav-dropdown-toggle');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+            });
+            document.querySelectorAll('.vs-dropdown-container.is-open').forEach(c => {
+                c.classList.remove('is-open');
+            });
+        }
+    });
+});
 
 // ── MOBILE MENU ──────────────────────────────────────
 function toggleMobileMenu() {
