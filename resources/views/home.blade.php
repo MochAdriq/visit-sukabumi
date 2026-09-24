@@ -515,10 +515,10 @@
                         <p class="text-[16px] md:text-[18px] text-gray-700 leading-relaxed">Jangan sampai ketinggalan acara seru di Sukabumi</p>
                     </div>
                     <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide" id="event-filters">
-                        <button onclick="filterEvents('minggu-ini', this)" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-[#1a6bbf] text-[#1a6bbf] bg-white text-xs md:text-sm font-bold rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors">Minggu ini</button>
-                        <button onclick="filterEvents('akhir-pekan', this)" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Akhir pekan</button>
-                        <button onclick="filterEvents('bulan-ini', this)" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Bulan ini</button>
-                        <button onclick="filterEvents('semua', this)" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Semua</button>
+                        <button onclick="filterEvents('minggu-ini', this)" data-filter="minggu-ini" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Minggu ini</button>
+                        <button onclick="filterEvents('akhir-pekan', this)" data-filter="akhir-pekan" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Akhir pekan</button>
+                        <button onclick="filterEvents('bulan-ini', this)" data-filter="bulan-ini" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Bulan ini</button>
+                        <button onclick="filterEvents('semua', this)" data-filter="semua" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-[#1a6bbf] text-[#1a6bbf] bg-white text-xs md:text-sm font-bold rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors">Semua</button>
                     </div>
                 </div>
 
@@ -768,8 +768,8 @@
     });
 
     document.addEventListener("DOMContentLoaded", function() {
-        const firstBtn = document.querySelector('.event-filter-btn');
-        if (firstBtn) filterEvents('minggu-ini', firstBtn);
+        const allBtn = document.querySelector('[data-filter="semua"]') || document.querySelector('.event-filter-btn:last-child');
+        if (allBtn) filterEvents('semua', allBtn);
     });
 
     function filterEvents(filterType, btnElement) {
