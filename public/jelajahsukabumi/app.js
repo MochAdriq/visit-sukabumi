@@ -136,6 +136,8 @@ function openPlaceModal(data) {
   }
   if (placeLink) {
     placeLink.href = data.url || '#';
+    placeLink.target = '_blank';
+    placeLink.rel = 'noopener noreferrer';
   }
   if (typeof placeDialog.showModal === 'function') {
     placeDialog.showModal();
