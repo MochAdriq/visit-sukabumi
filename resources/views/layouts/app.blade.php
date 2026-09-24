@@ -126,6 +126,108 @@
 
     @yield('content')
 
+    {{-- ════════════════════════════════════════════
+         FLOATING CORNER AD WIDGET (Bisnis.com Gambar 3)
+         ════════════════════════════════════════════ --}}
+    @php
+        $floatingAd = \App\Models\Advertisement::getRandomAd('floating_corner');
+    @endphp
+    @if($floatingAd)
+        <div x-data="{ dismissed: false }" 
+             x-show="!dismissed"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-8 scale-95"
+             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+             x-transition:leave-end="opacity-0 translate-y-8 scale-95"
+             class="fixed bottom-5 right-5 z-[9990] max-w-[280px] sm:max-w-[320px] w-full pointer-events-auto">
+            
+            <div class="relative bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
+                <div class="flex items-center justify-between px-3 py-1.5 bg-gray-50 border-b border-gray-100 text-[11px] font-semibold text-gray-500">
+                    <span class="inline-flex items-center gap-1 uppercase tracking-wider text-[10px] font-extrabold text-[#1a6bbf]">
+                        Sponsor Pilihan
+                    </span>
+                    <button @click="dismissed = true" type="button" class="text-gray-400 hover:text-gray-700 p-0.5 rounded cursor-pointer transition-colors" aria-label="Tutup">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <a href="{{ $floatingAd->url ?? '#' }}" target="{{ ($floatingAd->open_in_new_tab || (isset($floatingAd->url) && str_starts_with($floatingAd->url, 'http'))) ? '_blank' : '_self' }}" rel="noopener noreferrer" class="block w-full">
+                    <img src="{{ $floatingAd->image_url }}" alt="{{ $floatingAd->title }}" class="w-full h-auto object-cover max-h-[160px]">
+                </a>
+                @if($floatingAd->title)
+                <div class="p-2.5 bg-white">
+                    <p class="text-xs font-bold text-gray-900 truncate">{{ $floatingAd->title }}</p>
+                </div>
+                @endif
+            </div>
+        </div>
+    @endif
+
+    {{-- ════════════════════════════════════════════
+         POPUP / INTERSTITIAL MODAL (Bisnis.com Gambar 2)
+         ════════════════════════════════════════════ --}}
+    @php
+        $popupAd = \App\Models\Advertisement::getRandomAd('popup_interstitial');
+    @endphp
+    @if($popupAd)
+        <div x-data="{ 
+                open: false,
+                init() {
+                    if (!sessionStorage.getItem('vs_popup_seen')) {
+                        setTimeout(() => {
+                            this.open = true;
+                            sessionStorage.setItem('vs_popup_seen', 'true');
+                        }, 2000);
+                    }
+                }
+             }"
+             x-show="open" 
+             style="display: none;"
+             class="fixed inset-0 z-[99999] flex items-center justify-center p-4">
+            
+            <!-- Backdrop -->
+            <div @click="open = false" 
+                 x-show="open"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="fixed inset-0 bg-black/70 backdrop-blur-xs"></div>
+
+            <!-- Modal Card -->
+            <div x-show="open"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 scale-95"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-95"
+                 class="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-white/20 z-10">
+                
+                <button @click="open = false" type="button" class="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center cursor-pointer transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+
+                <a href="{{ $popupAd->url ?? '#' }}" target="{{ ($popupAd->open_in_new_tab || (isset($popupAd->url) && str_starts_with($popupAd->url, 'http'))) ? '_blank' : '_self' }}" rel="noopener noreferrer" class="block w-full">
+                    <img src="{{ $popupAd->image_url }}" alt="{{ $popupAd->title }}" class="w-full h-auto object-cover max-h-[360px]">
+                </a>
+                
+                <div class="p-4 bg-white flex items-center justify-between gap-3">
+                    <div class="min-w-0">
+                        <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#1a6bbf] bg-blue-50 px-2 py-0.5 rounded">Sponsor Resmi</span>
+                        <h3 class="text-sm font-bold text-gray-900 mt-1 truncate">{{ $popupAd->title }}</h3>
+                    </div>
+                    <button @click="open = false" type="button" class="px-4 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-xs font-bold text-gray-700 transition flex-shrink-0 cursor-pointer">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+
     {{-- GLightbox JS --}}
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
     <script>

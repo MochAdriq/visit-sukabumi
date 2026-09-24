@@ -159,9 +159,35 @@
             </div>
         @endif
 
-        {{-- Main Content --}}
+        {{-- Main Content with In-Article Ad Slot --}}
+        @php
+            $articleAd = \App\Models\Advertisement::getRandomAd('article_middle', 'blog');
+            $contentHtml = $post->content;
+            if ($articleAd) {
+                $targetAttr = ($articleAd->open_in_new_tab || (isset($articleAd->url) && str_starts_with($articleAd->url, 'http'))) ? '_blank' : '_self';
+                $adMarkup = '
+                <div class="my-8 p-4 sm:p-5 bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden not-prose shadow-xs">
+                    <div class="flex items-center justify-between gap-2 mb-2 text-[10px] font-extrabold uppercase tracking-widest text-[#1a6bbf]">
+                        <span>Sponsor Pilihan</span>
+                    </div>
+                    <a href="' . ($articleAd->url ?? '#') . '" target="' . $targetAttr . '" rel="noopener noreferrer" class="block w-full rounded-xl overflow-hidden shadow-xs hover:shadow-md transition">
+                        <img src="' . $articleAd->image_url . '" alt="' . htmlspecialchars($articleAd->title) . '" class="w-full h-auto max-h-[300px] object-cover rounded-xl" />
+                    </a>
+                </div>';
+                $paragraphs = explode('</p>', $contentHtml);
+                if (count($paragraphs) > 3) {
+                    array_splice($paragraphs, 3, 0, $adMarkup);
+                    $contentHtml = implode('</p>', $paragraphs);
+                } elseif (count($paragraphs) > 1) {
+                    array_splice($paragraphs, 1, 0, $adMarkup);
+                    $contentHtml = implode('</p>', $paragraphs);
+                } else {
+                    $contentHtml .= $adMarkup;
+                }
+            }
+        @endphp
         <article class="article-body bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 mb-16">
-            {!! $post->content !!}
+            {!! $contentHtml !!}
         </article>
 
         {{-- Actions: Back & Share --}}

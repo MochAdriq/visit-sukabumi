@@ -36,10 +36,13 @@ class AdvertisementResource extends Resource
                         Forms\Components\Select::make('position')
                             ->label('Posisi Penempatan')
                             ->options([
-                                'top_navbar'      => 'Bar Promo di Atas Navbar (Top Ribbon)',
-                                'homepage_middle' => 'Banner Utama Beranda (Tengah)',
-                                'place_sidebar'   => 'Sidebar Detail Halaman Tempat',
-                                'footer_banner'   => 'Banner Sponsor di Atas Footer (Pre-Footer)',
+                                'top_navbar'          => 'Bar Promo di Atas Navbar (Top Ribbon)',
+                                'homepage_middle'     => 'Banner Utama Beranda (Tengah)',
+                                'place_sidebar'       => 'Sidebar Detail Halaman Tempat',
+                                'footer_banner'       => 'Banner Sponsor di Atas Footer (Pre-Footer)',
+                                'article_middle'      => 'Tengah Paragraf Artikel Blog (In-Article)',
+                                'floating_corner'     => 'Widget Melayang Pojok Kanan Bawah (Floating Corner)',
+                                'popup_interstitial'  => 'Pop-Up Promo Selamat Datang (Welcome Modal)',
                             ])
                             ->default('homepage_middle')
                             ->required(),
@@ -111,18 +114,24 @@ class AdvertisementResource extends Resource
                     ->label('Posisi')
                     ->badge()
                     ->formatStateUsing(fn ($state) => match($state) {
-                        'top_navbar'      => 'Atas Navbar',
-                        'homepage_middle' => 'Beranda Tengah',
-                        'place_sidebar'   => 'Sidebar Tempat',
-                        'footer_banner'   => 'Atas Footer',
-                        default           => $state ?? 'Beranda Tengah',
+                        'top_navbar'          => 'Atas Navbar',
+                        'homepage_middle'     => 'Beranda Tengah',
+                        'place_sidebar'       => 'Sidebar Tempat',
+                        'footer_banner'       => 'Atas Footer',
+                        'article_middle'      => 'Tengah Artikel',
+                        'floating_corner'     => 'Pojok Kanan Bawah',
+                        'popup_interstitial'  => 'Pop-Up Modal',
+                        default               => $state ?? 'Beranda Tengah',
                     })
                     ->color(fn ($state) => match($state) {
-                        'top_navbar'      => 'warning',
-                        'homepage_middle' => 'success',
-                        'place_sidebar'   => 'info',
-                        'footer_banner'   => 'primary',
-                        default           => 'gray',
+                        'top_navbar'          => 'warning',
+                        'homepage_middle'     => 'success',
+                        'place_sidebar'       => 'info',
+                        'footer_banner'       => 'primary',
+                        'article_middle'      => 'secondary',
+                        'floating_corner'     => 'danger',
+                        'popup_interstitial'  => 'warning',
+                        default               => 'gray',
                     }),
 
                 Tables\Columns\TextColumn::make('url')
