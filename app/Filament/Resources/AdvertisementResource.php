@@ -36,11 +36,28 @@ class AdvertisementResource extends Resource
                         Forms\Components\Select::make('position')
                             ->label('Posisi Penempatan')
                             ->options([
+                                'top_navbar'      => 'Bar Promo di Atas Navbar (Top Ribbon)',
                                 'homepage_middle' => 'Banner Utama Beranda (Tengah)',
                                 'place_sidebar'   => 'Sidebar Detail Halaman Tempat',
+                                'footer_banner'   => 'Banner Sponsor di Atas Footer (Pre-Footer)',
                             ])
                             ->default('homepage_middle')
                             ->required(),
+
+                        Forms\Components\CheckboxList::make('target_pages')
+                            ->label('Tampilkan di Halaman Mana Saja')
+                            ->options([
+                                'all'          => 'Semua Halaman Publik',
+                                'home'         => 'Hanya di Beranda (Home)',
+                                'places'       => 'Daftar Destinasi (/wisata, /aktivitas, /penginapan)',
+                                'place_detail' => 'Halaman Detail Tempat (/place/{slug})',
+                                'events'       => 'Event & Festival (/event)',
+                                'blog'         => 'Blog & Panduan Wisata (/blog, /panduan-wisata)',
+                            ])
+                            ->default(['all'])
+                            ->columns(2)
+                            ->helperText('Pilih halaman yang diizinkan untuk menampilkan banner ini. Jika pilih "Semua Halaman Publik", banner akan muncul di seluruh halaman terkait posisi tersebut.')
+                            ->columnSpanFull(),
 
                         Forms\Components\TextInput::make('url')
                             ->label('Tautan Target (URL)')
@@ -94,13 +111,17 @@ class AdvertisementResource extends Resource
                     ->label('Posisi')
                     ->badge()
                     ->formatStateUsing(fn ($state) => match($state) {
+                        'top_navbar'      => 'Atas Navbar',
                         'homepage_middle' => 'Beranda Tengah',
                         'place_sidebar'   => 'Sidebar Tempat',
+                        'footer_banner'   => 'Atas Footer',
                         default           => $state ?? 'Beranda Tengah',
                     })
                     ->color(fn ($state) => match($state) {
+                        'top_navbar'      => 'warning',
                         'homepage_middle' => 'success',
                         'place_sidebar'   => 'info',
+                        'footer_banner'   => 'primary',
                         default           => 'gray',
                     }),
 

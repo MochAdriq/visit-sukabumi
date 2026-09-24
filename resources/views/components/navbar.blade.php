@@ -66,6 +66,34 @@ $navItems = [
     ];
 @endphp
 
+@php
+    $topAd = \App\Models\Advertisement::getRandomAd('top_navbar');
+@endphp
+
+{{-- ════════════════════════════════════════════
+     TOP AD BANNER / ANNOUNCEMENT RIBBON
+     ════════════════════════════════════════════ --}}
+@if($topAd)
+    <div x-data="{ dismissed: false }" x-show="!dismissed" class="relative z-[70] bg-[#163766] text-white border-b border-white/10 shadow-xs">
+        <div class="max-w-[1380px] mx-auto px-4 py-2 sm:py-2.5 flex items-center justify-between gap-3 text-xs sm:text-sm">
+            <a href="{{ $topAd->url ?? '#' }}" target="{{ ($topAd->open_in_new_tab || (isset($topAd->url) && str_starts_with($topAd->url, 'http'))) ? '_blank' : '_self' }}" rel="noopener noreferrer" class="flex-1 flex items-center justify-center gap-2.5 hover:underline font-medium text-center">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-[#F8BE2C] text-[#163766] flex-shrink-0">
+                    Sponsor
+                </span>
+                <span class="truncate">{{ $topAd->title }}</span>
+                <svg class="w-3.5 h-3.5 flex-shrink-0 text-[#F8BE2C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                </svg>
+            </a>
+            <button @click="dismissed = true" type="button" class="text-white/60 hover:text-white p-1 rounded transition-colors flex-shrink-0 cursor-pointer" aria-label="Tutup promo">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+@endif
+
 {{-- ════════════════════════════════════════════
      DESKTOP HEADER
      ════════════════════════════════════════════ --}}

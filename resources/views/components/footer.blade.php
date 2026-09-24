@@ -1,3 +1,25 @@
+@php
+    $footerAd = \App\Models\Advertisement::getRandomAd('footer_banner');
+@endphp
+
+@if($footerAd)
+    {{-- ════════════════════════════════════════════
+         PRE-FOOTER SPONSOR BANNER
+         ════════════════════════════════════════════ --}}
+    <div class="bg-slate-50 py-6 sm:py-8 border-t border-slate-200">
+        <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="relative rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-shadow group border border-slate-200 bg-white">
+                <a href="{{ $footerAd->url ?? '#' }}" target="{{ ($footerAd->open_in_new_tab || (isset($footerAd->url) && str_starts_with($footerAd->url, 'http'))) ? '_blank' : '_self' }}" rel="noopener noreferrer" class="block w-full">
+                    <img src="{{ $footerAd->image_url }}" alt="{{ $footerAd->title }}" class="w-full h-auto max-h-[220px] object-cover" />
+                </a>
+                <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider pointer-events-none">
+                    Sponsor Resmi
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
 <footer class="bg-white border-t border-gray-200 relative">
     {{-- Top Brand Bar --}}
     <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6 border-b border-gray-200">
