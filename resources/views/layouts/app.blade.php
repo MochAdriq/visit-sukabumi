@@ -6,11 +6,11 @@
 
     @php
         $pageTitle = trim($__env->yieldContent('title'));
-        $defaultTitle = 'Visit Sukabumi — Panduan Wisata Kabupaten Sukabumi';
+        $defaultTitle = 'Visit Sukabumi - Panduan digital untuk menjelajah Sukabumi';
         $metaTitle = $pageTitle ?: $defaultTitle;
 
         $pageDesc = trim($__env->yieldContent('meta_description'));
-        $defaultDesc = 'Temukan destinasi wisata, event, penginapan, dan kuliner terbaik di Kabupaten Sukabumi. Panduan perjalanan lengkap dari Visit Sukabumi.';
+        $defaultDesc = 'Visit Sukabumi adalah platform digital yang menghubungkan wisatawan, pelaku bisnis, dan pemerintah dalam satu ekosistem pariwisata. Temukan destinasi wisata, event, penginapan, dan kuliner terbaik di Kabupaten Sukabumi.';
         $metaDesc = $pageDesc ?: $defaultDesc;
 
         $ogTitle = trim($__env->yieldContent('og_title')) ?: $metaTitle;

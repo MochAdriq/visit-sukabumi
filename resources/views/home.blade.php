@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 {{-- \u2550\u2550 SEO META: Homepage \u2550\u2550 --}}
-@section('title', 'Visit Sukabumi — Panduan Wisata Terlengkap Kabupaten Sukabumi')
-@section('meta_description', 'Temukan destinasi wisata alam, pantai, geopark, event, kuliner, dan penginapan terbaik di Kabupaten Sukabumi. Panduan perjalanan lengkap dari Visit Sukabumi.')
+@section('title', 'Visit Sukabumi - Panduan digital untuk menjelajah Sukabumi')
+@section('meta_description', 'Visit Sukabumi adalah platform digital yang menghubungkan wisatawan, pelaku bisnis, dan pemerintah dalam satu ekosistem pariwisata. Temukan destinasi wisata, event, kuliner, dan penginapan terbaik di Sukabumi.')
 @section('canonical', url('/'))
 @section('og_type', 'website')
-@section('og_title', 'Visit Sukabumi — Panduan Wisata Kabupaten Sukabumi')
-@section('og_description', 'Temukan destinasi wisata alam, pantai, geopark, event, kuliner, dan penginapan terbaik di Kabupaten Sukabumi.')
+@section('og_title', 'Visit Sukabumi - Panduan digital untuk menjelajah Sukabumi')
+@section('og_description', 'Visit Sukabumi adalah platform digital yang menghubungkan wisatawan, pelaku bisnis, dan pemerintah dalam satu ekosistem pariwisata. Temukan destinasi wisata alam, pantai, geopark, event, kuliner, dan penginapan terbaik di Kabupaten Sukabumi.')
 @section('og_image', asset('assets/images/og-default.jpg'))
-@section('og_image_alt', 'Visit Sukabumi — Panduan Wisata Kabupaten Sukabumi')
+@section('og_image_alt', 'Visit Sukabumi - Panduan digital untuk menjelajah Sukabumi')
 
 {{-- ══ JSON-LD: Organization + WebSite ══ --}}
 @push('structured_data')
@@ -23,7 +23,7 @@
                 'url' => asset('assets/images/logo.png'),
             ],
             'sameAs' => [],
-            'description' => 'Platform panduan wisata resmi Kabupaten Sukabumi — destinasi, event, kuliner, penginapan, dan inspirasi perjalanan.',
+            'description' => 'Visit Sukabumi adalah platform digital yang menghubungkan wisatawan, pelaku bisnis, dan pemerintah dalam satu ekosistem pariwisata.',
             'areaServed' => [
                 '@type' => 'AdministrativeArea',
                 'name' => 'Kabupaten Sukabumi',
