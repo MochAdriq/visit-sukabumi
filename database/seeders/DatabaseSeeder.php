@@ -25,11 +25,12 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Seed master tags & admin users
+        // Seed master tags, admin users, & advertisements
         $this->call([
             AdminUserSeeder::class,
             TagSeeder::class,
             TaxSettingSeeder::class,
+            AdvertisementSeeder::class,
         ]);
 
         // Hapus komentar di bawah jika ingin men-seed data destinasi dan event secara otomatis:
