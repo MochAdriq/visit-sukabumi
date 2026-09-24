@@ -27,9 +27,9 @@ class AdvertisementSeeder extends Seeder
         Advertisement::updateOrCreate(
             ['position' => 'homepage_middle'],
             [
-                'title' => 'Eksplorasi Keindahan Alam Sukabumi — Paket Wisata Keluarga Lengkap & Terpercaya',
-                'image_path' => 'images/ads/banner-1.jpg',
-                'url' => '/wisata',
+                'title' => 'Eksplorasi Keindahan Alam Sukabumi — Sepetak Tanah Surga Di Selatan Jawa Barat',
+                'image_path' => 'images/ads/visit_sukabumi_animation.jpg',
+                'url' => '/jelajahsukabumi',
                 'target_pages' => ['home'],
                 'sort_order' => 1,
                 'open_in_new_tab' => false,
@@ -42,7 +42,7 @@ class AdvertisementSeeder extends Seeder
             ['position' => 'place_sidebar'],
             [
                 'title' => 'Sewa Glamping & Villa Nyaman Dekat Destinasi Wisata Favorit',
-                'image_path' => 'images/dummy-beach.jpg',
+                'image_path' => 'images/ads/banner-1.jpg',
                 'url' => '/penginapan',
                 'target_pages' => ['places'],
                 'sort_order' => 1,
@@ -56,7 +56,7 @@ class AdvertisementSeeder extends Seeder
             ['position' => 'footer_banner'],
             [
                 'title' => 'Jelajahi Pesona Sukabumi Bersama Mitra Penginapan & Transportasi Resmi',
-                'image_path' => 'images/ads/banner-1.jpg',
+                'image_path' => 'images/ads/visit_sukabumi_animation.jpg',
                 'url' => '/wisata',
                 'target_pages' => ['all'],
                 'sort_order' => 1,
