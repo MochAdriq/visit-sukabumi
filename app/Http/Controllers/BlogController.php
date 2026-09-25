@@ -22,12 +22,61 @@ class BlogController extends Controller
             $query->where('category', $category);
         }
 
-        $posts = $query->latest('published_at')->paginate(12)->withQueryString();
+        $isFiltered = $request->filled('q') || $request->filled('category') || ((int)$request->get('page', 1) > 1);
 
-        // Get unique categories for filter
-        $categories = BlogPost::published()->select('category')->distinct()->pluck('category');
+        // Showcase editorial (headline + subheadlines + pilihan) aktif di landing utama tanpa filter
+        $headlinePost = null;
+        $subHeadlinePosts = collect();
+        $curatedPosts = collect();
 
-        return view('blog.index', compact('posts', 'categories'));
+        if (!$isFiltered) {
+            $showcasePosts = BlogPost::published()
+                ->with('author')
+                ->latest('published_at')
+                ->limit(7)
+                ->get();
+
+            $headlinePost = $showcasePosts->first();
+            $subHeadlinePosts = $showcasePosts->slice(1, 3)->values();
+            $curatedPosts = $showcasePosts->slice(4, 3)->values();
+        }
+
+        // Aliran artikel terkini dengan paginasi
+        $posts = $query->latest('published_at')->paginate(10)->withQueryString();
+
+        // 5 Artikel Terpopuler untuk sidebar ranking ala Kompas.com
+        $popularPosts = BlogPost::published()
+            ->withCount('comments')
+            ->orderByDesc('comments_count')
+            ->latest('published_at')
+            ->limit(5)
+            ->get();
+
+        // Destinasi wisata Sukabumi pilihan untuk widget sidebar
+        $recommendedPlaces = \App\Models\Place::where('status', 'published')
+            ->with(['primaryImage', 'category'])
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+
+        // Daftar kategori unik beserta jumlah artikel untuk menu ribbon & sidebar
+        $categories = BlogPost::published()
+            ->select('category')
+            ->selectRaw('count(*) as count')
+            ->groupBy('category')
+            ->orderBy('category')
+            ->get();
+
+        return view('blog.index', compact(
+            'posts',
+            'categories',
+            'headlinePost',
+            'subHeadlinePosts',
+            'curatedPosts',
+            'popularPosts',
+            'recommendedPlaces',
+            'isFiltered'
+        ));
     }
 
     public function show(BlogPost $post)
@@ -41,15 +90,31 @@ class BlogController extends Controller
             }
         }
 
-        $post->load(['author', 'places', 'comments.user']);
+        $post->load(['author', 'places.primaryImage', 'comments.user']);
 
         $related = BlogPost::published()
             ->where('category', $post->category)
             ->where('id', '!=', $post->id)
             ->latest('published_at')
+            ->limit(4)
+            ->get();
+
+        // 5 Artikel Terpopuler untuk widget ranking Kompas.com
+        $popularPosts = BlogPost::published()
+            ->where('id', '!=', $post->id)
+            ->withCount('comments')
+            ->orderByDesc('comments_count')
+            ->latest('published_at')
+            ->limit(5)
+            ->get();
+
+        // Destinasi unggulan untuk widget sidebar
+        $recommendedPlaces = \App\Models\Place::where('status', 'published')
+            ->with(['primaryImage', 'category'])
+            ->inRandomOrder()
             ->limit(3)
             ->get();
 
-        return view('blog.show', compact('post', 'related'));
+        return view('blog.show', compact('post', 'related', 'popularPosts', 'recommendedPlaces'));
     }
 }
