@@ -126,43 +126,6 @@
 
     @yield('content')
 
-    {{-- ════════════════════════════════════════════
-         FLOATING CORNER AD WIDGET (Bisnis.com Gambar 3)
-         ════════════════════════════════════════════ --}}
-    @php
-        $floatingAd = \App\Models\Advertisement::getRandomAd('floating_corner');
-    @endphp
-    @if($floatingAd)
-        <div x-data="{ dismissed: false }" 
-             x-show="!dismissed"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 translate-y-8 scale-95"
-             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-             x-transition:leave-end="opacity-0 translate-y-8 scale-95"
-             class="fixed bottom-5 right-5 z-[9990] max-w-[280px] sm:max-w-[320px] w-full pointer-events-auto">
-            
-            <div class="relative bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-                <div class="flex items-center justify-between px-3 py-1.5 bg-gray-50 border-b border-gray-100 text-[11px] font-semibold text-gray-500">
-                    <span class="inline-flex items-center gap-1 uppercase tracking-wider text-[10px] font-extrabold text-[#1a6bbf]">
-                        Sponsor Pilihan
-                    </span>
-                    <button @click="dismissed = true" type="button" class="text-gray-400 hover:text-gray-700 p-0.5 rounded cursor-pointer transition-colors" aria-label="Tutup">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
-                    </button>
-                </div>
-                <a href="{{ $floatingAd->url ?? '#' }}" target="{{ ($floatingAd->open_in_new_tab || (isset($floatingAd->url) && str_starts_with($floatingAd->url, 'http'))) ? '_blank' : '_self' }}" rel="noopener noreferrer" class="block w-full">
-                    <img src="{{ $floatingAd->image_url }}" alt="{{ $floatingAd->title }}" class="w-full h-auto object-cover max-h-[160px]">
-                </a>
-                @if($floatingAd->title)
-                <div class="p-2.5 bg-white">
-                    <p class="text-xs font-bold text-gray-900 truncate">{{ $floatingAd->title }}</p>
-                </div>
-                @endif
-            </div>
-        </div>
-    @endif
 
     {{-- ════════════════════════════════════════════
          POPUP / INTERSTITIAL MODAL (Bisnis.com Gambar 2)
