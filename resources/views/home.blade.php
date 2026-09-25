@@ -511,14 +511,20 @@
             <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-5 md:mb-7">
                     <div>
-                        <h2 class="text-[26px] md:text-[34px] font-extrabold text-gray-950 mb-1 tracking-tight">Event & Festival Mendatang</h2>
+                        <h2 class="text-[26px] md:text-[34px] font-extrabold text-gray-950 mb-1 tracking-tight">Event & Festival Sukabumi</h2>
                         <p class="text-[16px] md:text-[18px] text-gray-700 leading-relaxed">Jangan sampai ketinggalan acara seru di Sukabumi</p>
                     </div>
-                    <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide" id="event-filters">
-                        <button onclick="filterEvents('minggu-ini', this)" data-filter="minggu-ini" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Minggu ini</button>
-                        <button onclick="filterEvents('akhir-pekan', this)" data-filter="akhir-pekan" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Akhir pekan</button>
-                        <button onclick="filterEvents('bulan-ini', this)" data-filter="bulan-ini" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Bulan ini</button>
-                        <button onclick="filterEvents('semua', this)" data-filter="semua" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-[#1a6bbf] text-[#1a6bbf] bg-white text-xs md:text-sm font-bold rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors">Semua</button>
+                    <div class="flex items-center gap-3">
+                        <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide" id="event-filters">
+                            <button onclick="filterEvents('minggu-ini', this)" data-filter="minggu-ini" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Minggu ini</button>
+                            <button onclick="filterEvents('akhir-pekan', this)" data-filter="akhir-pekan" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Akhir pekan</button>
+                            <button onclick="filterEvents('bulan-ini', this)" data-filter="bulan-ini" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-gray-300 text-gray-600 bg-white text-xs md:text-sm font-bold rounded-full hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition-colors">Bulan ini</button>
+                            <button onclick="filterEvents('semua', this)" data-filter="semua" class="event-filter-btn flex-shrink-0 px-3.5 py-1.5 border-2 border-[#1a6bbf] text-[#1a6bbf] bg-white text-xs md:text-sm font-bold rounded-full hover:bg-[#1a6bbf] hover:text-white transition-colors">Semua</button>
+                        </div>
+                        <a href="{{ route('event.index') }}" class="hidden lg:inline-flex items-center gap-1.5 text-sm font-bold text-[#1a6bbf] hover:text-[#135a9e] whitespace-nowrap ml-2">
+                            Lihat semua
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </a>
                     </div>
                 </div>
 
@@ -552,10 +558,17 @@
                         <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gray-100 mb-3">
                             <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900">Belum ada event dalam waktu dekat</h3>
+                        <h3 class="text-lg font-bold text-gray-900">Belum ada event</h3>
                         <p class="text-gray-500 text-sm mt-1">Pantau terus halaman ini ya!</p>
                     </div>
                     @endforelse
+                </div>
+
+                <div class="mt-8 text-center">
+                    <a href="{{ route('event.index') }}" class="inline-flex items-center gap-2 px-6 py-2.5 border border-gray-300 text-gray-700 font-bold rounded-full hover:bg-gray-50 text-sm transition-colors">
+                        Lihat Semua Event & Festival
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
                 </div>
             </div>
         </div>
@@ -969,11 +982,12 @@
 
         const cards = document.querySelectorAll('.event-card');
         let visible = 0;
+        const maxLimit = filterType === 'semua' ? 8 : 4;
         cards.forEach(card => {
             const d = new Date(card.getAttribute('data-date')); d.setHours(0,0,0,0);
             const match = filterType === 'akhir-pekan' ? (d.getDay() === 0 || d.getDay() === 6) : (filterType === 'semua' ? true : (d >= today && d <= endDate));
-            card.style.display = (match && visible < 4) ? 'block' : 'none';
-            if (match && visible < 4) visible++;
+            card.style.display = (match && visible < maxLimit) ? 'block' : 'none';
+            if (match && visible < maxLimit) visible++;
         });
 
         let msg = document.getElementById('empty-event-msg');

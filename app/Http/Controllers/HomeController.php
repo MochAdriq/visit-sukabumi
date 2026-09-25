@@ -75,11 +75,13 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
 
-        // 5. Upcoming Events
+        // 5. Events (Semua event aktif: event mendatang diprioritaskan, diikuti event lampau terbaru)
+        $todayStr = now()->format('Y-m-d');
         $upcomingEvents = \App\Models\Event::where('is_active', true)
-            ->where('start_date', '>=', now())
-            ->orderBy('start_date', 'asc')
-            ->limit(20)
+            ->orderByRaw("CASE WHEN start_date >= '{$todayStr}' THEN 0 ELSE 1 END")
+            ->orderByRaw("CASE WHEN start_date >= '{$todayStr}' THEN start_date END ASC")
+            ->orderByRaw("CASE WHEN start_date < '{$todayStr}' THEN start_date END DESC")
+            ->limit(24)
             ->get();
 
         // 6. Banner Image (Aktivitas Seru)
