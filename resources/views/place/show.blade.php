@@ -1087,20 +1087,15 @@
                         @endif
                     </div>
 
-                    {{-- Banner Iklan --}}
+                    {{-- Banner Iklan Sidebar (Khusus Format Portrait) --}}
                     @php
-                        $ad = \App\Models\Advertisement::where('is_active', true)
-                            ->where(function($q) {
-                                $q->where('position', 'place_sidebar')->orWhereNull('position');
-                            })
-                            ->inRandomOrder()
-                            ->first();
+                        $ad = \App\Models\Advertisement::getRandomAd('place_sidebar', 'place_detail', 'portrait');
                     @endphp
                     
                     @if($ad)
-                    <div class="mt-6 rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition">
+                    <div class="mt-6 rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition bg-slate-50">
                         <a href="{{ $ad->url ?? '#' }}" target="{{ ($ad->open_in_new_tab || (isset($ad->url) && str_starts_with($ad->url, 'http'))) ? '_blank' : '_self' }}" class="block w-full h-full">
-                            <img src="{{ $ad->image_url }}" alt="{{ $ad->title }}" class="w-full h-auto object-cover">
+                            <img src="{{ $ad->image_url }}" alt="{{ $ad->title }}" class="w-full h-auto object-contain mx-auto">
                         </a>
                     </div>
                     @endif

@@ -9,12 +9,13 @@ class AdvertisementSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Top Navbar Ribbon (Muncul di ribbon paling atas situs)
+        // 1. Top Navbar Ribbon (Landscape - Horizontal)
         Advertisement::updateOrCreate(
             ['position' => 'top_navbar'],
             [
                 'title' => 'Festival Geopark Ciletuh 2026 — Dapatkan Tiket Early Bird Spesial Sekarang!',
-                'image_path' => 'images/ads/banner-1.jpg',
+                'format' => 'landscape',
+                'image_path' => 'images/ads/visit_sukabumi_animation.jpg',
                 'url' => '/event',
                 'target_pages' => ['all'],
                 'sort_order' => 1,
@@ -23,11 +24,12 @@ class AdvertisementSeeder extends Seeder
             ]
         );
 
-        // 2. Homepage Middle Banner (Banner promo utama di tengah beranda)
+        // 2. Homepage Middle Banner (Landscape - Horizontal)
         Advertisement::updateOrCreate(
             ['position' => 'homepage_middle'],
             [
                 'title' => 'Eksplorasi Keindahan Alam Sukabumi — Sepetak Tanah Surga Di Selatan Jawa Barat',
+                'format' => 'landscape',
                 'image_path' => 'images/ads/visit_sukabumi_animation.jpg',
                 'url' => '/jelajahsukabumi',
                 'target_pages' => ['home'],
@@ -37,11 +39,12 @@ class AdvertisementSeeder extends Seeder
             ]
         );
 
-        // 3. Place Detail Sidebar (Sidebar kanan di halaman detail objek wisata)
+        // 3. Place Detail Sidebar (PORTRAIT - Vertikal)
         Advertisement::updateOrCreate(
             ['position' => 'place_sidebar'],
             [
                 'title' => 'Sewa Glamping & Villa Nyaman Dekat Destinasi Wisata Favorit',
+                'format' => 'portrait',
                 'image_path' => 'images/ads/banner-1.jpg',
                 'url' => '/penginapan',
                 'target_pages' => ['places'],
@@ -51,11 +54,12 @@ class AdvertisementSeeder extends Seeder
             ]
         );
 
-        // 4. Pre-Footer Banner (Strip horizontal sebelum footer di semua halaman)
+        // 4. Pre-Footer Banner (Landscape - Horizontal)
         Advertisement::updateOrCreate(
             ['position' => 'footer_banner'],
             [
                 'title' => 'Jelajahi Pesona Sukabumi Bersama Mitra Penginapan & Transportasi Resmi',
+                'format' => 'landscape',
                 'image_path' => 'images/ads/visit_sukabumi_animation.jpg',
                 'url' => '/wisata',
                 'target_pages' => ['all'],
@@ -65,12 +69,13 @@ class AdvertisementSeeder extends Seeder
             ]
         );
 
-        // 5. In-Article Banner (Tengah Paragraf Artikel Blog)
+        // 5. In-Article Banner (Landscape - Horizontal)
         Advertisement::updateOrCreate(
             ['position' => 'article_middle'],
             [
                 'title' => 'Petualangan Seru Arung Jeram Sungai Citarik — Promo Paket Weekend Hemat',
-                'image_path' => 'images/dummy-beach.jpg',
+                'format' => 'landscape',
+                'image_path' => 'images/ads/visit_sukabumi_animation.jpg',
                 'url' => '/wisata',
                 'target_pages' => ['blog'],
                 'sort_order' => 1,
@@ -79,12 +84,13 @@ class AdvertisementSeeder extends Seeder
             ]
         );
 
-        // 6. Floating Corner Widget (Pojok Kanan Bawah)
+        // 6. Floating Corner Widget
         Advertisement::updateOrCreate(
             ['position' => 'floating_corner'],
             [
                 'title' => 'Diskon Spesial Resort Tepi Pantai Palabuhanratu s/d 30%',
-                'image_path' => 'images/dummy-beach.jpg',
+                'format' => 'landscape',
+                'image_path' => 'images/ads/visit_sukabumi_animation.jpg',
                 'url' => '/penginapan',
                 'target_pages' => ['home', 'places'],
                 'sort_order' => 1,
@@ -93,11 +99,12 @@ class AdvertisementSeeder extends Seeder
             ]
         );
 
-        // 7. Popup Interstitial Modal (Promo Sambutan)
+        // 7. Popup Interstitial Modal
         Advertisement::updateOrCreate(
             ['position' => 'popup_interstitial'],
             [
                 'title' => 'Jelajah Sukabumi Interaktif — Rasakan Sensasi Menyetir Virtual!',
+                'format' => 'landscape',
                 'image_path' => 'images/ads/adsvis.gif',
                 'url' => '/jelajahsukabumi',
                 'target_pages' => ['home'],

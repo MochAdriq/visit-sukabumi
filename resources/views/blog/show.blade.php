@@ -171,7 +171,7 @@
                         <span>Sponsor Pilihan</span>
                     </div>
                     <a href="' . ($articleAd->url ?? '#') . '" target="' . $targetAttr . '" rel="noopener noreferrer" class="block w-full rounded-xl overflow-hidden shadow-xs hover:shadow-md transition">
-                        <img src="' . $articleAd->image_url . '" alt="' . htmlspecialchars($articleAd->title) . '" class="w-full h-auto max-h-[300px] object-cover rounded-xl" />
+                        <img src="' . $articleAd->image_url . '" alt="' . htmlspecialchars($articleAd->title) . '" class="w-full h-auto max-h-[300px] object-contain mx-auto rounded-xl" />
                     </a>
                 </div>';
                 $paragraphs = explode('</p>', $contentHtml);

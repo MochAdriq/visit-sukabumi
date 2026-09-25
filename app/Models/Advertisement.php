@@ -12,6 +12,7 @@ class Advertisement extends Model
         'image_path',
         'url',
         'position',
+        'format',
         'target_pages',
         'sort_order',
         'open_in_new_tab',
@@ -45,23 +46,20 @@ class Advertisement extends Model
         return 'other';
     }
 
-    public static function getRandomAd(string $position, ?string $pageKey = null): ?self
+    public static function getRandomAd(string $slotType = 'landscape', ?string $pageKey = null, ?string $forcedFormat = null): ?self
     {
         // Hindari iklan di halaman admin, dinas, mitra, atau autentikasi
         if (request()->is('admin*') || request()->is('kelola*') || request()->is('dinas*') || request()->is('login*') || request()->is('register*')) {
             return null;
         }
 
+        // Tentukan format yang dipatenkan:
+        // place_sidebar / portrait wajib PORTRAIT, slot lainnya wajib LANDSCAPE
+        $expectedFormat = $forcedFormat ?: (($slotType === 'place_sidebar' || $slotType === 'portrait') ? 'portrait' : 'landscape');
         $page = $pageKey ?: self::getCurrentPageKey();
 
         return self::where('is_active', true)
-            ->where(function($q) use ($position) {
-                $q->where('position', $position);
-                // Kompatibilitas posisi lama
-                if ($position === 'homepage_middle' || $position === 'place_sidebar') {
-                    $q->orWhereNull('position');
-                }
-            })
+            ->where('format', $expectedFormat)
             ->where(function ($query) use ($page) {
                 $query->whereNull('target_pages')
                     ->orWhereJsonContains('target_pages', 'all')

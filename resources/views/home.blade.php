@@ -136,7 +136,7 @@
                    title="{{ $bannerTitle }}">
                     <img src="{{ $bannerImg }}" 
                          alt="{{ $bannerTitle }}" 
-                         class="w-full h-auto max-h-[320px] aspect-[21/9] sm:aspect-[16/6] md:aspect-[3/1] object-cover group-hover:scale-[1.01] transition-transform duration-300">
+                         class="w-full h-auto max-h-[320px] object-contain mx-auto group-hover:scale-[1.01] transition-transform duration-300">
                 </a>
             </div>
         </div>

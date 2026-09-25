@@ -24,31 +24,46 @@ class AdvertisementResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Informasi Banner')
-                    ->description('Kelola detail banner iklan, penempatan posisi, dan tautan tujuannya.')
+                Forms\Components\Section::make('Format & Informasi Banner')
+                    ->description('Tentukan format orientasi banner (Landscape atau Portrait). Sistem akan otomatis merandom penayangannya di slot yang sesuai.')
                     ->schema([
+                        Forms\Components\Radio::make('format')
+                            ->label('Format Orientasi Banner')
+                            ->options([
+                                'landscape' => 'Landscape (Horizontal)',
+                                'portrait'  => 'Portrait (Vertikal)',
+                            ])
+                            ->descriptions([
+                                'landscape' => 'Otomatis di-random untuk slot horizontal: Beranda Tengah, Artikel Blog, dan Pre-Footer.',
+                                'portrait'  => 'Otomatis di-random untuk slot vertikal: Sidebar Kanan Halaman Detail Tempat Wisata.',
+                            ])
+                            ->default('landscape')
+                            ->inline()
+                            ->required()
+                            ->columnSpanFull(),
+
                         Forms\Components\TextInput::make('title')
-                            ->label('Judul Iklan / Banner')
-                            ->placeholder('Contoh: Jelajah Sukabumi Interaktif')
+                            ->label('Judul Iklan / Nama Sponsor')
+                            ->placeholder('Contoh: Promo Glamping Ciletuh Weekend')
                             ->required()
                             ->maxLength(255),
 
-                        Forms\Components\Select::make('position')
-                            ->label('Posisi Penempatan')
-                            ->options([
-                                'top_navbar'          => 'Bar Promo di Atas Navbar (Top Ribbon)',
-                                'homepage_middle'     => 'Banner Utama Beranda (Tengah)',
-                                'place_sidebar'       => 'Sidebar Detail Halaman Tempat',
-                                'footer_banner'       => 'Banner Sponsor di Atas Footer (Pre-Footer)',
-                                'article_middle'      => 'Tengah Paragraf Artikel Blog (In-Article)',
-                                'floating_corner'     => 'Widget Melayang Pojok Kanan Bawah (Floating Corner)',
-                                'popup_interstitial'  => 'Pop-Up Promo Selamat Datang (Welcome Modal)',
-                            ])
-                            ->default('homepage_middle')
-                            ->required(),
+                        Forms\Components\TextInput::make('url')
+                            ->label('Tautan Target (URL)')
+                            ->placeholder('Contoh: /jelajahsukabumi atau https://...')
+                            ->helperText('Bisa menggunakan path internal (/jelajahsukabumi) atau link eksternal lengkap.')
+                            ->maxLength(255),
+
+                        Forms\Components\FileUpload::make('image_path')
+                            ->label('File Banner (Gambar / GIF Animasi)')
+                            ->image()
+                            ->directory('ads')
+                            ->helperText('Dukung format JPG, PNG, WebP, dan GIF animasi. Gambar tidak akan di-crop/dipotong paksa, proporsi asli gambar akan dipertahankan.')
+                            ->required()
+                            ->columnSpanFull(),
 
                         Forms\Components\CheckboxList::make('target_pages')
-                            ->label('Tampilkan di Halaman Mana Saja')
+                            ->label('Target Halaman Tampil')
                             ->options([
                                 'all'          => 'Semua Halaman Publik',
                                 'home'         => 'Hanya di Beranda (Home)',
@@ -59,28 +74,14 @@ class AdvertisementResource extends Resource
                             ])
                             ->default(['all'])
                             ->columns(2)
-                            ->helperText('Pilih halaman yang diizinkan untuk menampilkan banner ini. Jika pilih "Semua Halaman Publik", banner akan muncul di seluruh halaman terkait posisi tersebut.')
+                            ->helperText('Pilih halaman yang diizinkan untuk menampilkan banner ini. Default: Semua Halaman Publik.')
                             ->columnSpanFull(),
-
-                        Forms\Components\TextInput::make('url')
-                            ->label('Tautan Target (URL)')
-                            ->placeholder('Contoh: /jelajahsukabumi atau https://...')
-                            ->helperText('Bisa menggunakan path internal seperti /jelajahsukabumi atau URL eksternal lengkap.')
-                            ->maxLength(255),
 
                         Forms\Components\TextInput::make('sort_order')
                             ->label('Urutan Prioritas')
                             ->numeric()
                             ->default(0)
-                            ->helperText('Semakin kecil angka (0, 1, 2...), semakin awal banner ditampilkan.'),
-
-                        Forms\Components\FileUpload::make('image_path')
-                            ->label('Gambar / GIF Banner')
-                            ->image()
-                            ->directory('ads')
-                            ->helperText('Dukung format JPG, PNG, WebP, dan GIF animasi. Rekomendasi rasio landscape memanjang (misal 970x250).')
-                            ->required()
-                            ->columnSpanFull(),
+                            ->helperText('Semakin kecil angka (0, 1, 2...), semakin awal banner diprioritaskan saat di-random.'),
 
                         Forms\Components\Toggle::make('open_in_new_tab')
                             ->label('Buka di Tab Baru (_blank)')
@@ -89,7 +90,7 @@ class AdvertisementResource extends Resource
 
                         Forms\Components\Toggle::make('is_active')
                             ->label('Status Aktif')
-                            ->helperText('Hanya banner aktif yang akan ditampilkan kepada pengunjung.')
+                            ->helperText('Hanya banner aktif yang akan diikutsertakan dalam rotasi acak.')
                             ->required()
                             ->default(true),
                     ])->columns(2),
@@ -105,33 +106,21 @@ class AdvertisementResource extends Resource
                     ->height(45),
 
                 Tables\Columns\TextColumn::make('title')
-                    ->label('Judul Banner')
+                    ->label('Judul / Sponsor')
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
 
-                Tables\Columns\TextColumn::make('position')
-                    ->label('Posisi')
+                Tables\Columns\TextColumn::make('format')
+                    ->label('Format')
                     ->badge()
                     ->formatStateUsing(fn ($state) => match($state) {
-                        'top_navbar'          => 'Atas Navbar',
-                        'homepage_middle'     => 'Beranda Tengah',
-                        'place_sidebar'       => 'Sidebar Tempat',
-                        'footer_banner'       => 'Atas Footer',
-                        'article_middle'      => 'Tengah Artikel',
-                        'floating_corner'     => 'Pojok Kanan Bawah',
-                        'popup_interstitial'  => 'Pop-Up Modal',
-                        default               => $state ?? 'Beranda Tengah',
+                        'portrait' => 'Portrait (Vertikal)',
+                        default    => 'Landscape (Horizontal)',
                     })
                     ->color(fn ($state) => match($state) {
-                        'top_navbar'          => 'warning',
-                        'homepage_middle'     => 'success',
-                        'place_sidebar'       => 'info',
-                        'footer_banner'       => 'primary',
-                        'article_middle'      => 'secondary',
-                        'floating_corner'     => 'danger',
-                        'popup_interstitial'  => 'warning',
-                        default               => 'gray',
+                        'portrait' => 'warning',
+                        default    => 'success',
                     }),
 
                 Tables\Columns\TextColumn::make('url')
@@ -146,21 +135,16 @@ class AdvertisementResource extends Resource
                 Tables\Columns\TextColumn::make('sort_order')
                     ->label('Urutan')
                     ->sortable(),
-
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Terakhir Diubah')
-                    ->dateTime('d M Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('sort_order', 'asc')
             ->filters([
-                Tables\Filters\SelectFilter::make('position')
-                    ->label('Posisi')
+                Tables\Filters\SelectFilter::make('format')
+                    ->label('Format Orientasi')
                     ->options([
-                        'homepage_middle' => 'Beranda Tengah',
-                        'place_sidebar'   => 'Sidebar Tempat',
+                        'landscape' => 'Landscape (Horizontal)',
+                        'portrait'  => 'Portrait (Vertikal)',
                     ]),
+
                 Tables\Filters\TernaryFilter::make('is_active')
                     ->label('Status Aktif'),
             ])
