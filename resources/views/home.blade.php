@@ -560,6 +560,186 @@
             </div>
         </div>
 
+        {{-- SECTION 4.5: SUKABUMI DALAM LENSA (VIDEO DOKUMENTASI) --}}
+        @if(isset($featuredVideos) && $featuredVideos->count() > 0)
+        <div x-data="{ 
+            homeVideoEmbed: '', 
+            homeVideoTitle: '', 
+            homeVideoOpen: false,
+            playHomeVideo(url, title) {
+                this.homeVideoEmbed = url + (url.includes('?') ? '&autoplay=1' : '?autoplay=1');
+                this.homeVideoTitle = title;
+                this.homeVideoOpen = true;
+                document.body.classList.add('overflow-hidden');
+            },
+            closeHomeVideo() {
+                this.homeVideoOpen = false;
+                this.homeVideoEmbed = '';
+                this.homeVideoTitle = '';
+                document.body.classList.remove('overflow-hidden');
+            }
+        }"
+        @keydown.escape.window="closeHomeVideo()"
+        class="bg-[#0B1E38] py-14 md:py-20 relative overflow-hidden text-white">
+
+            {{-- Background decorative effects --}}
+            <div class="absolute inset-0 pointer-events-none overflow-hidden">
+                <div class="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-blue-600/10 blur-3xl"></div>
+                <div class="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-emerald-600/10 blur-3xl"></div>
+                <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:28px_28px] opacity-5"></div>
+            </div>
+
+            <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                {{-- Section Header --}}
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                    <div class="max-w-2xl">
+                        <p class="text-xs font-bold uppercase tracking-wider text-blue-400 mb-2">
+                            Dokumentasi Pariwisata
+                        </p>
+                        <h2 class="text-2xl md:text-4xl lg:text-5xl font-black text-white tracking-tight">
+                            Sukabumi Dalam Lensa
+                        </h2>
+                        <p class="text-sm md:text-base text-blue-100/80 mt-3 leading-relaxed">
+                            Saksikan kemegahan Geopark Ciletuh UNESCO, deburan ombak eksotis pantai selatan, dan pesona wisata Sukabumi dalam visual sinematik.
+                        </p>
+                    </div>
+
+                    <div>
+                        <a href="{{ route('video.index') }}" 
+                           class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm backdrop-blur-xs transition-all duration-200 group">
+                            <span>Jelajahi Semua Video</span>
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Video Cards Grid (4 items) --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    @foreach($featuredVideos as $video)
+                        <div class="bg-slate-900/80 rounded-2xl overflow-hidden border border-slate-700/60 shadow-xl hover:border-slate-500/80 transition-all duration-300 flex flex-col group backdrop-blur-xs">
+                            
+                            {{-- Thumbnail Container --}}
+                            <div class="relative aspect-video overflow-hidden bg-black cursor-pointer"
+                                 @click="playHomeVideo('{{ $video->embed_url }}', '{{ addslashes($video->title) }}')">
+                                
+                                <img src="{{ $video->thumbnail_url }}" 
+                                     onerror="this.onerror=null; this.src='{{ $video->hq_thumbnail_url }}';" 
+                                     alt="{{ $video->title }}" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" 
+                                     loading="lazy">
+
+                                {{-- Dark Overlay --}}
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/20 group-hover:from-black/60 transition-colors"></div>
+
+                                {{-- Play Button Center --}}
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="w-12 h-12 rounded-full bg-red-600 group-hover:bg-red-500 text-white flex items-center justify-center shadow-lg shadow-red-600/40 group-hover:scale-110 transition-transform duration-300">
+                                        <svg class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M8 5v14l11-7z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Card Body --}}
+                            <div class="p-4 flex-1 flex flex-col justify-between">
+                                <div>
+                                    <p class="text-[11px] font-bold uppercase tracking-wider text-blue-400 mb-1.5">
+                                        {{ $video->category }}
+                                        @if($video->duration)
+                                            <span class="text-slate-600 font-normal mx-1">•</span>
+                                            <span class="text-slate-400 font-normal tracking-normal">{{ $video->duration }}</span>
+                                        @endif
+                                    </p>
+                                    <h3 class="text-sm font-bold text-white group-hover:text-blue-300 transition-colors line-clamp-2 leading-snug cursor-pointer"
+                                        @click="playHomeVideo('{{ $video->embed_url }}', '{{ addslashes($video->title) }}')">
+                                        {{ $video->title }}
+                                    </h3>
+                                </div>
+
+                                <div class="pt-3 mt-3 border-t border-slate-800 flex items-center justify-between text-xs">
+                                    <span class="text-slate-400 text-[11px]">YouTube Visual</span>
+                                    <button type="button" 
+                                            @click="playHomeVideo('{{ $video->embed_url }}', '{{ addslashes($video->title) }}')"
+                                            class="text-[#F8BE2C] hover:underline font-bold flex items-center gap-1 cursor-pointer">
+                                        <span>Putar</span>
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M8 5v14l11-7z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- Alpine.js Lightbox Modal for Homepage --}}
+            <div x-show="homeVideoOpen" 
+                 x-cloak
+                 style="display: none;"
+                 class="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 md:p-10">
+                
+                {{-- Backdrop --}}
+                <div @click="closeHomeVideo()" 
+                     x-show="homeVideoOpen"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     class="fixed inset-0 bg-black/85 backdrop-blur-md"></div>
+
+                {{-- Modal Container --}}
+                <div x-show="homeVideoOpen"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 scale-95"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-95"
+                     class="relative bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl max-w-4xl w-full overflow-hidden border border-white/10 z-10 flex flex-col">
+                    
+                    {{-- Header --}}
+                    <div class="px-4 py-3 sm:px-6 sm:py-4 bg-slate-950 flex items-center justify-between border-b border-white/10">
+                        <div class="flex items-center gap-2.5 min-w-0 pr-4">
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse flex-shrink-0"></span>
+                            <h4 class="text-xs sm:text-sm font-bold text-white truncate" x-text="homeVideoTitle || 'Pemutar Video Wisata'"></h4>
+                        </div>
+                        <button @click="closeHomeVideo()" 
+                                type="button" 
+                                class="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex-shrink-0" 
+                                aria-label="Tutup Video">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    {{-- 16:9 Iframe --}}
+                    <div class="relative aspect-video w-full bg-black">
+                        <template x-if="homeVideoOpen">
+                            <iframe :src="homeVideoEmbed" 
+                                    class="absolute inset-0 w-full h-full border-0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                    allowfullscreen></iframe>
+                        </template>
+                    </div>
+
+                    {{-- Footer Note --}}
+                    <div class="px-4 py-2.5 sm:px-6 bg-slate-950 text-right">
+                        <span class="text-[11px] text-gray-400">Tekan <kbd class="px-1.5 py-0.5 bg-white/10 rounded text-gray-200">ESC</kbd> untuk menutup</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        @endif
+
         {{-- SECTION 5: CERITA TRAVELER --}}
         @if(isset($recentReviews) && $recentReviews->count() > 0)
         @php

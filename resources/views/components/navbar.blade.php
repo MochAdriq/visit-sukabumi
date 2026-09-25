@@ -54,12 +54,13 @@ $navItems = [
         [
             'label'    => 'Seputar Sukabumi',
             'href'     => '#',
-            'activeOn' => ['information*', 'panduan-wisata*'],
+            'activeOn' => ['information*', 'panduan-wisata*', 'video*', 'galeri*'],
             'dropdown' => true,
-            'intro'    => ['title' => 'Seputar Sukabumi', 'text' => 'Panduan lengkap, informasi sejarah, serta ulasan artikel blog.'],
+            'intro'    => ['title' => 'Seputar Sukabumi', 'text' => 'Panduan lengkap, informasi sejarah, galeri video, serta artikel blog.'],
             'links'    => [
                 ['label' => 'Tentang Sukabumi', 'href' => '/information', 'highlight' => false],
                 ['label' => 'Panduan Wisata', 'href' => '/panduan-wisata', 'highlight' => false],
+                ['label' => 'Galeri Video', 'href' => '/video', 'highlight' => false],
                 ['label' => 'Blog / Artikel', 'href' => '/blog', 'highlight' => false],
             ],
         ],

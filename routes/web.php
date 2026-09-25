@@ -59,6 +59,10 @@ Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::post('/blog/{post:slug}/comment', [\App\Http\Controllers\BlogCommentController::class, 'store'])->name('blog.comment.store');
 
+// Video Gallery Routes
+Route::get('/video', [\App\Http\Controllers\VideoController::class, 'index'])->name('video.index');
+Route::get('/galeri', [\App\Http\Controllers\VideoController::class, 'index'])->name('video.gallery');
+
 // Static & Legal Pages
 Route::view('/information', 'information.index')->name('information.index');
 Route::get('/panduan-wisata', function () {

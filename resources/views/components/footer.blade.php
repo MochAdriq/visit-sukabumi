@@ -128,6 +128,7 @@
                     $panduanLinks = [
                         ['title' => 'Panduan lengkap wisata', 'url' => route('guide.index')],
                         ['title' => 'Cara ke Sukabumi (Rute)', 'url' => route('guide.index') . '#rute-transportasi'],
+                        ['title' => 'Galeri Video Wisata', 'url' => route('video.index')],
                         ['title' => 'Rekomendasi Itinerary', 'url' => route('guide.index') . '#itinerary-rekomendasi'],
                         ['title' => 'Tips keselamatan pantai', 'url' => route('guide.index') . '#keselamatan-pantai'],
                         ['title' => 'Hotel & penginapan', 'url' => route('penginapan.index')],
