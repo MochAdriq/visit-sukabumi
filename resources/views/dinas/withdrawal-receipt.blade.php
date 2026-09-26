@@ -36,7 +36,7 @@
         {{-- Kop Surat Resmi Pemda --}}
         <div class="border-b-4 border-double border-gray-800 pb-5 mb-8 text-center relative">
             <div class="flex items-center justify-center gap-4 mb-2">
-                <img src="{{ asset('assets/images/logo-v2.png') }}" alt="Visit Sukabumi" class="h-14 w-auto object-contain">
+                <img src="{{ asset('images/logo-v2.png') }}" alt="Visit Sukabumi" class="h-14 w-auto object-contain">
                 <div>
                     <h2 class="text-base font-bold tracking-widest text-gray-600 uppercase">Pemerintah Kabupaten Sukabumi</h2>
                     <h1 class="text-xl sm:text-2xl font-black text-gray-900 tracking-tight uppercase">Badan Pendapatan Daerah (Bapenda)</h1>
