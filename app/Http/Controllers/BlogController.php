@@ -33,12 +33,12 @@ class BlogController extends Controller
             $showcasePosts = BlogPost::published()
                 ->with('author')
                 ->latest('published_at')
-                ->limit(7)
+                ->limit(8)
                 ->get();
 
             $headlinePost = $showcasePosts->first();
-            $subHeadlinePosts = $showcasePosts->slice(1, 3)->values();
-            $curatedPosts = $showcasePosts->slice(4, 3)->values();
+            $subHeadlinePosts = $showcasePosts->slice(1, 4)->values();
+            $curatedPosts = $showcasePosts->slice(5, 3)->values();
         }
 
         // Aliran artikel terkini dengan paginasi

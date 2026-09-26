@@ -153,16 +153,16 @@
                         </article>
                     </div>
 
-                    {{-- 2B. SECONDARY HEADLINES (Middle 3.5 Cols - Stack of 3) --}}
-                    <div class="lg:col-span-4 flex flex-col justify-between divide-y divide-gray-100 border-t lg:border-t-0 lg:border-l border-gray-100 pt-6 lg:pt-0 lg:pl-6">
+                    {{-- 2B. SECONDARY HEADLINES (Middle 4 Cols - Stack of 4) --}}
+                    <div class="lg:col-span-4 flex flex-col divide-y divide-gray-100 border-t lg:border-t-0 lg:border-l border-gray-100 pt-6 lg:pt-0 lg:pl-6">
                         @foreach($subHeadlinePosts as $subPost)
                             @php
                                 $subImg = $subPost->image_path 
                                     ? (str_starts_with($subPost->image_path, 'http') ? $subPost->image_path : Storage::url($subPost->image_path)) 
                                     : ($subPost->youtube_thumbnail_url ?? null);
                             @endphp
-                            <article class="group py-4 first:pt-0 last:pb-0 flex items-start gap-4">
-                                <a href="{{ route('blog.show', $subPost->slug) }}" class="block relative w-28 h-20 sm:w-32 sm:h-22 shrink-0 overflow-hidden rounded-lg bg-gray-100 shadow-2xs">
+                            <article class="group py-3 first:pt-0 last:pb-0 flex items-start gap-3.5">
+                                <a href="{{ route('blog.show', $subPost->slug) }}" class="block relative w-24 h-18 sm:w-28 sm:h-20 shrink-0 overflow-hidden rounded-lg bg-gray-100 shadow-2xs">
                                     @if($subImg)
                                         <img src="{{ $subImg }}" 
                                              alt="{{ $subPost->title }}" 
@@ -177,25 +177,25 @@
 
                                     @if($subPost->youtube_id || $subPost->category === 'Video')
                                         <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors pointer-events-none">
-                                            <div class="w-8 h-8 rounded-full bg-white/95 text-emerald-800 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                                                <svg class="w-3.5 h-3.5 ml-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                            <div class="w-7 h-7 rounded-full bg-white/95 text-emerald-800 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                                                <svg class="w-3 h-3 ml-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                             </div>
                                         </div>
                                     @endif
                                 </a>
 
                                 <div class="flex-1 min-w-0">
-                                    <div class="mb-1">
+                                    <div class="mb-0.5">
                                         <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
                                             {{ $subPost->category }}
                                         </span>
                                     </div>
                                     <a href="{{ route('blog.show', $subPost->slug) }}" class="block">
-                                        <h3 class="text-sm font-bold text-gray-900 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-2">
+                                        <h3 class="text-xs sm:text-sm font-bold text-gray-900 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-2">
                                             {{ $subPost->title }}
                                         </h3>
                                     </a>
-                                    <div class="text-[11px] text-gray-400 mt-2">
+                                    <div class="text-[11px] text-gray-400 mt-1">
                                         {{ ($subPost->published_at ?? $subPost->created_at)->translatedFormat('d M Y') }}
                                     </div>
                                 </div>
