@@ -377,18 +377,29 @@ class TaxWithdrawalResource extends Resource
                     }),
 
                 Tables\Columns\TextColumn::make('requester.name')
-                    ->label('Pemohon')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Pemohon (Maker)')
+                    ->description(fn(TaxWithdrawal $record) => 'Diajukan: ' . ($record->created_at ? $record->created_at->translatedFormat('d M Y, H:i') : '-'))
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('approver.name')
+                    ->label('Penyetuju (Checker)')
+                    ->placeholder('Menunggu ACC')
+                    ->description(fn(TaxWithdrawal $record) => $record->status === 'pending' && $record->requested_by === auth()->id() 
+                        ? 'Menunggu verifikasi pihak lain' 
+                        : ($record->approved_by ? 'Disetujui: ' . $record->updated_at->translatedFormat('d M Y, H:i') : null))
+                    ->searchable(),
 
                 Tables\Columns\TextColumn::make('transferred_at')
                     ->label('Waktu Transfer')
                     ->dateTime('d M Y, H:i')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Diajukan')
                     ->dateTime('d M Y, H:i')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('created_at', 'desc')
             ->actions([
@@ -400,7 +411,7 @@ class TaxWithdrawalResource extends Resource
                     ->url(fn(TaxWithdrawal $record) => route('dinas.tax_withdrawal.print', $record->withdrawal_code))
                     ->openUrlInNewTab(),
 
-                // Aksi Approve
+                // Aksi Approve (Anti Self-Approval / Dual Control)
                 Tables\Actions\Action::make('approve')
                     ->label('Setujui')
                     ->icon('heroicon-o-check-circle')
@@ -408,18 +419,74 @@ class TaxWithdrawalResource extends Resource
                     ->requiresConfirmation()
                     ->modalHeading('Setujui Penyetoran Kas Daerah')
                     ->modalDescription('Apakah Anda yakin menyetujui pengajuan penyetoran ini? Dana siap ditransfer ke Bank BJB Kasda.')
-                    ->visible(fn(TaxWithdrawal $record) => $record->status === 'pending')
+                    ->visible(fn(TaxWithdrawal $record) => 
+                        $record->status === 'pending' && (auth()->user()?->role === 'admin' || auth()->id() !== $record->requested_by)
+                    )
                     ->action(function (TaxWithdrawal $record) {
+                        if (auth()->id() === $record->requested_by && auth()->user()?->role !== 'admin') {
+                            Notification::make()
+                                ->title('Pemisahan Tugas Wajib (Dual Control)')
+                                ->body('Anda adalah pembuat pengajuan ini. Sesuai prinsip pengendalian internal, persetujuan harus dilakukan oleh pejabat/petugas yang berbeda.')
+                                ->danger()
+                                ->send();
+                            return;
+                        }
+
                         $record->update([
                             'status' => 'approved',
                             'approved_by' => auth()->id(),
-                            'approved_at' => now(),
                         ]);
 
                         Notification::make()
                             ->title('Penyetoran Disetujui')
                             ->body("Pengajuan {$record->withdrawal_code} telah disetujui.")
                             ->success()
+                            ->send();
+                    }),
+
+                // Aksi Tolak (Reject)
+                Tables\Actions\Action::make('reject')
+                    ->label('Tolak')
+                    ->icon('heroicon-o-x-circle')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->modalHeading('Tolak Pengajuan Penyetoran')
+                    ->modalDescription('Apakah Anda yakin ingin menolak pengajuan ini? Mutasi saldo pajak akan dikembalikan ke status escrow.')
+                    ->form([
+                        Forms\Components\Textarea::make('notes')
+                            ->label('Alasan Penolakan')
+                            ->placeholder('Tuliskan alasan penolakan agar dapat dievaluasi oleh pemohon...')
+                            ->required(),
+                    ])
+                    ->visible(fn(TaxWithdrawal $record) => 
+                        $record->status === 'pending' && (auth()->user()?->role === 'admin' || auth()->id() !== $record->requested_by)
+                    )
+                    ->action(function (TaxWithdrawal $record, array $data) {
+                        if (auth()->id() === $record->requested_by && auth()->user()?->role !== 'admin') {
+                            Notification::make()
+                                ->title('Pemisahan Tugas Wajib (Dual Control)')
+                                ->body('Anda tidak dapat menolak/menyetujui pengajuan yang Anda buat sendiri.')
+                                ->danger()
+                                ->send();
+                            return;
+                        }
+
+                        $record->update([
+                            'status' => 'rejected',
+                            'notes' => $data['notes'] ?? 'Ditolak oleh atasan/pemeriksa.',
+                        ]);
+
+                        // Kembalikan mutasi saldo di TaxLedger menjadi held_in_escrow
+                        TaxLedger::where('tax_withdrawal_id', $record->id)
+                            ->update([
+                                'status' => 'held_in_escrow',
+                                'tax_withdrawal_id' => null,
+                            ]);
+
+                        Notification::make()
+                            ->title('Pengajuan Ditolak')
+                            ->body("Pengajuan {$record->withdrawal_code} ditolak. Saldo pajak dikembalikan ke escrow.")
+                            ->warning()
                             ->send();
                     }),
 
