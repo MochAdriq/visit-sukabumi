@@ -18,17 +18,25 @@ class ReviewManagementResource extends Resource
 {
     protected static ?string $model = Review::class;
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
+    protected static ?string $navigationGroup = '4. Ulasan & Reputasi';
     protected static ?string $navigationLabel = 'Ulasan Wisatawan';
     protected static ?string $modelLabel = 'Ulasan';
-    protected static ?string $pluralModelLabel = 'Ulasan';
-    protected static ?int $navigationSort = 3;
+    protected static ?string $pluralModelLabel = 'Ulasan Wisatawan';
+    protected static ?int $navigationSort = 1;
 
     /**
      * Hanya tampilkan ulasan untuk destinasi yang dimiliki pengelola ini.
      */
     public static function getEloquentQuery(): Builder
     {
-        $placeIds = Auth::user()->ownedPlaces()->pluck('id');
+        $user = Auth::user();
+
+        if ($user && $user->role === 'admin') {
+            return parent::getEloquentQuery()->with(['user', 'place']);
+        }
+
+        $placeIds = $user ? $user->ownedPlaces()->pluck('id') : collect();
+
         return parent::getEloquentQuery()
             ->whereIn('place_id', $placeIds)
             ->with(['user', 'place']);
@@ -45,18 +53,22 @@ class ReviewManagementResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Wisatawan')
+                    ->weight('bold')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('place.name')
-                    ->label('Destinasi'),
+                    ->label('Destinasi')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('rating')
                     ->label('Rating')
-                    ->formatStateUsing(fn ($state) => str_repeat('★', (int) $state) . str_repeat('☆', 5 - (int) $state)),
+                    ->formatStateUsing(fn ($state) => str_repeat('★', (int) $state) . str_repeat('☆', 5 - (int) $state))
+                    ->color('warning')
+                    ->weight('bold'),
                 Tables\Columns\TextColumn::make('content')
                     ->label('Isi Ulasan')
                     ->limit(80)
                     ->wrap(),
                 Tables\Columns\BadgeColumn::make('official_response')
-                    ->label('Status Respons')
+                    ->label('Status Balasan')
                     ->getStateUsing(fn ($record) => $record->official_response ? 'Sudah dibalas' : 'Belum dibalas')
                     ->colors([
                         'success' => 'Sudah dibalas',
@@ -72,6 +84,15 @@ class ReviewManagementResource extends Resource
                 Tables\Filters\Filter::make('belum_dibalas')
                     ->label('Belum Dibalas')
                     ->query(fn (Builder $query) => $query->whereNull('official_response')),
+                Tables\Filters\SelectFilter::make('rating')
+                    ->label('Filter Rating')
+                    ->options([
+                        '5' => '5 Bintang (Sempurna)',
+                        '4' => '4 Bintang (Sangat Baik)',
+                        '3' => '3 Bintang (Cukup)',
+                        '2' => '2 Bintang (Kurang)',
+                        '1' => '1 Bintang (Buruk)',
+                    ]),
             ])
             ->actions([
                 Action::make('balas')

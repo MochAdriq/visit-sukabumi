@@ -28,6 +28,13 @@ class KelolaPanelProvider extends PanelProvider
                 'primary' => Color::hex('#1a6bbf'),
             ])
             ->brandName('Portal Mitra — Visit Sukabumi')
+            ->favicon(asset('assets/images/logo-v2.png'))
+            ->navigationGroups([
+                '1. Reservasi & Tamu',
+                '2. Penginapan & Kamar',
+                '3. Profil Tempat Wisata',
+                '4. Ulasan & Reputasi',
+            ])
             ->discoverResources(in: app_path('Filament/Kelola/Resources'), for: 'App\\Filament\\Kelola\\Resources')
             ->discoverPages(in: app_path('Filament/Kelola/Pages'), for: 'App\\Filament\\Kelola\\Pages')
             ->pages([

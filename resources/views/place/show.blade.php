@@ -681,7 +681,7 @@
 
                 {{-- ══ PENGINAPAN / HOTEL ══ --}}
                 @if($place->has_accommodation)
-                    <div class="border-b border-gray-100 pb-8">
+                    <div id="kamar-section" class="border-b border-gray-100 pb-8 scroll-mt-24">
                         <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2">
                             <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                             Info Penginapan
@@ -990,100 +990,248 @@
             <div class="hidden lg:block w-full lg:w-1/3">
                 <div class="sticky top-24 space-y-5">
 
-                    {{-- Pricing / CTA Card --}}
                     @php
-                        $hasPriceOrTicket = $place->has_ticket || $place->has_general_price;
-                        $hasContactCTA = ($place->has_ticket && $place->ticket_booking_url) ||
-                                         ($place->has_accommodation && $place->hotel_booking_url) ||
-                                         ($place->has_restaurant && $place->restaurant_reservation_url);
-                        $shouldShowCard = $hasPriceOrTicket || $hasContactCTA;
+                        $activeRooms = $place->rooms ? $place->rooms->where('is_active', true) : collect();
+                        $isHotel = $place->has_accommodation || ($place->category && in_array($place->category->slug, ['hotel-resort', 'penginapan', 'hotel-dan-resort'])) || $activeRooms->isNotEmpty();
+                        $isResto = !$isHotel && ($place->has_restaurant || ($place->category && in_array($place->category->slug, ['kuliner', 'restoran', 'cafe'])));
+
+                        // Pricing & Contextual Labels
+                        if ($isHotel) {
+                            $priceKicker = 'Tarif Menginap';
+                            if ($activeRooms->isNotEmpty()) {
+                                $minRoomPrice = $activeRooms->min('price_per_night');
+                                $displayPrice = 'Rp ' . number_format($minRoomPrice, 0, ',', '.');
+                                $priceUnit = '/ malam';
+                                $priceNote = 'Tarif terendah kamar tersedia';
+                            } elseif ($place->has_general_price && $place->formatted_price) {
+                                $displayPrice = $place->formatted_price;
+                                $priceUnit = '/ malam';
+                                $priceNote = 'Estimasi tarif menginap';
+                            } else {
+                                $displayPrice = 'Hubungi Pengelola';
+                                $priceUnit = '';
+                                $priceNote = 'Sesuai ketersediaan unit';
+                            }
+                        } elseif ($isResto) {
+                            $priceKicker = 'Estimasi Kuliner';
+                            $displayPrice = $place->formatted_price ?: 'Bervariasi';
+                            $priceUnit = '/ porsi';
+                            $priceNote = 'Kisaran harga menu pilihan';
+                        } else {
+                            $priceKicker = 'Harga Tiket Masuk';
+                            if ($place->has_ticket && $place->ticket_price !== null) {
+                                $displayPrice = $place->ticket_price > 0 ? 'Rp ' . number_format($place->ticket_price, 0, ',', '.') : 'Gratis';
+                            } elseif ($place->has_general_price && $place->formatted_price) {
+                                $displayPrice = $place->formatted_price;
+                            } else {
+                                $displayPrice = 'Gratis';
+                            }
+                            $priceUnit = $displayPrice === 'Gratis' ? '' : '/ orang';
+                            $priceNote = 'Akses kunjungan destinasi';
+                        }
+
+                        $hasAnyPricingOrBooking = $place->has_ticket || $place->has_general_price || $isHotel || $isResto;
                     @endphp
 
-                    @if($shouldShowCard)
-                    <div class="bg-white border border-gray-200 rounded-2xl shadow-lg p-6">
-                        @if($hasPriceOrTicket)
-                        <div class="flex justify-between items-center mb-5">
-                            <div>
-                                <div class="text-xl md:text-2xl font-extrabold text-gray-900 leading-tight">
-                                    @if($place->has_ticket && $place->ticket_price !== null)
-                                        Rp {{ number_format($place->ticket_price, 0, ',', '.') }}
-                                    @elseif($place->has_general_price && $place->formatted_price)
-                                        {{ $place->formatted_price }}
-                                    @else
-                                        Gratis
-                                    @endif
-                                </div>
-                                <div class="text-xs text-gray-400 mt-0.5">per orang</div>
-                            </div>
-                            <span class="text-xs bg-green-50 text-green-700 font-bold px-3 py-1 rounded-full">Tersedia</span>
+                    {{-- ── 1. KARTU TARIF & PEMESANAN (ANTI-SLOP) ── --}}
+                    @if($hasAnyPricingOrBooking)
+                    <div class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm">
+                        {{-- Header / Eyebrow: Pure tracking typography, NO gimmicky pills --}}
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                {{ $priceKicker }}
+                            </span>
+                            <span class="text-xs font-semibold text-emerald-600 flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Tersedia
+                            </span>
                         </div>
-                        @endif
 
-                        {{-- Dynamic CTA buttons based on active toggles --}}
-                        @if($place->has_ticket && $place->ticket_booking_url)
-                            <a href="{{ $place->ticket_booking_url }}" target="_blank"
-                                class="block w-full text-center bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold py-3 rounded-full transition shadow-sm mb-2">
-                                Pesan Tiket Sekarang
-                            </a>
-                        @elseif($place->has_accommodation && $place->hotel_booking_url)
-                            <a href="{{ $place->hotel_booking_url }}" target="_blank"
-                                class="block w-full text-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-full transition shadow-sm mb-2">
-                                Booking Kamar
-                            </a>
-                        @elseif($place->has_restaurant && $place->restaurant_reservation_url)
-                            <a href="{{ Str::startsWith($place->restaurant_reservation_url, 'http') ? $place->restaurant_reservation_url : 'https://wa.me/' . preg_replace('/\D/', '', $place->restaurant_reservation_url) . '?text=' . $restoWaText }}" target="_blank"
-                                class="block w-full text-center bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-full transition shadow-sm mb-2">
-                                Reservasi Meja
-                            </a>
-                        @endif
+                        {{-- Price Display --}}
+                        <div class="flex items-baseline gap-1.5 flex-wrap">
+                            <span class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+                                {{ $displayPrice }}
+                            </span>
+                            @if($priceUnit)
+                                <span class="text-sm font-semibold text-slate-500">
+                                    {{ $priceUnit }}
+                                </span>
+                            @endif
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">
+                            {{ $priceNote }}
+                        </p>
 
-                        
-                        @if($hasPriceOrTicket && !$hasContactCTA)
-                            <button class="w-full bg-[#f9a826] hover:bg-[#e8971e] text-gray-900 font-bold py-3 rounded-full transition shadow-sm mb-2 cursor-not-allowed opacity-80" disabled>
-                                Tiket Tersedia di Lokasi
-                            </button>
-                        @endif
-                        
-                        @if($hasPriceOrTicket)
-                        <p class="text-center text-xs text-gray-400">Silakan cek info lebih lanjut saat berkunjung</p>
-                        @endif
+                        {{-- CTA Primary Actions based on Entity Type --}}
+                        <div class="mt-5 space-y-2.5">
+                            @if($isHotel && $activeRooms->isNotEmpty())
+                                {{-- Hotel with direct rooms: Scroll to room selection --}}
+                                <a href="#kamar-section"
+                                   class="w-full flex items-center justify-center gap-2 bg-[#163766] hover:bg-[#0f274a] text-white font-bold py-3.5 px-4 rounded-xl transition duration-150 shadow-sm text-sm">
+                                    <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                    </svg>
+                                    Lihat & Pesan Kamar
+                                    <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </a>
+                            @elseif($isHotel && $place->hotel_booking_url)
+                                <a href="{{ $place->hotel_booking_url }}" target="_blank"
+                                   class="w-full flex items-center justify-center gap-2 bg-[#163766] hover:bg-[#0f274a] text-white font-bold py-3.5 px-4 rounded-xl transition shadow-sm text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    Booking Kamar Resmi
+                                </a>
+                            @elseif($place->has_ticket && $place->ticket_booking_url)
+                                <a href="{{ $place->ticket_booking_url }}" target="_blank"
+                                   class="w-full flex items-center justify-center gap-2 bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold py-3.5 px-4 rounded-xl transition shadow-sm text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/>
+                                    </svg>
+                                    Pesan Tiket Sekarang
+                                </a>
+                            @elseif($isResto && $place->restaurant_reservation_url)
+                                <a href="{{ Str::startsWith($place->restaurant_reservation_url, 'http') ? $place->restaurant_reservation_url : 'https://wa.me/' . preg_replace('/\D/', '', $place->restaurant_reservation_url) . '?text=' . $restoWaText }}" target="_blank"
+                                   class="w-full flex items-center justify-center gap-2 bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold py-3.5 px-4 rounded-xl transition shadow-sm text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                    </svg>
+                                    Reservasi Meja
+                                </a>
+                            @elseif($isHotel)
+                                {{-- Hotel without online booking links: Informational note --}}
+                                <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl text-xs text-slate-600">
+                                    <div class="font-bold text-slate-800 flex items-center gap-1.5 mb-1">
+                                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        Reservasi di Meja Resepsionis
+                                    </div>
+                                    <p class="text-slate-500 leading-relaxed">
+                                        Pemesanan kamar dilayani langsung di lokasi atau dapat menghubungi kontak resmi hotel di bawah.
+                                    </p>
+                                </div>
+                            @else
+                                {{-- Attraction on-site ticket: Informative OTS note --}}
+                                <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl text-xs text-slate-600">
+                                    <div class="font-bold text-slate-800 flex items-center gap-1.5 mb-1">
+                                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/>
+                                        </svg>
+                                        Tiket Tersedia di Loket (OTS)
+                                    </div>
+                                    <p class="text-slate-500 leading-relaxed">
+                                        Pembelian tiket fisik langsung dilayani di pintu masuk saat berkunjung.
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- Subtle Highlights & Guarantees --}}
+                        <div class="mt-4 pt-4 border-t border-slate-100 space-y-2 text-xs text-slate-500">
+                            @if($isHotel)
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span>Pajak Daerah PBJT (10%) transparan</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span>Layanan konfirmasi reservasi resmi</span>
+                                </div>
+                            @else
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span>Akses destinasi dan fasilitas umum</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span>Informasi terverifikasi pengelola</span>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                     @endif
 
-                    {{-- Map --}}
+                    {{-- ── 2. KARTU PETA & LOKASI (CLEAN & EDITORIAL) ── --}}
                     @if($place->latitude && $place->longitude)
-                        <div class="border border-gray-200 rounded-2xl overflow-hidden">
-                            <div class="h-48">
+                        <div class="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-sm">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                                    <svg class="w-4 h-4 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                    Lokasi & Navigasi
+                                </h4>
+                            </div>
+
+                            <div class="h-44 rounded-xl overflow-hidden border border-slate-200/80">
                                 <iframe
                                     width="100%" height="100%"
                                     src="https://maps.google.com/maps?q={{ $place->latitude }},{{ $place->longitude }}&hl=id&z=15&output=embed"
                                     frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
-                                    class="w-full h-full">
+                                    class="w-full h-full filter saturate-[0.95]">
                                 </iframe>
                             </div>
+
                             @if($place->address)
-                                <div class="p-4">
-                                    <p class="text-sm text-gray-600">{{ $place->address }}</p>
+                                <div class="mt-3.5 space-y-2">
+                                    <p class="text-xs text-slate-600 leading-relaxed flex items-start gap-2">
+                                        <svg class="w-4 h-4 text-slate-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                        </svg>
+                                        <span>{{ $place->address }}</span>
+                                    </p>
+                                    
+                                    <a href="https://www.google.com/maps/dir/?api=1&destination={{ $place->latitude }},{{ $place->longitude }}" target="_blank"
+                                       class="inline-flex items-center gap-1.5 text-xs font-bold text-[#1a6bbf] hover:text-[#0f4c81] transition">
+                                        <span>Buka Petunjuk Arah di Maps</span>
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                        </svg>
+                                    </a>
                                 </div>
                             @endif
                         </div>
                     @endif
 
-                    {{-- Contact Buttons --}}
-                    <div class="space-y-3">
+                    {{-- ── 3. SALURAN KONTAK & WEBSITE RESMI ── --}}
+                    <div class="space-y-2.5">
                         @if($place->phone)
                             <a href="https://wa.me/{{ preg_replace('/\D/', '', $place->phone) }}?text={{ $waText }}" target="_blank"
-                                class="flex items-center justify-center w-full py-3 px-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl transition shadow-sm gap-2">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                                Chat WhatsApp
+                               class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-[#128c7e] hover:bg-[#075e54] text-white font-bold rounded-xl transition shadow-xs text-sm">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                                </svg>
+                                <span>Hubungi via WhatsApp</span>
                             </a>
                         @endif
+
                         @if($place->website)
-                            <div class="text-center">
-                                <a href="{{ $place->website }}" target="_blank" class="text-sm text-[#1a6bbf] hover:underline font-medium">
-                                    Kunjungi Website Resmi →
-                                </a>
-                            </div>
+                            <a href="{{ $place->website }}" target="_blank"
+                               class="w-full flex items-center justify-between py-2.5 px-4 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold rounded-xl transition text-xs shadow-2xs">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                                    </svg>
+                                    <span>Kunjungi Website Resmi</span>
+                                </div>
+                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
+                            </a>
                         @endif
                     </div>
 
@@ -1124,29 +1272,32 @@
         {{-- Mobile sticky CTA --}}
         <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 z-50 lg:hidden flex justify-between items-center shadow-[0_-4px_12px_rgba(0,0,0,0.06)]">
             <div>
-                <p class="text-xs text-gray-400">Harga per orang</p>
+                <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">{{ $priceKicker ?? 'Harga' }}</p>
                 <p class="text-base sm:text-lg font-extrabold text-gray-900 leading-tight">
-                    @if($place->has_ticket && $place->ticket_price)
-                        Rp {{ number_format($place->ticket_price, 0, ',', '.') }}
-                    @elseif($place->has_general_price && $place->formatted_price)
-                        {{ $place->formatted_price }}
-                    @else
-                        Gratis
+                    {{ $displayPrice ?? 'Gratis' }}
+                    @if(!empty($priceUnit))
+                        <span class="text-xs font-semibold text-gray-500">{{ $priceUnit }}</span>
                     @endif
                 </p>
             </div>
-            @if($place->has_ticket && $place->ticket_booking_url)
+            @if(isset($isHotel) && $isHotel && $activeRooms->isNotEmpty())
+                <a href="#kamar-section"
+                    class="bg-[#163766] hover:bg-[#0f274a] text-white font-bold px-6 py-3 rounded-xl transition shadow-md text-sm">
+                    Pilih Kamar
+                </a>
+            @elseif($place->has_ticket && $place->ticket_booking_url)
                 <a href="{{ $place->ticket_booking_url }}" target="_blank"
-                    class="bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold px-6 py-3 rounded-full transition shadow-md">
+                    class="bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold px-6 py-3 rounded-xl transition shadow-md text-sm">
                     Pesan Tiket
                 </a>
             @elseif($place->phone)
                 <a href="https://wa.me/{{ preg_replace('/\D/', '', $place->phone) }}?text={{ $waText }}" target="_blank"
-                    class="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 rounded-full transition shadow-md">
+                    class="bg-[#128c7e] hover:bg-[#075e54] text-white font-bold px-6 py-3 rounded-xl transition shadow-md text-sm flex items-center gap-1.5">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
                     Chat WA
                 </a>
             @else
-                <button class="bg-[#1a6bbf] hover:bg-[#145299] text-white font-bold px-6 py-3 rounded-full transition shadow-md">
+                <button class="bg-[#163766] hover:bg-[#0f274a] text-white font-bold px-6 py-3 rounded-xl transition shadow-md text-sm">
                     Cek Ketersediaan
                 </button>
             @endif

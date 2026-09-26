@@ -33,7 +33,7 @@ class User extends Authenticatable implements FilamentUser
         }
 
         if ($panel->getId() === 'kelola') {
-            return $this->claims()->where('status', 'approved')->exists();
+            return $this->role === 'admin' || $this->ownedPlaces()->exists() || $this->claims()->where('status', 'approved')->exists();
         }
 
         return false;
@@ -139,7 +139,7 @@ class User extends Authenticatable implements FilamentUser
      */
     public function isMitra(): bool
     {
-        return $this->claims()->where('status', 'approved')->exists();
+        return $this->ownedPlaces()->exists() || $this->claims()->where('status', 'approved')->exists();
     }
 
     /**

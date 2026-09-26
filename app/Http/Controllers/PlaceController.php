@@ -62,6 +62,7 @@ class PlaceController extends Controller
             'category',
             'placeImages',
             'reviews.user',
+            'rooms',
         ]);
 
         $related = Place::with(['category', 'primaryImage'])
