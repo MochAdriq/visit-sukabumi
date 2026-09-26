@@ -577,9 +577,9 @@
             </div>
 
             {{-- ════════════════════════════════════════════
-                 KOLOM KANAN: STICKY SIDEBAR (~32%)
+                 KOLOM KANAN: SIDEBAR (~32%)
                  ════════════════════════════════════════════ --}}
-            <aside class="lg:col-span-4 space-y-8 sticky top-24">
+            <aside class="lg:col-span-4 space-y-8">
 
                 {{-- ══ WIDGET 1: TERPOPULER (TOP 5 KOMPAS.COM STYLE) ══ --}}
                 <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-xs">
