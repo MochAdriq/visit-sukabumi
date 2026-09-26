@@ -32,9 +32,11 @@ Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show'
 
 // Pemesanan & Rincian Pajak (Booking & Tax Breakdown)
 Route::post('/booking/calculate', [BookingController::class, 'calculate'])->name('booking.calculate');
-Route::post('/booking/checkout', [BookingController::class, 'store'])->name('booking.store');
+Route::middleware('auth')->group(function () {
+    Route::post('/booking/checkout', [BookingController::class, 'store'])->name('booking.store');
+    Route::post('/booking/{booking_code}/upload-proof', [BookingController::class, 'uploadProof'])->name('booking.upload_proof');
+});
 Route::get('/booking/{booking_code}', [BookingController::class, 'show'])->name('booking.show');
-Route::post('/booking/{booking_code}/upload-proof', [BookingController::class, 'uploadProof'])->name('booking.upload_proof');
 Route::post('/booking/{booking_code}/pay-simulation', [BookingController::class, 'simulatePayment'])->name('booking.pay_simulation');
 Route::get('/dinas/tax-withdrawals/{withdrawal_code}/print', function (string $withdrawal_code) {
     $withdrawal = \App\Models\TaxWithdrawal::with(['rkudAccount', 'requester', 'approver'])

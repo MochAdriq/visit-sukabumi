@@ -735,12 +735,22 @@
                                                 </div>
                                             </div>
 
-                                            <button type="button" 
-                                                    onclick="openHotelModal({{ $room->id }}, '{{ addslashes($room->name) }}', {{ (float) $room->price_per_night }})"
-                                                    class="w-full md:w-auto px-6 py-2.5 rounded-full bg-[#163766] hover:bg-[#102747] text-white font-bold text-xs transition flex items-center justify-center gap-2 shadow-sm whitespace-nowrap">
-                                                <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                                Pilih Kamar
-                                            </button>
+                                            @auth
+                                                <button type="button" 
+                                                        onclick="openHotelModal({{ $room->id }}, '{{ addslashes($room->name) }}', {{ (float) $room->price_per_night }})"
+                                                        class="w-full md:w-auto px-6 py-2.5 rounded-full bg-[#163766] hover:bg-[#102747] text-white font-bold text-xs transition flex items-center justify-center gap-2 shadow-sm whitespace-nowrap">
+                                                    <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                                    Pilih Kamar
+                                                </button>
+                                            @else
+                                                <a href="{{ route('login', ['redirect' => url()->current()]) }}"
+                                                   class="w-full md:w-auto px-6 py-2.5 rounded-full bg-[#163766] hover:bg-[#102747] text-white font-bold text-xs transition flex items-center justify-center gap-2 shadow-sm whitespace-nowrap">
+                                                    <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                                                    </svg>
+                                                    Masuk untuk Pesan
+                                                </a>
+                                            @endauth
                                         </div>
                                     @endforeach
                                 </div>
@@ -765,7 +775,7 @@
                         </button>
 
                         <div class="mb-4">
-                            <span class="text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded-full border border-purple-200">Reservasi Kamar</span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-purple-700">Reservasi Kamar</span>
                             <h3 id="modalRoomName" class="text-xl font-black text-gray-900 mt-2">Pesan Kamar</h3>
                             <p class="text-xs text-gray-500">{{ $place->name }}</p>
                         </div>
@@ -845,6 +855,11 @@
                 let currentRoomPrice = 0;
 
                 function openHotelModal(id, name, price) {
+                    @guest
+                        window.location.href = "{{ route('login', ['redirect' => url()->current()]) }}";
+                        return;
+                    @endguest
+
                     currentRoomPrice = price;
                     document.getElementById('modalRoomId').value = id;
                     document.getElementById('modalRoomName').textContent = name;

@@ -593,26 +593,41 @@
                                     </div>
                                 </div>
 
-                                {{-- Data Pemesan Form Toggle --}}
-                                <div id="customerFields" class="space-y-3 pt-2 border-t border-gray-100">
-                                    <div>
-                                        <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">Nama Lengkap</label>
-                                        <input type="text" name="customer_name" required placeholder="Nama Anda" value="{{ auth()->user()?->name ?? '' }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200 focus:border-black">
+                                @auth
+                                    {{-- Data Pemesan Form Toggle --}}
+                                    <div id="customerFields" class="space-y-3 pt-2 border-t border-gray-100">
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">Nama Pemesan</label>
+                                            <input type="text" name="customer_name" required placeholder="Nama Anda" value="{{ auth()->user()->name }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200 focus:border-black">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">Email</label>
+                                            <input type="email" name="customer_email" required placeholder="email@domain.com" value="{{ auth()->user()->email }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200 focus:border-black">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">No. WhatsApp</label>
+                                            <input type="tel" name="customer_phone" required placeholder="08xxxxxxxxxx" value="{{ auth()->user()->phone ?? '' }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200 focus:border-black">
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">Email</label>
-                                        <input type="email" name="customer_email" required placeholder="email@domain.com" value="{{ auth()->user()?->email ?? '' }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200 focus:border-black">
-                                    </div>
-                                    <div>
-                                        <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">No. WhatsApp</label>
-                                        <input type="tel" name="customer_phone" required placeholder="08xxxxxxxxxx" value="{{ auth()->user()?->phone ?? '' }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200 focus:border-black">
-                                    </div>
-                                </div>
 
-                                <button type="submit" class="w-full bg-[#163766] hover:bg-[#102747] text-white font-bold py-3.5 px-6 rounded-2xl transition text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20">
-                                    <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-                                    Lanjut ke Pembayaran
-                                </button>
+                                    <button type="submit" class="w-full bg-[#163766] hover:bg-[#102747] text-white font-bold py-3.5 px-6 rounded-2xl transition text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20">
+                                        <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                                        Lanjut ke Pembayaran
+                                    </button>
+                                @else
+                                    <div class="pt-3 border-t border-gray-100 space-y-3">
+                                        <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 leading-relaxed">
+                                            <p class="font-bold text-amber-950 mb-0.5">Wajib Masuk Akun</p>
+                                            Silakan masuk ke akun Anda terlebih dahulu agar tiket dan invoice resmi tersimpan aman di akun Anda.
+                                        </div>
+                                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="w-full bg-[#163766] hover:bg-[#102747] text-white font-bold py-3.5 px-6 rounded-2xl transition text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20">
+                                            <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                                            </svg>
+                                            Masuk untuk Pesan Tiket
+                                        </a>
+                                    </div>
+                                @endauth
                             </form>
 
                             <script>

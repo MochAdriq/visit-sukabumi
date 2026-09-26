@@ -73,6 +73,11 @@ class BookingController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        if (!auth()->check()) {
+            return redirect()->route('login', ['redirect' => url()->previous()])
+                ->with('info', 'Silakan masuk ke akun Anda terlebih dahulu untuk menyelesaikan pemesanan.');
+        }
+
         $validated = $request->validate([
             'booking_type' => 'required|in:event,hotel',
             'item_id' => 'required|integer',
