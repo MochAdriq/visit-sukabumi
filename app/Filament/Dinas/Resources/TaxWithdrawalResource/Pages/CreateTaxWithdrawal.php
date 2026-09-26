@@ -12,6 +12,13 @@ class CreateTaxWithdrawal extends CreateRecord
 {
     protected static string $resource = TaxWithdrawalResource::class;
 
+    protected static ?string $title = 'Formulir Penyetoran Pajak ke Kas Daerah (RKUD)';
+
+    public function getSubheading(): ?string
+    {
+        return 'Proses pemindahbukuan saldo Pajak Barang dan Jasa Tertentu (PBJT 10%) dari rekening penampung escrow ke Rekening Kas Umum Daerah (RKUD) Kabupaten Sukabumi pada Bank BJB.';
+    }
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $availableBalance = (float) TaxLedger::where('status', 'held_in_escrow')->sum('tax_amount');
