@@ -714,7 +714,7 @@
                                 <div class="flex items-center justify-between mb-4">
                                     <div>
                                         <h3 class="text-base font-bold text-gray-900">Reservasi Kamar Langsung</h3>
-                                        <p class="text-xs text-gray-500">Transparansi harga sewa dan Pajak Daerah PBJT (10%)</p>
+                                        <p class="text-xs text-gray-500">Konfirmasi instan dengan tarif resmi pengelola</p>
                                     </div>
                                     <span class="text-xs font-bold text-purple-700 bg-purple-100 px-3 py-1 rounded-full">Resmi Mitra</span>
                                 </div>
@@ -739,7 +739,7 @@
                                                     onclick="openHotelModal({{ $room->id }}, '{{ addslashes($room->name) }}', {{ (float) $room->price_per_night }})"
                                                     class="w-full md:w-auto px-6 py-2.5 rounded-full bg-[#163766] hover:bg-[#102747] text-white font-bold text-xs transition flex items-center justify-center gap-2 shadow-sm whitespace-nowrap">
                                                 <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                                Pilih & Hitung Pajak
+                                                Pilih Kamar
                                             </button>
                                         </div>
                                     @endforeach
@@ -802,12 +802,12 @@
                                     <span>Subtotal (<span id="modalNightsText">1</span> malam, <span id="modalRoomsText">1</span> kamar)</span>
                                     <span id="modalSubtotal" class="font-mono text-gray-900 font-bold">Rp 0</span>
                                 </div>
-                                <div class="flex justify-between items-center text-amber-800 bg-amber-50/80 p-2 rounded-lg border border-amber-200/60">
-                                    <span class="flex items-center gap-1.5 font-bold">
-                                        <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                        Pajak Daerah (PBJT Hotel 10%)
+                                <div class="flex justify-between items-center text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                                    <span class="flex items-center gap-1.5 font-semibold text-xs">
+                                        <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        Pajak & Biaya Layanan (10%)
                                     </span>
-                                    <span id="modalTax" class="font-mono font-bold text-amber-700">Rp 0</span>
+                                    <span id="modalTax" class="font-mono font-bold text-slate-800">Rp 0</span>
                                 </div>
                                 <div class="pt-2 border-t border-gray-200 flex justify-between items-center text-sm font-black text-gray-900">
                                     <span>Total Tagihan</span>
@@ -1138,7 +1138,7 @@
                                     <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                     </svg>
-                                    <span>Pajak Daerah PBJT (10%) transparan</span>
+                                    <span>Harga transparan tanpa biaya tersembunyi</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
