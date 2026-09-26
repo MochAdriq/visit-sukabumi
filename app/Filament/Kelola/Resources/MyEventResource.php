@@ -25,6 +25,11 @@ class MyEventResource extends Resource
     protected static ?string $pluralModelLabel = 'Event & Acara Saya';
     protected static ?int $navigationSort = 1;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()?->hasEventAccess() ?? false;
+    }
+
     public static function canCreate(): bool
     {
         return true;

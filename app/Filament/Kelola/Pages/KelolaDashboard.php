@@ -21,6 +21,10 @@ class KelolaDashboard extends Page
 
     public $places;
     public $primaryPlace;
+    public $events;
+    public $primaryEvent;
+    public $hasPlaces = false;
+    public $hasEvents = false;
     public $totalReviews = 0;
     public $avgRating = 0.0;
     public $wishlistCount = 0;
@@ -28,6 +32,7 @@ class KelolaDashboard extends Page
     public $paidRevenue = 0;
     public $todayCheckIns = 0;
     public $activeRoomsCount = 0;
+    public $activeTicketsCount = 0;
     public $pendingBookingsCount = 0;
     public $recentReviews;
     public $recentBookings;
@@ -36,6 +41,9 @@ class KelolaDashboard extends Page
     {
         $user = Auth::user();
         if (!$user) return;
+
+        $this->hasPlaces = $user->hasPlaceAccess() && ($user->role === 'admin' || $user->ownedPlaces()->exists());
+        $this->hasEvents = $user->hasEventAccess() && ($user->role === 'admin' || $user->events()->exists());
 
         if ($user->role === 'admin' && !$user->ownedPlaces()->exists()) {
             $this->places = Place::query()
@@ -59,6 +67,18 @@ class KelolaDashboard extends Page
         $this->primaryPlace = $this->places->first();
         $this->activeRoomsCount = HotelRoom::whereIn('place_id', $placeIds)->where('is_active', true)->count();
 
+        // Events
+        if ($user->role === 'admin' && !$user->events()->exists()) {
+            $this->events = \App\Models\Event::withCount('tickets')->latest()->take(5)->get();
+            $myEventIds = \App\Models\Event::pluck('id');
+        } else {
+            $this->events = $user->events()->withCount('tickets')->latest()->get();
+            $myEventIds = $this->events->pluck('id');
+        }
+        $this->primaryEvent = $this->events->first();
+        $ticketIds = \App\Models\EventTicket::whereIn('event_id', $myEventIds)->pluck('id');
+        $this->activeTicketsCount = \App\Models\EventTicket::whereIn('event_id', $myEventIds)->where('is_active', true)->count();
+
         // Reviews & Wishlist
         $reviews = Review::whereIn('place_id', $placeIds);
         $this->totalReviews  = $reviews->count();
@@ -70,11 +90,6 @@ class KelolaDashboard extends Page
             ->latest()
             ->take(5)
             ->get();
-
-        $myEventIds = ($user->role === 'admin' && !$user->events()->exists())
-            ? \App\Models\Event::pluck('id')
-            : $user->events()->pluck('id');
-        $ticketIds = \App\Models\EventTicket::whereIn('event_id', $myEventIds)->pluck('id');
 
         // Bookings Query
         $bookingQuery = Booking::where(function ($query) use ($placeIds, $roomIds, $ticketIds) {

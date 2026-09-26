@@ -85,6 +85,24 @@ class BookingResource extends Resource
                             ->prefix('Rp')
                             ->disabled(),
                     ])->columns(3),
+
+                Forms\Components\Section::make('Bukti Pembayaran Manual')
+                    ->schema([
+                        Forms\Components\FileUpload::make('payment_proof')
+                            ->label('Foto / Berkas Bukti Transfer')
+                            ->image()
+                            ->disk('public')
+                            ->directory('payment-proofs')
+                            ->disabled(),
+                        Forms\Components\DateTimePicker::make('payment_proof_uploaded_at')
+                            ->label('Waktu Unggah Bukti')
+                            ->disabled(),
+                        Forms\Components\Textarea::make('payment_note')
+                            ->label('Catatan dari Pengirim')
+                            ->disabled(),
+                        Forms\Components\TextInput::make('payment_reference')
+                            ->label('Referensi Pembayaran'),
+                    ])->columns(2),
             ]);
     }
 
@@ -134,6 +152,11 @@ class BookingResource extends Resource
                     ->weight('bold')
                     ->sortable(),
 
+                Tables\Columns\ImageColumn::make('payment_proof')
+                    ->label('Bukti')
+                    ->disk('public')
+                    ->toggleable(),
+
                 Tables\Columns\BadgeColumn::make('payment_status')
                     ->label('Status')
                     ->colors([
@@ -165,6 +188,28 @@ class BookingResource extends Resource
                     ]),
             ])
             ->actions([
+                Tables\Actions\Action::make('verifyPayment')
+                    ->label('Verifikasi Lunas')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalHeading('Verifikasi Pembayaran Manual')
+                    ->modalDescription(fn(Booking $record) => "Apakah Anda yakin ingin memverifikasi pembayaran untuk kode booking {$record->booking_code} senilai Rp " . number_format($record->total_amount, 0, ',', '.') . " sebagai LUNAS?")
+                    ->visible(fn(Booking $record) => $record->payment_status === 'pending')
+                    ->action(function(Booking $record) {
+                        $record->update([
+                            'payment_status' => 'paid',
+                            'paid_at' => now(),
+                            'payment_method' => 'manual_transfer',
+                            'payment_reference' => $record->payment_reference ?? ('MANUAL-' . strtoupper(\Illuminate\Support\Str::random(8))),
+                        ]);
+                        app(\App\Services\BookingPricingService::class)->recordTaxEscrow($record);
+                        \Filament\Notifications\Notification::make()
+                            ->title('Pembayaran Berhasil Diverifikasi')
+                            ->body("Booking {$record->booking_code} telah berstatus Lunas dan pajak PBJT telah dialokasikan.")
+                            ->success()
+                            ->send();
+                    }),
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ]);

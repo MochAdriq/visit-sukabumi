@@ -165,4 +165,22 @@ class User extends Authenticatable implements FilamentUser
     {
         return in_array($this->role, ['dinas', 'admin']);
     }
+
+    /**
+     * Apakah user berhak mengelola tempat wisata / destinasi.
+     */
+    public function hasPlaceAccess(): bool
+    {
+        return $this->isAdmin()
+            || $this->ownedPlaces()->exists()
+            || $this->claims()->where('status', 'approved')->exists();
+    }
+
+    /**
+     * Apakah user berhak mengelola event / acara.
+     */
+    public function hasEventAccess(): bool
+    {
+        return $this->isAdmin() || $this->events()->exists();
+    }
 }

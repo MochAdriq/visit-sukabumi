@@ -18,11 +18,16 @@ class ReviewManagementResource extends Resource
 {
     protected static ?string $model = Review::class;
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
-    protected static ?string $navigationGroup = '4. Ulasan & Reputasi';
+    protected static ?string $navigationGroup = '5. Ulasan & Reputasi';
     protected static ?string $navigationLabel = 'Ulasan Wisatawan';
     protected static ?string $modelLabel = 'Ulasan';
     protected static ?string $pluralModelLabel = 'Ulasan Wisatawan';
     protected static ?int $navigationSort = 1;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()?->hasPlaceAccess() ?? false;
+    }
 
     /**
      * Hanya tampilkan ulasan untuk destinasi yang dimiliki pengelola ini.

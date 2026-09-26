@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -155,6 +156,44 @@ class BookingController extends Controller
             ->firstOrFail();
 
         return view('booking.invoice', compact('booking'));
+    }
+
+    /**
+     * Unggah Bukti Transfer Pembayaran Manual oleh Wisatawan.
+     */
+    public function uploadProof(Request $request, string $booking_code): RedirectResponse
+    {
+        $booking = Booking::where('booking_code', $booking_code)->firstOrFail();
+
+        if ($booking->payment_status === 'paid') {
+            return back()->with('info', 'Pemesanan ini sudah berstatus LUNAS.');
+        }
+
+        $request->validate([
+            'payment_proof' => 'required|image|mimes:jpeg,jpg,png,webp|max:5120',
+            'payment_note' => 'nullable|string|max:500',
+        ], [
+            'payment_proof.required' => 'Silakan pilih berkas foto atau struk bukti transfer.',
+            'payment_proof.image' => 'Berkas bukti transfer harus berupa gambar (JPG, PNG, atau WebP).',
+            'payment_proof.max' => 'Ukuran berkas bukti transfer maksimal 5MB.',
+        ]);
+
+        if ($request->hasFile('payment_proof')) {
+            if ($booking->payment_proof && Storage::disk('public')->exists($booking->payment_proof)) {
+                Storage::disk('public')->delete($booking->payment_proof);
+            }
+
+            $path = $request->file('payment_proof')->store('payment-proofs', 'public');
+
+            $booking->update([
+                'payment_proof' => $path,
+                'payment_proof_uploaded_at' => now(),
+                'payment_method' => 'manual_transfer',
+                'payment_note' => $request->input('payment_note'),
+            ]);
+        }
+
+        return back()->with('success', 'Bukti transfer berhasil diunggah! Tim kami akan segera memverifikasi pembayaran Anda.');
     }
 
     /**

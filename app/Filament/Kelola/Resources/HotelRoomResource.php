@@ -18,11 +18,16 @@ class HotelRoomResource extends Resource
     protected static ?string $model = HotelRoom::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
-    protected static ?string $navigationGroup = '2. Penginapan & Kamar';
+    protected static ?string $navigationGroup = '3. Penginapan & Kamar';
     protected static ?string $navigationLabel = 'Kamar & Akomodasi';
     protected static ?string $modelLabel = 'Tipe Kamar';
     protected static ?string $pluralModelLabel = 'Kamar & Akomodasi';
     protected static ?int $navigationSort = 2;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()?->hasPlaceAccess() ?? false;
+    }
 
     public static function getEloquentQuery(): Builder
     {

@@ -18,11 +18,16 @@ class PlaceGalleryResource extends Resource
     protected static ?string $model = PlaceImage::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-photo';
-    protected static ?string $navigationGroup = '3. Profil Tempat Wisata';
+    protected static ?string $navigationGroup = '4. Profil Tempat Wisata';
     protected static ?string $navigationLabel = 'Galeri Foto Wisata';
     protected static ?string $modelLabel = 'Foto Galeri';
     protected static ?string $pluralModelLabel = 'Galeri Foto';
     protected static ?int $navigationSort = 2;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()?->hasPlaceAccess() ?? false;
+    }
 
     public static function getEloquentQuery(): Builder
     {

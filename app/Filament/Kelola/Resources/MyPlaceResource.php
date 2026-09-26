@@ -16,11 +16,16 @@ class MyPlaceResource extends Resource
 {
     protected static ?string $model = Place::class;
     protected static ?string $navigationIcon = 'heroicon-o-map-pin';
-    protected static ?string $navigationGroup = '3. Profil Tempat Wisata';
+    protected static ?string $navigationGroup = '4. Profil Tempat Wisata';
     protected static ?string $navigationLabel = 'Destinasi Saya';
     protected static ?string $modelLabel = 'Destinasi';
     protected static ?string $pluralModelLabel = 'Destinasi';
     protected static ?int $navigationSort = 1;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()?->hasPlaceAccess() ?? false;
+    }
 
     public static function canCreate(): bool
     {

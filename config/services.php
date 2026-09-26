@@ -41,4 +41,11 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI', 'https://visitsukabumi.com/auth/google/callback'),
     ],
 
+    'payment' => [
+        'bank_name' => env('PAYMENT_BANK_NAME', 'Bank BJB'),
+        'bank_account_no' => env('PAYMENT_BANK_ACCOUNT_NO', '0012345678001'),
+        'bank_account_name' => env('PAYMENT_BANK_ACCOUNT_NAME', 'KAS RESMI VISIT SUKABUMI'),
+        'whatsapp_number' => env('PAYMENT_WHATSAPP_NUMBER', '6281234567890'),
+    ],
+
 ];

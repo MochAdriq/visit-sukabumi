@@ -133,36 +133,52 @@
         <div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 20px; position: relative; z-index: 1;">
             <div>
                 <p style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #93c5fd; margin: 0 0 6px 0;">
-                    Portal Pengelola Pariwisata • {{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMMM Y') }}
+                    @if($this->hasPlaces)
+                        Portal Pengelola Pariwisata • {{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMMM Y') }}
+                    @else
+                        Portal Penyelenggara Event • {{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMMM Y') }}
+                    @endif
                 </p>
                 <h1 style="font-size: 22px; font-weight: 800; color: #ffffff; margin: 0 0 6px 0; letter-spacing: -0.01em;">
-                    {{ $this->primaryPlace?->name ?? 'Destinasi Pariwisata' }}
+                    @if($this->hasPlaces && $this->primaryPlace)
+                        {{ $this->primaryPlace->name }}
+                    @elseif($this->hasEvents && $this->primaryEvent)
+                        {{ $this->primaryEvent->title }}
+                    @else
+                        Portal Mitra Resmi
+                    @endif
                 </h1>
                 <p style="font-size: 13px; color: #cbd5e1; margin: 0; max-width: 620px; line-height: 1.5;">
                     Pengelola: <strong style="color: #ffffff;">{{ auth()->user()->name }}</strong> 
-                    @if($this->primaryPlace?->district)
+                    @if($this->hasPlaces && $this->primaryPlace?->district)
                         • Wilayah {{ $this->primaryPlace->district }}
+                    @elseif($this->hasEvents && $this->primaryEvent?->location_name)
+                        • {{ $this->primaryEvent->location_name }}
                     @endif
                     • Status: <span style="color: #86efac; font-weight: 700;">Terverifikasi Aktif</span>
                 </p>
             </div>
 
             <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;">
-                <a href="{{ route('filament.kelola.resources.my-events.index') }}"
-                   style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 255, 255, 0.12); color: #ffffff; font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.25); text-decoration: none; transition: background-color 0.15s;">
-                    <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                    Event & Tiket
-                </a>
+                @if($this->hasEvents)
+                    <a href="{{ route('filament.kelola.resources.my-events.index') }}"
+                       style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 255, 255, 0.12); color: #ffffff; font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.25); text-decoration: none; transition: background-color 0.15s;">
+                        <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        Event & Tiket
+                    </a>
+                @endif
 
-                <a href="{{ route('filament.kelola.resources.hotel-rooms.create') }}"
-                   style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 255, 255, 0.12); color: #ffffff; font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.25); text-decoration: none; transition: background-color 0.15s;">
-                    <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    Tambah Kamar
-                </a>
+                @if($this->hasPlaces)
+                    <a href="{{ route('filament.kelola.resources.hotel-rooms.create') }}"
+                       style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 255, 255, 0.12); color: #ffffff; font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.25); text-decoration: none; transition: background-color 0.15s;">
+                        <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Tambah Kamar
+                    </a>
+                @endif
 
                 <a href="{{ route('filament.kelola.resources.mitra-bookings.index') }}"
                    style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; color: #0f294a; font-size: 12px; font-weight: 800; padding: 8px 16px; border-radius: 8px; text-decoration: none; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: transform 0.15s;">
@@ -221,11 +237,11 @@
             </p>
         </div>
 
-        {{-- Card 3: Check-In Hari Ini --}}
+        {{-- Card 3: Check-In Hari Ini ATAU Tipe Tiket Aktif --}}
         <div class="km-card" style="padding: 18px 20px;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
                 <span class="km-text-muted" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">
-                    Kedatangan Hari Ini
+                    {{ $this->hasPlaces ? 'Kedatangan Hari Ini' : 'Tipe Tiket Aktif' }}
                 </span>
                 <div class="km-icon-box" style="width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                     <svg style="width: 17px; height: 17px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -234,30 +250,52 @@
                 </div>
             </div>
             <div class="km-text-main" style="font-size: 26px; font-weight: 900; line-height: 1.1; margin-bottom: 4px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">
-                {{ $this->todayCheckIns }} <span class="km-text-muted" style="font-size: 14px; font-weight: 600;">Tamu</span>
+                @if($this->hasPlaces)
+                    {{ $this->todayCheckIns }} <span class="km-text-muted" style="font-size: 14px; font-weight: 600;">Tamu</span>
+                @else
+                    {{ $this->activeTicketsCount }} <span class="km-text-muted" style="font-size: 14px; font-weight: 600;">Tipe</span>
+                @endif
             </div>
             <p class="km-text-muted" style="font-size: 12px; margin: 0;">
-                Tanggal {{ \Carbon\Carbon::today()->format('d M Y') }}
+                @if($this->hasPlaces)
+                    Tanggal {{ \Carbon\Carbon::today()->format('d M Y') }}
+                @else
+                    Tiket acara siap dipesan wisatawan
+                @endif
             </p>
         </div>
 
-        {{-- Card 4: Kepuasan Tamu --}}
+        {{-- Card 4: Kepuasan Tamu ATAU Total Event --}}
         <div class="km-card" style="padding: 18px 20px;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
                 <span class="km-text-muted" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">
-                    Kepuasan Wisatawan
+                    {{ $this->hasPlaces ? 'Kepuasan Wisatawan' : 'Event & Acara Saya' }}
                 </span>
-                <div class="km-icon-amber" style="width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <svg style="width: 17px; height: 17px;" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
+                <div class="{{ $this->hasPlaces ? 'km-icon-amber' : 'km-icon-box' }}" style="width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    @if($this->hasPlaces)
+                        <svg style="width: 17px; height: 17px;" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                    @else
+                        <svg style="width: 17px; height: 17px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                        </svg>
+                    @endif
                 </div>
             </div>
             <div class="km-text-main" style="font-size: 26px; font-weight: 900; line-height: 1.1; margin-bottom: 4px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">
-                {{ $this->avgRating }} <span class="km-text-muted" style="font-size: 14px; font-weight: 600;">/ 5.0</span>
+                @if($this->hasPlaces)
+                    {{ $this->avgRating }} <span class="km-text-muted" style="font-size: 14px; font-weight: 600;">/ 5.0</span>
+                @else
+                    {{ $this->events ? $this->events->count() : 0 }} <span class="km-text-muted" style="font-size: 14px; font-weight: 600;">Event</span>
+                @endif
             </div>
             <p class="km-text-muted" style="font-size: 12px; margin: 0;">
-                Berdasarkan {{ $this->totalReviews }} ulasan terverifikasi
+                @if($this->hasPlaces)
+                    Berdasarkan {{ $this->totalReviews }} ulasan terverifikasi
+                @else
+                    Acara resmi aktif dalam sistem
+                @endif
             </p>
         </div>
     </div>
@@ -347,9 +385,9 @@
 
         {{-- KOLOM KANAN: RINGKASAN PROPERTI & PENGATURAN CEPAT --}}
         <div>
-            {{-- Properti Aktif --}}
+            {{-- Properti Aktif ATAU Event Aktif --}}
             <div class="km-card" style="overflow: hidden; margin-bottom: 16px;">
-                @if($this->primaryPlace)
+                @if($this->hasPlaces && $this->primaryPlace)
                     <div style="height: 140px; background: #e2e8f0; position: relative;">
                         <img src="{{ $this->primaryPlace->cover_image_url }}" alt="{{ $this->primaryPlace->name }}" style="width: 100%; height: 100%; object-fit: cover;">
                         <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);"></div>
@@ -371,7 +409,6 @@
 
                         {{-- Navigasi Cepat Properti --}}
                         <div style="display: flex; flex-direction: column; gap: 8px;">
-                            {{-- Tombol Edit Profil yang telah diperbaiki --}}
                             <a href="{{ route('filament.kelola.resources.my-places.edit', ['record' => $this->primaryPlace]) }}"
                                class="km-btn-secondary"
                                style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 700;">
@@ -409,9 +446,59 @@
                             </a>
                         </div>
                     </div>
+                @elseif($this->hasEvents && $this->primaryEvent)
+                    <div style="height: 140px; background: #e2e8f0; position: relative;">
+                        <img src="{{ $this->primaryEvent->banner_url ?? asset('assets/images/placeholder.jpg') }}" alt="{{ $this->primaryEvent->title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);"></div>
+                        <div style="position: absolute; bottom: 12px; left: 14px; right: 14px; color: #ffffff;">
+                            <p style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #93c5fd; margin: 0 0 2px 0;">
+                                {{ $this->primaryEvent->location_name ?? 'Kabupaten Sukabumi' }}
+                            </p>
+                            <h3 style="font-size: 14px; font-weight: 800; margin: 0; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                {{ $this->primaryEvent->title }}
+                            </h3>
+                        </div>
+                    </div>
+
+                    <div style="padding: 16px;">
+                        <div class="km-text-muted" style="font-size: 12px; line-height: 1.5; margin-bottom: 14px;">
+                            Pelaksanaan: <strong class="km-text-main">{{ $this->primaryEvent->start_date?->translatedFormat('d F Y') ?? 'Belum diatur' }}</strong><br>
+                            Kategori: <strong class="km-text-main">{{ $this->primaryEvent->category ?? 'Event Budaya' }}</strong>
+                        </div>
+
+                        {{-- Navigasi Cepat Event --}}
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <a href="{{ route('filament.kelola.resources.my-events.edit', ['record' => $this->primaryEvent]) }}"
+                               class="km-btn-secondary"
+                               style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 700;">
+                                <span>Kelola Event & Tiket</span>
+                                <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+
+                            <a href="{{ route('filament.kelola.resources.my-events.index') }}"
+                               class="km-btn-secondary"
+                               style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 700;">
+                                <span>Daftar Semua Event ({{ $this->events ? $this->events->count() : 0 }})</span>
+                                <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+
+                            <a href="{{ route('event.show', $this->primaryEvent->slug) }}" target="_blank"
+                               class="km-btn-outline"
+                               style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 700;">
+                                <span>Pratinjau Halaman Event</span>
+                                <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
                 @else
                     <div class="km-text-muted" style="padding: 24px; text-align: center; font-size: 13px;">
-                        Belum ada tempat wisata yang terhubung.
+                        Belum ada tempat wisata atau event yang terhubung.
                     </div>
                 @endif
             </div>
@@ -419,7 +506,7 @@
     </div>
 
     {{-- ── 4. ULASAN WISATAWAN TERKINI ── --}}
-    @if($this->recentReviews->count() > 0)
+    @if($this->hasPlaces && $this->recentReviews->count() > 0)
         <div class="km-card" style="overflow: hidden;">
             <div class="km-border-b" style="padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
                 <div>

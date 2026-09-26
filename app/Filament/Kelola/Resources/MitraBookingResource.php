@@ -27,6 +27,13 @@ class MitraBookingResource extends Resource
     protected static ?string $pluralModelLabel = 'Daftar Pesanan & Tamu';
     protected static ?int $navigationSort = 1;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        $user = Auth::user();
+        if (!$user) return false;
+        return $user->isAdmin() || $user->hasPlaceAccess() || $user->hasEventAccess();
+    }
+
     public static function canCreate(): bool
     {
         return false;
@@ -130,6 +137,11 @@ class MitraBookingResource extends Resource
                         default => ucfirst($state),
                     }),
 
+                Tables\Columns\ImageColumn::make('payment_proof')
+                    ->label('Bukti Transfer')
+                    ->disk('public')
+                    ->toggleable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Waktu Pesan')
                     ->dateTime('d M Y, H:i')
@@ -154,6 +166,28 @@ class MitraBookingResource extends Resource
                     ]),
             ])
             ->actions([
+                Tables\Actions\Action::make('verifyPayment')
+                    ->label('Verifikasi Lunas')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalHeading('Verifikasi Pembayaran Tamu')
+                    ->modalDescription(fn(Booking $record) => "Apakah Anda yakin ingin memverifikasi pembayaran pesanan ini ({$record->booking_code}) senilai Rp " . number_format($record->total_amount, 0, ',', '.') . " sebagai LUNAS?")
+                    ->visible(fn(Booking $record) => $record->payment_status === 'pending')
+                    ->action(function(Booking $record) {
+                        $record->update([
+                            'payment_status' => 'paid',
+                            'paid_at' => now(),
+                            'payment_method' => 'manual_transfer',
+                            'payment_reference' => $record->payment_reference ?? ('MANUAL-' . strtoupper(\Illuminate\Support\Str::random(8))),
+                        ]);
+                        app(\App\Services\BookingPricingService::class)->recordTaxEscrow($record);
+                        \Filament\Notifications\Notification::make()
+                            ->title('Pembayaran Berhasil Diverifikasi')
+                            ->body("Pesanan {$record->booking_code} kini berstatus Lunas.")
+                            ->success()
+                            ->send();
+                    }),
                 Tables\Actions\ViewAction::make()
                     ->label('Detail')
                     ->modalHeading('Rincian Pesanan Tamu'),
@@ -242,6 +276,22 @@ class MitraBookingResource extends Resource
                             ->money('IDR', locale: 'id_ID')
                             ->weight('bold')
                             ->color('success'),
+                    ]),
+
+                Infolists\Components\Section::make('Bukti Pembayaran Manual')
+                    ->columns(2)
+                    ->schema([
+                        Infolists\Components\ImageEntry::make('payment_proof')
+                            ->label('Foto / Struk Bukti Transfer')
+                            ->disk('public'),
+                        Infolists\Components\TextEntry::make('payment_proof_uploaded_at')
+                            ->label('Waktu Upload Bukti')
+                            ->dateTime('d M Y, H:i WIB')
+                            ->placeholder('Belum ada bukti diunggah'),
+                        Infolists\Components\TextEntry::make('payment_note')
+                            ->label('Catatan Pengirim')
+                            ->columnSpanFull()
+                            ->placeholder('-'),
                     ]),
             ]);
     }

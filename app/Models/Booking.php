@@ -31,6 +31,9 @@ class Booking extends Model
         'payment_status',
         'payment_method',
         'payment_reference',
+        'payment_proof',
+        'payment_proof_uploaded_at',
+        'payment_note',
         'paid_at',
         'notes',
     ];
@@ -45,8 +48,17 @@ class Booking extends Model
         'tax_amount' => 'decimal:2',
         'platform_fee' => 'decimal:2',
         'total_amount' => 'decimal:2',
+        'payment_proof_uploaded_at' => 'datetime',
         'paid_at' => 'datetime',
     ];
+
+    public function getPaymentProofUrlAttribute(): ?string
+    {
+        if (!$this->payment_proof) {
+            return null;
+        }
+        return \Illuminate\Support\Facades\Storage::url($this->payment_proof);
+    }
 
     public function user(): BelongsTo
     {
