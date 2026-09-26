@@ -312,7 +312,7 @@ $navItems = [
     {{-- ════════════════════════════════════════════
          MOBILE NAVBAR — ☰ Logo Search style
          ════════════════════════════════════════════ --}}
-<div class="md:hidden sticky top-0 z-50 shadow-sm">
+<div id="mobile-navbar" class="md:hidden sticky top-0 z-50 shadow-sm transition-transform duration-300 ease-in-out">
     <div class="flex items-center justify-between px-4 h-[120px] border-b border-gray-200 bg-white relative overflow-hidden">
 
         {{-- Left: Hamburger --}}
@@ -731,6 +731,47 @@ function toggleMobileSearch() {
         }
     }
 }
+
+// ── MOBILE NAVBAR AUTO-HIDE ON SCROLL ────────────────
+(function() {
+    let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+    const mobileNavbar = document.getElementById('mobile-navbar');
+    const scrollDelta = 8;
+
+    window.addEventListener('scroll', function() {
+        if (window.innerWidth >= 768 || !mobileNavbar) return;
+
+        const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+        // Jangan sembunyikan jika drawer menu atau search bar sedang terbuka
+        const drawer = document.getElementById('mobile-drawer');
+        const isDrawerOpen = drawer && !drawer.classList.contains('-translate-x-full');
+        const searchBar = document.getElementById('mobile-search-bar');
+        const isSearchOpen = searchBar && !searchBar.classList.contains('hidden');
+        if (isDrawerOpen || isSearchOpen) {
+            lastScrollY = currentScrollY;
+            return;
+        }
+
+        // Dekat puncak halaman: selalu tampilkan navbar
+        if (currentScrollY <= 80) {
+            mobileNavbar.classList.remove('-translate-y-full');
+            lastScrollY = currentScrollY;
+            return;
+        }
+
+        if (Math.abs(currentScrollY - lastScrollY) < scrollDelta) return;
+
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            // Scroll ke bawah -> sembunyikan navbar
+            mobileNavbar.classList.add('-translate-y-full');
+        } else if (currentScrollY < lastScrollY) {
+            // Scroll ke atas -> tampilkan navbar kembali
+            mobileNavbar.classList.remove('-translate-y-full');
+        }
+        lastScrollY = currentScrollY;
+    }, { passive: true });
+})();
 
 // ── GLOBAL SEARCH MODAL ──────────────────────────────
 function openSearchModal() {

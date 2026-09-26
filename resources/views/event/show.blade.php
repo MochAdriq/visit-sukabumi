@@ -523,16 +523,17 @@
 
             </div>
 
-            {{-- ── RIGHT: Sticky Booking Card ── --}}
-            <div class="lg:col-span-1">
+            {{-- ── RIGHT: Sticky Booking Card (Desktop) ── --}}
+            @php
+                $activeTickets = $event->tickets->where('is_active', true);
+                $minPrice = $activeTickets->count() > 0 ? (float) $activeTickets->min('price') : 0;
+                $waPhone = "6282298285558";
+                $waText = "Halo, saya ingin bertanya seputar pemesanan tiket event (*{$event->title}*) dari website Visit Sukabumi.";
+            @endphp
+            <div class="hidden lg:block lg:col-span-1">
                 <div class="sticky top-28 space-y-6">
                     {{-- Primary Booking Card --}}
                     <div class="bg-white border border-gray-200 rounded-3xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-6">
-                        @php
-                            $activeTickets = $event->tickets->where('is_active', true);
-                            $waPhone = "6282298285558";
-                            $waText = "Halo, saya ingin bertanya seputar pemesanan tiket event (*{$event->title}*) dari website Visit Sukabumi.";
-                        @endphp
 
                         @if($activeTickets->count() > 0)
                             <div class="mb-4">
@@ -900,4 +901,230 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endif
+
+    {{-- ════════════════════════════════════════════
+         MOBILE STICKY BOTTOM BAR & EXPANDABLE SHEET
+         ════════════════════════════════════════════ --}}
+    @if($activeTickets->count() > 0)
+        {{-- 1. Mini Bar Sticky di Bawah HP --}}
+        <div class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 py-3 shadow-[0_-4px_24px_rgba(0,0,0,0.08)] flex items-center justify-between lg:hidden">
+            <div class="flex flex-col">
+                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Mulai Dari</span>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-lg font-black text-gray-900 font-mono">Rp {{ number_format($minPrice, 0, ',', '.') }}</span>
+                    <span class="text-[11px] text-gray-500 font-medium">/ orang</span>
+                </div>
+            </div>
+            <button type="button" onclick="openMobileBookingSheet()" class="inline-flex items-center gap-1.5 bg-[#163766] hover:bg-[#102747] text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-md active:scale-95 transition">
+                <span>Pilih Tiket</span>
+                <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/></svg>
+            </button>
+        </div>
+
+        {{-- 2. Backdrop Sheet --}}
+        <div id="mobileBookingBackdrop" onclick="closeMobileBookingSheet()" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden opacity-0 transition-opacity duration-300 lg:hidden"></div>
+
+        {{-- 3. Expandable Bottom Sheet --}}
+        <div id="mobileBookingSheet" class="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl shadow-2xl max-h-[85vh] overflow-y-auto transform translate-y-full transition-transform duration-300 ease-out hidden lg:hidden border-t border-gray-200 p-5">
+            {{-- Drag Handle --}}
+            <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4 cursor-pointer" onclick="closeMobileBookingSheet()"></div>
+
+            {{-- Header Sheet --}}
+            <div class="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
+                <div>
+                    <span class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider block mb-0.5">Tiket Resmi Tersedia</span>
+                    <h3 class="text-base font-black text-gray-900">Pesan Tiket & Tempat</h3>
+                </div>
+                <button type="button" onclick="closeMobileBookingSheet()" class="p-1.5 text-gray-400 hover:text-black rounded-full hover:bg-gray-100 transition" aria-label="Tutup">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            {{-- Form Pemesanan Mobile --}}
+            <form action="{{ route('booking.store') }}" method="POST" id="mobileEventBookingForm" class="space-y-4">
+                @csrf
+                <input type="hidden" name="booking_type" value="event">
+
+                {{-- Pilihan Kategori Tiket --}}
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Pilih Kategori Tiket</label>
+                    <select name="item_id" id="m_ticketSelect" required class="w-full text-sm font-semibold border-2 border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 focus:bg-white focus:border-black transition">
+                        @foreach($activeTickets as $t)
+                            <option value="{{ $t->id }}" data-price="{{ (float) $t->price }}" data-quota="{{ $t->available_quota ?? 999 }}">
+                                {{ $t->name }} — Rp {{ number_format($t->price, 0, ',', '.') }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Jumlah Tiket --}}
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Jumlah Tiket</label>
+                    <div class="flex items-center border-2 border-gray-200 rounded-xl bg-gray-50 overflow-hidden">
+                        <button type="button" id="m_btnMinusQty" class="w-12 py-2.5 text-lg font-bold text-gray-600 hover:bg-gray-200 transition">-</button>
+                        <input type="number" name="quantity" id="m_ticketQty" value="1" min="1" max="10" readonly class="w-full text-center font-bold text-gray-900 bg-transparent border-0 focus:ring-0">
+                        <button type="button" id="m_btnPlusQty" class="w-12 py-2.5 text-lg font-bold text-gray-600 hover:bg-gray-200 transition">+</button>
+                    </div>
+                </div>
+
+                {{-- Breakdown Box --}}
+                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 space-y-2 text-xs">
+                    <div class="flex justify-between text-gray-600 font-medium">
+                        <span>Subtotal (<span id="m_summaryQtyText">1</span> Tiket)</span>
+                        <span id="m_summarySubtotal" class="font-mono text-gray-900 font-bold">Rp 0</span>
+                    </div>
+                    <div class="flex justify-between items-center text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                        <span class="flex items-center gap-1.5 font-semibold text-xs">
+                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Pajak & Biaya Layanan (10%)
+                        </span>
+                        <span id="m_summaryTax" class="font-mono font-bold text-slate-800">Rp 0</span>
+                    </div>
+                    <div class="pt-2 border-t border-gray-200 flex justify-between items-center text-sm font-black text-gray-900">
+                        <span>Total Bayar</span>
+                        <span id="m_summaryTotal" class="font-mono text-[#00aa6c] text-base font-black">Rp 0</span>
+                    </div>
+                </div>
+
+                @auth
+                    {{-- Data Pemesan --}}
+                    <div class="space-y-3 pt-2 border-t border-gray-100">
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">Nama Pemesan</label>
+                            <input type="text" name="customer_name" required placeholder="Nama Anda" value="{{ auth()->user()->name }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200 focus:border-black">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">Email</label>
+                            <input type="email" name="customer_email" required placeholder="email@domain.com" value="{{ auth()->user()->email }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200 focus:border-black">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-1">No. WhatsApp</label>
+                            <input type="tel" name="customer_phone" required placeholder="08xxxxxxxxxx" value="{{ auth()->user()->phone ?? '' }}" class="w-full text-xs px-3 py-2 border rounded-xl bg-gray-50 focus:bg-white border-gray-200 focus:border-black">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-[#163766] hover:bg-[#102747] text-white font-bold py-3.5 px-6 rounded-2xl transition text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20">
+                        <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                        Lanjut ke Pembayaran
+                    </button>
+                @else
+                    <div class="pt-3 border-t border-gray-100 space-y-3">
+                        <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 leading-relaxed">
+                            <p class="font-bold text-amber-950 mb-0.5">Wajib Masuk Akun</p>
+                            Silakan masuk ke akun Anda terlebih dahulu agar tiket dan invoice resmi tersimpan aman di akun Anda.
+                        </div>
+                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="w-full bg-[#163766] hover:bg-[#102747] text-white font-bold py-3.5 px-6 rounded-2xl transition text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20">
+                            <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                            </svg>
+                            Masuk untuk Pesan Tiket
+                        </a>
+                    </div>
+                @endauth
+            </form>
+        </div>
+
+        <script>
+        function openMobileBookingSheet() {
+            const backdrop = document.getElementById('mobileBookingBackdrop');
+            const sheet = document.getElementById('mobileBookingSheet');
+            if(!backdrop || !sheet) return;
+
+            backdrop.classList.remove('hidden');
+            sheet.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            requestAnimationFrame(() => {
+                backdrop.classList.remove('opacity-0');
+                backdrop.classList.add('opacity-100');
+                sheet.classList.remove('translate-y-full');
+                sheet.classList.add('translate-y-0');
+            });
+        }
+
+        function closeMobileBookingSheet() {
+            const backdrop = document.getElementById('mobileBookingBackdrop');
+            const sheet = document.getElementById('mobileBookingSheet');
+            if(!backdrop || !sheet) return;
+
+            backdrop.classList.remove('opacity-100');
+            backdrop.classList.add('opacity-0');
+            sheet.classList.remove('translate-y-0');
+            sheet.classList.add('translate-y-full');
+            document.body.style.overflow = '';
+
+            setTimeout(() => {
+                backdrop.classList.add('hidden');
+                sheet.classList.add('hidden');
+            }, 300);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const mTicketSelect = document.getElementById('m_ticketSelect');
+            const mQtyInput = document.getElementById('m_ticketQty');
+            const mBtnMinus = document.getElementById('m_btnMinusQty');
+            const mBtnPlus = document.getElementById('m_btnPlusQty');
+            const mSummaryQtyText = document.getElementById('m_summaryQtyText');
+            const mSummarySubtotal = document.getElementById('m_summarySubtotal');
+            const mSummaryTax = document.getElementById('m_summaryTax');
+            const mSummaryTotal = document.getElementById('m_summaryTotal');
+
+            function updateMobilePricing() {
+                if(!mTicketSelect) return;
+                const opt = mTicketSelect.options[mTicketSelect.selectedIndex];
+                const basePrice = parseFloat(opt ? opt.getAttribute('data-price') : 0);
+                const qty = parseInt(mQtyInput.value || 1);
+
+                const subtotal = basePrice * qty;
+                const tax = Math.round(subtotal * 0.10);
+                const total = subtotal + tax;
+
+                if(mSummaryQtyText) mSummaryQtyText.textContent = qty;
+                if(mSummarySubtotal) mSummarySubtotal.textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
+                if(mSummaryTax) mSummaryTax.textContent = 'Rp ' + tax.toLocaleString('id-ID');
+                if(mSummaryTotal) mSummaryTotal.textContent = 'Rp ' + total.toLocaleString('id-ID');
+            }
+
+            if(mBtnMinus && mQtyInput) {
+                mBtnMinus.addEventListener('click', function() {
+                    let cur = parseInt(mQtyInput.value);
+                    if(cur > 1) {
+                        mQtyInput.value = cur - 1;
+                        updateMobilePricing();
+                    }
+                });
+            }
+
+            if(mBtnPlus && mQtyInput) {
+                mBtnPlus.addEventListener('click', function() {
+                    let cur = parseInt(mQtyInput.value);
+                    if(cur < 10) {
+                        mQtyInput.value = cur + 1;
+                        updateMobilePricing();
+                    }
+                });
+            }
+
+            if(mTicketSelect) {
+                mTicketSelect.addEventListener('change', updateMobilePricing);
+                updateMobilePricing();
+            }
+        });
+        </script>
+    @else
+        {{-- Fallback WhatsApp Bar for Mobile if no tickets --}}
+        @php
+            $waOrderText = "Halo, saya ingin memesan tiket event (*{$event->title}*) dari website Visit Sukabumi.\n\nBoleh minta informasi lebih lanjut terkait pemesanan?";
+        @endphp
+        <div class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 py-3 shadow-[0_-4px_24px_rgba(0,0,0,0.08)] flex items-center justify-between lg:hidden">
+            <div>
+                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">Tiket Event</span>
+                <span class="text-sm font-bold text-gray-900">Reservasi via WhatsApp</span>
+            </div>
+            <a href="https://wa.me/{{ $waPhone }}?text={{ urlencode($waOrderText) }}" target="_blank"
+               class="inline-flex items-center gap-1.5 bg-[#00aa6c] hover:bg-[#008a57] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition">
+                Cek Ketersediaan
+            </a>
+        </div>
+    @endif
 @endsection
