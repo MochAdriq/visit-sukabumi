@@ -128,6 +128,18 @@ class HomeController extends Controller
             }
         }
 
-        return view('home', compact('mustSees', 'recentReviews', 'bestChoices', 'popularPlaces', 'popularCulinaries', 'upcomingEvents', 'bannerImage', 'categories', 'homeAd', 'featuredVideos'));
+        // 10. Latest Non-Video Blog Posts (Inspirasi Perjalanan Sukabumi)
+        $latestBlogPosts = \App\Models\BlogPost::published()
+            ->with('author')
+            ->where(function ($q) {
+                $q->whereNull('youtube_url')
+                  ->orWhere('youtube_url', '');
+            })
+            ->where('category', '!=', 'Video')
+            ->latest('published_at')
+            ->limit(4)
+            ->get();
+
+        return view('home', compact('mustSees', 'recentReviews', 'bestChoices', 'popularPlaces', 'popularCulinaries', 'upcomingEvents', 'bannerImage', 'categories', 'homeAd', 'featuredVideos', 'latestBlogPosts'));
     }
 }

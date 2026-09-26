@@ -771,16 +771,19 @@
                 animation: scroll-y linear infinite;
             }
         </style>
-        <div class="bg-white py-10 md:py-16 border-b border-gray-100 relative overflow-hidden">
+        <div class="bg-white py-8 md:py-12 border-b border-gray-100 relative overflow-hidden">
             <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="text-center max-w-2xl mx-auto mb-10">
-                    <h2 class="text-2xl md:text-4xl lg:text-5xl font-extrabold text-gray-950 tracking-tight">Apa Kata Mereka</h2>
-                    <p class="text-[16px] md:text-[18px] text-gray-700 mt-4 leading-relaxed">
+                <div class="text-center max-w-2xl mx-auto mb-6">
+                    <p class="text-xs font-bold uppercase tracking-wider text-blue-600 mb-1.5">
+                        Testimoni Wisatawan
+                    </p>
+                    <h2 class="text-2xl md:text-3xl lg:text-4xl font-black text-gray-950 tracking-tight">Apa Kata Mereka</h2>
+                    <p class="text-sm md:text-base text-gray-600 mt-2 leading-relaxed">
                         Ulasan nyata dari ribuan wisatawan yang sudah menikmati indahnya pesona Sukabumi bersama kami.
                     </p>
                 </div>
 
-                <div class="flex justify-center gap-4 md:gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)] h-[600px] md:h-[740px] overflow-hidden">
+                <div class="flex justify-center gap-4 md:gap-6 mt-6 [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)] h-[320px] md:h-[390px] overflow-hidden">
                     
                     {{-- Column 1 --}}
                     <div class="w-full md:w-1/3 max-w-[320px]">
@@ -817,6 +820,87 @@
                     </div>
 
                 </div>
+            </div>
+        </div>
+        @endif
+
+        {{-- SECTION 6: JURNAL & INSPIRASI WISATA (BLOG NON-VIDEO) --}}
+        @if(isset($latestBlogPosts) && $latestBlogPosts->count() > 0)
+        <div class="bg-gray-50/70 py-12 md:py-16 border-b border-gray-200/80">
+            <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8">
+                
+                {{-- Section Header --}}
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1.5">
+                            Jurnal & Inspirasi Wisata
+                        </p>
+                        <h2 class="text-2xl md:text-3xl lg:text-4xl font-black text-gray-950 tracking-tight">
+                            Cerita & Panduan Eksplorasi
+                        </h2>
+                        <p class="text-sm md:text-base text-gray-600 mt-2 max-w-2xl leading-relaxed">
+                            Panduan terpercaya, tips perjalanan autentik, dan kisah keindahan alam Sukabumi langsung dari para penjelajah.
+                        </p>
+                    </div>
+                    <div class="shrink-0">
+                        <a href="{{ route('blog.index') }}" 
+                           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white hover:bg-emerald-50 border border-gray-200 text-gray-800 hover:text-emerald-700 font-bold text-xs md:text-sm shadow-2xs hover:border-emerald-300 transition-all duration-200 group">
+                            <span>Buka Semua Artikel</span>
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Cards Grid (4 columns) --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    @foreach($latestBlogPosts as $post)
+                        @php
+                            $coverImg = $post->image_path 
+                                ? (str_starts_with($post->image_path, 'http') ? $post->image_path : Storage::url($post->image_path)) 
+                                : asset('assets/images/1.webp');
+                        @endphp
+                        <article class="bg-white rounded-2xl overflow-hidden border border-gray-200/90 shadow-2xs hover:shadow-md hover:border-gray-300 transition-all duration-300 flex flex-col group">
+                            <a href="{{ route('blog.show', $post->slug) }}" class="block relative aspect-[16/10] overflow-hidden bg-gray-100">
+                                <img src="{{ $coverImg }}" 
+                                     alt="{{ $post->title }}" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                     loading="lazy">
+                                <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+                            </a>
+
+                            <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                                <div>
+                                    <div class="mb-1.5">
+                                        <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
+                                            {{ $post->category }}
+                                        </span>
+                                    </div>
+                                    <a href="{{ route('blog.show', $post->slug) }}" class="block">
+                                        <h3 class="text-sm sm:text-base font-bold text-gray-900 group-hover:text-emerald-700 transition-colors line-clamp-2 leading-snug">
+                                            {{ $post->title }}
+                                        </h3>
+                                    </a>
+                                    <p class="text-xs text-gray-600 line-clamp-2 mt-2 leading-relaxed">
+                                        {{ $post->excerpt ?? Str::limit(strip_tags($post->content), 90) }}
+                                    </p>
+                                </div>
+
+                                <div class="pt-3 mt-4 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-400">
+                                    <span>{{ ($post->published_at ?? $post->created_at)->translatedFormat('d F Y') }}</span>
+                                    <span class="font-medium text-emerald-700 group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
+                                        Baca
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+
             </div>
         </div>
         @endif
