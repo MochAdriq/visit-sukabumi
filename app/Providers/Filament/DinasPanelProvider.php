@@ -27,24 +27,18 @@ class DinasPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::hex('#163766'),
             ])
-            ->brandName('Portal Pajak Daerah — Bapenda Kab. Sukabumi')
+            ->brandName('Portal Pemda — Bapenda & Disparbud Kab. Sukabumi')
             ->favicon(asset('assets/images/logo-v2.png'))
             ->login()
             ->pages([
                 Pages\Dashboard::class,
             ])
             ->navigationGroups([
-                '1. Penyetoran Kas Daerah',
-                '2. Pembukuan & Pengawasan',
-                '3. Kebijakan & Rekening',
+                '1. Pendapatan Daerah (PAD)',
+                '2. Monitoring Pariwisata',
+                '3. Kebijakan & Rekening Kasda',
             ])
-            ->resources([
-                \App\Filament\Resources\TaxWithdrawalResource::class,
-                \App\Filament\Resources\TaxLedgerResource::class,
-                \App\Filament\Resources\BookingResource::class,
-                \App\Filament\Resources\RkudAccountResource::class,
-                \App\Filament\Resources\TaxSettingResource::class,
-            ])
+            ->discoverResources(in: app_path('Filament/Dinas/Resources'), for: 'App\\Filament\\Dinas\\Resources')
             ->discoverWidgets(in: app_path('Filament/Dinas/Widgets'), for: 'App\\Filament\\Dinas\\Widgets')
             ->middleware([
                 EncryptCookies::class,

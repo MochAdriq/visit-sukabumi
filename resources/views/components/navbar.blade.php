@@ -170,6 +170,10 @@ $navItems = [
                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-100 text-indigo-800 border border-indigo-200">
                                             Admin
                                         </span>
+                                    @elseif(Auth::user()->role === 'dinas')
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-[#163766] border border-blue-200">
+                                            Dinas Pemda
+                                        </span>
                                     @elseif(Auth::user()->isMitra())
                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200">
                                             Mitra
@@ -181,6 +185,17 @@ $navItems = [
                             </div>
 
                             <div class="py-1.5">
+                                {{-- Portal Dinas / Pemda (jika dinas atau admin) --}}
+                                @if(Auth::user()->isDinas())
+                                    <a href="{{ url('/dinas') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-[#163766] bg-blue-50/70 hover:bg-blue-100/90 transition-colors border-b border-blue-100/60">
+                                        <svg class="w-4 h-4 text-[#163766]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                        </svg>
+                                        <span class="flex-1">Portal Dinas Pemda (/dinas)</span>
+                                        <span class="text-[10px] font-semibold text-[#163766] bg-white/80 px-1.5 py-0.5 rounded border border-blue-200">Pemda</span>
+                                    </a>
+                                @endif
+
                                 {{-- Panel Admin (jika admin) --}}
                                 @if(Auth::user()->isAdmin())
                                     <a href="{{ url('/admin') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-indigo-700 bg-indigo-50/70 hover:bg-indigo-100/90 transition-colors border-b border-indigo-100/60">
@@ -367,6 +382,10 @@ $navItems = [
                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-100 text-indigo-800 border border-indigo-200">
                         Admin
                     </span>
+                @elseif(Auth::user()->role === 'dinas')
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-[#163766] border border-blue-200">
+                        Dinas Pemda
+                    </span>
                 @elseif(Auth::user()->isMitra())
                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200">
                         Mitra
@@ -379,6 +398,14 @@ $navItems = [
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                     Profil Saya
                 </a>
+                @if(Auth::user()->isDinas())
+                    <a href="{{ url('/dinas') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#163766] bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-lg hover:bg-blue-100 transition-colors">
+                        <svg class="w-3.5 h-3.5 text-[#163766]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                        Portal Dinas
+                    </a>
+                @endif
                 @if(Auth::user()->isAdmin())
                     <a href="{{ url('/admin') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-lg hover:bg-indigo-100 transition-colors">
                         <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -439,6 +466,14 @@ $navItems = [
         {{-- Wishlist & User actions --}}
         <div class="mt-2 border-t border-gray-100 pt-1">
             @auth
+            @if(Auth::user()->isDinas())
+            <a href="{{ url('/dinas') }}" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-[#163766] bg-blue-50/70 hover:bg-blue-100/90 transition-colors border-b border-blue-100/60">
+                <svg class="w-5 h-5 text-[#163766]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                <span>Portal Pemda & Dinas (/dinas)</span>
+            </a>
+            @endif
             @if(Auth::user()->isAdmin())
             <a href="{{ url('/admin') }}" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-indigo-700 bg-indigo-50/70 hover:bg-indigo-100/90 transition-colors border-b border-indigo-100/60">
                 <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

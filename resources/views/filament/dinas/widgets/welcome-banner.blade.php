@@ -121,10 +121,10 @@
             </a>
 
             {{-- Tombol Seluruh Pesanan --}}
-            <a href="{{ route('filament.dinas.resources.bookings.index') }}" 
+            <a href="{{ route('filament.dinas.resources.booking-audits.index') }}" 
                style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.12); color: #ffffff; font-weight: 600; font-size: 12.5px; padding: 8px 16px; border-radius: 12px; text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.25); cursor: pointer;">
                 <svg style="width: 14px; height: 14px; color: #93c5fd;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
-                Data Pesanan Wisatawan
+                Audit Tiket & Pesanan
             </a>
 
             {{-- Tombol Rekening Kasda --}}

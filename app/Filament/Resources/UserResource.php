@@ -40,12 +40,14 @@ class UserResource extends Resource
                             ->label('Email'),
                         Forms\Components\Select::make('role')
                             ->options([
-                                'admin' => 'Admin',
+                                'admin' => 'Admin (Super Admin)',
+                                'dinas' => 'Dinas (Bapenda & Disparbud)',
                                 'user'  => 'User / Pengunjung',
                             ])
                             ->required()
                             ->default('user')
-                            ->label('Role'),
+                            ->label('Role Akses')
+                            ->helperText('Pilih "Dinas" untuk memberikan hak akses ke Portal Pemda (/dinas).'),
                         Forms\Components\DateTimePicker::make('email_verified_at')
                             ->label('Verifikasi Email')
                             ->nullable(),
@@ -81,8 +83,15 @@ class UserResource extends Resource
                     ->badge()
                     ->color(fn(string $state) => match($state) {
                         'admin' => 'danger',
+                        'dinas' => 'info',
                         'user'  => 'gray',
                         default => 'gray',
+                    })
+                    ->formatStateUsing(fn(string $state) => match($state) {
+                        'admin' => 'SUPER ADMIN',
+                        'dinas' => 'DINAS / PEMDA',
+                        'user'  => 'PENGUNJUNG',
+                        default => strtoupper($state),
                     })
                     ->label('Role'),
                 Tables\Columns\TextColumn::make('reviews_count')
@@ -105,6 +114,7 @@ class UserResource extends Resource
                 Tables\Filters\SelectFilter::make('role')
                     ->options([
                         'admin' => 'Admin',
+                        'dinas' => 'Dinas',
                         'user'  => 'User',
                     ])
                     ->label('Filter Role'),

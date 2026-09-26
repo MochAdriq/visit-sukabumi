@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Dinas\Resources;
 
-use App\Filament\Resources\RkudAccountResource\Pages;
+use App\Filament\Dinas\Resources\RkudAccountResource\Pages;
 use App\Models\RkudAccount;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -15,11 +15,11 @@ class RkudAccountResource extends Resource
     protected static ?string $model = RkudAccount::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-library';
-    protected static ?string $navigationGroup = 'Keuangan & Pajak Daerah';
+    protected static ?string $navigationGroup = '3. Kebijakan & Rekening Kasda';
     protected static ?string $navigationLabel = 'Rekening Kas Daerah (RKUD)';
     protected static ?string $modelLabel = 'Rekening Kas Daerah';
     protected static ?string $pluralModelLabel = 'Rekening Kas Daerah (RKUD)';
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -28,17 +28,17 @@ class RkudAccountResource extends Resource
                 Forms\Components\TextInput::make('bank_name')
                     ->label('Nama Bank Resmi')
                     ->required()
-                    ->placeholder('e.g. Bank BJB'),
+                    ->placeholder('Contoh: Bank BJB'),
 
                 Forms\Components\TextInput::make('account_number')
                     ->label('Nomor Rekening RKUD')
                     ->required()
-                    ->placeholder('e.g. 0012345678901'),
+                    ->placeholder('Contoh: 0012345678901'),
 
                 Forms\Components\TextInput::make('account_holder_name')
                     ->label('Nama Pemilik Rekening')
                     ->required()
-                    ->placeholder('e.g. KAS DAERAH KABUPATEN SUKABUMI'),
+                    ->placeholder('Contoh: KAS DAERAH KABUPATEN SUKABUMI'),
 
                 Forms\Components\TextInput::make('agency_name')
                     ->label('Instansi Pengelola')
@@ -62,18 +62,18 @@ class RkudAccountResource extends Resource
                 Tables\Columns\TextColumn::make('account_number')
                     ->label('Nomor Rekening')
                     ->fontFamily('mono')
-                    ->copyable()
-                    ->searchable(),
+                    ->copyable(),
 
                 Tables\Columns\TextColumn::make('account_holder_name')
-                    ->label('Nama Rekening')
-                    ->searchable(),
+                    ->label('Nama Rekening'),
 
                 Tables\Columns\TextColumn::make('agency_name')
-                    ->label('Instansi'),
+                    ->label('Instansi Pengelola')
+                    ->badge(),
 
-                Tables\Columns\ToggleColumn::make('is_active')
-                    ->label('Aktif'),
+                Tables\Columns\IconColumn::make('is_active')
+                    ->label('Aktif')
+                    ->boolean(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -84,6 +84,8 @@ class RkudAccountResource extends Resource
     {
         return [
             'index' => Pages\ListRkudAccounts::route('/'),
+            'create' => Pages\CreateRkudAccount::route('/create'),
+            'edit' => Pages\EditRkudAccount::route('/{record}/edit'),
         ];
     }
 }

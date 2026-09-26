@@ -15,11 +15,11 @@ class BookingResource extends Resource
     protected static ?string $model = Booking::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
-    protected static ?string $navigationGroup = '2. Pembukuan & Pengawasan';
-    protected static ?string $navigationLabel = 'Data Pesanan Wisatawan';
+    protected static ?string $navigationGroup = 'Pemesanan & Transaksi';
+    protected static ?string $navigationLabel = 'Pemesanan Tiket';
     protected static ?string $modelLabel = 'Pemesanan';
-    protected static ?string $pluralModelLabel = 'Data Pesanan Wisatawan (Bookings)';
-    protected static ?int $navigationSort = 2;
+    protected static ?string $pluralModelLabel = 'Pemesanan Tiket Wisata';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

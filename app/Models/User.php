@@ -149,4 +149,12 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->role === 'admin';
     }
+
+    /**
+     * Apakah user adalah dinas pemda atau admin.
+     */
+    public function isDinas(): bool
+    {
+        return in_array($this->role, ['dinas', 'admin']);
+    }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Dinas\Resources;
 
-use App\Filament\Resources\TaxLedgerResource\Pages;
+use App\Filament\Dinas\Resources\TaxLedgerResource\Pages;
 use App\Models\TaxLedger;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -15,7 +15,7 @@ class TaxLedgerResource extends Resource
     protected static ?string $model = TaxLedger::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
-    protected static ?string $navigationGroup = 'Keuangan & Pajak Daerah';
+    protected static ?string $navigationGroup = '1. Pendapatan Daerah (PAD)';
     protected static ?string $navigationLabel = 'Buku Mutasi Pajak';
     protected static ?string $modelLabel = 'Mutasi Kas Pajak';
     protected static ?string $pluralModelLabel = 'Buku Mutasi Pajak';
@@ -26,25 +26,19 @@ class TaxLedgerResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('vendor_name')
-                    ->label('Wajib Pajak (Vendor/Penyelenggara)')
+                    ->label('Wajib Pajak (Vendor / Penyelenggara)')
                     ->disabled(),
                 Forms\Components\TextInput::make('sector')
-                    ->label('Sektor')
+                    ->label('Sektor Pajak (PBJT)')
                     ->disabled(),
                 Forms\Components\TextInput::make('tax_amount')
                     ->label('Nominal Pajak Masuk')
                     ->numeric()
                     ->prefix('Rp')
                     ->disabled(),
-                Forms\Components\Select::make('status')
+                Forms\Components\TextInput::make('status')
                     ->label('Status Kas Penampung (Escrow)')
-                    ->options([
-                        'held_in_escrow' => 'Tertampung di Escrow',
-                        'ready_for_withdrawal' => 'Siap Ditarik ke RKUD',
-                        'withdrawn' => 'Sudah Dicairkan ke Kasda',
-                        'refunded' => 'Dikembalikan (Refund)',
-                    ])
-                    ->required(),
+                    ->disabled(),
             ]);
     }
 
@@ -52,32 +46,48 @@ class TaxLedgerResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID Mutasi')
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Tanggal & Waktu')
+                    ->dateTime('d M Y, H:i')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('booking.booking_code')
-                    ->label('Kode Transaksi')
-                    ->fontFamily('mono')
-                    ->weight('bold')
+                Tables\Columns\TextColumn::make('vendor_name')
+                    ->label('Wajib Pajak (Destinasi/Vendor)')
                     ->searchable()
-                    ->copyable(),
+                    ->weight('medium')
+                    ->wrap(),
 
                 Tables\Columns\BadgeColumn::make('sector')
-                    ->label('Sektor PBJT')
+                    ->label('Sektor')
                     ->colors([
                         'primary' => 'hotel',
-                        'warning' => 'event',
+                        'success' => 'restaurant',
+                        'warning' => 'wisata_alam',
+                        'info' => 'entertainment',
+                        'danger' => 'event',
                     ])
-                    ->formatStateUsing(fn(string $state): string => strtoupper($state)),
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        'hotel' => 'PERHOTELAN',
+                        'restaurant' => 'RESTORAN',
+                        'wisata_alam' => 'WISATA ALAM',
+                        'entertainment' => 'HIBURAN',
+                        'event' => 'FESTIVAL / EVENT',
+                        default => strtoupper($state),
+                    }),
 
-                Tables\Columns\TextColumn::make('vendor_name')
-                    ->label('Wajib Pajak (Hotel/EO)')
-                    ->searchable()
-                    ->weight('medium'),
+                Tables\Columns\TextColumn::make('base_amount')
+                    ->label('Dasar Pengenaan Pajak (DPP)')
+                    ->money('IDR', locale: 'id_ID')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('tax_rate')
+                    ->label('Tarif')
+                    ->formatStateUsing(fn($state) => "{$state}%")
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('tax_amount')
-                    ->label('Pajak PBJT (Kasda)')
+                    ->label('Pajak PBJT')
                     ->money('IDR', locale: 'id_ID')
                     ->weight('bold')
                     ->color('success')
@@ -93,33 +103,37 @@ class TaxLedgerResource extends Resource
                     ])
                     ->formatStateUsing(fn(string $state): string => match ($state) {
                         'held_in_escrow' => 'TERTAMPUNG DI ESCROW',
-                        'ready_for_withdrawal' => 'SIAP DITARIK KE RKUD',
-                        'withdrawn' => 'SUDAH DISETOR KE KASDA',
-                        'refunded' => 'DIKEMBALIKAN',
+                        'ready_for_withdrawal' => 'SIAP SETOR KASDA',
+                        'withdrawn' => 'SUDAH MASUK KASDA',
+                        'refunded' => 'DIKEMBALIKAN (REFUND)',
                         default => strtoupper($state),
                     }),
 
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Waktu Masuk')
-                    ->dateTime('d M Y, H:i')
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('taxWithdrawal.withdrawal_code')
+                    ->label('Kode Setoran')
+                    ->fontFamily('mono')
+                    ->color('primary')
+                    ->default('-'),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('sector')
+                    ->label('Filter Sektor')
                     ->options([
+                        'wisata_alam' => 'Wisata Alam',
                         'hotel' => 'Perhotelan',
-                        'event' => 'Kesenian & Hiburan (Event)',
+                        'restaurant' => 'Restoran',
+                        'event' => 'Event & Festival',
                     ]),
+
                 Tables\Filters\SelectFilter::make('status')
+                    ->label('Filter Status')
                     ->options([
                         'held_in_escrow' => 'Tertampung di Escrow',
-                        'ready_for_withdrawal' => 'Siap Ditarik',
-                        'withdrawn' => 'Sudah Disetor ke Kasda',
+                        'ready_for_withdrawal' => 'Siap Setor Kasda',
+                        'withdrawn' => 'Sudah Masuk Kasda',
+                        'refunded' => 'Dikembalikan (Refund)',
                     ]),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
             ]);
     }
 

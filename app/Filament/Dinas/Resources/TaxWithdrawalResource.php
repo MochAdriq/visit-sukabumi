@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Dinas\Resources;
 
-use App\Filament\Resources\TaxWithdrawalResource\Pages;
+use App\Filament\Dinas\Resources\TaxWithdrawalResource\Pages;
 use App\Models\RkudAccount;
 use App\Models\TaxLedger;
 use App\Models\TaxWithdrawal;
@@ -18,8 +18,8 @@ class TaxWithdrawalResource extends Resource
     protected static ?string $model = TaxWithdrawal::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-up-tray';
-    protected static ?string $navigationGroup = 'Keuangan & Pajak Daerah';
-    protected static ?string $navigationLabel = 'Penyetoran Kas Daerah (RKUD)';
+    protected static ?string $navigationGroup = '1. Pendapatan Daerah (PAD)';
+    protected static ?string $navigationLabel = 'Penyetoran Kasda (RKUD)';
     protected static ?string $modelLabel = 'Penyetoran Pajak';
     protected static ?string $pluralModelLabel = 'Penyetoran Kas Daerah';
     protected static ?int $navigationSort = 1;
@@ -33,8 +33,8 @@ class TaxWithdrawalResource extends Resource
                 Forms\Components\Section::make('Informasi Rekening Kas Daerah (RKUD)')
                     ->schema([
                         Forms\Components\Placeholder::make('escrow_info')
-                            ->label('Saldo Escrow yang Tersedia')
-                            ->content(fn() => 'Rp ' . number_format($availableEscrow, 0, ',', '.') . ' (Siap disetorkan ke Kasda)'),
+                            ->label('Saldo Pajak Siap Setor (Escrow)')
+                            ->content(fn() => 'Rp ' . number_format($availableEscrow, 0, ',', '.') . ' (Dana siap ditransfer ke RKUD BJB)'),
 
                         Forms\Components\Select::make('rkud_account_id')
                             ->label('Rekening Kas Daerah Tujuan')
@@ -53,7 +53,7 @@ class TaxWithdrawalResource extends Resource
 
                         Forms\Components\Textarea::make('notes')
                             ->label('Keperluan / Catatan Dinas')
-                            ->placeholder('Contoh: Penyetoran PAD PBJT Masa Pajak Bulan Berjalan ke Kasda')
+                            ->placeholder('Contoh: Penyetoran PAD Pajak Wisata Masa Pajak Berjalan ke Kasda')
                             ->default('Penyetoran Penerimaan Asli Daerah (PAD) Sektor Pariwisata ke RKUD Kabupaten Sukabumi')
                             ->columnSpanFull(),
                     ])->columns(2),
@@ -80,7 +80,7 @@ class TaxWithdrawalResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('withdrawal_code')
-                    ->label('Kode Penarikan')
+                    ->label('Kode Setoran')
                     ->fontFamily('mono')
                     ->weight('bold')
                     ->searchable()
@@ -125,81 +125,76 @@ class TaxWithdrawalResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Diajukan')
                     ->dateTime('d M Y, H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
             ->actions([
-                // Aksi Persetujuan Penarikan
-                Tables\Actions\Action::make('approve')
-                    ->label('Setujui')
-                    ->icon('heroicon-o-check-circle')
-                    ->color('warning')
-                    ->requiresConfirmation()
-                    ->modalHeading('Persetujuan Penarikan Pajak ke Kasda')
-                    ->modalDescription('Apakah Anda yakin ingin menyetujui pengajuan penarikan dana pajak ini untuk diproses transfer ke Rekening Kas Umum Daerah?')
-                    ->visible(fn(TaxWithdrawal $record) => $record->status === 'pending')
-                    ->action(function (TaxWithdrawal $record) {
-                        $record->update([
-                            'status' => 'approved',
-                            'approved_by' => auth()->id(),
-                        ]);
-
-                        Notification::make()
-                            ->title('Pengajuan Disetujui')
-                            ->body('Penarikan dana pajak telah disetujui. Silakan lakukan proses transfer ke RKUD.')
-                            ->success()
-                            ->send();
-                    }),
-
-                // Aksi Konfirmasi Transfer Selesai
-                Tables\Actions\Action::make('confirm_transfer')
-                    ->label('Konfirmasi Transfer')
-                    ->icon('heroicon-o-arrow-up-right')
-                    ->color('success')
-                    ->form([
-                        Forms\Components\DateTimePicker::make('transferred_at')
-                            ->label('Waktu Transfer')
-                            ->default(now())
-                            ->required(),
-                        Forms\Components\FileUpload::make('transfer_proof_path')
-                            ->label('Lampiran Bukti Transfer Bank')
-                            ->image()
-                            ->directory('transfer-proofs')
-                            ->visibility('public')
-                            ->required(),
-                    ])
-                    ->visible(fn(TaxWithdrawal $record) => in_array($record->status, ['pending', 'approved']))
-                    ->action(function (TaxWithdrawal $record, array $data) {
-                        $record->update([
-                            'status' => 'transferred',
-                            'transferred_at' => $data['transferred_at'] ?? now(),
-                            'transfer_proof_path' => $data['transfer_proof_path'] ?? null,
-                            'approved_by' => $record->approved_by ?? auth()->id(),
-                        ]);
-
-                        // Mutasi saldo di TaxLedger menjadi withdrawn
-                        TaxLedger::where('tax_withdrawal_id', $record->id)->update([
-                            'status' => 'withdrawn',
-                            'withdrawn_at' => now(),
-                        ]);
-
-                        Notification::make()
-                            ->title('Transfer Berhasil Dikonfirmasi')
-                            ->body('Dana pajak resmi dicatat telah masuk ke Rekening Kas Daerah (RKUD) Bank BJB!')
-                            ->success()
-                            ->send();
-                    }),
-
-                // Aksi Cetak Berita Acara Rekonsiliasi (SPJ Kasda)
-                Tables\Actions\Action::make('print_receipt')
-                    ->label('Cetak SPJ')
+                // Aksi Cetak Bukti Setor / STS
+                Tables\Actions\Action::make('print')
+                    ->label('Cetak STS')
                     ->icon('heroicon-o-printer')
                     ->color('gray')
                     ->url(fn(TaxWithdrawal $record) => route('dinas.tax_withdrawal.print', $record->withdrawal_code))
                     ->openUrlInNewTab(),
 
-                Tables\Actions\ViewAction::make(),
+                // Aksi Approve
+                Tables\Actions\Action::make('approve')
+                    ->label('Setujui')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalHeading('Setujui Penyetoran Kas Daerah')
+                    ->modalDescription('Apakah Anda yakin menyetujui pengajuan penyetoran ini? Dana siap ditransfer ke Bank BJB Kasda.')
+                    ->visible(fn(TaxWithdrawal $record) => $record->status === 'pending')
+                    ->action(function (TaxWithdrawal $record) {
+                        $record->update([
+                            'status' => 'approved',
+                            'approved_by' => auth()->id(),
+                            'approved_at' => now(),
+                        ]);
+
+                        Notification::make()
+                            ->title('Penyetoran Disetujui')
+                            ->body("Pengajuan {$record->withdrawal_code} telah disetujui.")
+                            ->success()
+                            ->send();
+                    }),
+
+                // Aksi Upload Bukti Transfer (Transferred)
+                Tables\Actions\Action::make('mark_transferred')
+                    ->label('Upload Bukti Transfer')
+                    ->icon('heroicon-o-document-check')
+                    ->color('primary')
+                    ->form([
+                        Forms\Components\FileUpload::make('transfer_proof_path')
+                            ->label('Foto / Scan Bukti Transfer Bank BJB')
+                            ->image()
+                            ->directory('transfer-proofs')
+                            ->visibility('public')
+                            ->required(),
+                        Forms\Components\DateTimePicker::make('transferred_at')
+                            ->label('Waktu Realisasi Transfer')
+                            ->default(now())
+                            ->required(),
+                    ])
+                    ->visible(fn(TaxWithdrawal $record) => $record->status === 'approved')
+                    ->action(function (TaxWithdrawal $record, array $data) {
+                        $record->update([
+                            'status' => 'transferred',
+                            'transfer_proof_path' => $data['transfer_proof_path'],
+                            'transferred_at' => $data['transferred_at'],
+                        ]);
+
+                        // Ubah status mutasi pajak menjadi 'withdrawn'
+                        TaxLedger::where('tax_withdrawal_id', $record->id)
+                            ->update(['status' => 'withdrawn']);
+
+                        Notification::make()
+                            ->title('Setoran Masuk Kasda')
+                            ->body("Bukti transfer Bank BJB berhasil dicatat. Status: SUDAH MASUK KASDA.")
+                            ->success()
+                            ->send();
+                    }),
             ]);
     }
 

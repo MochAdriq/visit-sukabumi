@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Dinas\Resources;
 
-use App\Filament\Resources\TaxSettingResource\Pages;
+use App\Filament\Dinas\Resources\TaxSettingResource\Pages;
 use App\Models\TaxSetting;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -15,11 +15,11 @@ class TaxSettingResource extends Resource
     protected static ?string $model = TaxSetting::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-scale';
-    protected static ?string $navigationGroup = 'Keuangan & Pajak Daerah';
+    protected static ?string $navigationGroup = '3. Kebijakan & Rekening Kasda';
     protected static ?string $navigationLabel = 'Tarif Pajak Daerah (PBJT)';
     protected static ?string $modelLabel = 'Tarif Pajak (PBJT)';
-    protected static ?string $pluralModelLabel = 'Pengaturan Tarif Pajak (PBJT)';
-    protected static ?int $navigationSort = 4;
+    protected static ?string $pluralModelLabel = 'Tarif Pajak Daerah (PBJT)';
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
@@ -28,7 +28,7 @@ class TaxSettingResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('Nama Pajak Daerah')
                     ->required()
-                    ->placeholder('e.g. PBJT Jasa Perhotelan'),
+                    ->placeholder('Contoh: PBJT Jasa Perhotelan'),
 
                 Forms\Components\Select::make('category')
                     ->label('Kategori Sektor')
@@ -51,8 +51,8 @@ class TaxSettingResource extends Resource
                     ->default(true),
 
                 Forms\Components\Textarea::make('description')
-                    ->label('Dasar Hukum / Peraturan Daerah')
-                    ->placeholder('e.g. Sesuai UU HKPD No. 1 Tahun 2022')
+                    ->label('Dasar Hukum / Peraturan Daerah (Perda)')
+                    ->placeholder('Contoh: Sesuai UU HKPD No. 1 Tahun 2022 dan Perda Kab. Sukabumi')
                     ->columnSpanFull(),
             ]);
     }
@@ -62,31 +62,32 @@ class TaxSettingResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nama Pajak')
+                    ->label('Jenis Pajak')
                     ->weight('bold')
                     ->searchable(),
 
                 Tables\Columns\BadgeColumn::make('category')
-                    ->label('Kategori')
+                    ->label('Sektor')
                     ->colors([
                         'primary' => 'hotel',
-                        'warning' => 'event',
+                        'danger' => 'event',
                         'success' => 'attraction',
                     ])
-                    ->formatStateUsing(fn(string $state): string => strtoupper($state)),
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        'hotel' => 'PERHOTELAN',
+                        'event' => 'HIBURAN / EVENT',
+                        'attraction' => 'WISATA & REKREASI',
+                        default => strtoupper($state),
+                    }),
 
                 Tables\Columns\TextColumn::make('rate_percent')
                     ->label('Tarif Pajak')
                     ->formatStateUsing(fn($state) => "{$state}%")
-                    ->weight('bold')
-                    ->color('primary'),
+                    ->weight('black')
+                    ->color('success'),
 
                 Tables\Columns\ToggleColumn::make('is_active')
-                    ->label('Status Aktif'),
-
-                Tables\Columns\TextColumn::make('description')
-                    ->label('Dasar Hukum')
-                    ->limit(40),
+                    ->label('Aktif'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -97,6 +98,8 @@ class TaxSettingResource extends Resource
     {
         return [
             'index' => Pages\ListTaxSettings::route('/'),
+            'create' => Pages\CreateTaxSetting::route('/create'),
+            'edit' => Pages\EditTaxSetting::route('/{record}/edit'),
         ];
     }
 }
