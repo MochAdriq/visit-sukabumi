@@ -96,23 +96,34 @@ class TaxWithdrawalResource extends Resource
                                 if (!$account) return new HtmlString('<span class="text-sm text-gray-500">Pilih rekening RKUD di atas.</span>');
 
                                 return new HtmlString("
-                                    <div style='background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px 18px; font-size:12px;'>
-                                        <div style='display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px;'>
+                                    <style>
+                                        .rkud-info-card { border-radius: 12px; padding: 14px 18px; font-size: 12px; background: #f8fafc; border: 1px solid #e2e8f0; }
+                                        .rkud-label { color: #64748b; font-size: 11px; text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 3px; letter-spacing: 0.05em; }
+                                        .rkud-val { color: #0f172a; font-size: 13px; font-weight: 700; }
+                                        .rkud-val-mono { color: #0f172a; font-size: 14px; font-family: monospace; font-weight: 700; }
+                                        
+                                        .dark .rkud-info-card { background: #18181b; border-color: rgba(255,255,255,0.1); }
+                                        .dark .rkud-label { color: #a1a1aa; }
+                                        .dark .rkud-val { color: #f4f4f5; }
+                                        .dark .rkud-val-mono { color: #38bdf8; }
+                                    </style>
+                                    <div class='rkud-info-card'>
+                                        <div style='display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:14px;'>
                                             <div>
-                                                <span style='color:#64748b; font-size:11px; text-transform:uppercase; font-weight:600; display:block;'>Bank Operasional</span>
-                                                <strong style='color:#0f172a; font-size:13px;'>{$account->bank_name}</strong>
+                                                <span class='rkud-label'>Bank Operasional</span>
+                                                <strong class='rkud-val'>{$account->bank_name}</strong>
                                             </div>
                                             <div>
-                                                <span style='color:#64748b; font-size:11px; text-transform:uppercase; font-weight:600; display:block;'>Nomor Rekening Kasda</span>
-                                                <strong style='color:#0f172a; font-size:14px; font-family:monospace;'>{$account->account_number}</strong>
+                                                <span class='rkud-label'>Nomor Rekening Kasda</span>
+                                                <strong class='rkud-val-mono'>{$account->account_number}</strong>
                                             </div>
                                             <div>
-                                                <span style='color:#64748b; font-size:11px; text-transform:uppercase; font-weight:600; display:block;'>Nama Pemegang Rekening</span>
-                                                <strong style='color:#0f172a; font-size:13px;'>{$account->account_holder_name}</strong>
+                                                <span class='rkud-label'>Nama Pemegang Rekening</span>
+                                                <strong class='rkud-val'>{$account->account_holder_name}</strong>
                                             </div>
                                             <div>
-                                                <span style='color:#64748b; font-size:11px; text-transform:uppercase; font-weight:600; display:block;'>Instansi Pembina</span>
-                                                <strong style='color:#0f172a; font-size:13px;'>{$account->agency_name}</strong>
+                                                <span class='rkud-label'>Instansi Pembina</span>
+                                                <strong class='rkud-val'>{$account->agency_name}</strong>
                                             </div>
                                         </div>
                                     </div>
@@ -186,30 +197,57 @@ class TaxWithdrawalResource extends Resource
                                     $date = $l->created_at->format('d/m/Y H:i');
 
                                     $rows .= "
-                                        <tr style='border-bottom: 1px solid #f1f5f9;'>
-                                            <td style='padding: 8px 12px; font-family: monospace; font-size: 12px; font-weight: 700; color: #0f172a;'>#{$bookingCode}</td>
-                                            <td style='padding: 8px 12px; font-size: 12px; color: #334155;'>{$vendor}</td>
-                                            <td style='padding: 8px 12px; font-size: 11px; font-weight: 700; color: #475569;'>{$sector}</td>
-                                            <td style='padding: 8px 12px; font-size: 12px; color: #64748b;'>{$date}</td>
-                                            <td style='padding: 8px 12px; font-size: 12px; font-weight: 800; color: #15803d; text-align: right; font-family: monospace;'>{$taxAmount}</td>
+                                        <tr class='escrow-row'>
+                                            <td class='escrow-cell escrow-code'>#{$bookingCode}</td>
+                                            <td class='escrow-cell escrow-vendor'>{$vendor}</td>
+                                            <td class='escrow-cell escrow-sector'>{$sector}</td>
+                                            <td class='escrow-cell escrow-date'>{$date}</td>
+                                            <td class='escrow-cell escrow-tax'>{$taxAmount}</td>
                                         </tr>
                                     ";
                                 }
 
                                 $totalRowsNotice = $escrowTxCount > 5 
-                                    ? "<div style='font-size:11px; color:#64748b; padding-top:10px; text-align:right;'>Menampilkan 5 dari total <strong>{$escrowTxCount} transaksi</strong> escrow yang tercakup dalam batch ini.</div>" 
+                                    ? "<div class='escrow-notice'>Menampilkan 5 dari total <strong>{$escrowTxCount} transaksi</strong> escrow yang tercakup dalam batch ini.</div>" 
                                     : "";
 
                                 return new HtmlString("
-                                    <div style='overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 12px;'>
-                                        <table style='width: 100%; border-collapse: collapse; text-align: left;'>
+                                    <style>
+                                        .escrow-audit-wrap { overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff; }
+                                        .escrow-audit-table { width: 100%; border-collapse: collapse; text-align: left; }
+                                        .escrow-audit-table thead tr { background: #f8fafc; border-bottom: 1px solid #e2e8f0; font-size: 11px; text-transform: uppercase; color: #64748b; letter-spacing: 0.05em; font-weight: 700; }
+                                        .escrow-audit-table th { padding: 10px 14px; }
+                                        .escrow-cell { padding: 10px 14px; font-size: 12px; }
+                                        .escrow-row { border-bottom: 1px solid #f1f5f9; }
+                                        .escrow-row:last-child { border-bottom: none; }
+                                        .escrow-code { font-family: monospace; font-weight: 700; color: #0f172a; }
+                                        .escrow-vendor { color: #334155; font-weight: 500; }
+                                        .escrow-sector { font-size: 11px; font-weight: 700; color: #475569; }
+                                        .escrow-date { color: #64748b; }
+                                        .escrow-tax { font-family: monospace; font-weight: 800; color: #15803d; text-align: right; }
+                                        .escrow-notice { font-size: 11px; color: #64748b; padding-top: 10px; text-align: right; }
+
+                                        /* Dark Mode Support for Filament */
+                                        .dark .escrow-audit-wrap { border-color: rgba(255,255,255,0.1); background: #18181b; }
+                                        .dark .escrow-audit-table thead tr { background: #27272a; border-bottom: 1px solid rgba(255,255,255,0.1); color: #a1a1aa; }
+                                        .dark .escrow-row { border-bottom: 1px solid rgba(255,255,255,0.06); }
+                                        .dark .escrow-row:hover { background: rgba(255,255,255,0.03); }
+                                        .dark .escrow-code { color: #f4f4f5; }
+                                        .dark .escrow-vendor { color: #e4e4e7; }
+                                        .dark .escrow-sector { color: #a1a1aa; }
+                                        .dark .escrow-date { color: #a1a1aa; }
+                                        .dark .escrow-tax { color: #4ade80; }
+                                        .dark .escrow-notice { color: #a1a1aa; }
+                                    </style>
+                                    <div class='escrow-audit-wrap'>
+                                        <table class='escrow-audit-table'>
                                             <thead>
-                                                <tr style='background: #f8fafc; border-bottom: 1px solid #e2e8f0; font-size: 11px; text-transform: uppercase; color: #64748b; letter-spacing: 0.05em;'>
-                                                    <th style='padding: 10px 12px;'>Kode Transaksi</th>
-                                                    <th style='padding: 10px 12px;'>Wajib Pungut / Mitra</th>
-                                                    <th style='padding: 10px 12px;'>Sektor</th>
-                                                    <th style='padding: 10px 12px;'>Waktu Masuk</th>
-                                                    <th style='padding: 10px 12px; text-align: right;'>Pajak PBJT (10%)</th>
+                                                <tr>
+                                                    <th>Kode Transaksi</th>
+                                                    <th>Wajib Pungut / Mitra</th>
+                                                    <th>Sektor</th>
+                                                    <th>Waktu Masuk</th>
+                                                    <th style='text-align: right;'>Pajak PBJT (10%)</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -233,22 +271,49 @@ class TaxWithdrawalResource extends Resource
                         Forms\Components\Placeholder::make('sop_guide')
                             ->hiddenLabel()
                             ->content(new HtmlString("
-                                <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; font-size: 12px;'>
-                                    <div style='background: #f8fafc; border-left: 3px solid #3b82f6; padding: 12px; border-radius: 8px;'>
-                                        <strong style='color: #1e3a8a; display: block; margin-bottom: 4px;'>Langkah 1: Pengajuan (Draft)</strong>
-                                        <p style='color: #475569; margin: 0; line-height: 1.4;'>Operator dinas mengajukan nominal penarikan sesuai saldo yang tersedia di rekening penampung escrow.</p>
+                                <style>
+                                    .sop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; font-size: 12px; }
+                                    .sop-box { padding: 12px 14px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; }
+                                    .sop-box-1 { border-left: 4px solid #3b82f6; }
+                                    .sop-box-2 { border-left: 4px solid #eab308; }
+                                    .sop-box-3 { border-left: 4px solid #6366f1; }
+                                    .sop-box-4 { border-left: 4px solid #22c55e; }
+                                    
+                                    .sop-title { font-weight: 700; display: block; margin-bottom: 4px; }
+                                    .sop-box-1 .sop-title { color: #1e40af; }
+                                    .sop-box-2 .sop-title { color: #854d0e; }
+                                    .sop-box-3 .sop-title { color: #3730a3; }
+                                    .sop-box-4 .sop-title { color: #15803d; }
+                                    .sop-desc { color: #475569; margin: 0; line-height: 1.45; }
+
+                                    /* Dark Mode Support */
+                                    .dark .sop-box { background: #18181b; border-color: rgba(255,255,255,0.08); }
+                                    .dark .sop-box-1 { border-left: 4px solid #60a5fa; }
+                                    .dark .sop-box-2 { border-left: 4px solid #facc15; }
+                                    .dark .sop-box-3 { border-left: 4px solid #818cf8; }
+                                    .dark .sop-box-4 { border-left: 4px solid #4ade80; }
+                                    .dark .sop-box-1 .sop-title { color: #93c5fd; }
+                                    .dark .sop-box-2 .sop-title { color: #fde047; }
+                                    .dark .sop-box-3 .sop-title { color: #a5b4fc; }
+                                    .dark .sop-box-4 .sop-title { color: #86efac; }
+                                    .dark .sop-desc { color: #d4d4d8; }
+                                </style>
+                                <div class='sop-grid'>
+                                    <div class='sop-box sop-box-1'>
+                                        <strong class='sop-title'>Langkah 1: Pengajuan (Draft)</strong>
+                                        <p class='sop-desc'>Operator dinas mengajukan nominal penarikan sesuai saldo yang tersedia di rekening penampung escrow.</p>
                                     </div>
-                                    <div style='background: #f8fafc; border-left: 3px solid #eab308; padding: 12px; border-radius: 8px;'>
-                                        <strong style='color: #854d0e; display: block; margin-bottom: 4px;'>Langkah 2: Otorisasi Pimpinan</strong>
-                                        <p style='color: #475569; margin: 0; line-height: 1.4;'>Bendahara Penerimaan / Kepala Dinas meninjau dan memberikan persetujuan (approval) penyetoran.</p>
+                                    <div class='sop-box sop-box-2'>
+                                        <strong class='sop-title'>Langkah 2: Otorisasi Pimpinan</strong>
+                                        <p class='sop-desc'>Bendahara Penerimaan / Kepala Dinas meninjau dan memberikan persetujuan (approval) penyetoran.</p>
                                     </div>
-                                    <div style='background: #f8fafc; border-left: 3px solid #6366f1; padding: 12px; border-radius: 8px;'>
-                                        <strong style='color: #3730a3; display: block; margin-bottom: 4px;'>Langkah 3: Pemindahbukuan</strong>
-                                        <p style='color: #475569; margin: 0; line-height: 1.4;'>Pemindahbukuan dana dari rekening penampung ke Bank BJB Rekening Kas Umum Daerah (RKUD).</p>
+                                    <div class='sop-box sop-box-3'>
+                                        <strong class='sop-title'>Langkah 3: Pemindahbukuan</strong>
+                                        <p class='sop-desc'>Pemindahbukuan dana dari rekening penampung ke Bank BJB Rekening Kas Umum Daerah (RKUD).</p>
                                     </div>
-                                    <div style='background: #f8fafc; border-left: 3px solid #22c55e; padding: 12px; border-radius: 8px;'>
-                                        <strong style='color: #14532d; display: block; margin-bottom: 4px;'>Langkah 4: Bukti Setor & STS</strong>
-                                        <p style='color: #475569; margin: 0; line-height: 1.4;'>Upload bukti transfer bank dan cetak Berita Acara Rekonsiliasi resmi yang dilengkapi QR Code validasi.</p>
+                                    <div class='sop-box sop-box-4'>
+                                        <strong class='sop-title'>Langkah 4: Bukti Setor & STS</strong>
+                                        <p class='sop-desc'>Upload bukti transfer bank dan cetak Berita Acara Rekonsiliasi resmi yang dilengkapi QR Code validasi.</p>
                                     </div>
                                 </div>
                             "))
