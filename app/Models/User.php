@@ -79,6 +79,14 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
+     * Riwayat pemesanan tiket event & kamar hotel milik pengguna.
+     */
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class)->latest();
+    }
+
+    /**
      * Destinasi yang sudah diklaim dan disetujui oleh user ini.
      */
     public function ownedPlaces(): HasMany

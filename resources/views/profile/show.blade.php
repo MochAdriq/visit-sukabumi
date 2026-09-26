@@ -91,13 +91,24 @@
         {{-- TAB NAVIGATION --}}
         <div x-data="{ tab: '{{ request('tab', 'profil') }}' }" class="space-y-6">
 
-            {{-- Tab Pills --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 flex gap-1">
-                @foreach(['profil' => 'Informasi Akun', 'destinasi' => 'Destinasi Saya', 'aktivitas' => 'Aktivitas Wisata'] as $key => $label)
+            {{-- Tab Buttons --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 flex flex-wrap gap-1">
+                @php
+                    $profileTabs = [
+                        'profil' => ['label' => 'Informasi Akun', 'icon' => 'user'],
+                        'tiket' => ['label' => 'Tiket & Pesanan' . ($userBookings->count() > 0 ? ' (' . $userBookings->count() . ')' : ''), 'icon' => 'ticket'],
+                        'destinasi' => ['label' => 'Destinasi Saya', 'icon' => 'map-pin'],
+                        'aktivitas' => ['label' => 'Aktivitas Wisata', 'icon' => 'heart']
+                    ];
+                @endphp
+                @foreach($profileTabs as $key => $tData)
                 <button @click="tab = '{{ $key }}'"
                         :class="tab === '{{ $key }}' ? 'bg-[#1a6bbf] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'"
-                        class="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold transition-all">
-                    {{ $label }}
+                        class="flex-1 min-w-[130px] px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5">
+                    @if($tData['icon'] === 'ticket')
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+                    @endif
+                    <span>{{ $tData['label'] }}</span>
                 </button>
                 @endforeach
             </div>
@@ -207,6 +218,203 @@
                         </div>
                     </form>
                 </div>
+            </div>
+
+            {{-- ══════════ TAB: TIKET & PESANAN SAYA ══════════ --}}
+            <div x-show="tab === 'tiket'" x-cloak class="space-y-6" x-data="{ bookingFilter: 'all' }">
+                
+                {{-- Header & Filter Bar --}}
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/>
+                            </svg>
+                            Riwayat Tiket & Reservasi
+                        </h2>
+                        <p class="text-xs text-gray-500 mt-1">Daftar seluruh tiket acara dan reservasi kamar hotel beserta status verifikasi pembayaran Anda.</p>
+                    </div>
+
+                    {{-- Interactive filter controls --}}
+                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+                        <button type="button" @click="bookingFilter = 'all'"
+                                :class="bookingFilter === 'all' ? 'bg-[#163766] text-white shadow-xs' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'"
+                                class="px-3.5 py-1.5 rounded-full text-xs font-bold transition whitespace-nowrap">
+                            Semua ({{ $userBookings->count() }})
+                        </button>
+                        <button type="button" @click="bookingFilter = 'paid'"
+                                :class="bookingFilter === 'paid' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'"
+                                class="px-3.5 py-1.5 rounded-full text-xs font-bold transition whitespace-nowrap">
+                            Lunas ({{ $userBookings->where('payment_status', 'paid')->count() }})
+                        </button>
+                        <button type="button" @click="bookingFilter = 'verifying'"
+                                :class="bookingFilter === 'verifying' ? 'bg-amber-600 text-white shadow-xs' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'"
+                                class="px-3.5 py-1.5 rounded-full text-xs font-bold transition whitespace-nowrap">
+                            Menunggu Verifikasi ({{ $userBookings->where('payment_status', 'pending')->whereNotNull('payment_proof')->count() }})
+                        </button>
+                        <button type="button" @click="bookingFilter = 'unpaid'"
+                                :class="bookingFilter === 'unpaid' ? 'bg-slate-700 text-white shadow-xs' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'"
+                                class="px-3.5 py-1.5 rounded-full text-xs font-bold transition whitespace-nowrap">
+                            Belum Bayar ({{ $userBookings->where('payment_status', 'pending')->whereNull('payment_proof')->count() }})
+                        </button>
+                    </div>
+                </div>
+
+                @if($userBookings->count() > 0)
+                    <div class="space-y-4">
+                        @foreach($userBookings as $b)
+                            @php
+                                $isPaid = $b->payment_status === 'paid';
+                                $isVerifying = $b->payment_status === 'pending' && $b->payment_proof !== null;
+                                $isUnpaid = $b->payment_status === 'pending' && $b->payment_proof === null;
+                                $isCancelled = $b->payment_status === 'cancelled';
+                                
+                                $filterTag = $isPaid ? 'paid' : ($isVerifying ? 'verifying' : ($isUnpaid ? 'unpaid' : 'cancelled'));
+                            @endphp
+                            <div x-show="bookingFilter === 'all' || bookingFilter === '{{ $filterTag }}'"
+                                 class="bg-white rounded-2xl border border-gray-200/90 shadow-sm p-5 sm:p-6 transition hover:border-[#1a6bbf]/40 hover:shadow-md">
+                                
+                                {{-- Top Row: Category uppercase tracking text (NO pill) + Booking Code + Status Badge --}}
+                                <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-gray-100">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <span class="text-xs font-bold uppercase tracking-wider {{ $b->booking_type === 'event' ? 'text-indigo-600' : 'text-purple-600' }}">
+                                            {{ $b->booking_type === 'event' ? 'Tiket Acara' : 'Reservasi Kamar' }}
+                                        </span>
+                                        <span class="text-gray-300">•</span>
+                                        <span class="font-mono text-xs font-bold text-gray-700 bg-gray-50 px-2.5 py-0.5 rounded border border-gray-200">
+                                            #{{ $b->booking_code }}
+                                        </span>
+                                        <span class="text-gray-300">•</span>
+                                        <span class="text-xs text-gray-400">
+                                            Dipesan {{ $b->created_at->translatedFormat('d M Y, H:i') }} WIB
+                                        </span>
+                                    </div>
+
+                                    {{-- Functional Status Badge --}}
+                                    <div>
+                                        @if($isPaid)
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                                <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                                Lunas & Terverifikasi
+                                            </span>
+                                        @elseif($isVerifying)
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                                                <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                Menunggu Verifikasi Struk
+                                            </span>
+                                        @elseif($isUnpaid)
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                                                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                Menunggu Pembayaran
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                                                <svg class="w-3.5 h-3.5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                Dibatalkan
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                {{-- Middle Row: Title, Dates, Specs, Price --}}
+                                <div class="py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                    <div class="space-y-1">
+                                        <h3 class="text-base sm:text-lg font-black text-gray-900">
+                                            {{ $b->source_title }}
+                                        </h3>
+                                        <p class="text-xs text-gray-600 flex items-center gap-2 flex-wrap">
+                                            <span>Pilihan: <strong class="text-gray-800">{{ $b->bookable?->name ?? 'Tiket / Kamar' }}</strong></span>
+                                            <span>•</span>
+                                            <span>Jumlah: <strong class="text-gray-800">{{ $b->quantity }} {{ $b->booking_type === 'event' ? 'Tiket' : 'Kamar' }}</strong></span>
+                                        </p>
+                                        @if($b->booking_type === 'hotel' && $b->check_in_date && $b->check_out_date)
+                                            <p class="text-xs text-gray-500 flex items-center gap-1.5 pt-0.5">
+                                                <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                                Jadwal Menginap: {{ $b->check_in_date->format('d M Y') }} – {{ $b->check_out_date->format('d M Y') }}
+                                            </p>
+                                        @elseif($b->booking_type === 'event' && $b->bookable?->event?->start_date)
+                                            <p class="text-xs text-gray-500 flex items-center gap-1.5 pt-0.5">
+                                                <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                                Tanggal Acara: {{ \Carbon\Carbon::parse($b->bookable->event->start_date)->translatedFormat('d F Y') }}
+                                            </p>
+                                        @endif
+                                    </div>
+
+                                    <div class="text-left md:text-right">
+                                        <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">Total Tagihan</span>
+                                        <span class="text-xl font-black text-gray-900 font-mono">Rp {{ number_format($b->total_amount, 0, ',', '.') }}</span>
+                                    </div>
+                                </div>
+
+                                {{-- Status Note / Verification Details Callout --}}
+                                <div class="mt-1 pt-3 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                                    <div class="text-xs text-gray-500">
+                                        @if($isPaid)
+                                            <span class="text-emerald-700 flex items-center gap-1.5 font-medium">
+                                                <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                Pembayaran terverifikasi{{ $b->paid_at ? ' pada ' . $b->paid_at->translatedFormat('d M Y, H:i') . ' WIB' : '' }}. E-Tiket Anda siap digunakan.
+                                            </span>
+                                        @elseif($isVerifying)
+                                            <span class="text-amber-800 flex items-center gap-1.5 font-medium">
+                                                <svg class="w-4 h-4 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                Bukti transfer diunggah {{ $b->payment_proof_uploaded_at ? $b->payment_proof_uploaded_at->diffForHumans() : 'baru saja' }}. Sedang dalam antrean verifikasi pengelola.
+                                            </span>
+                                        @elseif($isUnpaid)
+                                            <span class="text-slate-600 flex items-center gap-1.5">
+                                                <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                Belum ada bukti transfer. Silakan transfer manual ke rekening resmi dan unggah struk pembayaran.
+                                            </span>
+                                        @else
+                                            <span class="text-rose-600 flex items-center gap-1.5">
+                                                <svg class="w-4 h-4 text-rose-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                Transaksi ini telah dibatalkan atau kedaluwarsa.
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                                        @if($isUnpaid)
+                                            <a href="{{ route('booking.show', $b->booking_code) }}#upload-section"
+                                               class="w-full sm:w-auto px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl transition shadow-xs flex items-center justify-center gap-1.5 whitespace-nowrap">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                                Unggah Struk
+                                            </a>
+                                        @endif
+                                        <a href="{{ route('booking.show', $b->booking_code) }}"
+                                           class="w-full sm:w-auto px-5 py-2.5 bg-[#163766] hover:bg-[#102747] text-white font-bold text-xs rounded-xl transition shadow-xs flex items-center justify-center gap-1.5 whitespace-nowrap">
+                                            <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                            {{ $isPaid ? 'Buka E-Tiket Resmi' : 'Rincian & Invoice' }}
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    {{-- Empty State --}}
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-10 text-center">
+                        <div class="w-16 h-16 rounded-2xl bg-blue-50 text-[#1a6bbf] flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-base font-bold text-gray-900 mb-1">Belum Ada Riwayat Pemesanan</h3>
+                        <p class="text-xs text-gray-500 max-w-sm mx-auto mb-5 leading-relaxed">
+                            Anda belum memesan tiket acara ataupun kamar hotel di Visit Sukabumi. Mulai rencanakan liburan Anda sekarang!
+                        </p>
+                        <div class="flex items-center justify-center gap-3 flex-wrap">
+                            <a href="{{ route('event.index') }}" class="px-4 py-2.5 rounded-xl bg-[#163766] hover:bg-[#102747] text-white font-bold text-xs transition shadow-xs flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-[#f8be2c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                Jelajahi Acara Seru
+                            </a>
+                            <a href="{{ route('place.index') }}" class="px-4 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 font-bold text-xs transition">
+                                Cari Penginapan & Wisata
+                            </a>
+                        </div>
+                    </div>
+                @endif
+
             </div>
 
             {{-- ══════════ TAB 2: DESTINASI SAYA ══════════ --}}

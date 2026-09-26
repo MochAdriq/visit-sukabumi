@@ -213,6 +213,14 @@ $navItems = [
                                     <span>Profil Saya</span>
                                 </a>
 
+                                {{-- Tiket & Pesanan Saya --}}
+                                <a href="{{ route('profile.show', ['tab' => 'tiket']) }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#1a6bbf] transition-colors">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/>
+                                    </svg>
+                                    <span>Tiket & Pesanan Saya</span>
+                                </a>
+
                                 {{-- Wishlist --}}
                                 <a href="{{ route('wishlist.index') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-amber-50 hover:text-[#f9a826] transition-colors">
                                     <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
@@ -470,11 +478,17 @@ $navItems = [
                 <span>Panel Admin</span>
             </a>
             @endif
-            <a href="{{ route('profile.show') }}" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">
+            <a href="{{ route('profile.show') }}" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors border-b border-gray-50">
                 <svg class="w-5 h-5 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                 </svg>
                 Profil Saya
+            </a>
+            <a href="{{ route('profile.show', ['tab' => 'tiket']) }}" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors border-b border-gray-50">
+                <svg class="w-5 h-5 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/>
+                </svg>
+                Tiket & Pesanan Saya
             </a>
             @endauth
             <a href="{{ route('wishlist.index') }}" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 hover:text-[#f9a826] transition-colors">

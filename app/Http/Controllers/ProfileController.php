@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,16 @@ class ProfileController extends Controller
     {
         $user = Auth::user()->load(['claims.place', 'wishlists', 'reviews.place']);
 
-        // Data untuk 3 tab profil
+        // Data pemesanan tiket acara & reservasi kamar milik pengguna
+        $userBookings = Booking::with('bookable')
+            ->where(function ($q) use ($user) {
+                $q->where('user_id', $user->id)
+                  ->orWhere('customer_email', $user->email);
+            })
+            ->latest()
+            ->get();
+
+        // Data untuk tab profil lainnya
         $pendingClaim   = $user->claims->where('status', 'pending')->first();
         $approvedClaims = $user->claims->where('status', 'approved');
         $rejectedClaim  = $user->claims->where('status', 'rejected')->sortByDesc('updated_at')->first();
@@ -26,6 +36,7 @@ class ProfileController extends Controller
 
         return view('profile.show', compact(
             'user',
+            'userBookings',
             'pendingClaim',
             'approvedClaims',
             'rejectedClaim',
