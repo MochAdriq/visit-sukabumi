@@ -60,7 +60,7 @@ $navItems = [
             'links'    => [
                 ['label' => 'Tentang Sukabumi', 'href' => '/information', 'highlight' => false],
                 ['label' => 'Panduan Wisata', 'href' => '/panduan-wisata', 'highlight' => false],
-                ['label' => 'Galeri Video', 'href' => '/video', 'highlight' => false],
+                ['label' => 'Galeri Video', 'href' => '/blog?category=Video', 'highlight' => false],
                 ['label' => 'Blog / Artikel', 'href' => '/blog', 'highlight' => false],
             ],
         ],

@@ -15,6 +15,8 @@ class BlogPost extends Model
         'slug',
         'content',
         'image_path',
+        'youtube_url',
+        'youtube_id',
         'author_id',
         'author_name',
         'category',
@@ -32,7 +34,59 @@ class BlogPost extends Model
             if ($post->status === 'published' && is_null($post->published_at)) {
                 $post->published_at = now();
             }
+            if (!empty($post->youtube_url)) {
+                $post->youtube_id = self::extractYoutubeId($post->youtube_url);
+            }
         });
+    }
+
+    public static function extractYoutubeId(?string $url): ?string
+    {
+        if (empty($url)) {
+            return null;
+        }
+
+        $url = trim($url);
+        $patterns = [
+            '/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/ ]{11})/i',
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $url, $matches)) {
+                return $matches[1];
+            }
+        }
+
+        if (strlen($url) === 11 && preg_match('/^[a-zA-Z0-9_-]{11}$/', $url)) {
+            return $url;
+        }
+
+        return null;
+    }
+
+    public function getYoutubeEmbedUrlAttribute(): ?string
+    {
+        return $this->youtube_id ? "https://www.youtube-nocookie.com/embed/{$this->youtube_id}?rel=0" : null;
+    }
+
+    public function getYoutubeThumbnailUrlAttribute(): ?string
+    {
+        return $this->youtube_id ? "https://img.youtube.com/vi/{$this->youtube_id}/maxresdefault.jpg" : null;
+    }
+
+    public function getEmbedUrlAttribute(): ?string
+    {
+        return $this->youtube_embed_url;
+    }
+
+    public function getThumbnailUrlAttribute(): ?string
+    {
+        return $this->youtube_thumbnail_url ?? ($this->image_path ? asset('storage/' . $this->image_path) : null);
+    }
+
+    public function getHqThumbnailUrlAttribute(): ?string
+    {
+        return $this->youtube_id ? "https://img.youtube.com/vi/{$this->youtube_id}/hqdefault.jpg" : $this->thumbnail_url;
     }
 
     /** Route model binding by slug */

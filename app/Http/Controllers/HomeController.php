@@ -101,20 +101,31 @@ class HomeController extends Controller
         $homeAd = \App\Models\Advertisement::getRandomAd('homepage_middle', 'home');
 
         // 9. Featured Videos (Sukabumi Dalam Lensa)
-        $featuredVideos = \App\Models\Video::where('is_active', true)
-            ->where('is_featured', true)
-            ->orderBy('sort_order', 'asc')
-            ->orderBy('id', 'desc')
+        $featuredVideos = \App\Models\BlogPost::published()
+            ->where(function ($q) {
+                $q->where('category', 'Video')
+                  ->orWhereNotNull('youtube_url');
+            })
+            ->latest('published_at')
             ->limit(4)
             ->get();
 
-        // Fallback jika belum ada yang di-set featured, ambil video aktif terbaru
         if ($featuredVideos->isEmpty()) {
             $featuredVideos = \App\Models\Video::where('is_active', true)
+                ->where('is_featured', true)
                 ->orderBy('sort_order', 'asc')
                 ->orderBy('id', 'desc')
                 ->limit(4)
                 ->get();
+
+            // Fallback jika belum ada yang di-set featured, ambil video aktif terbaru
+            if ($featuredVideos->isEmpty()) {
+                $featuredVideos = \App\Models\Video::where('is_active', true)
+                    ->orderBy('sort_order', 'asc')
+                    ->orderBy('id', 'desc')
+                    ->limit(4)
+                    ->get();
+            }
         }
 
         return view('home', compact('mustSees', 'recentReviews', 'bestChoices', 'popularPlaces', 'popularCulinaries', 'upcomingEvents', 'bannerImage', 'categories', 'homeAd', 'featuredVideos'));

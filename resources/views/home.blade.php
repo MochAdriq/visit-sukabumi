@@ -618,7 +618,7 @@
                     </div>
 
                     <div>
-                        <a href="{{ route('video.index') }}" 
+                        <a href="{{ route('blog.index', ['category' => 'Video']) }}" 
                            class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm backdrop-blur-xs transition-all duration-200 group">
                             <span>Jelajahi Semua Video</span>
                             <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -261,8 +261,24 @@
                  ════════════════════════════════════════════ --}}
             <div class="lg:col-span-8 min-w-0">
 
-                {{-- Lead Featured Image (Kompas Ratio 16:9) --}}
-                @if($post->image_path)
+                {{-- Lead Media: Video Player (16:9) or Featured Image --}}
+                @if($post->youtube_embed_url)
+                    <figure class="mb-8">
+                        <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-md border border-gray-200 bg-black">
+                            <iframe 
+                                src="{{ $post->youtube_embed_url }}" 
+                                title="{{ $post->title }}"
+                                class="absolute inset-0 w-full h-full border-0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                        <figcaption class="mt-2.5 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-gray-500 gap-1 leading-relaxed">
+                            <span>Tayangan video: <strong>{{ $post->title }}</strong></span>
+                            <span class="text-slate-400 shrink-0 font-medium">(Video: YouTube)</span>
+                        </figcaption>
+                    </figure>
+                @elseif($post->image_path)
                     <figure class="mb-8">
                         <div class="rounded-2xl overflow-hidden shadow-xs border border-gray-200 bg-slate-100">
                             <img src="{{ Storage::url($post->image_path) }}" 

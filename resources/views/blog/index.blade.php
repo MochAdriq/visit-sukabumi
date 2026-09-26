@@ -97,7 +97,7 @@
                         @php
                             $headlineImg = $headlinePost->image_path 
                                 ? (str_starts_with($headlinePost->image_path, 'http') ? $headlinePost->image_path : Storage::url($headlinePost->image_path)) 
-                                : null;
+                                : ($headlinePost->youtube_thumbnail_url ?? null);
                         @endphp
                         <article class="group flex flex-col h-full">
                             <a href="{{ route('blog.show', $headlinePost->slug) }}" class="block relative aspect-[16/10] overflow-hidden rounded-xl bg-gray-100 mb-4 shadow-xs">
@@ -110,6 +110,14 @@
                                         <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                         </svg>
+                                    </div>
+                                @endif
+
+                                @if($headlinePost->youtube_id || $headlinePost->category === 'Video')
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors pointer-events-none">
+                                        <div class="w-12 h-12 rounded-full bg-white/95 text-emerald-800 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                            <svg class="w-5 h-5 ml-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                        </div>
                                     </div>
                                 @endif
                             </a>
@@ -151,7 +159,7 @@
                             @php
                                 $subImg = $subPost->image_path 
                                     ? (str_starts_with($subPost->image_path, 'http') ? $subPost->image_path : Storage::url($subPost->image_path)) 
-                                    : null;
+                                    : ($subPost->youtube_thumbnail_url ?? null);
                             @endphp
                             <article class="group py-4 first:pt-0 last:pb-0 flex items-start gap-4">
                                 <a href="{{ route('blog.show', $subPost->slug) }}" class="block relative w-28 h-20 sm:w-32 sm:h-22 shrink-0 overflow-hidden rounded-lg bg-gray-100 shadow-2xs">
@@ -164,6 +172,14 @@
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                             </svg>
+                                        </div>
+                                    @endif
+
+                                    @if($subPost->youtube_id || $subPost->category === 'Video')
+                                        <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors pointer-events-none">
+                                            <div class="w-8 h-8 rounded-full bg-white/95 text-emerald-800 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                                                <svg class="w-3.5 h-3.5 ml-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                            </div>
                                         </div>
                                     @endif
                                 </a>
@@ -239,7 +255,7 @@
                         @php
                             $cImg = $curated->image_path 
                                 ? (str_starts_with($curated->image_path, 'http') ? $curated->image_path : Storage::url($curated->image_path)) 
-                                : null;
+                                : ($curated->youtube_thumbnail_url ?? null);
                         @endphp
                         <article class="group flex flex-col">
                             <a href="{{ route('blog.show', $curated->slug) }}" class="block relative aspect-[16/10] overflow-hidden rounded-xl bg-gray-100 mb-3.5 shadow-2xs">
@@ -252,6 +268,14 @@
                                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                         </svg>
+                                    </div>
+                                @endif
+
+                                @if($curated->youtube_id || $curated->category === 'Video')
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors pointer-events-none">
+                                        <div class="w-10 h-10 rounded-full bg-white/95 text-emerald-800 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                                            <svg class="w-4 h-4 ml-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                        </div>
                                     </div>
                                 @endif
                             </a>
@@ -330,7 +354,7 @@
                             @php
                                 $feedImg = $post->image_path 
                                     ? (str_starts_with($post->image_path, 'http') ? $post->image_path : Storage::url($post->image_path)) 
-                                    : null;
+                                    : ($post->youtube_thumbnail_url ?? null);
                             @endphp
                             <article class="group py-6 first:pt-0 flex flex-col sm:flex-row gap-5 items-start">
                                 
@@ -345,6 +369,14 @@
                                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                             </svg>
+                                        </div>
+                                    @endif
+
+                                    @if($post->youtube_id || $post->category === 'Video')
+                                        <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors pointer-events-none">
+                                            <div class="w-10 h-10 rounded-full bg-white/95 text-emerald-800 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                                                <svg class="w-4 h-4 ml-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                            </div>
                                         </div>
                                     @endif
                                 </a>

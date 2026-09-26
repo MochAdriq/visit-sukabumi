@@ -90,10 +90,18 @@ class BlogPostResource extends Resource
                                 'Berita' => 'Berita',
                                 'Tips & Trik' => 'Tips & Trik',
                                 'Kuliner' => 'Kuliner',
+                                'Video' => 'Video / Dokumentasi',
                             ])
                             ->required()
                             ->default('Panduan Wisata')
-                            ->label('Kategori'),
+                            ->label('Kategori')
+                            ->live(),
+                        Forms\Components\TextInput::make('youtube_url')
+                            ->label('URL Video YouTube')
+                            ->placeholder('Contoh: https://www.youtube.com/watch?v=... atau https://youtu.be/...')
+                            ->visible(fn (\Filament\Forms\Get $get) => $get('category') === 'Video')
+                            ->required(fn (\Filament\Forms\Get $get) => $get('category') === 'Video')
+                            ->helperText('Kolom ini muncul khusus untuk konten berkategori Video.'),
                         Forms\Components\Select::make('author_id')
                             ->relationship(
                                 name: 'author',
