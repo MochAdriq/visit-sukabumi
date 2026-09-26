@@ -42,15 +42,20 @@ class MitraBookingResource extends Resource
 
         $placeIds = $user ? $user->ownedPlaces()->pluck('id') : collect();
         $roomIds = HotelRoom::whereIn('place_id', $placeIds)->pluck('id');
+        $myEventIds = $user ? $user->events()->pluck('id') : collect();
+        $ticketIds = \App\Models\EventTicket::whereIn('event_id', $myEventIds)->pluck('id');
 
         return parent::getEloquentQuery()
-            ->where(function (Builder $query) use ($placeIds, $roomIds) {
+            ->where(function (Builder $query) use ($placeIds, $roomIds, $ticketIds) {
                 $query->where(function (Builder $q) use ($roomIds) {
                     $q->where('bookable_type', HotelRoom::class)
                       ->whereIn('bookable_id', $roomIds);
                 })->orWhere(function (Builder $q) use ($placeIds) {
                     $q->where('bookable_type', Place::class)
                       ->whereIn('bookable_id', $placeIds);
+                })->orWhere(function (Builder $q) use ($ticketIds) {
+                    $q->where('bookable_type', \App\Models\EventTicket::class)
+                      ->whereIn('bookable_id', $ticketIds);
                 });
             })
             ->latest('created_at');
@@ -67,14 +72,22 @@ class MitraBookingResource extends Resource
                     ->searchable()
                     ->copyable(),
 
+                Tables\Columns\TextColumn::make('booking_type')
+                    ->label('Kategori')
+                    ->formatStateUsing(fn (?string $state): string => match ($state) {
+                        'hotel' => 'Kamar Hotel',
+                        'event' => 'Tiket Event',
+                        default => ucfirst($state ?? '-'),
+                    }),
+
                 Tables\Columns\TextColumn::make('customer_name')
-                    ->label('Nama Tamu')
+                    ->label('Nama Pemesan')
                     ->weight('bold')
                     ->searchable()
                     ->description(fn (Booking $record): string => $record->customer_phone ?? '-'),
 
                 Tables\Columns\TextColumn::make('source_title')
-                    ->label('Kamar / Tiket')
+                    ->label('Item / Layanan')
                     ->wrap()
                     ->searchable(),
 
@@ -124,6 +137,13 @@ class MitraBookingResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('booking_type')
+                    ->label('Kategori Layanan')
+                    ->options([
+                        'hotel' => 'Kamar Hotel',
+                        'event' => 'Tiket Event',
+                    ]),
+
                 Tables\Filters\SelectFilter::make('payment_status')
                     ->label('Status Pembayaran')
                     ->options([

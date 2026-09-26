@@ -33,7 +33,7 @@ class User extends Authenticatable implements FilamentUser
         }
 
         if ($panel->getId() === 'kelola') {
-            return $this->role === 'admin' || $this->ownedPlaces()->exists() || $this->claims()->where('status', 'approved')->exists();
+            return $this->role === 'admin' || $this->ownedPlaces()->exists() || $this->claims()->where('status', 'approved')->exists() || $this->events()->exists();
         }
 
         return false;
@@ -135,11 +135,19 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * Apakah user adalah mitra aktif (memiliki tempat terverifikasi).
+     * Event yang dimiliki / diselenggarakan oleh user ini.
+     */
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class);
+    }
+
+    /**
+     * Apakah user adalah mitra aktif (memiliki tempat terverifikasi atau event).
      */
     public function isMitra(): bool
     {
-        return $this->ownedPlaces()->exists() || $this->claims()->where('status', 'approved')->exists();
+        return $this->ownedPlaces()->exists() || $this->claims()->where('status', 'approved')->exists() || $this->events()->exists();
     }
 
     /**

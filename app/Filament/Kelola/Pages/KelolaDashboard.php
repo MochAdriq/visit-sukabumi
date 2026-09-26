@@ -71,14 +71,22 @@ class KelolaDashboard extends Page
             ->take(5)
             ->get();
 
+        $myEventIds = ($user->role === 'admin' && !$user->events()->exists())
+            ? \App\Models\Event::pluck('id')
+            : $user->events()->pluck('id');
+        $ticketIds = \App\Models\EventTicket::whereIn('event_id', $myEventIds)->pluck('id');
+
         // Bookings Query
-        $bookingQuery = Booking::where(function ($query) use ($placeIds, $roomIds) {
+        $bookingQuery = Booking::where(function ($query) use ($placeIds, $roomIds, $ticketIds) {
             $query->where(function ($q) use ($roomIds) {
                 $q->where('bookable_type', HotelRoom::class)
                   ->whereIn('bookable_id', $roomIds);
             })->orWhere(function ($q) use ($placeIds) {
                 $q->where('bookable_type', Place::class)
                   ->whereIn('bookable_id', $placeIds);
+            })->orWhere(function ($q) use ($ticketIds) {
+                $q->where('bookable_type', \App\Models\EventTicket::class)
+                  ->whereIn('bookable_id', $ticketIds);
             });
         });
 

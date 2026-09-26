@@ -185,25 +185,23 @@ $navItems = [
                             </div>
 
                             <div class="py-1.5">
-                                {{-- Portal Dinas / Pemda (jika dinas atau admin) --}}
-                                @if(Auth::user()->isDinas())
-                                    <a href="{{ url('/dinas') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-[#163766] bg-blue-50/70 hover:bg-blue-100/90 transition-colors border-b border-blue-100/60">
-                                        <svg class="w-4 h-4 text-[#163766]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                {{-- Buka Halaman Kelola (HANYA jika akun eligible: mitra tempat/hotel, pengelola event, atau admin) --}}
+                                @if(Auth::user()->isMitra() || Auth::user()->isAdmin())
+                                    <a href="{{ url('/kelola') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-[#1a6bbf] hover:bg-blue-50 transition-colors border-b border-gray-100">
+                                        <svg class="w-4 h-4 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                         </svg>
-                                        <span class="flex-1">Portal Dinas Pemda (/dinas)</span>
-                                        <span class="text-[10px] font-semibold text-[#163766] bg-white/80 px-1.5 py-0.5 rounded border border-blue-200">Pemda</span>
+                                        <span>Buka Halaman Kelola</span>
                                     </a>
                                 @endif
 
-                                {{-- Panel Admin (jika admin) --}}
+                                {{-- Panel Admin (HANYA jika role admin) --}}
                                 @if(Auth::user()->isAdmin())
-                                    <a href="{{ url('/admin') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-indigo-700 bg-indigo-50/70 hover:bg-indigo-100/90 transition-colors border-b border-indigo-100/60">
+                                    <a href="{{ url('/admin') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-indigo-700 hover:bg-indigo-50 transition-colors border-b border-gray-100">
                                         <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                                         </svg>
-                                        <span class="flex-1">Panel Admin (/admin)</span>
-                                        <span class="text-[10px] font-semibold text-indigo-600 bg-white/80 px-1.5 py-0.5 rounded border border-indigo-100">Kelola</span>
+                                        <span>Panel Admin</span>
                                     </a>
                                 @endif
 
@@ -214,16 +212,6 @@ $navItems = [
                                     </svg>
                                     <span>Profil Saya</span>
                                 </a>
-
-                                {{-- Portal Kelola (jika mitra) --}}
-                                @if(Auth::user()->claims()->where('status', 'approved')->exists())
-                                    <a href="{{ url('/kelola') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-[#1a6bbf] hover:bg-blue-50 transition-colors">
-                                        <svg class="w-4 h-4 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                        </svg>
-                                        <span>Portal Mitra (/kelola)</span>
-                                    </a>
-                                @endif
 
                                 {{-- Wishlist --}}
                                 <a href="{{ route('wishlist.index') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-amber-50 hover:text-[#f9a826] transition-colors">
@@ -466,20 +454,20 @@ $navItems = [
         {{-- Wishlist & User actions --}}
         <div class="mt-2 border-t border-gray-100 pt-1">
             @auth
-            @if(Auth::user()->isDinas())
-            <a href="{{ url('/dinas') }}" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-[#163766] bg-blue-50/70 hover:bg-blue-100/90 transition-colors border-b border-blue-100/60">
-                <svg class="w-5 h-5 text-[#163766]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            @if(Auth::user()->isMitra() || Auth::user()->isAdmin())
+            <a href="{{ url('/kelola') }}" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-[#1a6bbf] hover:bg-blue-50 transition-colors border-b border-gray-50">
+                <svg class="w-5 h-5 text-[#1a6bbf]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                 </svg>
-                <span>Portal Pemda & Dinas (/dinas)</span>
+                <span>Buka Halaman Kelola</span>
             </a>
             @endif
             @if(Auth::user()->isAdmin())
-            <a href="{{ url('/admin') }}" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-indigo-700 bg-indigo-50/70 hover:bg-indigo-100/90 transition-colors border-b border-indigo-100/60">
+            <a href="{{ url('/admin') }}" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-indigo-700 hover:bg-indigo-50 transition-colors border-b border-gray-50">
                 <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                 </svg>
-                <span>Panel Admin (/admin)</span>
+                <span>Panel Admin</span>
             </a>
             @endif
             <a href="{{ route('profile.show') }}" class="flex items-center gap-3 px-5 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 hover:text-[#1a6bbf] transition-colors">

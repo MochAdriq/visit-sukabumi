@@ -31,9 +31,10 @@ class KelolaPanelProvider extends PanelProvider
             ->favicon(asset('assets/images/logo-v2.png'))
             ->navigationGroups([
                 '1. Reservasi & Tamu',
-                '2. Penginapan & Kamar',
-                '3. Profil Tempat Wisata',
-                '4. Ulasan & Reputasi',
+                '2. Event & Tiket Acara',
+                '3. Penginapan & Kamar',
+                '4. Profil Tempat Wisata',
+                '5. Ulasan & Reputasi',
             ])
             ->discoverResources(in: app_path('Filament/Kelola/Resources'), for: 'App\\Filament\\Kelola\\Resources')
             ->discoverPages(in: app_path('Filament/Kelola/Pages'), for: 'App\\Filament\\Kelola\\Pages')

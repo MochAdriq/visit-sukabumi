@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     protected $fillable = [
+        'user_id',
+        'organizer_type',
+        'organizer_name',
         'title',
         'slug',
         'description',
@@ -23,11 +26,30 @@ class Event extends Model
         'cancellation_policy',
     ];
 
+    public function isInternalOrganizer(): bool
+    {
+        return $this->organizer_type === 'internal' || empty($this->user_id);
+    }
+
+    public function getDisplayOrganizerNameAttribute(): string
+    {
+        if ($this->organizer_type === 'internal') {
+            return $this->organizer_name ?: 'Visit Sukabumi Official';
+        }
+
+        return $this->organizer_name ?: ($this->user?->name ?? 'Mitra Visit Sukabumi');
+    }
+
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'is_active' => 'boolean',
     ];
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function itineraries()
     {
@@ -42,6 +64,13 @@ class Event extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return $this->where('slug', $value)
+            ->orWhere('id', $value)
+            ->first();
     }
 
     public function reviews()
