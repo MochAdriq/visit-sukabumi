@@ -57,44 +57,24 @@
         }
     </style>
 
-    <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6 border-b border-gray-200">
-        <div class="flex-shrink-0 text-center md:text-left">
-            <a href="{{ url('/') }}" class="inline-block">
-                <img src="{{ asset('images/logo-v2.png') }}" alt="Visit Sukabumi" class="h-16 md:h-20 object-contain drop-shadow-sm mb-1" />
-            </a>
-            <div class="text-xs text-gray-500 font-semibold tracking-widest uppercase mt-0.5 px-2">Panduan Wisata Resmi</div>
-        </div>
-
-        {{-- Partner Logos Marquee (Smooth Continuous Left-to-Right) --}}
-        <div class="flex-1 w-full min-w-0 overflow-hidden relative py-2 mx-0 md:mx-6">
+    {{-- Partner Logos Marquee (Pure 100% Full-Width Continuous Smooth Left-to-Right) --}}
+    <div class="border-b border-gray-200 py-6 md:py-8 overflow-hidden relative bg-white">
+        <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 relative">
             {{-- Smooth Edge Fade Masks --}}
-            <div class="pointer-events-none absolute inset-y-0 left-0 w-8 md:w-16 bg-gradient-to-r from-white to-transparent z-10"></div>
-            <div class="pointer-events-none absolute inset-y-0 right-0 w-8 md:w-16 bg-gradient-to-l from-white to-transparent z-10"></div>
+            <div class="pointer-events-none absolute inset-y-0 left-0 w-12 md:w-24 bg-gradient-to-r from-white to-transparent z-10"></div>
+            <div class="pointer-events-none absolute inset-y-0 right-0 w-12 md:w-24 bg-gradient-to-l from-white to-transparent z-10"></div>
 
-            <div class="partner-marquee-track flex items-center gap-10 md:gap-14 w-max hover:[animation-play-state:paused]">
+            <div class="partner-marquee-track flex items-center gap-12 md:gap-16 w-max hover:[animation-play-state:paused]">
                 @foreach([1, 2] as $set)
-                    <div class="flex items-center gap-10 md:gap-14 shrink-0" @if($set === 2) aria-hidden="true" @endif>
+                    <div class="flex items-center gap-12 md:gap-16 shrink-0" @if($set === 2) aria-hidden="true" @endif>
                         @foreach($halfLogos as $logo)
-                            <div class="flex items-center justify-center shrink-0 px-2 opacity-80 hover:opacity-100 transition-opacity duration-300">
-                                <img src="{{ $logo['src'] }}" alt="{{ $logo['name'] }}" class="{{ $logo['h'] }} max-w-[130px] md:max-w-[160px] object-contain select-none pointer-events-none" loading="lazy" />
+                            <div class="flex items-center justify-center shrink-0 px-3 opacity-80 hover:opacity-100 transition-opacity duration-300">
+                                <img src="{{ $logo['src'] }}" alt="{{ $logo['name'] }}" class="{{ $logo['h'] }} max-w-[140px] md:max-w-[170px] object-contain select-none pointer-events-none" loading="lazy" />
                             </div>
                         @endforeach
                     </div>
                 @endforeach
             </div>
-        </div>
-
-        <div class="flex-shrink-0 flex items-center gap-4">
-            {{-- Social links (kept as # for now per user request) --}}
-            <a href="#" class="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition" title="Facebook">
-                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-            </a>
-            <a href="#" class="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition" title="Instagram">
-                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zm1.5-4.87h.01M7.5 20.5h9a5 5 0 0 0 5-5v-9a5 5 0 0 0-5-5h-9a5 5 0 0 0-5 5v9a5 5 0 0 0 5 5z"/></svg>
-            </a>
-            <a href="#" class="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition" title="YouTube">
-                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM10 15.5V8.5l6 3.5-6 3.5z"/></svg>
-            </a>
         </div>
     </div>
 
