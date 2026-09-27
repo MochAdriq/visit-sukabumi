@@ -23,22 +23,68 @@
 @endif
 
 <footer class="bg-white border-t border-gray-200 relative">
-    {{-- Top Brand Bar --}}
+    {{-- Top Brand Bar with Continuous Smooth Left-to-Right Partner Logos Marquee --}}
+    @php
+        $partnerLogos = [
+            ['name' => 'Bank Mandiri', 'src' => asset('images/partners/bank-mandiri.png'), 'h' => 'h-6 md:h-7'],
+            ['name' => 'ASITA', 'src' => asset('images/partners/asita.png'), 'h' => 'h-8 md:h-9'],
+            ['name' => 'Brightnest', 'src' => asset('images/partners/brightnest.png'), 'h' => 'h-7 md:h-8'],
+            ['name' => 'Google Gemini', 'src' => asset('images/partners/gemini.png'), 'h' => 'h-7 md:h-8'],
+            ['name' => 'Google', 'src' => asset('images/partners/google.png'), 'h' => 'h-7 md:h-8'],
+            ['name' => 'Microsoft', 'src' => asset('images/partners/microsoft.png'), 'h' => 'h-5 md:h-6'],
+        ];
+        // Shuffle randomly per request so sorting is non-deterministic
+        $shuffledLogos = collect($partnerLogos)->shuffle()->values();
+        // Duplicate once inside each half to ensure seamless coverage across wide screens
+        $halfLogos = $shuffledLogos->concat($shuffledLogos);
+    @endphp
+
+    <style>
+        @keyframes partnerMarqueeLtr {
+            0% {
+                transform: translate3d(-50%, 0, 0);
+            }
+            100% {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+        .partner-marquee-track {
+            animation: partnerMarqueeLtr 32s linear infinite;
+            will-change: transform;
+        }
+        .partner-marquee-track:hover {
+            animation-play-state: paused;
+        }
+    </style>
+
     <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6 border-b border-gray-200">
-        <div>
+        <div class="flex-shrink-0 text-center md:text-left">
             <a href="{{ url('/') }}" class="inline-block">
                 <img src="{{ asset('images/logo-v2.png') }}" alt="Visit Sukabumi" class="h-16 md:h-20 object-contain drop-shadow-sm mb-1" />
             </a>
             <div class="text-xs text-gray-500 font-semibold tracking-widest uppercase mt-0.5 px-2">Panduan Wisata Resmi</div>
         </div>
-        <div class="text-gray-300 hidden md:block">
-            <svg width="220" height="55" viewBox="0 0 220 55" fill="none" stroke="currentColor" stroke-width="1.2">
-                <path d="M10 55 L10 35 L30 15 L50 35 L70 20 L90 40 L110 25 L130 40 L150 15 L170 35 L190 10 L210 35 L210 55 Z" stroke-linejoin="round"/>
-                <circle cx="90" cy="8" r="6"/>
-                <path d="M84 8 Q90 2 96 8"/>
-            </svg>
+
+        {{-- Partner Logos Marquee (Smooth Continuous Left-to-Right) --}}
+        <div class="flex-1 w-full min-w-0 overflow-hidden relative py-2 mx-0 md:mx-6">
+            {{-- Smooth Edge Fade Masks --}}
+            <div class="pointer-events-none absolute inset-y-0 left-0 w-8 md:w-16 bg-gradient-to-r from-white to-transparent z-10"></div>
+            <div class="pointer-events-none absolute inset-y-0 right-0 w-8 md:w-16 bg-gradient-to-l from-white to-transparent z-10"></div>
+
+            <div class="partner-marquee-track flex items-center gap-10 md:gap-14 w-max hover:[animation-play-state:paused]">
+                @foreach([1, 2] as $set)
+                    <div class="flex items-center gap-10 md:gap-14 shrink-0" @if($set === 2) aria-hidden="true" @endif>
+                        @foreach($halfLogos as $logo)
+                            <div class="flex items-center justify-center shrink-0 px-2 opacity-80 hover:opacity-100 transition-opacity duration-300">
+                                <img src="{{ $logo['src'] }}" alt="{{ $logo['name'] }}" class="{{ $logo['h'] }} max-w-[130px] md:max-w-[160px] object-contain select-none pointer-events-none" loading="lazy" />
+                            </div>
+                        @endforeach
+                    </div>
+                @endforeach
+            </div>
         </div>
-        <div class="flex items-center gap-4">
+
+        <div class="flex-shrink-0 flex items-center gap-4">
             {{-- Social links (kept as # for now per user request) --}}
             <a href="#" class="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:border-[#1a6bbf] hover:text-[#1a6bbf] transition" title="Facebook">
                 <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
