@@ -35,46 +35,40 @@
         ];
         // Shuffle randomly per request so sorting is non-deterministic
         $shuffledLogos = collect($partnerLogos)->shuffle()->values();
-        // Duplicate once inside each half to ensure seamless coverage across wide screens
-        $halfLogos = $shuffledLogos->concat($shuffledLogos);
+        // Repeat 4x per group so one group is ~3800px wide, easily filling 4K / ultrawide displays
+        $groupLogos = $shuffledLogos->concat($shuffledLogos)->concat($shuffledLogos)->concat($shuffledLogos);
     @endphp
 
     <style>
         @keyframes partnerMarqueeLtr {
             0% {
-                transform: translate3d(-50%, 0, 0);
+                transform: translate3d(-100%, 0, 0);
             }
             100% {
-                transform: translate3d(0, 0, 0);
+                transform: translate3d(0%, 0, 0);
             }
         }
-        .partner-marquee-track {
-            animation: partnerMarqueeLtr 32s linear infinite;
+        .partner-marquee-group {
+            animation: partnerMarqueeLtr 55s linear infinite;
             will-change: transform;
         }
-        .partner-marquee-track:hover {
+        .partner-marquee-container:hover .partner-marquee-group {
             animation-play-state: paused;
         }
     </style>
 
-    {{-- Partner Logos Marquee (Pure 100% Full-Width Continuous Smooth Left-to-Right) --}}
-    <div class="border-b border-gray-200 py-6 md:py-8 overflow-hidden relative bg-white">
-        <div class="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 relative">
-            {{-- Smooth Edge Fade Masks --}}
-            <div class="pointer-events-none absolute inset-y-0 left-0 w-12 md:w-24 bg-gradient-to-r from-white to-transparent z-10"></div>
-            <div class="pointer-events-none absolute inset-y-0 right-0 w-12 md:w-24 bg-gradient-to-l from-white to-transparent z-10"></div>
-
-            <div class="partner-marquee-track flex items-center gap-12 md:gap-16 w-max hover:[animation-play-state:paused]">
-                @foreach([1, 2] as $set)
-                    <div class="flex items-center gap-12 md:gap-16 shrink-0" @if($set === 2) aria-hidden="true" @endif>
-                        @foreach($halfLogos as $logo)
-                            <div class="flex items-center justify-center shrink-0 px-3 opacity-80 hover:opacity-100 transition-opacity duration-300">
-                                <img src="{{ $logo['src'] }}" alt="{{ $logo['name'] }}" class="{{ $logo['h'] }} max-w-[140px] md:max-w-[170px] object-contain select-none pointer-events-none" loading="lazy" />
-                            </div>
-                        @endforeach
-                    </div>
-                @endforeach
-            </div>
+    {{-- Partner Logos Marquee (Pure 100% Full-Width Continuous Smooth Left-to-Right, No Fade Mask, No Gaps) --}}
+    <div class="border-b border-gray-200 py-6 md:py-8 overflow-hidden bg-white w-full">
+        <div class="partner-marquee-container flex overflow-hidden w-full select-none">
+            @foreach([1, 2] as $groupIndex)
+                <div class="partner-marquee-group flex shrink-0 items-center gap-12 md:gap-16 pr-12 md:pr-16" @if($groupIndex === 2) aria-hidden="true" @endif>
+                    @foreach($groupLogos as $logo)
+                        <div class="flex items-center justify-center shrink-0">
+                            <img src="{{ $logo['src'] }}" alt="{{ $logo['name'] }}" class="{{ $logo['h'] }} max-w-[140px] md:max-w-[170px] object-contain select-none pointer-events-none opacity-100" loading="lazy" />
+                        </div>
+                    @endforeach
+                </div>
+            @endforeach
         </div>
     </div>
 
