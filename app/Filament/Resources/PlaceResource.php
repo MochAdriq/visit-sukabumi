@@ -199,7 +199,8 @@ class PlaceResource extends Resource
                                 ->label('Foto'),
                             Forms\Components\Toggle::make('is_primary')
                                 ->label('Foto Utama')
-                                ->default(false),
+                                ->default(false)
+                                ->dehydrateStateUsing(fn ($state) => (bool) $state),
                             Forms\Components\TextInput::make('copyright_name')
                                 ->label('Nama Copyright (Opsional)')
                                 ->maxLength(255),

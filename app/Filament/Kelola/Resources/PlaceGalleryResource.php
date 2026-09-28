@@ -75,7 +75,8 @@ class PlaceGalleryResource extends Resource
                         Forms\Components\Toggle::make('is_primary')
                             ->label('Jadikan Foto Utama (Cover)')
                             ->helperText('Foto utama akan tampil sebagai gambar sampul destinasi di kartu pencarian dan halaman depan.')
-                            ->default(false),
+                            ->default(false)
+                            ->dehydrateStateUsing(fn ($state) => (bool) $state),
 
                         Forms\Components\TextInput::make('copyright_name')
                             ->label('Kredit Foto / Fotografer')

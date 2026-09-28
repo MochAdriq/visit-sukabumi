@@ -41,7 +41,8 @@ class PlaceImageResource extends Resource
                     ->label('Foto'),
                 Forms\Components\Toggle::make('is_primary')
                     ->label('Foto Utama')
-                    ->required(),
+                    ->default(false)
+                    ->dehydrateStateUsing(fn ($state) => (bool) $state),
             ]);
     }
 
