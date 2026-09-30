@@ -1,3 +1,10 @@
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+if (document.body.classList.contains('is-intro')) {
+  window.scrollTo(0, 0);
+}
+
 const clamp = (min, value, max) => Math.min(max, Math.max(min, value));
 const body = document.body;
 const intro = document.querySelector('#intro');

@@ -6,6 +6,10 @@
   --color-secondary: #145299;
 }
 
+[x-cloak] {
+  display: none !important;
+}
+
 html, body {
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }

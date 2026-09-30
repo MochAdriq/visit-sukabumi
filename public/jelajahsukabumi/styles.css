@@ -3,6 +3,19 @@
 html { background:var(--blue); scroll-behavior:auto; }
 body { margin:0; color:var(--ink); font-family:Inter,sans-serif; overflow-x:hidden; }
 body.is-intro { overflow:hidden; }
+body.is-intro .stage,
+body.is-intro .hud,
+body.is-intro .car,
+body.is-intro .speedometer,
+body.is-intro .drive-controls,
+body.is-intro .scroll-instruction {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+.stage, .hud, .car, .speedometer, .drive-controls, .scroll-instruction {
+  transition: opacity .4s ease, visibility .4s ease;
+}
 button,a { font:inherit; }
 button { cursor:pointer; }
 
